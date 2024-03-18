@@ -1,0 +1,29 @@
+
+.custom-accordion-item {
+    border: 2px solid  #A210C6;
+    border-radius: 4px;
+  }
+
+.custom-accordion-panel {
+    max-width: 350px;
+    max-height: 200px;
+    white-space: normal;
+    overflow: hidden;
+    transition: max-width 0.3s ease-in-out;
+    transition: max-height 0.3s ease-in-out;
+    font-size: 16px;
+    display: flex; /* Center the content vertically */
+    align-items: center; /* Center the content vertically */
+  }
+  
+  .custom-accordion-panel.open {
+    max-width: 350px;
+    max-height: 200px;
+  }
+  
+  .box {
+    /* background-color: #A210C6; */
+    opacity: 0; /* Initial state, invisible */
+  
+    /* Other styles */
+  }
