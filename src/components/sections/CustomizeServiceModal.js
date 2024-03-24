@@ -24,24 +24,24 @@ import {
   DrawerBody,
   DrawerFooter,
   DrawerCloseButton,
-  // extendTheme,
+  extendTheme,
 } from "@chakra-ui/react";
 
-// const customTheme = extendTheme({
-//   components: {
-//     Link: {
-//       baseStyle: {
-//         _focus: {
-//           boxShadow: "none",
-//         },
-//       },
-//     },
-//   },
-//   fonts: {
-//     body: "Montserrat, sans-serif",
-//     heading: "Gill Sans MT, sans-serif",
-//   },
-// });
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const CustomizePlanModal = ({ isOpen, onClose }) => {
   const [selectedServices, setSelectedServices] = useState([]);
@@ -50,8 +50,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const [shift, setShift] = useState("");
   const [medicSpecialization, setMedicSpecialization] = useState("");
   const [name, setName] = useState("");
-  const [costOfService] = useState(0);
-
+  const [costOfService, setCostOfService] = useState(0);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const toast = useToast();
   const [setLoading] = useState(false);
@@ -86,40 +85,36 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
     "Dressing changes",
   ];
 
-  // const calculateCost = () => {
-  //   let costPerDay = 0;
+  const calculateCost = () => {
+    let costPerDay = 0;
 
-    
-  //   if (medicSpecialization === "Nurse Assistant") {
-  //     costPerDay = 6000;
-  //   } else {
-  //     costPerDay = 12000;
-  //   }
+    if (medicSpecialization === "Nurse Assistant") {
+      costPerDay = 6000;
+    } else {
+      costPerDay = 12000;
+    }
 
-   
-  //   if (shift === "Day Shift") {
-  //     costPerDay *= 1; 
-  //   } else if (shift === "Live-in") {
-  
-  //     if (medicSpecialization === "Nurse Assistant") {
-  //       costPerDay = 8000;
-  //     } else {
-  //       costPerDay = 16000;
-  //     }
-  //   }
+    if (shift === "Day Shift") {
+      costPerDay *= 1;
+    } else if (shift === "Live-in") {
+      if (medicSpecialization === "Nurse Assistant") {
+        costPerDay = 8000;
+      } else {
+        costPerDay = 16000;
+      }
+    }
 
-   
-  //   const totalCost = costPerDay * parseInt(duration);
-  //   return totalCost.toLocaleString("en-NG", {
-  //     minimumFractionDigits: 2,
-  //     maximumFractionDigits: 2,
-  //   }); 
-  // };
+    const totalCost = costPerDay * parseInt(duration);
+    return totalCost.toLocaleString("en-NG", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
 
-  // useEffect(() => {
-  //   const calculatedCost = calculateCost();
-  //   setCostOfService(calculatedCost);
-  // }, [duration, medicSpecialization]);
+  useEffect(() => {
+    const calculatedCost = calculateCost();
+    setCostOfService(calculatedCost);
+  }, [duration, medicSpecialization]);
 
   const formattedCost = (cost) => {
     // Format the costOfService as naira with the last two zeros separated by a dot
@@ -243,7 +238,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <Drawer isOpen={isOpen} onClose={onClose} size="lg">
+      <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size="lg">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />

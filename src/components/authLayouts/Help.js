@@ -10,7 +10,7 @@ export default function Help() {
   return (
     <Box
       display={{ base: "none", lg: "block" }}
-      marginTop="100px"
+      marginTop="20px"
       marginLeft="100px"
     >
       <Image

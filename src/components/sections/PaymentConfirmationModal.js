@@ -64,16 +64,16 @@ const PaymentConfirmationPage = () => {
     });
   };
 
-  // const formattedCost = (cost) => {
-  //   // Divide costOfService by 100 to represent the amount in naira
-  //   const costInNaira = cost / 100;
+  const formattedCost = (cost) => {
+    // Divide costOfService by 100 to represent the amount in naira
+    const costInNaira = cost / 100;
 
-  //   // Format the costOfService as naira with the last two zeros separated by a dot
-  //   const formattedCost =
-  //     "₦ " + costInNaira.toLocaleString("en-NG", { maximumFractionDigits: 2 });
+    // Format the costOfService as naira with the last two zeros separated by a dot
+    const formattedCost =
+      "₦ " + costInNaira.toLocaleString("en-NG", { maximumFractionDigits: 2 });
 
-  //   return formattedCost;
-  // };
+    return formattedCost;
+  };
 
   const handlePaymentSuccess = (response) => {
     verifyPayment();
@@ -164,7 +164,7 @@ const PaymentConfirmationPage = () => {
             <Text fontSize="20px" mb={4}>
               Hi {user?.firstName}, kindly pay the sum of{" "}
               <Text as="span" textDecoration="underline"  fontWeight="bold" color="#510863">
-                {costOfService}
+              {formattedCost(costOfService)}
               </Text>{" "}
               to proceed with your booking for{" "}
               <Text as="span" textDecoration="underline" fontWeight="bold" color="#510863">

@@ -76,7 +76,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     };
 
     fetchData();
-  });
+  }, []);
 
  
 

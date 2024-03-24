@@ -291,49 +291,49 @@ const BookBeneficiaryAppointmentModal = ({
     }
   }, [selectedBeneficiary]);
 
-  // const calculateServiceCost = () => {
-  //   const { servicePlan, shift } = formPages;
+  const calculateServiceCost = () => {
+    const { servicePlan, shift } = formPages;
 
-  //   let costOfService = 0;
+    let costOfService = 0;
 
-  //   switch (servicePlan) {
-  //     case "Elderly care by a Licensed Nurse":
-  //       costOfService = shift === "Day Shift (8hrs)" ? 18000000 : 22000000;
-  //       break;
-  //     case "Elderly care by a Nurse Assistant":
-  //       costOfService = shift === "Day Shift (8hrs)" ? 12000000 : 15000000;
-  //       break;
-  //     case "Postpartum care":
-  //     case "Recovery care":
-  //       costOfService = shift === "Day Shift (8hrs)" ? 20000000 : 25000000;
-  //       break;
-  //     case "Nanny care":
-  //       costOfService = shift === "Day Shift (8hrs)" ? 7000000 : 9000000;
-  //       break;
-  //     case "Short home visit":
-  //       costOfService = 1500000;
-  //       break;
-  //     default:
-  //       const customPlan = customizedPlans.find(
-  //         (plan) => plan.name === servicePlan
-  //       );
-  //       if (customPlan) {
-  //         // Adding two decimal places to costOfService for custom plans
-  //         costOfService = parseInt(
-  //           customPlan.costOfService.replace(/[,]/g, "")
-  //         );
-  //       } else {
-  //         costOfService = 0;
-  //       }
-  //       break;
-  //   }
+    switch (servicePlan) {
+      case "Elderly care by a Licensed Nurse":
+        costOfService = shift === "Day Shift (8hrs)" ? 18000000 : 22000000;
+        break;
+      case "Elderly care by a Nurse Assistant":
+        costOfService = shift === "Day Shift (8hrs)" ? 12000000 : 15000000;
+        break;
+      case "Postpartum care":
+      case "Recovery care":
+        costOfService = shift === "Day Shift (8hrs)" ? 20000000 : 25000000;
+        break;
+      case "Nanny care":
+        costOfService = shift === "Day Shift (8hrs)" ? 7000000 : 9000000;
+        break;
+      case "Short home visit":
+        costOfService = 1500000;
+        break;
+      default:
+        const customPlan = customizedPlans.find(
+          (plan) => plan.name === servicePlan
+        );
+        if (customPlan) {
+          // Adding two decimal places to costOfService for custom plans
+          costOfService = parseInt(
+            customPlan.costOfService.replace(/[,]/g, "")
+          );
+        } else {
+          costOfService = 0;
+        }
+        break;
+    }
 
-  //   setFormPages({ ...formPages, costOfService });
-  // };
+    setFormPages({ ...formPages, costOfService });
+  };
 
-  // useEffect(() => {
-  //   calculateServiceCost();
-  // }, [formPages.servicePlan, formPages.shift]);
+  useEffect(() => {
+    calculateServiceCost();
+  }, [formPages.servicePlan, formPages.shift]);
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
