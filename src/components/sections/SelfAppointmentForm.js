@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import LocationIcon from "../../assets/LocationIcon.svg";
 import CalenderIcon from "../../assets/CalenderIcon.svg";
+import PaymentModal from "./PaymentMethod";
 import {
   Drawer,
   DrawerOverlay,
@@ -34,6 +35,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const [selectedDob] = useState(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentData, setPaymentData] = useState({}); 
+
   const [formFields, setFormFields] = useState({
     startDate: null,
     endDate: null,
@@ -45,7 +49,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     costOfService: "",
   });
 
-  const navigate = useNavigate();
+ 
 
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
@@ -174,20 +178,16 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           status: "success",
           duration: 6000,
         });
-        const {
-          id: appointmentId,
-          costOfService,
-          recipientFirstname,
-          recipientLastname,
-        } = response.data.data;
-        const beneficiary = `${recipientFirstname} ${recipientLastname}`;
-        console.log("beneficiary", beneficiary);
-
+     
+        setPaymentData({
+          costOfService: response.data.data.costOfService,
+          appointmentId: response.data.data.id,
+          beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
+        });
         setTimeout(() => {
-          navigate("/make-payment", {
-            state: { costOfService, appointmentId, beneficiary },
-          });
+          setIsPaymentModalOpen(true);
         }, 1000);
+        // onClose()
       } else {
         setLoading(false);
         console.error("Error booking appointment");
@@ -279,200 +279,207 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   });
 
   return (
-    <Drawer
-      isOpen={isOpen}
-      onClose={onClose}
-      size={{ base: "md", md: "lg" }}
-      placement="right"
-    >
-      <DrawerOverlay />
-      <DrawerContent alignItems="center">
-        <DrawerCloseButton />
-        <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
-        <DrawerBody>
-          <FormControl isRequired>
-            <Flex flexWrap="wrap" ml={{ md: "45px" }}>
-              <Box w={{ base: "300px", md: "270px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
-                  Start Date
-                </FormLabel>
-                <Flex
-                  h="6vh"
-                  paddingTop="5px"
-                  paddingLeft="15px"
-                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                >
-                  <DatePicker
-                    selected={selectedStartDate}
-                    onChange={handleStartDateChange}
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
-                    dateFormat="dd-MM-yyyy"
-                    placeholderText="preferred date to start"
-                    className="form-control"
-                    minDate={new Date()}
-                  />
-                  <Image
-                    ml={{ base: "50px", md: "30px" }}
-                    w="24px"
-                    h="24px"
-                    src={CalenderIcon}
-                    alt="CalenderIcon"
-                  />
-                </Flex>
-              </Box>
-              <Box
-                w={{ base: "300px", md: "270px" }}
-                ml={{ md: "5px" }}
-                marginTop="20px"
-              >
-                <FormLabel fontWeight="bold">End Date</FormLabel>
-                <Flex
-                  h="6vh"
-                  paddingTop="5px"
-                  paddingLeft="15px"
-                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                >
-                  <DatePicker
-                    selected={selectedEndDate}
-                    onChange={handleEndDateChange}
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
-                    dateFormat="dd-MM-yyyy"
-                    placeholderText="preferred date to end"
-                    className="form-control"
-                    minDate={new Date()}
-                    style={{ border: "none" }}
-                  />
-                  <Image
-                    ml={{ base: "50px", md: "30px" }}
-                    w="24px"
-                    h="24px"
-                    src={CalenderIcon}
-                    alt="CalenderIcon"
-                  />
-                </Flex>
-              </Box>
-            </Flex>
-            <Flex flexWrap="wrap" marginTop="20px">
-              <Box w={{ base: "300px", md: "270px" }} ml={{ md: "40px" }}>
-                <FormLabel fontWeight="bold">Service Plan </FormLabel>
-                <Select
-                  name="servicePlan"
-                  placeholder="preferred service plan"
+    <>
+      <Drawer
+        isOpen={isOpen}
+        onClose={onClose}
+        size={{ base: "md", md: "lg" }}
+        placement="right"
+      >
+        <DrawerOverlay />
+        <DrawerContent alignItems="center">
+          <DrawerCloseButton />
+          <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
+          <DrawerBody>
+            <FormControl isRequired>
+              <Flex flexWrap="wrap" ml={{ md: "45px" }}>
+                <Box w={{ base: "300px", md: "270px" }}>
+                  <FormLabel fontWeight="bold" marginTop="20px">
+                    Start Date
+                  </FormLabel>
+                  <Flex
+                    h="6vh"
+                    paddingTop="5px"
+                    paddingLeft="15px"
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  >
+                    <DatePicker
+                      selected={selectedStartDate}
+                      onChange={handleStartDateChange}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      dateFormat="dd-MM-yyyy"
+                      placeholderText="preferred date to start"
+                      className="form-control"
+                      minDate={new Date()}
+                    />
+                    <Image
+                      ml={{ base: "50px", md: "30px" }}
+                      w="24px"
+                      h="24px"
+                      src={CalenderIcon}
+                      alt="CalenderIcon"
+                    />
+                  </Flex>
+                </Box>
+                <Box
                   w={{ base: "300px", md: "270px" }}
-                  value={formFields.servicePlan}
-                  onChange={handleInputChange}
+                  ml={{ md: "5px" }}
+                  marginTop="20px"
                 >
-                  <option value="Elderly care by a Licensed Nurse">
-                    Elderly care by a Licensed Nurse
-                  </option>
-                  <option value="Elderly care by a Nurse Assistant">
-                    Elderly care by a Nurse Assistant
-                  </option>
-                  <option value="Postpartum care">
-                    Postpartum care by a Licensed Nurse/Midwife
-                  </option>
-                  <option value="Nanny care">
-                    Nanny service by a Professional Nanny
-                  </option>
-                  <option value="Recovery care">
-                    Recovery care by a Licensed Nurse
-                  </option>
-                  <option value="Short home visit">
-                    Short home visit by a Licensed Nurse
-                  </option>
-                  {customizedPlans.map((plan) => (
-                    <option key={plan.id} value={plan.name}>
-                      {plan.name}
-                    </option>
-                  ))}
-                </Select>
-              </Box>
-              <Box ml={{ md: "5px" }}>
-                <FormLabel fontWeight="bold">Shift </FormLabel>
-                <Select
-                  name="shift"
-                  placeholder="select preferred shift"
-                  w={{ base: "300px", md: "270px" }}
-                  value={formFields.shift}
-                  onChange={handleInputChange}
-                >
-                  <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
-                  <option value="Live-in (24hrs)">Live-in (24hrs)</option>
-                </Select>
-              </Box>
-            </Flex>
-            <Box ml={{ md: "40px" }} marginTop="20px">
-              <FormLabel fontWeight="bold">Current Location </FormLabel>
-              <Flex>
-                <Input
-                  name="currentLocation"
-                  type="text"
-                  placeholder="current Location"
-                  value={formFields.currentLocation}
-                  onChange={handleInputChange}
-                  w={{ base: "300px", md: "550px" }}
-                />
-                <Image
-                  marginTop="10px"
-                  marginLeft="-35px"
-                  w="24px"
-                  h="24px"
-                  src={LocationIcon}
-                  alt="LocationIcon"
-                />
+                  <FormLabel fontWeight="bold">End Date</FormLabel>
+                  <Flex
+                    h="6vh"
+                    paddingTop="5px"
+                    paddingLeft="15px"
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  >
+                    <DatePicker
+                      selected={selectedEndDate}
+                      onChange={handleEndDateChange}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      dateFormat="dd-MM-yyyy"
+                      placeholderText="preferred date to end"
+                      className="form-control"
+                      minDate={new Date()}
+                      style={{ border: "none" }}
+                    />
+                    <Image
+                      ml={{ base: "50px", md: "30px" }}
+                      w="24px"
+                      h="24px"
+                      src={CalenderIcon}
+                      alt="CalenderIcon"
+                    />
+                  </Flex>
+                </Box>
               </Flex>
-            </Box>
-            <Box ml={{ md: "40px" }} marginTop="20px">
-              <FormLabel fontWeight="bold">
-                Upload necessary document (test results, medical report, scans,
-                etc)
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  padding="5px"
-                  name="medicalReport"
-                  type="file"
+              <Flex flexWrap="wrap" marginTop="20px">
+                <Box w={{ base: "300px", md: "270px" }} ml={{ md: "40px" }}>
+                  <FormLabel fontWeight="bold">Service Plan </FormLabel>
+                  <Select
+                    name="servicePlan"
+                    placeholder="preferred service plan"
+                    w={{ base: "300px", md: "270px" }}
+                    value={formFields.servicePlan}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Elderly care by a Licensed Nurse">
+                      Elderly care by a Licensed Nurse
+                    </option>
+                    <option value="Elderly care by a Nurse Assistant">
+                      Elderly care by a Nurse Assistant
+                    </option>
+                    <option value="Postpartum care">
+                      Postpartum care by a Licensed Nurse/Midwife
+                    </option>
+                    <option value="Nanny care">
+                      Nanny service by a Professional Nanny
+                    </option>
+                    <option value="Recovery care">
+                      Recovery care by a Licensed Nurse
+                    </option>
+                    <option value="Short home visit">
+                      Short home visit by a Licensed Nurse
+                    </option>
+                    {customizedPlans.map((plan) => (
+                      <option key={plan.id} value={plan.name}>
+                        {plan.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Box>
+                <Box ml={{ md: "5px" }}>
+                  <FormLabel fontWeight="bold">Shift </FormLabel>
+                  <Select
+                    name="shift"
+                    placeholder="select preferred shift"
+                    w={{ base: "300px", md: "270px" }}
+                    value={formFields.shift}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
+                    <option value="Live-in (24hrs)">Live-in (24hrs)</option>
+                  </Select>
+                </Box>
+              </Flex>
+              <Box ml={{ md: "40px" }} marginTop="20px">
+                <FormLabel fontWeight="bold">Current Location </FormLabel>
+                <Flex>
+                  <Input
+                    name="currentLocation"
+                    type="text"
+                    placeholder="current Location"
+                    value={formFields.currentLocation}
+                    onChange={handleInputChange}
+                    w={{ base: "300px", md: "550px" }}
+                  />
+                  <Image
+                    marginTop="10px"
+                    marginLeft="-35px"
+                    w="24px"
+                    h="24px"
+                    src={LocationIcon}
+                    alt="LocationIcon"
+                  />
+                </Flex>
+              </Box>
+              <Box ml={{ md: "40px" }} marginTop="20px">
+                <FormLabel fontWeight="bold">
+                  Upload necessary document (test results, medical report,
+                  scans, etc)
+                </FormLabel>
+                <InputGroup>
+                  <Input
+                    padding="5px"
+                    name="medicalReport"
+                    type="file"
+                    onChange={handleInputChange}
+                    w={{ base: "300px", md: "550px" }}
+                    placeholder="Upload necessary document"
+                  />
+                </InputGroup>
+              </Box>
+              <Box ml={{ md: "40px" }} marginTop="20px">
+                <FormLabel fontWeight="bold">Health History </FormLabel>
+                <Textarea
+                  name="recipientHealthHistory"
+                  type="text"
+                  placeholder="share health history and any special need we should know"
+                  value={formFields.recipientHealthHistory}
                   onChange={handleInputChange}
                   w={{ base: "300px", md: "550px" }}
-                  placeholder="Upload necessary document"
                 />
-              </InputGroup>
-            </Box>
-            <Box ml={{ md: "40px" }} marginTop="20px">
-              <FormLabel fontWeight="bold">Health History </FormLabel>
-              <Textarea
-                name="recipientHealthHistory"
-                type="text"
-                placeholder="share health history and any special need we should know"
-                value={formFields.recipientHealthHistory}
-                onChange={handleInputChange}
-                w={{ base: "300px", md: "550px" }}
-              />
-            </Box>
-          </FormControl>
-        </DrawerBody>
-        <DrawerFooter>
-          <Button
-            w="150px"
-            isLoading={loading}
-            loadingText="Processing..."
-            bg="#510863"
-            color="white"
-            onClick={handleFormSubmit}
-            borderRadius="100px"
-            _hover={{ color: "" }}
-          >
-            {loading ? "Processing..." : "Submit"}
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+              </Box>
+            </FormControl>
+          </DrawerBody>
+          <DrawerFooter>
+            <Button
+              w="150px"
+              isLoading={loading}
+              loadingText="Processing..."
+              bg="#510863"
+              color="white"
+              onClick={handleFormSubmit}
+              borderRadius="100px"
+              _hover={{ color: "" }}
+            >
+              {loading ? "Processing..." : "Submit"}
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        paymentData={paymentData}
+      />
+    </>
   );
 };
 

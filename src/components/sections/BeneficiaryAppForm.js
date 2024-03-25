@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import LocationIcon from "../../assets/LocationIcon.svg";
 import CalenderIcon from "../../assets/CalenderIcon.svg";
+import PaymentModal from "./PaymentMethod";
 import {
   InputGroup,
   Drawer,
@@ -38,6 +39,9 @@ const BookBeneficiaryAppointmentModal = ({
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const navigate = useNavigate();
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentData, setPaymentData] = useState({}); 
+
   const [formPages, setFormPages] = useState({
     recipientFirstname: selectedBeneficiary.recipientFirstName,
     recipientLastname: selectedBeneficiary.recipientLastName,
@@ -179,18 +183,13 @@ const BookBeneficiaryAppointmentModal = ({
           status: "success",
           duration: 6000,
         });
-        const {
-          id: appointmentId,
-          costOfService,
-          recipientFirstname,
-          recipientLastname,
-        } = response.data.data;
-        const beneficiary = `${recipientFirstname} ${recipientLastname}`;
-        console.log("beneficiary", beneficiary);
+        setPaymentData({
+          costOfService: response.data.data.costOfService,
+          appointmentId: response.data.data.id,
+          beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
+        });
         setTimeout(() => {
-          navigate("/make-payment", {
-            state: { costOfService, appointmentId, beneficiary },
-          });
+          setIsPaymentModalOpen(true);
         }, 1000);
       } else {
         setLoading(false);
@@ -336,7 +335,8 @@ const BookBeneficiaryAppointmentModal = ({
   }, [formPages.servicePlan, formPages.shift]);
 
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+    <>
+     <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerHeader color="#510863">
@@ -550,6 +550,13 @@ const BookBeneficiaryAppointmentModal = ({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+     <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        paymentData={paymentData}
+      />
+    </>
+   
   );
 };
 
