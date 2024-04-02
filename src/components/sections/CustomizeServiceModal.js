@@ -98,7 +98,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
       costPerDay *= 1;
     } else if (shift === "Live-in") {
       if (medicSpecialization === "Nurse Assistant") {
-        costPerDay = 8000;
+        costPerDay = 10000;
       } else {
         costPerDay = 16000;
       }
