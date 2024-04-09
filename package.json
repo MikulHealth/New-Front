@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "node --max-old-space-size=1000 node_modules/nuxt/bin/nuxt.js build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
