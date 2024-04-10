@@ -44,7 +44,7 @@ const UserDetailsDrawer = ({ isOpen, onClose }) => {
     };
 
     fetchData();
-  });
+  }, []);
 
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
