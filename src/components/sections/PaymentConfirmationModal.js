@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { PaystackButton } from "react-paystack";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/Whitelogo.png";
+// import logo from "../../assets/Whitelogo.png";
 
 // const customTheme = extendTheme({
 //   components: {
@@ -153,7 +153,9 @@ const PaymentConfirmationPage = () => {
   return (
     <Box height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
       <Box mb={4}>
-        <Image src={logo} alt="Logo" w="100px" h="30px" />
+        <Image
+        //  src={logo}
+          alt="Logo" w="100px" h="30px" />
       </Box>
       <Box color="white" mx="auto" w={paymentFormWidth}>
         <Text fontSize="24px" fontWeight="bold" mb={4}>

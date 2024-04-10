@@ -13,9 +13,9 @@ import {
   Image,
   VStack,
 } from "@chakra-ui/react";
-import RightArrow from "../../assets/RightArrow.svg";
-import CardPayment from "../../assets/OnlinePayment.svg";
-import Wallet from "../../assets/Wallet.svg";
+// import RightArrow from "../../assets/RightArrow.svg";
+// import CardPayment from "../../assets/OnlinePayment.svg";
+// import Wallet from "../../assets/Wallet.svg";
 import { useNavigate } from "react-router-dom";
 function PaymentModal({ isOpen, onClose, paymentData }) {
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                 w="30px"
                 h="30px"
                 boxSize={["20px", "30px"]}
-                src={Wallet}
+                // src={Wallet}
                 alt="Settings"
               />
               <Box marginLeft="10px" padding="10px" paddingBottom="10px">
@@ -110,7 +110,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                 w="30px"
                 h="30px"
                 boxSize={["20px", "30px"]}
-                src={CardPayment}
+                // src={CardPayment}
                 alt="Settings"
               />
               <Box marginLeft="10px" padding="10px" paddingBottom="10px">

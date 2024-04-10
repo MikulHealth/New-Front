@@ -10,21 +10,21 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import SignUp from "../../../assets/SignUp.svg";
-import SelectCare from "../../../assets/SelectService.svg";
-import GetMatched from "../../../assets/GetMatched.svg";
-import ReceieveCare from "../../../assets/RecieveCare.svg";
-import AbtPic from "../../../assets/AboutPic.svg";
-import Wallet from "../../../assets/WalletWhite.svg";
-import Eye from "../../../assets/Eye.svg";
-import Persona from "../../../assets/Pesona.svg";
-import Safety from "../../../assets/Safety.svg";
-import Quality from "../../../assets/Quality.svg";
-import Flexible from "../../../assets/Flexible.svg";
-import Sylvia from "../../../assets/Sylvia.svg";
-import Michael from "../../../assets/Michael.svg";
-import Jim from "../../../assets/Jim.svg";
-import Hafsie from "../../../assets/Hafsie.svg";
+// import SignUp from "../../../assets/SignUp.svg";
+// import SelectCare from "../../../assets/SelectService.svg";
+// import GetMatched from "../../../assets/GetMatched.svg";
+// import ReceieveCare from "../../../assets/RecieveCare.svg";
+// import AbtPic from "../../../assets/AboutPic.svg";
+// import Wallet from "../../../assets/WalletWhite.svg";
+// import Eye from "../../../assets/Eye.svg";
+// import Persona from "../../../assets/Pesona.svg";
+// import Safety from "../../../assets/Safety.svg";
+// import Quality from "../../../assets/Quality.svg";
+// import Flexible from "../../../assets/Flexible.svg";
+// import Sylvia from "../../../assets/Sylvia.svg";
+// import Michael from "../../../assets/Michael.svg";
+// import Jim from "../../../assets/Jim.svg";
+// import Hafsie from "../../../assets/Hafsie.svg";
 import "../../../styles/pages/LandingPage.css";
 import NavigationBar from "../../unAuthLayouts/NavigationBar";
 import Footer from "../../unAuthLayouts/Footer";
@@ -61,7 +61,7 @@ const LandingPage = () => {
         <Box
           style={settingsContainerStyle}
           marginTop="-1px"
-          bgImage={`url(${AbtPic})`}
+          // bgImage={`url(${AbtPic})`}
           bgSize="cover"
           bgPosition="center"
           minHeight="100vh" // Set minimum height to ensure content is visible on all screen sizes
@@ -120,7 +120,7 @@ const LandingPage = () => {
             >
               <Box marginLeft="100px">
                 <Image
-                  src={Wallet}
+                  // src={Wallet}
                   alt="Logo"
                   w="100px"
                   h="103px"
@@ -161,7 +161,7 @@ const LandingPage = () => {
             >
               <Box marginLeft="90px">
                 <Image
-                  src={Eye}
+                  // src={Eye}
                   alt="Logo"
                   w="100px"
                   h="103px"
@@ -203,7 +203,7 @@ const LandingPage = () => {
             >
               <Box marginLeft="100px">
                 <Image
-                  src={Persona}
+                  // src={Persona}
                   alt="Logo"
                   w="100px"
                   h="103px"
@@ -248,7 +248,7 @@ const LandingPage = () => {
             >
               <Box marginLeft="100px">
                 <Image
-                  src={Safety}
+                  // src={Safety}
                   alt="Logo"
                   w="100px"
                   h="103px"
@@ -285,7 +285,7 @@ const LandingPage = () => {
             >
               <Box marginLeft="90px">
                 <Image
-                  src={Quality}
+                  // src={Quality}
                   alt="Logo"
                   w="100px"
                   h="103px"
@@ -322,7 +322,7 @@ const LandingPage = () => {
             >
               <Box marginLeft="90px">
                 <Image
-                  src={Flexible}
+                  // src={Flexible}
                   alt="Logo"
                   w="100px"
                   h="103px"
@@ -375,7 +375,9 @@ const LandingPage = () => {
                 boxShadow="0px 4px 8px rgba(162, 16, 198, 0.5)"
                 borderRadius="10"
               >
-                <Image src={Michael} alt="Logo" w="462px" h="422px" />
+                <Image 
+                // src={Michael} 
+                alt="Logo" w="462px" h="422px" />
               </Box>
             </Box>
 
@@ -465,7 +467,7 @@ const LandingPage = () => {
               borderRadius="10"
             >
               <Image
-                src={Jim}
+                // src={Jim}
                 alt="Logo"
                 w="462px"
                 h="422px"
@@ -491,7 +493,9 @@ const LandingPage = () => {
               boxShadow="0px 4px 8px rgba(162, 16, 198, 0.5)"
               borderRadius="10"
             >
-              <Image src={Hafsie} alt="Logo" w="462px" h="422px" />
+              <Image 
+              // src={Hafsie}
+               alt="Logo" w="462px" h="422px" />
             </Box>
           </Box>
 
@@ -586,7 +590,7 @@ const LandingPage = () => {
               borderRadius="10"
             >
               <Image
-                src={Sylvia}
+                // src={Sylvia}
                 alt="Logo"
                 w="462px"
                 h="422px"
@@ -620,7 +624,9 @@ const LandingPage = () => {
               marginLeft="150px"
             >
               <Box>
-                <Image src={SignUp} alt="Logo" w="200px" h="200px" />
+                <Image 
+                // src={SignUp}
+                 alt="Logo" w="200px" h="200px" />
               </Box>
 
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -644,7 +650,9 @@ const LandingPage = () => {
               marginLeft="300px"
             >
               <Box>
-                <Image src={SelectCare} alt="Logo" w="200px" h="200px" />
+                <Image 
+                // src={SelectCare} 
+                alt="Logo" w="200px" h="200px" />
               </Box>
 
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -682,7 +690,9 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box marginLeft="20px">
-                <Image src={SignUp} alt="Logo" w="200px" h="200px" />
+                <Image
+                //  src={SignUp} 
+                 alt="Logo" w="200px" h="200px" />
               </Box>
 
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -699,7 +709,9 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box marginLeft="20px">
-                <Image src={SelectCare} alt="Logo" w="200px" h="200px" />
+                <Image 
+                // src={SelectCare} 
+                alt="Logo" w="200px" h="200px" />
               </Box>
 
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -716,7 +728,9 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box marginLeft="15px">
-                <Image src={GetMatched} alt="Logo" w="200px" h="200px" />
+                <Image 
+                // src={GetMatched} 
+                alt="Logo" w="200px" h="200px" />
               </Box>
 
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -733,7 +747,9 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box marginLeft="15px">
-                <Image src={ReceieveCare} alt="Logo" w="200px" h="200px" />
+                <Image 
+                // src={ReceieveCare} 
+                alt="Logo" w="200px" h="200px" />
               </Box>
 
               <Text fontSize="xl" fontWeight="bold" textAlign="center">

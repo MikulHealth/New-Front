@@ -22,14 +22,14 @@ import {
 import AOS from "aos";
 import "../../styles/pages/LandingPage.css";
 import BeneficiariesModal from "../sections/Beneficiaries";
-import Tele from "../../assets/Telemed.svg";
+// import Tele from "../../assets/Telemed.svg";
 
 import NavBar from "../authLayouts/NavBar";
-import Services from "../../assets/Services.svg";
-import BookIcon from "../../assets/appointment.svg";
-import Beneficiary from "../../assets/Beneficiaries.svg";
-import Report from "../../assets/MedicalRepoert.svg";
-import CustomService from "../../assets/CustomeService.svg";
+// import Services from "../../assets/Services.svg";
+// import BookIcon from "../../assets/appointment.svg";
+// import Beneficiary from "../../assets/Beneficiaries.svg";
+// import Report from "../../assets/MedicalRepoert.svg";
+// import CustomService from "../../assets/CustomeService.svg";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import MobileFooter from "../authLayouts/MobileFooter";
 const customTheme = extendTheme({
@@ -324,7 +324,7 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      src={BookIcon}
+                      // src={BookIcon}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
@@ -391,7 +391,7 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      src={Beneficiary}
+                      // src={Beneficiary}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
@@ -451,7 +451,7 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      src={Services}
+                      // src={Services}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
@@ -513,7 +513,7 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      src={CustomService}
+                      // src={CustomService}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
@@ -579,7 +579,7 @@ const ClientDash = () => {
                   alignItems="center"
                 >
                   <Image
-                    src={Report}
+                    // src={Report}
                     margin={{ base: "10px", md: "15px" }}
                     paddingTopt={{ base: "20px", md: "" }}
                     w={{ base: "25px", md: "60px" }}
@@ -677,7 +677,7 @@ const ClientDash = () => {
 
             <Box align="center" bg="#F6E4FC" borderRadius="10" h="30vh">
               <Image
-                src={Tele}
+                // src={Tele}
                 alt="Nurse and Patient"
                 w="150px"
                 h="150px"

@@ -21,9 +21,9 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Nurse from "../../assets/Nurse.svg";
-import Shade from "../../assets/Shade.svg";
-import logo from "../../assets/Whitelogo.png";
+// import Nurse from "../../assets/Nurse.svg";
+// import Shade from "../../assets/Shade.svg";
+// import logo from "../../assets/Whitelogo.png";
 import "../../styles/pages/LandingPage.css";
 import LoadingSpinner from "../../utils/Spiner";
 
@@ -276,7 +276,9 @@ const LandingPage = () => {
           <HStack spacing={10}>
             <Box w="5px" />
             <a href="/">
-              <Image src={logo} alt="Logo" w="100px" h="30px" />
+              <Image 
+              // src={logo}
+               alt="Logo" w="100px" h="30px" />
             </a>
             <Spacer />
             <Spacer />
@@ -289,9 +291,11 @@ const LandingPage = () => {
         </Box>
         <Box display="flex" overflow="hidden">
           <Box>
-            <Image src={Nurse} alt="Logo" w="715px" h="1024px" />
+            <Image 
+            // src={Nurse}
+             alt="Logo" w="715px" h="1024px" />
             <Image
-              src={Shade}
+              // src={Shade}
               alt="Logo"
               w="715px"
               h="1024px"

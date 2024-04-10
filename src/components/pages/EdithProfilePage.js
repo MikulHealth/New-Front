@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import DateIcon from "../../assets/DateIcon.svg";
+// import DateIcon from "../../assets/DateIcon.svg";
 import NavBar from "../authLayouts/NavBar";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import {
@@ -296,7 +296,7 @@ const EdithProfilePage = () => {
                   marginLeft="160px"
                   h="24px"
                   w="24px"
-                  src={DateIcon}
+                  // src={DateIcon}
                   alt="Date icon"
                 />
               </Flex>
@@ -579,7 +579,7 @@ const EdithProfilePage = () => {
                     marginLeft="160px"
                     h="24px"
                     w="24px"
-                    src={DateIcon}
+                    // src={DateIcon}
                     alt="Date icon"
                   />
                 </Flex>

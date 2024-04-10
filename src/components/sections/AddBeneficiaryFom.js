@@ -27,7 +27,7 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
-import CalenderIcon from "../../assets/CalenderIcon.svg";
+// import CalenderIcon from "../../assets/CalenderIcon.svg";
 
 const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
   const [selectedDob, setSelectedDob] = useState(null);
@@ -210,7 +210,7 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>

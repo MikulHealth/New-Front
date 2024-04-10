@@ -26,10 +26,9 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Login1 from "../../assets/Login1.svg";
-
-import Google from "../../assets/GoogleIcon.svg";
-import logo from "../../assets/Whitelogo.png";
+// import Login1 from "../../assets/Login1.svg";
+// import Google from "../../assets/GoogleIcon.svg";
+// import logo from "../../assets/Whitelogo.png";
 import "../../styles/pages/LandingPage.css";
 import { UnlockIcon } from "@chakra-ui/icons";
 
@@ -151,7 +150,9 @@ const LandingPage = () => {
             <Box w="5px" />
             <a href="/">
               <a href="/">
-                <Image src={logo} alt="Logo" w="100px" h="30px" />
+                <Image 
+                // src={logo} 
+                alt="Logo" w="100px" h="30px" />
               </a>
             </a>
             <Spacer />
@@ -166,7 +167,7 @@ const LandingPage = () => {
         <Box display="flex">
           <Box marginLeft="-110px">
             <Image
-              src={Login1}
+              // src={Login1}
               alt="Logo"
               w="715px"
               h="1000px"
@@ -252,7 +253,7 @@ const LandingPage = () => {
                   h="45px"
                 >
                   <Image
-                    src={Google}
+                    // src={Google}
                     alt="GoogleIcon"
                     w="20px"
                     h="20px"

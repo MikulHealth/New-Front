@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-import EmailIcon from "../../assets/EmailIcon.svg";
-import TextIcon from "../../assets/TextIcon.svg";
+// import EmailIcon from "../../assets/EmailIcon.svg";
+// import TextIcon from "../../assets/TextIcon.svg";
 import NavBar from "../authLayouts/NavBar";
 import {
   ChakraProvider,
@@ -136,7 +136,7 @@ const NotificationSettingsPage = () => {
               </Text> */}
               <Flex marginTop="5px" alignItems="center">
                 <Image
-                  src={EmailIcon}
+                  // src={EmailIcon}
                   alt="Email Icon"
                   boxSize="50px"
                   marginBottom="2%"
@@ -159,7 +159,7 @@ const NotificationSettingsPage = () => {
 
               <Flex marginLeft="3px" marginTop="5px" alignItems="center">
                 <Image
-                  src={TextIcon}
+                  // src={TextIcon}
                   alt="Text Icon"
                   boxSize="50px"
                   marginBottom="2%"
@@ -253,7 +253,7 @@ const NotificationSettingsPage = () => {
               <Flex marginTop="5px">
                 <Image
                   justify="left"
-                  src={EmailIcon}
+                  // src={EmailIcon}
                   alt="Email Icon"
                   boxSize="50px"
                   marginBottom="2%"
@@ -276,7 +276,7 @@ const NotificationSettingsPage = () => {
 
               <Flex marginTop="5px" alignItems="center">
                 <Image
-                  src={TextIcon}
+                  // src={TextIcon}
                   alt="Text Icon"
                   boxSize="50px"
                   marginBottom="2%"

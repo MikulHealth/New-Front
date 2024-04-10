@@ -5,14 +5,13 @@ import {
   Box,
   Button,
   HStack,
-
   Image,
   VStack,
   Collapse,
   IconButton,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import logo from "../../assets/Whitelogo.png";
+// import logo from "../../assets/Whitelogo.png";
 import GetStartedModal from "./GetStarted";
 
 export default function NavigationBar() {
@@ -61,7 +60,9 @@ export default function NavigationBar() {
         <HStack spacing={6} alignItems="center">
           <Box w="5px" />
           <a href="/">
-            <Image src={logo} alt="Logo" w="100px" h="30px" />
+            <Image 
+            // src={logo}
+             alt="Logo" w="100px" h="30px" />
           </a>
 
           <IconButton

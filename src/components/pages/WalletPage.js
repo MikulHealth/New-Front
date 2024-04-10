@@ -26,9 +26,9 @@ import {
   Divider,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import Transfer from "../../assets/TransferPayment.svg";
-import Online from "../../assets/OnlinePayment.svg";
-import RightArrow from "../../assets/RightArrow.svg";
+// import Transfer from "../../assets/TransferPayment.svg";
+// import Online from "../../assets/OnlinePayment.svg";
+// import RightArrow from "../../assets/RightArrow.svg";
 import NavBar from "../authLayouts/NavBar";
 import MobileFooter from "../authLayouts/MobileFooter";
 
@@ -80,7 +80,7 @@ const FundWalletModal = ({
                 marginTop="15px"
                 w="50px"
                 h="50px"
-                src={Transfer}
+                // src={Transfer}
                 alt="Settings"
               />
               <Box marginLeft="10px" padding="10px" paddingBottom="10px">
@@ -92,7 +92,7 @@ const FundWalletModal = ({
                 marginTop="25px"
                 w="30px"
                 h="30px"
-                src={RightArrow}
+                // src={RightArrow}
                 alt="Settings"
               />
             </Flex>
@@ -117,7 +117,7 @@ const FundWalletModal = ({
                 marginTop="15px"
                 w="50px"
                 h="50px"
-                src={Online}
+                // src={Online}
                 alt="Settings"
               />
               <Box marginLeft="10px" padding="10px" paddingBottom="10px">
@@ -129,7 +129,7 @@ const FundWalletModal = ({
                 marginTop="25px"
                 w="30px"
                 h="30px"
-                src={RightArrow}
+                // src={RightArrow}
                 alt="Settings"
                 style={{
                   cursor: "pointer",

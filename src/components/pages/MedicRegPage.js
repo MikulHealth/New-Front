@@ -24,9 +24,9 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Doctors from "../../assets/Doctors.svg";
-import Shade from "../../assets/Shade.svg";
-import logo from "../../assets/Whitelogo.png";
+// import Doctors from "../../assets/Doctors.svg";
+// import Shade from "../../assets/Shade.svg";
+// import logo from "../../assets/Whitelogo.png";
 import "../../styles/pages/LandingPage.css";
 
 const customTheme = extendTheme({
@@ -147,7 +147,9 @@ const LandingPage = () => {
           <HStack spacing={10}>
             <Box w="5px" />
             <a href="/">
-              <Image src={logo} alt="Logo" w="100px" h="30px" />
+              <Image 
+              // src={logo}
+               alt="Logo" w="100px" h="30px" />
             </a>
             <Spacer />
             <Spacer />
@@ -160,9 +162,11 @@ const LandingPage = () => {
         </Box>
         <Box display="flex">
           <Box>
-            <Image src={Doctors} alt="Logo" w="715px" h="1024px" />
+            <Image 
+            // src={Doctors}
+             alt="Logo" w="715px" h="1024px" />
             <Image
-              src={Shade}
+              // src={Shade}
               alt="Logo"
               w="715px"
               h="1024px"

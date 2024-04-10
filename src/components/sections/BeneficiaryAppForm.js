@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import LocationIcon from "../../assets/LocationIcon.svg";
-import CalenderIcon from "../../assets/CalenderIcon.svg";
+// import LocationIcon from "../../assets/LocationIcon.svg";
+// import CalenderIcon from "../../assets/CalenderIcon.svg";
 import PaymentModal from "./PaymentMethod";
 import {
   InputGroup,
@@ -434,7 +434,7 @@ const BookBeneficiaryAppointmentModal = ({
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>
@@ -466,7 +466,7 @@ const BookBeneficiaryAppointmentModal = ({
                       ml={{base: "50px", md: "30px"}}
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>
@@ -492,7 +492,7 @@ const BookBeneficiaryAppointmentModal = ({
                     marginLeft="-35px"
                     w="24px"
                     h="24px"
-                    src={LocationIcon}
+                    // src={LocationIcon}
                     alt="LocationIcon"
                   />
                 </Flex>

@@ -15,10 +15,10 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import WhatsAppIcon from "../../../assets/WhatsApp.svg";
-import AddressIcon from "../../../assets/Address.svg";
-import EmailIcon from "../../../assets/Email.svg";
-import PhoneIcon from "../../../assets/Phone.svg";
+// import WhatsAppIcon from "../../../assets/WhatsApp.svg";
+// import AddressIcon from "../../../assets/Address.svg";
+// import EmailIcon from "../../../assets/Email.svg";
+// import PhoneIcon from "../../../assets/Phone.svg";
 import "../../../styles/pages/LandingPage.css";
 import NavigationBar from "../../unAuthLayouts/NavigationBar";
 import Footer from "../../unAuthLayouts/Footer";
@@ -165,7 +165,7 @@ const LandingPage = () => {
             <Box marginLeft="200px" marginTop="350px">
               <Flex>
                 <Image
-                  src={AddressIcon}
+                  // src={AddressIcon}
                   alt="Logo"
                   w="35px"
                   h="35px"
@@ -191,7 +191,9 @@ const LandingPage = () => {
 
             <Box marginLeft="450px" marginTop="350px" marginBottom="200px">
               <Flex>
-                <Image src={EmailIcon} alt="Logo" w="35px" h="35px" />
+                <Image 
+                // src={EmailIcon}
+                 alt="Logo" w="35px" h="35px" />
                 <Text
                   fontSize="24px"
                   fontFamily="body"
@@ -208,7 +210,9 @@ const LandingPage = () => {
               </Text>
               <Box marginTop="10px">
                 <Flex>
-                  <Image src={PhoneIcon} alt="Logo" w="42px" h="42px" />
+                  <Image 
+                  // src={PhoneIcon}
+                   alt="Logo" w="42px" h="42px" />
                   <Text
                     fontSize="24px"
                     fontFamily="body"
@@ -225,7 +229,7 @@ const LandingPage = () => {
               </Box>
               <a href="https://example.com">
                 <Image
-                  src={WhatsAppIcon}
+                  // src={WhatsAppIcon}
                   alt="Logo"
                   w="80px"
                   h="80px"

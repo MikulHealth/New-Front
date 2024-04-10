@@ -12,8 +12,7 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
-import Done from "../../assets/MedicRegDone.svg";
+// import Done from "../../assets/MedicRegDone.svg";
 import "../../styles/pages/LandingPage.css";
 
 const customTheme = extendTheme({
@@ -55,7 +54,7 @@ const LandingPage = () => {
             And we’re done!
           </Text>
           <Image
-            src={Done}
+            // src={Done}
             alt="Logo"
             w="250px"
             h="250px"

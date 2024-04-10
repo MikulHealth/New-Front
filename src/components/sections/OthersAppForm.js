@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import LocationIcon from "../../assets/LocationIcon.svg";
-import CalenderIcon from "../../assets/CalenderIcon.svg";
+// import LocationIcon from "../../assets/LocationIcon.svg";
+// import CalenderIcon from "../../assets/CalenderIcon.svg";
 import { FaPhoneAlt } from "react-icons/fa";
 import PaymentModal from "./PaymentMethod";
 import {
@@ -410,7 +410,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       marginLeft="30px"
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>
@@ -496,7 +496,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       marginLeft="30px"
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>
@@ -528,7 +528,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       marginLeft="30px"
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>
@@ -619,7 +619,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     marginLeft="-35px"
                     w="24px"
                     h="24px"
-                    src={LocationIcon}
+                    // src={LocationIcon}
                     alt="LocationIcon"
                   />
                 </Flex>

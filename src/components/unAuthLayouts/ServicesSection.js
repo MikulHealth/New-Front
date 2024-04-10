@@ -11,12 +11,12 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import Elderly from "../../assets/Elder.svg";
-import PostPaturm from "../../assets/Postpartum.svg";
-import Recovery from "../../assets/Recovery.svg";
-import ShortHome from "../../assets/ShortService.svg";
-import Nanny from "../../assets/Nanny.svg";
-import Doctor from "../../assets/Doctor.svg";
+// import Elderly from "../../assets/Elder.svg";
+// import PostPaturm from "../../assets/Postpartum.svg";
+// import Recovery from "../../assets/Recovery.svg";
+// import ShortHome from "../../assets/ShortService.svg";
+// import Nanny from "../../assets/Nanny.svg";
+// import Doctor from "../../assets/Doctor.svg";
 import "../../styles/pages/LandingPage.css";
 import { NavLink } from "react-router-dom";
 
@@ -55,29 +55,29 @@ export default function ServicesSection() {
           gap={{ base: "20px", md: "40px" }}
         >
           <ServiceBox
-            image={Elderly}
+            // image={Elderly}
             title="Elderly Care"
             description="Comprehensive nursing care focusing on the needs and overall well-being of the elderly"
           />
 
           <ServiceBox
-            image={PostPaturm}
+            // image={PostPaturm}
             title="Post-Partum Care"
             description="Specialized care for new-born babies and their mothers post-delivery"
           />
           <ServiceBox
-            image={Recovery}
+            // image={Recovery}
             title="Recovery Care"
             description="All-inclusive care for people recovering from surgery, critical and long-term illnesses"
           />
 
           <ServiceBox
-            image={Nanny}
+            // image={Nanny}
             title="Nanny services"
             description="Professional child-care services provided by well-trained nannies for children of all ages"
           />
           <ServiceBox
-            image={ShortHome}
+            // image={ShortHome}
             title="Short home visit"
             description="Professional home nursing services to address specific healthcare needs"
           />
@@ -99,7 +99,7 @@ export default function ServicesSection() {
             display={{ base: "block", lg: "block" }}
           >
             <Image
-              src={Doctor}
+              // src={Doctor}
               alt="Doctor"
               style={{ width: "100%", height: "100%" }}
             />
@@ -181,7 +181,9 @@ const ServiceBox = ({ image, title, description }) => {
       mt={{ base: "4", md: "0" }}
     >
       <Flex justifyContent="center" alignItems="center" mb="4">
-        <Image src={image} alt={title} w="300px" h="300" />
+        <Image
+        //  src={image} 
+         alt={title} w="300px" h="300" />
       </Flex>
       <Text
         color="white"

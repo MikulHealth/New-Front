@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import userImageIcon from "../../assets/userImage.svg";
+// import userImageIcon from "../../assets/userImage.svg";
 import {
   VStack,
   Text,

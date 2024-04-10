@@ -1,7 +1,7 @@
 import React from "react";
-import FBIcon from "../../assets/FaceBookIcon.svg";
-import IGIcon from "../../assets/InstagramIcon.svg";
-import WHIcon from "../../assets/WAIcon.svg";
+// import FBIcon from "../../assets/FaceBookIcon.svg";
+// import IGIcon from "../../assets/InstagramIcon.svg";
+// import WHIcon from "../../assets/WAIcon.svg";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import { Box, Link as ChakraLink, Flex, Image, Text } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
@@ -80,13 +80,19 @@ const Footer = ({ onFaqsClick }) => {
             mt={{ base: "2", md: "4" }}
           >
             <ChakraLink href="https://web.facebook.com/mikulhealthcare/?_rdc=1&_rdr://example.com">
-              <Image src={FBIcon} alt="Facebook" w="32px" h="32px" mr="4" />
+              <Image 
+              // src={FBIcon}
+               alt="Facebook" w="32px" h="32px" mr="4" />
             </ChakraLink>
             <ChakraLink href="https://www.instagram.com/mikulhealth/">
-              <Image src={IGIcon} alt="Instagram" w="32px" h="32px" mr="4" />
+              <Image 
+              // src={IGIcon}
+               alt="Instagram" w="32px" h="32px" mr="4" />
             </ChakraLink>
             <ChakraLink href="https://wa.me/message/3VO5QNBR2AB4L1://example.com">
-              <Image src={WHIcon} alt="WhatsApp" w="32px" h="32px" />
+              <Image 
+              // src={WHIcon}
+               alt="WhatsApp" w="32px" h="32px" />
             </ChakraLink>
           </Flex>
         </Box>

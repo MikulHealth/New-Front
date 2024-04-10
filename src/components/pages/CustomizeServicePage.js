@@ -27,7 +27,7 @@ import {
 } from "@chakra-ui/react";
 
 import LoadingSpinner from "../../utils/Spiner";
-import HelppIcon from "../../assets/HelppIcon.svg";
+// import HelppIcon from "../../assets/HelppIcon.svg";
 import CustomizeServiceModal from "../sections/CustomizeServiceModal";
 
 import NavBar from "../authLayouts/NavBar";
@@ -432,7 +432,7 @@ const CustomizeServicePage = () => {
           <Box marginLeft="910px" marginTop="-150px">
             <Image
               onClick={help}
-              src={HelppIcon}
+              // src={HelppIcon}
               alt="Logo"
               w="70px"
               h="70px"

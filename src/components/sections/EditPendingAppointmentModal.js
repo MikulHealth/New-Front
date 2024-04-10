@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CalenderIcon from "../../assets/CalenderIcon.svg";
+// import CalenderIcon from "../../assets/CalenderIcon.svg";
 import DatePicker from "react-datepicker";
 import {
   Drawer,
@@ -191,7 +191,7 @@ const EditPendingAppointment = ({
                     marginLeft="205px"
                     w="24px"
                     h="24px"
-                    src={CalenderIcon}
+                    // src={CalenderIcon}
                     alt="CalenderIcon"
                   />
                 </Flex>
@@ -224,7 +224,7 @@ const EditPendingAppointment = ({
                     marginLeft="205px"
                     w="24px"
                     h="24px"
-                    src={CalenderIcon}
+                    // src={CalenderIcon}
                     alt="CalenderIcon"
                   />
                 </Flex>

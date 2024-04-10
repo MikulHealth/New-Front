@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import LocationIcon from "../../assets/LocationIcon.svg";
-import CalenderIcon from "../../assets/CalenderIcon.svg";
+// import LocationIcon from "../../assets/LocationIcon.svg";
+// import CalenderIcon from "../../assets/CalenderIcon.svg";
 import PaymentModal from "./PaymentMethod";
 import {
   Drawer,
@@ -319,7 +319,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>
@@ -353,7 +353,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      src={CalenderIcon}
+                      // src={CalenderIcon}
                       alt="CalenderIcon"
                     />
                   </Flex>
@@ -424,7 +424,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     marginLeft="-35px"
                     w="24px"
                     h="24px"
-                    src={LocationIcon}
+                    // src={LocationIcon}
                     alt="LocationIcon"
                   />
                 </Flex>

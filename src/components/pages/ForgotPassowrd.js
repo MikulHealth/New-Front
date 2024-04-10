@@ -17,9 +17,8 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
 import "../../styles/pages/LandingPage.css";
-import logo from "../../assets/Whitelogo.png";
+// import logo from "../../assets/Whitelogo.png";
 
 const customTheme = extendTheme({
   components: {
@@ -57,7 +56,9 @@ const LandingPage = () => {
           <HStack spacing={10}>
             <Box w="5px" />
             <a href="/">
-              <Image src={logo} alt="Logo" w="100px" h="30px" />
+              <Image 
+              // src={logo} 
+              alt="Logo" w="100px" h="30px" />
             </a>
             <Spacer />
             <Spacer />
