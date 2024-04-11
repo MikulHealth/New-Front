@@ -26,7 +26,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 const BookBeneficiaryAppointmentModal = ({
   isOpen,
   onClose,
@@ -38,7 +38,7 @@ const BookBeneficiaryAppointmentModal = ({
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [customizedPlans, setCustomizedPlans] = useState([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({}); 
 

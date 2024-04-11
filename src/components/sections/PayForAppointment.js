@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { CheckIcon, WarningIcon } from "@chakra-ui/icons";
 import {
@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import PaymentModal from "./PaymentMethod";
 const PayForAppointmentModal = ({ isOpen, onClose, appointment }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";

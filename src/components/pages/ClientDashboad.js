@@ -63,7 +63,7 @@ const ClientDash = () => {
   // const [setShowSkeleton] = useState(true);
   const [apiMessage] = useState("");
   const [showPayAppointmentModal, setShowPayAppointmentModal] = useState(false);
-  const [matchedAppointments, setMatchedAppointments] = useState([]);
+  // const [matchedAppointments, setMatchedAppointments] = useState([]);
   const [showMatchedAppointmentsModal, setShowMatchedAppointmentsModal] =
     useState(false);
 
@@ -202,7 +202,7 @@ const ClientDash = () => {
     };
 
     fetchData();
-  }, []);
+  }, [navigate, dispatch]);
 
   const handleOpenWalletModal = () => {
     navigate("/wallet");
@@ -703,7 +703,7 @@ const ClientDash = () => {
       <MatchedAppointmentsModal
         isOpen={showMatchedAppointmentsModal}
         onClose={() => setShowMatchedAppointmentsModal(false)}
-        matchedAppointments={matchedAppointments}
+        // matchedAppointments={matchedAppointments}
         apiResponseMessage={apiMessage}
       />
 

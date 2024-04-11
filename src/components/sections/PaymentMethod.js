@@ -6,12 +6,10 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Button,
   Box,
   Text,
   Flex,
   Image,
-  VStack,
 } from "@chakra-ui/react";
 // import RightArrow from "../../assets/RightArrow.svg";
 // import CardPayment from "../../assets/OnlinePayment.svg";
