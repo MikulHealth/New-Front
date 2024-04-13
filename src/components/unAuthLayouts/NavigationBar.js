@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-// import logo from "../../assets/Whitelogo.png";
+import logo from "../../assets/Whitelogo.svg";
 import GetStartedModal from "./GetStarted";
 
 export default function NavigationBar() {
@@ -61,7 +61,7 @@ export default function NavigationBar() {
           <Box w="5px" />
           <a href="/">
             <Image 
-            // src={logo}
+            src={logo}
              alt="Logo" w="100px" h="30px" />
           </a>
 

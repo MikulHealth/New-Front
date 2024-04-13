@@ -13,16 +13,16 @@ import {
 } from "@chakra-ui/react";
 import "animate.css";
 import MHNurse from "../../../assets/MHNurse.svg";
-// import SignUp from "../../../assets/SignUp.svg";
-// import SelectCare from "../../../assets/SelectService.svg";
-// import GetMatched from "../../../assets/GetMatched.svg";
-// import ReceieveCare from "../../../assets/RecieveCare.svg";
-// import CenterMed from "../../../assets/CenterMedic.svg";
-// import Kudirat from "../../../assets/Kudirat.svg";
-// import Joy from "../../../assets/Josy.svg";
-// import Adeola from "../../../assets/Adeola.svg";
-// import Gift from "../../../assets/Gift.svg";
-// import "../../../styles/pages/LandingPage.css";
+import SignUp from "../../../assets/SignUp.svg";
+import SelectCare from "../../../assets/SelectService.svg";
+import GetMatched from "../../../assets/GetMatched.svg";
+import ReceieveCare from "../../../assets/RecieveCare.svg";
+import CenterMed from "../../../assets/CenterMedic.svg";
+import Kudirat from "../../../assets/Kudirat.svg";
+import Joy from "../../../assets/Josy.svg";
+import Adeola from "../../../assets/Adeola.svg";
+import Gift from "../../../assets/Gift.svg";
+import "../../../styles/pages/LandingPage.css";
 import GetStartedModal from "../../unAuthLayouts/GetStarted";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -197,7 +197,7 @@ const LandingPage = () => {
           >
             <Box marginLeft="20px">
               <Image 
-              // src={SignUp} 
+              src={SignUp} 
               alt="Logo" w="200px" h="200px" />
             </Box>
 
@@ -224,7 +224,7 @@ const LandingPage = () => {
           >
             <Box marginLeft="20px">
               <Image 
-              // src={SelectCare} 
+              src={SelectCare} 
               alt="Logo" w="200px" h="200px" />
             </Box>
 
@@ -251,7 +251,7 @@ const LandingPage = () => {
           >
             <Box marginLeft="15px">
               <Image 
-              // src={GetMatched}
+              src={GetMatched}
                alt="Logo" w="200px" h="200px" />
             </Box>
 
@@ -278,7 +278,7 @@ const LandingPage = () => {
           >
             <Box marginLeft="15px">
               <Image 
-              // src={ReceieveCare}
+              src={ReceieveCare}
                alt="Logo" w="200px" h="200px" />
             </Box>
 
@@ -332,7 +332,7 @@ const LandingPage = () => {
             >
               <Box marginLeft="2px">
                 <Image
-                  // src={Kudirat}
+                  src={Kudirat}
                   alt="image"
                   w="398px"
                   h="191px"
@@ -352,7 +352,7 @@ const LandingPage = () => {
             >
               <Box>
                 <Image
-                  // src={Adeola}
+                  src={Adeola}
                   alt="image"
                   w="398px"
                   h="191px"
@@ -373,7 +373,7 @@ const LandingPage = () => {
           >
             <Box>
               <Image
-                // src={CenterMed}
+                src={CenterMed}
                 alt="image"
                 w="306px"
                 h="413px"
@@ -393,7 +393,7 @@ const LandingPage = () => {
             >
               <Box>
                 <Image
-                  // src={Joy}
+                  src={Joy}
                   alt="image"
                   w="398px"
                   h="191px"
@@ -412,7 +412,7 @@ const LandingPage = () => {
             >
               <Box>
                 <Image
-                  // src={Gift}
+                  src={Gift}
                   alt="image"
                   w="398px"
                   h="191px"

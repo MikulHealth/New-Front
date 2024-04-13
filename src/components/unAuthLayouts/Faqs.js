@@ -1,8 +1,8 @@
 import React from "react";
-// import Folder from "../../assets/Folder.svg";
-// import Papa from "../../assets/ElderlyPapa.svg";
+import Folder from "../../assets/Folder.svg";
+import Papa from "../../assets/ElderlyPapa.svg";
 import { NavLink } from "react-router-dom";
-// import WhatsAppIcon from "../../assets/WhatsApp.svg";
+import WhatsAppIcon from "../../assets/WhatsApp.svg";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -262,7 +262,7 @@ export default function Faqs() {
                   >
                     <Box marginRight="30px">
                       <Image
-                        // src={Folder}
+                        src={Folder}
                         alt="Logo"
                         w={{ base: "100%", md: "551px" }}
                         h={{ base: "auto", md: "280px" }}
@@ -282,7 +282,7 @@ export default function Faqs() {
                   >
                     <Box marginRight="30px">
                       <Image
-                        // src={Papa}
+                        src={Papa}
                         alt="Logo"
                         w={{ base: "100%", md: "551px" }}
                         h={{ base: "auto", md: "280px" }}
@@ -293,7 +293,7 @@ export default function Faqs() {
                     <Box marginLeft={{ base: "0", md: "500px" }}>
                       <a href="https://example.com">
                         <Image
-                          // src={WhatsAppIcon}
+                          src={WhatsAppIcon}
                           alt="Logo"
                           w="80px"
                           h="80px"
