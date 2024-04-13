@@ -163,72 +163,79 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <Box overflowY="scroll" height="100vh">
-        <NavigationBar />
-        <Flex align="center" justify="center" height="100vh">
-          <Box
-            mt="600px"
-            width={{ base: "90%", sm: "500px" }}
-            p="6"
-            boxShadow="xl"
-            rounded="md"
-            bg="white"
-          >
-            <Text fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
-              Create your account
-            </Text>
-            <form onSubmit={handleSubmit}>
-              <FormControl isRequired>
-                <FormLabel>First Name</FormLabel>
+      <NavigationBar />
+      <Flex align="center" justify="center" height="100vh">
+        <Box
+          mb="300px"
+          mt={{ base: "600px", md: "700px" }}
+          width={{ base: "90%", sm: "500px" }}
+          p="6"
+          boxShadow="xl"
+          rounded="md"
+          bg="white"
+        >
+          <Text fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
+            Create your account
+          </Text>
+          <form onSubmit={handleSubmit}>
+            <FormControl isRequired>
+              <FormLabel>First Name</FormLabel>
+              <Input
+                name="firstName"
+                placeholder="First name"
+                onChange={handleInputChange}
+              />
+              <FormLabel mt="4">Last Name</FormLabel>
+              <Input
+                name="lastName"
+                placeholder="Last name"
+                onChange={handleInputChange}
+              />
+              <FormLabel mt="4">Email Address</FormLabel>
+              <Input
+                name="email"
+                type="email"
+                placeholder="Email"
+                onChange={handleInputChange}
+              />
+              <FormLabel mt="4">Home Address</FormLabel>
+              <Input
+                name="address"
+                placeholder="Home address"
+                onChange={handleInputChange}
+              />
+              <FormLabel mt="4">Phone Number</FormLabel>
+              <InputGroup>
+                <InputLeftAddon children="+234" />
                 <Input
-                  name="firstName"
-                  placeholder="First name"
+                  name="phoneNumber"
+                  type="tel"
+                  placeholder="Phone number"
                   onChange={handleInputChange}
                 />
-                <FormLabel mt="4">Last Name</FormLabel>
-                <Input
-                  name="lastName"
-                  placeholder="Last name"
-                  onChange={handleInputChange}
-                />
-                <FormLabel mt="4">Email Address</FormLabel>
-                <Input
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  onChange={handleInputChange}
-                />
-                <FormLabel mt="4">Home Address</FormLabel>
-                <Input
-                  name="address"
-                  placeholder="Home address"
-                  onChange={handleInputChange}
-                />
-                <FormLabel mt="4">Phone Number</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon children="+234" />
-                  <Input
-                    name="phoneNumber"
-                    type="tel"
-                    placeholder="Phone number"
-                    onChange={handleInputChange}
-                  />
-                </InputGroup>
-                <FormLabel mt="4">Gender</FormLabel>
-                <Select
-                  name="gender"
-                  placeholder="Select your gender"
-                  onChange={handleInputChange}
+              </InputGroup>
+              <FormLabel mt="4">Gender</FormLabel>
+              <Select
+                name="gender"
+                placeholder="Select your gender"
+                onChange={handleInputChange}
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </Select>
+              <Box marginLeft="1px" w="450px">
+                <FormLabel marginTop="20px">Date of Birth</FormLabel>
+                <Flex
+                  alignItems="flex-start"
+                  border="1px solid" 
+                  borderColor="gray.200"
+                  p={2} 
+                  borderRadius="8px"
                 >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </Select>
-                <Box marginLeft="1px" w="450px">
-                  <FormLabel marginTop="20px">Date of Birth</FormLabel>
                   <DatePicker
                     name="dob"
                     selected={formData.dob}
-                    onChange={(date) => handleDobChange(date)}
+                    onChange={handleDobChange}
                     maxDate={new Date()}
                     peekNextMonth
                     showMonthDropdown
@@ -238,61 +245,61 @@ const LandingPage = () => {
                     placeholderText="Select your date of birth"
                     className="form-control"
                   />
-                </Box>
-                <FormLabel mt="4">Upload Image</FormLabel>
+                </Flex>
+              </Box>
+              <FormLabel mt="4">Upload Image</FormLabel>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => postImage(e.target.files[0])}
+              />
+              {imageLoading && <LoadingSpinner />}
+              <FormLabel mt="4">Password</FormLabel>
+              <InputGroup size="md">
                 <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => postImage(e.target.files[0])}
+                  name="password"
+                  pr="4.5rem"
+                  type={show ? "text" : "password"}
+                  placeholder="Enter password"
+                  onChange={handleInputChange}
                 />
-                {imageLoading && <LoadingSpinner />}
-                <FormLabel mt="4">Password</FormLabel>
-                <InputGroup size="md">
-                  <Input
-                    name="password"
-                    pr="4.5rem"
-                    type={show ? "text" : "password"}
-                    placeholder="Enter password"
-                    onChange={handleInputChange}
-                  />
-                  <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleClick}>
-                      {show ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                <FormLabel mt="4">Confirm Password</FormLabel>
-                <InputGroup size="md">
-                  <Input
-                    name="confirmPassword"
-                    pr="4.5rem"
-                    type={show ? "text" : "password"}
-                    placeholder="Confirm password"
-                    onChange={handleInputChange}
-                  />
-                  <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleClick}>
-                      {show ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handleClick}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <FormLabel mt="4">Confirm Password</FormLabel>
+              <InputGroup size="md">
+                <Input
+                  name="confirmPassword"
+                  pr="4.5rem"
+                  type={show ? "text" : "password"}
+                  placeholder="Confirm password"
+                  onChange={handleInputChange}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handleClick}>
+                    {show ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
 
-                <Button
-                  mt="6"
-                  type="submit"
-                  w="full"
-                  bg="#A210C6"
-                  color="white"
-                  isLoading={loading}
-                  loadingText="Registering..."
-                >
-                  Submit
-                </Button>
-              </FormControl>
-            </form>
-          </Box>
-        </Flex>
-      </Box>
+              <Button
+                mt="6"
+                type="submit"
+                w="full"
+                bg="#A210C6"
+                color="white"
+                isLoading={loading}
+                loadingText="Registering..."
+              >
+                Submit
+              </Button>
+            </FormControl>
+          </form>
+        </Box>
+      </Flex>
     </ChakraProvider>
   );
 };
