@@ -63,7 +63,7 @@ const LandingPage = () => {
         style={settingsContainerStyle}
         flexWrap="wrap"
         marginBottom={{ base: "50px", md: "100px" }}
-        marginTop={{ base: "50px", md: "50px" }}
+        marginTop={{ base: "5px", md: "50px" }}
         display="flex"
         flexDirection={{ base: "column", md: "row" }}
         alignItems={{ base: "center", md: "flex-start" }}
@@ -127,9 +127,7 @@ const LandingPage = () => {
             </Button>
           </Box>
         </HStack>
-
         <Spacer />
-
         <style>
           {`
           @keyframes zoomInOut {
@@ -148,7 +146,7 @@ const LandingPage = () => {
         <Box
           marginTop={{ base: "0", md: "50px" }}
           marginLeft={{ base: "0", md: "0px" }}
-          padding={{ base: "90px", md: "0px" }}
+          padding={{ base: "50px", md: "0px" }}
           className="box"
           data-aos="zoom-out"
           data-aos-duration="10000"
