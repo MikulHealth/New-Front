@@ -12,7 +12,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import "animate.css";
-// import MHNurse from "../../../assets/MHNurse.svg";
+import MHNurse from "../../../assets/MHNurse.svg";
 // import SignUp from "../../../assets/SignUp.svg";
 // import SelectCare from "../../../assets/SelectService.svg";
 // import GetMatched from "../../../assets/GetMatched.svg";
@@ -159,7 +159,7 @@ const LandingPage = () => {
           display={{ base: "block", lg: "block" }}
         >
           <Image
-            // src={MHNurse}
+            src={MHNurse}
             alt="Nurse"
             style={{ width: "100%", height: "100%" }}
           />
