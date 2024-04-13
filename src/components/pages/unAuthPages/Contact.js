@@ -15,10 +15,10 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-// import WhatsAppIcon from "../../../assets/WhatsApp.svg";
-// import AddressIcon from "../../../assets/Address.svg";
-// import EmailIcon from "../../../assets/Email.svg";
-// import PhoneIcon from "../../../assets/Phone.svg";
+import WhatsAppIcon from "../../../assets/WhatsApp.svg";
+import AddressIcon from "../../../assets/AddressIcon.svg";
+import EmailIcon from "../../../assets/Email.svg";
+import PhoneIcon from "../../../assets/Phone.svg";
 import "../../../styles/pages/LandingPage.css";
 import NavigationBar from "../../unAuthLayouts/NavigationBar";
 import Footer from "../../unAuthLayouts/Footer";
@@ -54,10 +54,16 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <Box  overflow="hidden">
+      <Box overflow="hidden">
         <Box overflowY="scroll" height="100vh">
           <NavigationBar />
-          <Box style={settingsContainerStyle} marginTop="80px" bg="white" marginLeft="-400px" display="flex">
+          <Box
+            style={settingsContainerStyle}
+            marginTop="80px"
+            bg="white"
+            marginLeft="-400px"
+            display="flex"
+          >
             <Box marginLeft="500px">
               <Text
                 fontSize="28px"
@@ -165,7 +171,7 @@ const LandingPage = () => {
             <Box marginLeft="200px" marginTop="350px">
               <Flex>
                 <Image
-                  // src={AddressIcon}
+                  src={AddressIcon}
                   alt="Logo"
                   w="35px"
                   h="35px"
@@ -191,9 +197,12 @@ const LandingPage = () => {
 
             <Box marginLeft="450px" marginTop="350px" marginBottom="200px">
               <Flex>
-                <Image 
-                // src={EmailIcon}
-                 alt="Logo" w="35px" h="35px" />
+                <Image
+                  src={EmailIcon}
+                  alt="Logo"
+                  w="35px"
+                  h="35px"
+                />
                 <Text
                   fontSize="24px"
                   fontFamily="body"
@@ -210,9 +219,12 @@ const LandingPage = () => {
               </Text>
               <Box marginTop="10px">
                 <Flex>
-                  <Image 
-                  // src={PhoneIcon}
-                   alt="Logo" w="42px" h="42px" />
+                  <Image
+                    src={PhoneIcon}
+                    alt="Logo"
+                    w="42px"
+                    h="42px"
+                  />
                   <Text
                     fontSize="24px"
                     fontFamily="body"
@@ -229,7 +241,7 @@ const LandingPage = () => {
               </Box>
               <a href="https://example.com">
                 <Image
-                  // src={WhatsAppIcon}
+                  src={WhatsAppIcon}
                   alt="Logo"
                   w="80px"
                   h="80px"
@@ -243,7 +255,15 @@ const LandingPage = () => {
 
           <Box bg="#A210C6" padding="10px" marginTop="-30px">
             <AspectRatio ratio={16 / 9}>
-              {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.952912260219!2d3.375295414770757!3d6.5276316452784755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sLagos!5e0!3m2!1sen!2sng!4v1567723392506!5m2!1sen!2sng" /> */}
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.952912260219!2d3.375295414770757!3d6.5276316452784755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sLagos!5e0!3m2!1sen!2sng!4v1567723392506"
+                title="Google Maps location of Lagos"
+                width="600"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+              />
             </AspectRatio>
           </Box>
 

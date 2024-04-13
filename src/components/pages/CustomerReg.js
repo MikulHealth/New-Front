@@ -1,49 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import NavigationBar from "../unAuthLayouts/NavigationBar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import LoadingSpinner from "../../utils/Spiner";
 
 import {
   Box,
   Button,
-  Link as ChakraLink,
-  HStack,
-  Spacer,
-  Image,
   extendTheme,
   ChakraProvider,
   Text,
   FormControl,
   FormLabel,
-
-  Flex,
   Input,
   InputGroup,
-  InputLeftAddon,
   InputRightElement,
-
+  InputLeftAddon,
   useToast,
+  Flex,
   Select,
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-// import Customer from "../../assets/UserSignUp.svg";
-// import Shade from "../../assets/Shade.svg";
-// import logo from "../../assets/Whitelogo.png";
 import "../../styles/pages/LandingPage.css";
-import LoadingSpinner from "../../utils/Spiner";
 
 const customTheme = extendTheme({
   components: {
     Link: {
-      baseStyle: {
-        _focus: {
-          boxShadow: "none",
-        },
-      },
+      baseStyle: { _focus: { boxShadow: "none" } },
     },
   },
   fonts: {
@@ -61,7 +47,7 @@ const LandingPage = () => {
     password: "",
     confirmPassword: "",
     gender: "",
-    dob: "",
+    dob: new Date(),
     address: "",
     image: "",
     kinName: "",
@@ -69,75 +55,35 @@ const LandingPage = () => {
     language: "English",
     relationship: "Self",
   });
-
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const [image] = useState();
   const [show, setShow] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
-  // const [selectedDate, setSelectedDate] = useState(null);
-
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-
-  //   if (name === "dob") {
-  //     setSelectedDate(value);
-  //     setFormData({
-  //       ...formData,
-  //       dob: value,
-  //     });
-  //   } else {
-  //     setFormData({
-  //       ...formData,
-  //       [name]: value,
-  //     });
-  //   }
-  // };
-
-  const handleDobChange = (date) => {
-    setFormData({
-      ...formData,
-      dob: date,
-    });
-  };
-  
+  const toast = useToast();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const toast = useToast();
-  const handleClick = () => setShow(!show);
-  console.log("form details", formData);
+  const handleDobChange = (date) => {
+    setFormData({ ...formData, dob: date });
+  };
 
-  
+  const handleClick = () => setShow(!show);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateFields()) {
-      return;
-    }
-
-    await postImage(image, formData, setFormData);
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/v1/angel/join",
+        // "http://localhost:8080/v1/angel/join",
+        "https://backend-c1pz.onrender.com/v1/angel/join",
         formData,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
-
-      localStorage.setItem("phoneNumber", formData.phoneNumber);
-      console.log(response);
       toast({
         title: "Registration Successful",
         description: response.data.message,
@@ -145,94 +91,30 @@ const LandingPage = () => {
         duration: 5000,
         isClosable: true,
       });
-
-      const verifyNumberResponse = await axios.post(
-        "http://localhost:8080/api/v1/sms/verify-number",
-        {
-          phoneNumber: formData.phoneNumber,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      localStorage.setItem("phoneNumber", formData.phoneNumber);
-      // Handle the response for the second API call as needed
-      console.log(verifyNumberResponse);
-
-      setTimeout(() => {
-        navigate("/verify-number");
-      }, 5000);
-      // Redirect or perform other actions based on the response
+      navigate("/verify-number");
     } catch (error) {
       toast({
         title: "Registration Failed",
-        description: error.response.data,
+        description: error.response ? error.response.data : "Network error",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
     } finally {
-      // Set loading back to false regardless of success or failure
       setLoading(false);
     }
   };
 
-  const validateFields = () => {
-    const fieldMappings = {
-      firstName: "First Name",
-      lastName: "Last Name",
-      email: "Email",
-      phoneNumber: "Phone Number",
-      password: "Password",
-      confirmPassword: "Confirm Password",
-      gender: "Gender",
-      dob: "Date of Birth",
-      address: "Address",
-      kinName: "Next of Kin Name",
-      kinNumber: "Next of Kin Phone Number",
-    };
-
-    const requiredFields = [
-      "firstName",
-      "lastName",
-      "email",
-      "phoneNumber",
-      "password",
-      "confirmPassword",
-      "gender",
-      "dob",
-      "address",
-      "kinName",
-      "kinNumber",
-    ];
-
-    for (const field of requiredFields) {
-      if (!formData[field]) {
-        const readableFieldName = fieldMappings[field];
-        toast({
-          title: `${readableFieldName} is Required`,
-          description: `Please provide ${readableFieldName}.`,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  useEffect(() => {
-    AOS.init();
-  }, []);
-
-  const postImage = async (image, formData, setFormData) => {
+  const postImage = async (image) => {
     setImageLoading(true);
     if (image === undefined) {
-      // toast.error("Please select an image")
+      toast({
+        title: "Error",
+        description: "Please select an image",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       return;
     }
     console.log(image);
@@ -260,267 +142,156 @@ const LandingPage = () => {
         setImageLoading(false);
         console.log(imageData.url.toString());
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setImageLoading(false);
       }
     } else {
-      // toast.error("Please select an image");
-
+      toast({
+        title: "Error",
+        description: "Please select a valid image file",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
       return;
     }
   };
 
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
     <ChakraProvider theme={customTheme}>
       <Box overflowY="scroll" height="100vh">
-        <Box
-          bg="#A210C6"
-          p={3}
-          color="white"
-          position="sticky"
-          top="0"
-          zIndex="1000"
-          borderBottom="1px solid white"
-        >
-          <HStack spacing={10}>
-            <Box w="5px" />
-            <a href="/">
-              <Image
-              //  src={logo}
-                alt="Logo" w="100px" h="30px" />
-            </a>
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <ChakraLink fontStyle="italic" href="/" color="#A210C6">
-              <Button bg="white">Home</Button>
-            </ChakraLink>
-          </HStack>
-        </Box>
-        <Box display="flex">
-          <Box w="55%">
-            <Image
-              // src={Customer}
-              alt="Logo"
-              w="650px"
-              h="1050px"
-              marginTop="-70px"
-            />
-            <Image
-              // src={Shade}
-              alt="Logo"
-              w="700px"
-              h="1050px"
-              marginTop="-1000px"
-            />
-          </Box>
-          <Box>
-            <Text
-              fontSize="32px"
-              fontFamily="body"
-              color="#A210C6"
-              marginTop="30px"
-              marginLeft="-80px"
-            >
+        <NavigationBar />
+        <Flex align="center" justify="center" height="100vh">
+          <Box
+            mt="600px"
+            width={{ base: "90%", sm: "500px" }}
+            p="6"
+            boxShadow="xl"
+            rounded="md"
+            bg="white"
+          >
+            <Text fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
               Create your account
             </Text>
             <form onSubmit={handleSubmit}>
-              <FormControl isRequired marginTop="20px" w="110%">
-                <FormLabel>What is your name</FormLabel>
-                <Flex>
+              <FormControl isRequired>
+                <FormLabel>First Name</FormLabel>
+                <Input
+                  name="firstName"
+                  placeholder="First name"
+                  onChange={handleInputChange}
+                />
+                <FormLabel mt="4">Last Name</FormLabel>
+                <Input
+                  name="lastName"
+                  placeholder="Last name"
+                  onChange={handleInputChange}
+                />
+                <FormLabel mt="4">Email Address</FormLabel>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  onChange={handleInputChange}
+                />
+                <FormLabel mt="4">Home Address</FormLabel>
+                <Input
+                  name="address"
+                  placeholder="Home address"
+                  onChange={handleInputChange}
+                />
+                <FormLabel mt="4">Phone Number</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon children="+234" />
                   <Input
-                    name="firstName"
-                    placeholder="First name"
+                    name="phoneNumber"
+                    type="tel"
+                    placeholder="Phone number"
                     onChange={handleInputChange}
-                    w="240px"
                   />
-
+                </InputGroup>
+                <FormLabel mt="4">Gender</FormLabel>
+                <Select
+                  name="gender"
+                  placeholder="Select your gender"
+                  onChange={handleInputChange}
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </Select>
+                <Box marginLeft="1px" w="450px">
+                  <FormLabel marginTop="20px">Date of Birth</FormLabel>
+                  <DatePicker
+                    name="dob"
+                    selected={formData.dob}
+                    onChange={(date) => handleDobChange(date)}
+                    maxDate={new Date()}
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    dateFormat="yyyy-MM-dd"
+                    placeholderText="Select your date of birth"
+                    className="form-control"
+                  />
+                </Box>
+                <FormLabel mt="4">Upload Image</FormLabel>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => postImage(e.target.files[0])}
+                />
+                {imageLoading && <LoadingSpinner />}
+                <FormLabel mt="4">Password</FormLabel>
+                <InputGroup size="md">
                   <Input
-                    name="lastName"
-                    placeholder="Last name"
+                    name="password"
+                    pr="4.5rem"
+                    type={show ? "text" : "password"}
+                    placeholder="Enter password"
                     onChange={handleInputChange}
-                    w="240px"
-                    marginLeft="10px"
                   />
-                </Flex>
-
-                <Flex>
-                  <Box>
-                    <FormLabel
-                      fontSize="15px"
-                      marginLeft="10px"
-                      marginTop="30px"
-                    >
-                      Upload headshort
-                    </FormLabel>
-                    <Input
-                      name="image"
-                      w="240px"
-                      type="file"
-                      accept="image/*"
-                      placeholder="Image"
-                      onChange={(e) => {
-                        postImage(e.target.files[0], formData, setFormData);
-                      }}
-                    />
-                    {imageLoading && <LoadingSpinner size={20} />}
-                  </Box>
-                  <Box>
-                    <FormLabel marginLeft="45px" marginTop="28px">
-                      Email address
-                    </FormLabel>
-                    <Input
-                      name="email"
-                      placeholder="Email"
-                      type="email"
-                      onChange={handleInputChange}
-                      marginLeft="10px"
-                      w="240px"
-                    />
-                  </Box>
-                </Flex>
-                <FormLabel marginTop="20px">Contact details</FormLabel>
-                <Flex>
-                  <Input
-                    name="address"
-                    placeholder="Home address"
-                    type="address"
-                    onChange={handleInputChange}
-                    w="490px"
-                  />
-                </Flex>
-                <Box w="490px">
-                  <InputGroup marginTop="20px">
-                    <InputLeftAddon children="+234" />
-                    <Input
-                      name="phoneNumber"
-                      type="tel"
-                      placeholder="Phone number"
-                      onChange={handleInputChange}
-                    />
-                  </InputGroup>
-                </Box>
-
-                <Flex>
-                  <Box>
-                    <FormLabel marginTop="20px">Gender </FormLabel>
-                    <Select
-                      name="gender"
-                      placeholder="Select your gender"
-                      w="240px"
-                      onChange={handleInputChange}
-                    >
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </Select>
-                  </Box>
-                  <Box marginLeft="18px" w="240px">
-                    <FormLabel marginTop="20px">Date of Birth</FormLabel>
-                    <DatePicker
-                        name="dob"
-                        selected={formData.dob}
-                        onChange={(date) => handleDobChange(date)}
-                        maxDate={new Date()}
-                        peekNextMonth
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode="select"
-                        dateFormat="yyyy-MM-dd"
-                        placeholderText="Select your date of birth"
-                        className="form-control"
-                      />
-                  </Box>
-                </Flex>
-                <Flex marginTop="1px">
-                  <Box>
-                    <FormLabel marginTop="20px">Next of kin </FormLabel>
-                    <Input
-                      name="kinName"
-                      type="text"
-                      placeholder="Next of kin name"
-                      onChange={handleInputChange}
-                      w="240px"
-                    />
-                    <Input
-                      name="kinNumber"
-                      type="text"
-                      placeholder="Next of kin phone number"
-                      onChange={handleInputChange}
-                      w="240px"
-                      marginLeft="18px"
-                    />
-                  </Box>
-                </Flex>
-
-                <Box w="500px" marginTop="20px">
-                  <InputGroup size="md">
-                    <Input
-                      name="password"
-                      pr="4.5rem"
-                      type={show ? "text" : "password"}
-                      placeholder="Enter password"
-                      onChange={handleInputChange}
-                    />
-                    <InputRightElement width="4.5rem">
-                      <Button h="1.75rem" size="sm" onClick={handleClick}>
-                        {show ? "Hide" : "Show"}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                </Box>
-                <Box marginTop="20px" w="500px">
-                  <InputGroup size="md">
-                    <Input
-                      name="confirmPassword"
-                      pr="4.5rem"
-                      type={show ? "text" : "password"}
-                      placeholder="Confirm password"
-                      onChange={handleInputChange}
-                      w="500px"
-                    />
-                    <InputRightElement width="4.5rem">
-                      <Button h="1.75rem" size="sm" onClick={handleClick}>
-                        {show ? "Hide" : "Show"}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
-                </Box>
-
-                <Box marginLeft="-30px">
-                  <ChakraLink href="/join-complete">
-                    <Button
-                      type="submit"
-                      w="350px"
-                      bg="#A210C6"
-                      marginTop="20px"
-                      color="white"
-                      isLoading={loading}
-                      loadingText="Registering..."
-                    >
-                      {loading ? "Loading..." : "Submit"}
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                      {show ? "Hide" : "Show"}
                     </Button>
-                  </ChakraLink>
+                  </InputRightElement>
+                </InputGroup>
+                <FormLabel mt="4">Confirm Password</FormLabel>
+                <InputGroup size="md">
+                  <Input
+                    name="confirmPassword"
+                    pr="4.5rem"
+                    type={show ? "text" : "password"}
+                    placeholder="Confirm password"
+                    onChange={handleInputChange}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                      {show ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
 
-                  <Text
-                    fontSize="16px"
-                    fontFamily="Montserrat"
-                    marginTop="10px"
-                  >
-                    Already have an account?{" "}
-                    <ChakraLink
-                      fontStyle="italic"
-                      href="/login"
-                      color="#A210C6"
-                    >
-                      Login
-                    </ChakraLink>
-                  </Text>
-                </Box>
+                <Button
+                  mt="6"
+                  type="submit"
+                  w="full"
+                  bg="#A210C6"
+                  color="white"
+                  isLoading={loading}
+                  loadingText="Registering..."
+                >
+                  Submit
+                </Button>
               </FormControl>
             </form>
           </Box>
-        </Box>
+        </Flex>
       </Box>
     </ChakraProvider>
   );
