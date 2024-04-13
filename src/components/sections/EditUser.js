@@ -27,6 +27,7 @@ import LoadingSpinner from "../../utils/Spiner";
 import UpdatePhoneNumber from "./UpdatePhoneNumber";
 
 const EditProfileModal = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [image] = useState();
@@ -76,7 +77,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
  
 
@@ -115,8 +116,6 @@ const EditProfileModal = ({ isOpen, onClose }) => {
       dob: dobValue,
     });
   };
-
-  const navigate = useNavigate();
 
   const handleImageChange = async (image, editedUser, setEditedUser) => {
     setImageLoading(true);

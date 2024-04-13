@@ -76,7 +76,7 @@ const SettingsModal = ({ isOpen, onClose }) => {
     };
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     setEditedUser({

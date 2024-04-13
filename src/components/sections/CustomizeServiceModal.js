@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback  } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetCurrentUser } from "../../apiCalls/UserApis";
 import { useDispatch, useSelector } from "react-redux";
@@ -85,36 +85,38 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
     "Dressing changes",
   ];
 
-  const calculateCost = () => {
-    let costPerDay = 0;
 
-    if (medicSpecialization === "Nurse Assistant") {
-      costPerDay = 6000;
-    } else {
-      costPerDay = 12000;
-    }
-
-    if (shift === "Day Shift") {
-      costPerDay *= 1;
-    } else if (shift === "Live-in") {
+    const calculateCost = useCallback(() => {
+      let costPerDay = 0;
+  
       if (medicSpecialization === "Nurse Assistant") {
-        costPerDay = 10000;
+        costPerDay = 6000;
       } else {
-        costPerDay = 16000;
+        costPerDay = 12000;
       }
-    }
-
-    const totalCost = costPerDay * parseInt(duration);
-    return totalCost.toLocaleString("en-NG", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
-
-  useEffect(() => {
-    const calculatedCost = calculateCost();
-    setCostOfService(calculatedCost);
-  }, [duration, medicSpecialization]);
+  
+      if (shift === "Day Shift") {
+        costPerDay *= 1;
+      } else if (shift === "Live-in") {
+        if (medicSpecialization === "Nurse Assistant") {
+          costPerDay = 10000;
+        } else {
+          costPerDay = 16000;
+        }
+      }
+  
+      const totalCost = costPerDay * parseInt(duration);
+      return totalCost.toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }, [medicSpecialization, shift, duration]); // Include all dependencies used in `calculateCost`
+  
+    useEffect(() => {
+      const calculatedCost = calculateCost();
+      setCostOfService(calculatedCost);
+    }, [calculateCost]); // Now `calculateCost` is included in the dependency array
+  
 
   const formattedCost = (cost) => {
     // Format the costOfService as naira with the last two zeros separated by a dot

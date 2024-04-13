@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 // import LocationIcon from "../../assets/LocationIcon.svg";
 // import CalenderIcon from "../../assets/CalenderIcon.svg";
@@ -290,11 +290,11 @@ const BookBeneficiaryAppointmentModal = ({
     }
   }, [selectedBeneficiary]);
 
-  const calculateServiceCost = () => {
+  const calculateServiceCost = useCallback(() => {
     const { servicePlan, shift } = formPages;
-
+  
     let costOfService = 0;
-
+  
     switch (servicePlan) {
       case "Elderly care by a Licensed Nurse":
         costOfService = shift === "Day Shift (8hrs)" ? 18000000 : 22000000;
@@ -317,7 +317,6 @@ const BookBeneficiaryAppointmentModal = ({
           (plan) => plan.name === servicePlan
         );
         if (customPlan) {
-          // Adding two decimal places to costOfService for custom plans
           costOfService = parseInt(
             customPlan.costOfService.replace(/[,]/g, "")
           );
@@ -326,13 +325,19 @@ const BookBeneficiaryAppointmentModal = ({
         }
         break;
     }
-
-    setFormPages({ ...formPages, costOfService });
-  };
-
+  
+    setFormPages((prevPages) => ({ ...prevPages, costOfService }));
+  }, [
+    formPages,
+    customizedPlans,
+    // formPages.servicePlan, // specific property instead of the whole formPages object
+    // formPages.shift       // specific property instead of the whole formPages object
+  ]);
+  
   useEffect(() => {
     calculateServiceCost();
-  }, [formPages.servicePlan, formPages.shift]);
+  }, [calculateServiceCost]);
+  
 
   return (
     <>
