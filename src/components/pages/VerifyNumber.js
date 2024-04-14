@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import NavigationBar from "../unAuthLayouts/NavigationBar";
+// import NavigationBar from "../unAuthLayouts/NavigationBar";
+import logo from "../../assets/Logo.svg";
 import { useNavigate } from "react-router-dom";
 import {
   useToast,
   Box,
   Button,
+  Image,
   HStack,
   extendTheme,
   ChakraProvider,
@@ -37,7 +39,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const [inputs, setInputs] = useState(new Array(6).fill("")); // Simplified the initial state setup
+  const [inputs, setInputs] = useState(new Array(6).fill(""));
 
   const handleInputChange = (value, index) => {
     const newInputs = [...inputs];
@@ -115,8 +117,23 @@ const LandingPage = () => {
   return (
     <ChakraProvider theme={customTheme}>
       <Box overflowY="scroll" height="100vh">
-        <NavigationBar />
-        <VStack spacing={4} align="center" justify="center" p={4}>
+        {/* <NavigationBar /> */}
+        <VStack
+          spacing={4}
+          align="center"
+          justify="center"
+          p={4}
+          height="100vh"
+        >
+          <a href="/">
+            <Image
+              justifySelf="center"
+              src={logo}
+              alt="Logo"
+              w="350px"
+              h="150px"
+            />
+          </a>
           <Text fontSize="2xl" color="#A210C6">
             Verify your phone number
           </Text>

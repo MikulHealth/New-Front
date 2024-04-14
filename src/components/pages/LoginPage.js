@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/Logo.svg";
 import {
   Box,
   Button,
@@ -22,8 +23,8 @@ import {
   extendTheme,
 } from "@chakra-ui/react";
 import { UnlockIcon } from "@chakra-ui/icons";
-import NavigationBar from "../unAuthLayouts/NavigationBar";
-import Google from "../../assets/GoogleIcon.svg";
+// import NavigationBar from "../unAuthLayouts/NavigationBar";
+// import Google from "../../assets/GoogleIcon.svg";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../../styles/pages/LandingPage.css";
@@ -108,7 +109,6 @@ const LandingPage = () => {
   return (
     <ChakraProvider theme={customTheme}>
       <Box overflowY="scroll" height="100vh">
-        <NavigationBar />
         <Box
           display={{ base: "block", md: "flex" }}
           paddingX={{ base: "1rem", md: "2rem" }}
@@ -118,8 +118,13 @@ const LandingPage = () => {
             maxWidth={{ base: "90%", sm: "600px", md: "650px", lg: "700px" }}
             mx="auto"
             textAlign={{ base: "center", md: "left" }}
+            height="100vh"
+            mt="20px"
           >
-            <Text fontSize="32px" fontFamily="body" color="#A210C6" mt="30px">
+            <a href="/">
+              <Image justifySelf="center" src={logo} alt="Logo" w="350px" h="150px" />
+            </a>
+            <Text fontSize="26px" fontFamily="body" color="#A210C6" mt="-20px">
               Login to your account
             </Text>
             <FormControl isRequired mt="20px">
@@ -161,10 +166,10 @@ const LandingPage = () => {
               >
                 {loading ? "Loading..." : "Login"}
               </Button>
-              <Text textAlign="center" mt="30px">
+              {/* <Text textAlign="center" mt="30px">
                 or
-              </Text>
-              <Box
+              </Text> */}
+              {/* <Box
                 border="1px solid #A210C6"
                 p="8px"
                 mt="20px"
@@ -175,7 +180,7 @@ const LandingPage = () => {
               >
                 <Image src={Google} alt="GoogleIcon" w="20px" h="20px" />
                 <Text ml="5px">Continue with Google</Text>
-              </Box>
+              </Box> */}
               <Text fontSize="16px" fontFamily="Montserrat" mt="30px">
                 Don't have an account?{" "}
                 <ChakraLink onClick={onOpen} fontStyle="italic" color="#A210C6">
@@ -191,7 +196,7 @@ const LandingPage = () => {
                 <ModalContent bg="gray">
                   <ChakraLink
                     fontStyle="italic"
-                    href="/customer-signUp"
+                    href="/customer-signup"
                     color="#A210C6"
                   >
                     <Button

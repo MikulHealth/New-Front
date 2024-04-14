@@ -48,7 +48,7 @@ export default function GetStartedModal({ isOpen, onClose }) {
           </ChakraLink>
           <ChakraLink
             fontStyle="italic"
-            href="/customer-signUp"
+            href="/customer-signup"
             color="#A210C6"
             textDecoration="none"
             display="block"

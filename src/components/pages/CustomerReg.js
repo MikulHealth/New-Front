@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import NavigationBar from "../unAuthLayouts/NavigationBar";
+// import NavigationBar from "../unAuthLayouts/NavigationBar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import LoadingSpinner from "../../utils/Spiner";
-
+import logo from "../../assets/Logo.svg";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   ChakraProvider,
   Text,
   FormControl,
+  Image,
   FormLabel,
   Input,
   InputGroup,
@@ -163,17 +164,20 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <NavigationBar />
+      {/* <NavigationBar /> */}
       <Flex align="center" justify="center" height="100vh">
         <Box
           mb="300px"
-          mt={{ base: "600px", md: "700px" }}
+          mt={{ base: "700px", md: "800px" }}
           width={{ base: "90%", sm: "500px" }}
           p="6"
           boxShadow="xl"
           rounded="md"
           bg="white"
         >
+           <a href="/">
+              <Image justifySelf="center" src={logo} alt="Logo" w="350px" h="150px" />
+            </a>
           <Text fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
             Create your account
           </Text>

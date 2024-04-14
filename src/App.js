@@ -50,7 +50,7 @@ function App() {
             path="/confirm-medic-reg"
             element={<MedicRegConfirmation />}
           ></Route>
-          <Route path="/customer-signUp" element={<CustomerReg />}></Route>
+          <Route path="/customer-signup" element={<CustomerReg />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
           <Route path="/reset-password" element={<ResetPassword />}></Route>

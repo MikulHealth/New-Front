@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   useDisclosure,
   Box,
@@ -8,6 +8,8 @@ import {
   Image,
   extendTheme,
   ChakraProvider,
+  keyframes,
+  usePrefersReducedMotion,
   Text,
   Divider,
 } from "@chakra-ui/react";
@@ -47,11 +49,42 @@ const customTheme = extendTheme({
   },
 });
 
+const rollIn = keyframes`
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+`;
+
+const rollOut = keyframes`
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-100%); opacity: 0; }
+`;
+
+const phrases = ["Easy!", "Fast!", "Reliable!", "Secure!"];
+
 const LandingPage = () => {
   useEffect(() => {
     AOS.init();
   }, []);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [animation, setAnimation] = useState(rollIn);
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setAnimation(rollOut);
+      setTimeout(() => {
+        setCurrentIndex((currentIndex + 1) % phrases.length);
+        setAnimation(rollIn);
+      }, 500); // Half the interval to switch after fading out
+    }, 3000); // Change the text every 3 seconds
+
+    return () => clearInterval(intervalId);
+  }, [currentIndex]);
+
+  const animationStyle = prefersReducedMotion
+    ? undefined
+    : `${animation} 0.5s ease-in-out forwards`;
 
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
@@ -90,16 +123,29 @@ const LandingPage = () => {
               fontWeight="bold"
               fontFamily="body"
             >
-              <span style={{ color: "#A210C6" }}>Healthcare</span> that you{" "}
+              <span style={{ color: "#A210C6" }}>Healthcare</span> that you <br></br>
+              deserve at your fingertips.
             </Text>
-            <Text
+            {/* <Text
               marginTop="-10px"
               textAlign={{ base: "center", md: "left" }}
               fontSize={{ base: "36px", md: "48px" }}
               fontWeight="bold"
               fontFamily="body"
             >
-              deserve at your fingertips
+             deserve at your fingertips, <br></br> {phrases[currentIndex]}
+            </Text> */}
+            <Text
+              marginTop="-10px"
+              textAlign={{ base: "center", md: "left" }}
+              fontSize={{ base: "26px", md: "28px" }}
+              fontWeight="bold"
+              fontFamily="body"
+              css={{
+                animation: animationStyle,
+              }}
+            >
+             {phrases[currentIndex]}
             </Text>
             <Text
               marginTop="10px"
@@ -194,9 +240,7 @@ const LandingPage = () => {
             data-aos-duration="30000"
           >
             <Box marginLeft="20px">
-              <Image 
-              src={SignUp} 
-              alt="Logo" w="200px" h="200px" />
+              <Image src={SignUp} alt="Logo" w="200px" h="200px" />
             </Box>
 
             <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -221,9 +265,7 @@ const LandingPage = () => {
             data-aos-duration="30000"
           >
             <Box marginLeft="20px">
-              <Image 
-              src={SelectCare} 
-              alt="Logo" w="200px" h="200px" />
+              <Image src={SelectCare} alt="Logo" w="200px" h="200px" />
             </Box>
 
             <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -248,9 +290,7 @@ const LandingPage = () => {
             data-aos-duration="30000"
           >
             <Box marginLeft="15px">
-              <Image 
-              src={GetMatched}
-               alt="Logo" w="200px" h="200px" />
+              <Image src={GetMatched} alt="Logo" w="200px" h="200px" />
             </Box>
 
             <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -275,9 +315,7 @@ const LandingPage = () => {
             data-aos-duration="30000"
           >
             <Box marginLeft="15px">
-              <Image 
-              src={ReceieveCare}
-               alt="Logo" w="200px" h="200px" />
+              <Image src={ReceieveCare} alt="Logo" w="200px" h="200px" />
             </Box>
 
             <Text fontSize="xl" fontWeight="bold" textAlign="center">
@@ -292,7 +330,7 @@ const LandingPage = () => {
           </Box>
         </Box>
       </Box>
-     
+
       <Box flexWrap="wrap" bg="white">
         <Divider />
 
