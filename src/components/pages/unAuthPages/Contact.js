@@ -23,6 +23,7 @@ import "../../../styles/pages/LandingPage.css";
 import NavigationBar from "../../unAuthLayouts/NavigationBar";
 import Footer from "../../unAuthLayouts/Footer";
 
+
 const customTheme = extendTheme({
   components: {
     Link: {

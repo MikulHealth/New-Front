@@ -119,7 +119,7 @@ const LandingPage = () => {
           >
             <Text
               fontSize={{ base: "36px", md: "48px" }}
-              textAlign={{ base: "center", md: "left" }}
+              textAlign={{ base: "left", md: "left" }}
               fontWeight="bold"
               fontFamily="body"
             >
@@ -137,7 +137,7 @@ const LandingPage = () => {
             </Text> */}
             <Text
               marginTop="-10px"
-              textAlign={{ base: "center", md: "left" }}
+              textAlign={{ base: "left", md: "left" }}
               fontSize={{ base: "26px", md: "28px" }}
               fontWeight="bold"
               fontFamily="body"
@@ -149,7 +149,7 @@ const LandingPage = () => {
             </Text>
             <Text
               marginTop="10px"
-              textAlign={{ base: "center", md: "left" }}
+              textAlign={{ base: "left", md: "left" }}
               fontWeight="bold"
               fontFamily="body"
               fontSize={{ base: "16px", md: "20px" }}

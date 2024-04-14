@@ -10,9 +10,9 @@ import {
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Caregivers from "../../../assets/Caregiver.svg"
-import Vetted from "../../../assets/Vetted.svg"
-import AbtPic from "../../../assets/AbtPic.svg";
+import Caregivers from "../../../assets/Caregiver.svg";
+import Vetted from "../../../assets/Vetted.svg";
+// import AbtPic from "../../../assets/AbtPic.svg";
 import Wallet from "../../../assets/WalletWhite.svg";
 import Eye from "../../../assets/Eye.svg";
 import Persona from "../../../assets/Pesona.svg";
@@ -26,7 +26,7 @@ import Hafsie from "../../../assets/Hafsie.svg";
 import "../../../styles/pages/LandingPage.css";
 import NavigationBar from "../../unAuthLayouts/NavigationBar";
 import Footer from "../../unAuthLayouts/Footer";
-
+import Folder from "../../../assets/Folder.svg";
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -59,9 +59,9 @@ const LandingPage = () => {
         <Box
           style={settingsContainerStyle}
           marginTop="-1px"
-          bgImage={`url(${AbtPic})`}
-          bgSize="cover"
-          bgPosition="center"
+          bgImage={`url(${Folder})`}
+          bgSize={{ base: "cover", md: "cover", lg: "cover" }} // Adjust based on your preference
+          bgPosition={{ base: "center", md: "center", lg: "top center" }}
           minHeight="100vh"
         >
           <Text
@@ -77,7 +77,11 @@ const LandingPage = () => {
             About Us
           </Text>
         </Box>
-        <Box bg="#A210C6" paddingTop="60px" marginLeft="-40px">
+        <Box
+          bg="#A210C6"
+          pt="60px"
+          ml={{ base: "-10px", md: "-40px", lg: "-40px" }}
+        >
           <Box
             marginLeft="-510px"
             data-aos="fade-right"
@@ -103,9 +107,11 @@ const LandingPage = () => {
           </Box>
 
           <Flex
+            direction={{ base: "column", md: "row" }}
+            align="center"
             justifyContent="space-between"
-            flexWrap="wrap"
-            marginLeft="80px"
+            p="20px"
+            ml={{ base: "10px", md: "80px", lg: "90px" }}
             data-aos="fade-up"
             data-aos-duration="10000"
           >
@@ -230,11 +236,12 @@ const LandingPage = () => {
           </Flex>
 
           <Flex
+            direction={{ base: "column", md: "row" }}
+            align="center"
             justifyContent="space-between"
-            flexWrap="wrap"
-            marginLeft="90px"
-            marginTop="50px"
-            data-aos="fade-left"
+            p="20px"
+            ml={{ base: "10px", md: "80px", lg: "90px" }}
+            data-aos="fade-up"
             data-aos-duration="10000"
           >
             <Box
@@ -347,45 +354,41 @@ const LandingPage = () => {
         <Box bg="white">
           <Box mt="50px">
             <Text
-              fontSize="64px"
-              fontFamily="body"
-              color="black"
+              fontSize={{ base: "32px", md: "48px", lg: "64px" }}
+              fontWeight="bold"
               textAlign="center"
             >
               Meet Our Team
             </Text>
           </Box>
-
-          <Flex flexWrap="wrap">
+          <Flex mt={{ base: "0", md: "50px" }} justify="center" flexWrap="wrap">
             <Box
               bg="white"
               justifyContent="center"
               alignItems="center"
-              padding="20px"
+              padding={{ base: "10px", md: "20px" }}
               borderRadius="20px"
               flexDirection="row"
               data-aos="fade-left"
               data-aos-duration="10000"
+              mt={{ base: "10px", md: "" }}
             >
-              <Box
-                padding="25px"
-                marginLeft="80px"
-                // boxShadow="0px 4px 8px rgba(162, 16, 198, 0.5)"
-                // borderRadius="10"
-              >
-                <Image src={Michael} alt="Logo" w="462px" h="422px" />
-              </Box>
+              <Image
+                src={Michael}
+                alt="Logo"
+                w={{ base: "280px", md: "462px" }}
+                h={{ base: "400px", md: "422px" }}
+              />
             </Box>
 
             <Box
-              justifyContent="center"
-              alignItems="center"
+              ml={{ base: "0", md: "80px" }}
               padding="20px"
               borderRadius="20px"
               flexDirection="row"
-              w="656px"
-              h="275px"
-              marginTop="50px"
+              w={{ base: "366px", md: "656px" }}
+              h={{ base: "100px", md: "275px" }}
+              mt={{ base: "-30px", md: "80px" }}
               data-aos="fade-right"
               data-aos-duration="10000"
             >
@@ -398,8 +401,9 @@ const LandingPage = () => {
                 fontSize="20px"
                 fontFamily="Montserrat"
               >
-                Software Engineer & a licensed nurse in Nigeria over<br></br>
-                7 years of clinical experience in general nursing care <br></br>
+                Software Engineer & a licensed nurse in Nigeria with over
+                <br></br>7 years of clinical experience in general nursing care{" "}
+                <br></br>
                 and patient management.<br></br>
                 Passionate about innovative revolution in the health <br></br>
                 industry, he has worked with two successful Health <br></br>
@@ -408,112 +412,99 @@ const LandingPage = () => {
               </Text>
             </Box>
           </Flex>
-        </Box>
 
-        <Flex flexWrap="wrap" ml={{ md: "100px" }}>
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            padding="20px"
-            borderRadius="20px"
-            flexDirection="row"
-            marginTop="80px"
-            data-aos="fade-left"
-            data-aos-duration="10000"
-          >
-            <Text
-              fontSize="xl"
-              fontWeight="bold"
-              textAlign="left"
-              marginLeft="5px"
-            >
-              Jim Ofodum. Co-founde, Growth
-            </Text>
-            <Text
-              textAlign="left"
-              marginTop="10px"
-              fontSize="22px"
-              fontFamily="Montserrat"
-            >
-              Ejimonye, popularly referred to as Jim, is a trained <br></br>
-              financial technology professional who has worked <br></br>
-              with top African payment & telecoms companies.<br></br>
-              She co-founded a technology-enabled home cleaning <br></br>
-              brand called FICHAYA and co-owns a young <br></br>
-              professional's group called Konnect'd by Professionals.
-            </Text>
-          </Box>
-
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            padding="20px"
-            borderRadius="20px"
-            flexDirection="row"
-            w="656px"
-            h="275px"
-            marginLeft="30px"
-            data-aos="fade-right"
-            data-aos-duration="10000"
+          <Flex
+            mt={{ base: "0", md: "100px" }}
+            justify="center"
+            flexWrap="wrap"
           >
             <Box
-              padding="25px"
-              marginLeft="70px"
-              // boxShadow="0px 4px 8px rgba(162, 16, 198, 0.5)"
-              // borderRadius="10"
+              bg="white"
+              justifyContent="center"
+              alignItems="center"
+              padding={{ base: "10px", md: "20px" }}
+              borderRadius="20px"
+              flexDirection="row"
+              data-aos="fade-left"
+              data-aos-duration="10000"
+              mt={{ base: "350px", md: "0" }}
             >
               <Image
                 src={Jim}
                 alt="Logo"
-                w="462px"
-                h="422px"
-                marginLeft="10px"
+                w={{ base: "280px", md: "462px" }}
+                h={{ base: "400px", md: "422px" }}
               />
             </Box>
-          </Box>
-        </Flex>
 
-        <Flex flexWrap="wrap" mt={{ md: "200px" }}>
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            padding="20px"
-            borderRadius="20px"
-            flexDirection="row"
-            data-aos="fade-left"
-            data-aos-duration="10000"
-          >
             <Box
-              marginLeft="50px"
-              padding="25px"
-              // boxShadow="0px 4px 8px rgba(162, 16, 198, 0.5)"
-              // borderRadius="10"
+              ml={{ base: "0", md: "80px" }}
+              padding="20px"
+              borderRadius="20px"
+              flexDirection="row"
+              w={{ base: "366px", md: "656px" }}
+              h={{ base: "100px", md: "275px" }}
+              mt={{ base: "-30px", md: "80px" }}
+              data-aos="fade-right"
+              data-aos-duration="10000"
             >
-              <Image src={Hafsie} alt="Logo" w="462px" h="422px" />
+              <Text fontSize="xl" fontWeight="bold" textAlign="left">
+                Jim Ofodum. Co-founde, Growth
+              </Text>
+              <Text
+                textAlign="left"
+                marginTop="10px"
+                fontSize="20px"
+                fontFamily="Montserrat"
+              >
+                Ejimonye, popularly referred to as Jim, is a trained <br></br>
+                financial technology professional who has worked <br></br>
+                with top African payment & telecoms companies.<br></br>
+                She co-founded a technology-enabled home cleaning <br></br>
+                brand called FICHAYA and co-owns a young <br></br>
+                professional's group called Konnect'd by Professionals.
+              </Text>
             </Box>
-          </Box>
+          </Flex>
 
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            padding="20px"
-            borderRadius="20px"
-            flexDirection="row"
-            w="656px"
-            h="275px"
-            marginLeft="-40px"
-            marginTop="50px"
-            data-aos="fade-right"
-            data-aos-duration="10000"
-          >
-            <Box marginLeft="50px">
+          <Flex mt={{ base: "0", md: "50px" }} justify="center" flexWrap="wrap">
+            <Box
+              bg="white"
+              justifyContent="center"
+              alignItems="center"
+              padding={{ base: "10px", md: "20px" }}
+              borderRadius="20px"
+              flexDirection="row"
+              data-aos="fade-left"
+              data-aos-duration="10000"
+              mt={{ base: "350px", md: "0" }}
+            >
+              <Image
+                src={Hafsie}
+                alt="Logo"
+                w={{ base: "280px", md: "462px" }}
+                h={{ base: "400px", md: "422px" }}
+              />
+            </Box>
+
+            <Box
+              ml={{ base: "0", md: "80px" }}
+              padding="20px"
+              borderRadius="20px"
+              flexDirection="row"
+              w={{ base: "366px", md: "656px" }}
+              h={{ base: "100px", md: "275px" }}
+              mt={{ base: "-30px", md: "80px" }}
+              data-aos="fade-right"
+              data-aos-duration="10000"
+            >
               <Text fontSize="xl" fontWeight="bold" textAlign="left">
                 Dr. Hafsat Jijiwa. Medical Director.
               </Text>
               <Text
                 textAlign="left"
                 marginTop="10px"
-                fontSize="22px"
+                fontSize="20px"
                 fontFamily="Montserrat"
               >
                 She holds a Bachelor of Medicine, Bachelor of Surgery <br></br>
@@ -525,109 +516,94 @@ const LandingPage = () => {
                 passionate about public health.
               </Text>
             </Box>
-          </Box>
-        </Flex>
+          </Flex>
 
-        <Flex flexWrap="wrap" ml={{ md: "100px" }}>
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            padding="20px"
-            borderRadius="20px"
-            flexDirection="row"
-            marginTop="80px"
-            data-aos="fade-left"
-            data-aos-duration="10000"
-            marginLeft="-5px"
-          >
-            <Text
-              fontSize="xl"
-              fontWeight="bold"
-              textAlign="left"
-              marginLeft="5px"
-            >
-              Dr. Sylvia Onoabhagbe. Product Designer
-            </Text>
-            <Text
-              textAlign="left"
-              marginTop="10px"
-              fontSize="22px"
-              fontFamily="Montserrat"
-            >
-              She holds a Doctor of Optometry (O. D) degree, <br></br>
-              from the University of Benin, Edo state, Nigeria. <br></br>
-              She spent the first few years of her career<br></br>
-              working as a clinical optometrist, and has a lot of patient care
-              experience. <br></br>
-              She is also a trained product designer and is very<br></br>
-              passionate about building healthcare solutions for everyone.
-              <br></br>
-            </Text>
-          </Box>
-
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            padding="20px"
-            borderRadius="20px"
-            flexDirection="row"
-            w="656px"
-            h="275px"
-            marginLeft="10px"
-            data-aos="fade-right"
-            data-aos-duration="10000"
+          <Flex
+            mt={{ base: "0", md: "100px" }}
+            justify="center"
+            flexWrap="wrap"
           >
             <Box
-              padding="25px"
-              // marginLeft="20px"
-              // boxShadow="0px 4px 8px rgba(162, 16, 198, 0.5)"
-              // borderRadius="10"
+              bg="white"
+              justifyContent="center"
+              alignItems="center"
+              padding={{ base: "10px", md: "20px" }}
+              borderRadius="20px"
+              flexDirection="row"
+              data-aos="fade-left"
+              data-aos-duration="10000"
+              mt={{ base: "350px", md: "0" }}
             >
               <Image
                 src={Sylvia}
                 alt="Logo"
-                w="462px"
-                h="422px"
-                marginLeft="10px"
+                w={{ base: "280px", md: "462px" }}
+                h={{ base: "400px", md: "422px" }}
               />
             </Box>
-          </Box>
-        </Flex>
 
-        <Box bg="white" marginTop="200px">
-          <Box>
+            <Box
+              ml={{ base: "0", md: "80px" }}
+              padding="20px"
+              borderRadius="20px"
+              flexDirection="row"
+              w={{ base: "366px", md: "656px" }}
+              h={{ base: "100px", md: "275px" }}
+              mt={{ base: "-30px", md: "80px" }}
+              data-aos="fade-right"
+              data-aos-duration="10000"
+            >
+              <Text fontSize="xl" fontWeight="bold" textAlign="left">
+                Dr. Sylvia Onoabhagbe. Product Designer
+              </Text>
+              <Text
+                textAlign="left"
+                marginTop="10px"
+                fontSize="20px"
+                fontFamily="Montserrat"
+              >
+                She holds a Doctor of Optometry (O. D) degree, <br></br>
+                from the University of Benin, Edo state, Nigeria. <br></br>
+                She spent the first few years of her career<br></br>
+                working as a clinical optometrist, and has a lot of patient care
+                experience. <br></br>
+                She is also a trained product designer and is very<br></br>
+                passionate about building healthcare solutions for everyone.
+                <br></br>
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
+
+        <Box bg="white" mt={{ base: "400px", md: "150px" }}>
+          <Box textAlign="center">
             <Text
               fontSize="48px"
               fontWeight="bold"
               fontFamily="body"
               color="black"
-              marginTop="40px"
             >
               Medics
             </Text>
           </Box>
-
-          <Box display="flex">
+          <Flex
+            justify="center"
+            align="center"
+            wrap="wrap"
+            p="20px"
+            // justifyContent={{ md: "space-between" }}
+          >
             <Box
               bg="white"
-              justifyContent="center"
-              alignItems="center"
-              padding="20px"
+              p="20px"
               borderRadius="20px"
-              flexDirection="row"
-              marginLeft="250px"
-              
+              flexDirection="column"
+              alignItems="center"
+              maxW="300px"
             >
-              <Box>
-                <Image
-                  src={Caregivers}
-                  alt="Logo"
-                  w="200px"
-                  h="200px"
-                />
-              </Box>
+              <Image src={Caregivers} alt="onboarded" w="200px" h="200px" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
-                1000+ Caregivers Onboarderd
+                1000+ Caregivers Onboarded
               </Text>
               <Text textAlign="center">
                 Getting started is quick <br />
@@ -638,21 +614,13 @@ const LandingPage = () => {
             </Box>
             <Box
               bg="white"
-              justifyContent="center"
-              alignItems="center"
-              padding="20px"
+              p="20px"
               borderRadius="20px"
-              flexDirection="row"
-              marginLeft="300px"
+              flexDirection="column"
+              alignItems="center"
+              maxW="300px"
             >
-              <Box>
-                <Image
-                  src={Vetted}
-                  alt="Logo"
-                  w="200px"
-                  h="200px"
-                />
-              </Box>
+              <Image src={Vetted} alt="vetted" w="200px" h="200px" />
               <Text fontSize="xl" fontWeight="bold" textAlign="center">
                 500+ Vetted
               </Text>
@@ -663,7 +631,7 @@ const LandingPage = () => {
                 service you need
               </Text>
             </Box>
-          </Box>
+          </Flex>
         </Box>
 
         {/* <Box bg="white">
