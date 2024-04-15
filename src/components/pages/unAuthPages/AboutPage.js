@@ -54,49 +54,63 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <Box>
+      <Box >
         <NavigationBar />
         <Box
           style={settingsContainerStyle}
           marginTop="-1px"
           bgImage={`url(${Folder})`}
-          bgSize={{ base: "cover", md: "cover", lg: "cover" }} // Adjust based on your preference
+          bgSize={{ base: "cover", md: "cover", lg: "cover" }}
           bgPosition={{ base: "center", md: "center", lg: "top center" }}
           minHeight="100vh"
         >
-          <Text
-            fontSize={{ base: "32px", md: "48px", lg: "64px" }}
-            fontWeight="bold"
-            textAlign="center"
-            color="white"
-            paddingTop={{ base: "20px", md: "50px", lg: "70px" }}
-            textDecoration="underline"
-            data-aos="fade-up"
-            data-aos-duration="10000"
-          >
-            About Us
-          </Text>
+          <Box pt={{ base: "100px", md: "150px", lg: "160px" }}>
+            <Text
+              fontSize={{ base: "32px", md: "48px", lg: "64px" }}
+              fontWeight="bold"
+              textAlign="center"
+              color="white"
+              fontStyle="heading"
+              textShadow="2px 2px 4px gray"
+              data-aos="fade-up"
+              data-aos-duration="10000"
+              fontFamily="heading"
+            >
+              Mission
+            </Text>
+
+            <Text
+              fontSize={{ base: "22px", md: "28px", lg: "24px" }}
+              textAlign="center"
+              fontFamily="body"
+              color="white"
+              fontStyle="body"
+              textShadow="2px 2px 4px gray"
+              data-aos="fade-up"
+              data-aos-duration="10000"
+            >
+              To create the best in-home nursing care experience <br></br>
+              company and we are focused on creating a <br></br>
+              technology-accessible platform that drives easy access to
+              patient-care <br></br>information and management.
+            </Text>
+          </Box>
         </Box>
         <Box
           bg="#A210C6"
           pt="60px"
           ml={{ base: "-10px", md: "-40px", lg: "-40px" }}
         >
-          <Box
-            marginLeft="-510px"
-            data-aos="fade-right"
-            data-aos-duration="10000"
-          >
+          <Box justify="center" data-aos="fade-right" data-aos-duration="10000">
             <Text
               fontSize={{ base: "22px", md: "28px" }}
-              fontFamily="body"
+              fontFamily="heading"
               color="white"
-              marginLeft="-150px"
             >
               WHY USE MIKUL HEALTH?
             </Text>
             <Text
-              textAlign="left"
+              textAlign="center"
               fontSize={{ base: "22px", md: "28px" }}
               fontFamily="body"
               color="black"
@@ -137,6 +151,7 @@ const LandingPage = () => {
                 fontWeight="bold"
                 textAlign="center"
                 marginTop="10px"
+                fontFamily="heading"
               >
                 Affordability & <br></br>
                 Accessibility
@@ -146,6 +161,7 @@ const LandingPage = () => {
                 textAlign="center"
                 marginTop="10px"
                 color="white"
+                fontFamily="body"
               >
                 We offer competitive pricing for homecare <br></br>
                 services, making it affordable for everyone <br></br>
@@ -177,6 +193,7 @@ const LandingPage = () => {
                 fontSize={{ base: "22px", md: "28px" }}
                 fontWeight="bold"
                 textAlign="center"
+                fontFamily="heading"
                 marginTop="10px"
               >
                 Viscibility & <br></br>
@@ -187,6 +204,7 @@ const LandingPage = () => {
                 textAlign="center"
                 marginTop="10px"
                 color="white"
+                fontFamily="body"
               >
                 We use state-of-the-art technology to <br></br>
                 protect your personal and medical <br></br>
@@ -219,6 +237,7 @@ const LandingPage = () => {
                 fontWeight="bold"
                 textAlign="center"
                 marginTop="20px"
+                fontFamily="heading"
               >
                 Personalization
               </Text>
@@ -227,6 +246,7 @@ const LandingPage = () => {
                 textAlign="center"
                 marginTop="28px"
                 color="white"
+                fontFamily="body"
               >
                  We offer personalized care plans based on <br></br>
                 your individual needs and preferences,<br></br>
@@ -265,6 +285,7 @@ const LandingPage = () => {
                 fontWeight="bold"
                 textAlign="center"
                 marginTop="10px"
+                fontFamily="heading"
               >
                 Safety & Security
               </Text>
@@ -273,6 +294,7 @@ const LandingPage = () => {
                 textAlign="center"
                 marginTop="10px"
                 color="white"
+                fontFamily="body"
               >
                 All our caregivers are thoroughly screened <br></br>
                 and background checks are carried out. We <br></br>
@@ -302,6 +324,7 @@ const LandingPage = () => {
                 fontWeight="bold"
                 textAlign="center"
                 marginTop="10px"
+                fontFamily="heading"
               >
                 Quality Care
               </Text>
@@ -310,6 +333,7 @@ const LandingPage = () => {
                 textAlign="center"
                 marginTop="10px"
                 color="white"
+                fontFamily="body"
               >
                 We ensure that all caregivers registered <br></br>
                 with us meet high-quality standards, <br></br>
@@ -339,10 +363,17 @@ const LandingPage = () => {
                 fontWeight="bold"
                 textAlign="center"
                 marginTop="10px"
+                fontFamily="heading"
               >
                 Flexibility
               </Text>
-              <Text textAlign="center" marginTop="10px" color="white">
+              <Text
+                fontFamily="body"
+                textAlign="center"
+                marginTop="10px"
+                color="white"
+                fontSize={{ base: "16px", md: "18px" }}
+              >
                 We offer flexible scheduling options that fit <br></br>
                 your busy lifestyle, allowing you to receive <br></br>
                 care when it's most convenient for you.
@@ -357,6 +388,7 @@ const LandingPage = () => {
               fontSize={{ base: "32px", md: "48px", lg: "64px" }}
               fontWeight="bold"
               textAlign="center"
+              fontFamily="heading"
             >
               Meet Our Team
             </Text>
@@ -392,14 +424,14 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text fontSize="xl" fontWeight="bold" textAlign="left">
+              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="left">
                 Michael Joshua. Co-founder, CEO
               </Text>
               <Text
                 textAlign="left"
                 marginTop="10px"
                 fontSize="20px"
-                fontFamily="Montserrat"
+                fontFamily="body"
               >
                 Software Engineer & a licensed nurse in Nigeria with over
                 <br></br>7 years of clinical experience in general nursing care{" "}
@@ -448,14 +480,14 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text fontSize="xl" fontWeight="bold" textAlign="left">
+              <Text fontSize="xl" fontWeight="bold"  fontFamily="heading" textAlign="left">
                 Jim Ofodum. Co-founde, Growth
               </Text>
               <Text
                 textAlign="left"
                 marginTop="10px"
                 fontSize="20px"
-                fontFamily="Montserrat"
+                fontFamily="body"
               >
                 Ejimonye, popularly referred to as Jim, is a trained <br></br>
                 financial technology professional who has worked <br></br>
@@ -498,14 +530,14 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text fontSize="xl" fontWeight="bold" textAlign="left">
+              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="left">
                 Dr. Hafsat Jijiwa. Medical Director.
               </Text>
               <Text
                 textAlign="left"
                 marginTop="10px"
                 fontSize="20px"
-                fontFamily="Montserrat"
+                fontFamily="body"
               >
                 She holds a Bachelor of Medicine, Bachelor of Surgery <br></br>
                 (M.B.B.S) from Gulf Medical University, U.A.E. <br></br>
@@ -553,14 +585,14 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text fontSize="xl" fontWeight="bold" textAlign="left">
+              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="left">
                 Dr. Sylvia Onoabhagbe. Product Designer
               </Text>
               <Text
                 textAlign="left"
                 marginTop="10px"
                 fontSize="20px"
-                fontFamily="Montserrat"
+                fontFamily="body"
               >
                 She holds a Doctor of Optometry (O. D) degree, <br></br>
                 from the University of Benin, Edo state, Nigeria. <br></br>
@@ -580,7 +612,7 @@ const LandingPage = () => {
             <Text
               fontSize="48px"
               fontWeight="bold"
-              fontFamily="body"
+              fontFamily="heading"
               color="black"
             >
               Medics
@@ -602,10 +634,10 @@ const LandingPage = () => {
               maxW="300px"
             >
               <Image src={Caregivers} alt="onboarded" w="200px" h="200px" />
-              <Text fontSize="xl" fontWeight="bold" textAlign="center">
+              <Text fontSize="xl"  fontFamily="heading" fontWeight="bold" textAlign="center">
                 1000+ Caregivers Onboarded
               </Text>
-              <Text textAlign="center">
+              <Text   fontFamily="body" textAlign="center">
                 Getting started is quick <br />
                 and easy. Sign up with <br />
                 us to receive premium <br />
@@ -621,10 +653,10 @@ const LandingPage = () => {
               maxW="300px"
             >
               <Image src={Vetted} alt="vetted" w="200px" h="200px" />
-              <Text fontSize="xl" fontWeight="bold" textAlign="center">
+              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="center">
                 500+ Vetted
               </Text>
-              <Text textAlign="center">
+              <Text  fontFamily="body" textAlign="center">
                 Now that you are a part <br />
                 of our community, you <br />
                 can find the kind of <br />
