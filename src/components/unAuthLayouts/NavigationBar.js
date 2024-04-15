@@ -34,6 +34,9 @@ export default function NavigationBar() {
       case "/services":
         setPageTitle("Services");
         break;
+        case "/login":
+          setPageTitle("Login");
+          break;
       default:
         setPageTitle("Home");
         break;
@@ -72,7 +75,7 @@ export default function NavigationBar() {
             display={{ base: "block", md: "none" }}
             onClick={onToggle}
             aria-label="Toggle Navigation"
-            ml="auto" // Aligns the icon to the right end on mobile and tablet devices
+            ml="auto" 
           />
           <HStack
             marginRight={{ base: "0px", md: "50px" }}
@@ -92,6 +95,9 @@ export default function NavigationBar() {
             </NavLink> */}
             <NavLink to="/contact" pageTitle={pageTitle}>
               Contact Us
+            </NavLink>
+            <NavLink to="/Login" pageTitle={pageTitle}>
+              Login
             </NavLink>
           </HStack>
 
@@ -121,6 +127,9 @@ export default function NavigationBar() {
             </NavLink>
             <NavLink to="/contact" pageTitle={pageTitle}>
               Contact Us
+            </NavLink>
+            <NavLink to="/login" pageTitle={pageTitle}>
+              Login
             </NavLink>
             <Button bg="white" color="#A210C6" onClick={handleOpenModal}>
               Get started

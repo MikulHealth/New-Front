@@ -29,26 +29,7 @@ export default function GetStartedModal({ isOpen, onClose }) {
         <Box padding="10px">
           <ChakraLink
             fontStyle="italic"
-            href="/login"
-            color="#A210C6"
-            textDecoration="none"
-            display="block"
-            bg="white"
-            padding="10px"
-            borderRadius="8px"
-            fontWeight="bold"
-            textAlign="center"
-            marginY="20px"
-            transition="transform 0.3s ease-in-out"
-            _hover={{
-              transform: "translateY(-10px)",
-            }}
-          >
-            Login
-          </ChakraLink>
-          <ChakraLink
-            fontStyle="italic"
-            href="/customer-signup"
+            href="/signup"
             color="#A210C6"
             textDecoration="none"
             display="block"

@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
+import GetStartedModal from "../unAuthLayouts/GetStarted";
 import {
   Box,
   Button,
@@ -11,12 +12,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalFooter,
-  ModalCloseButton,
-  useDisclosure,
   useToast,
   Image,
   ChakraProvider,
@@ -46,11 +41,11 @@ const customTheme = extendTheme({
 const LandingPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const [phoneInput, setPhoneInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [show, setShow] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handlePhoneInputChange = (e) => setPhoneInput(e.target.value);
   const handlePasswordInputChange = (e) => setPasswordInput(e.target.value);
@@ -106,6 +101,14 @@ const LandingPage = () => {
     AOS.init();
   }, []);
 
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <ChakraProvider theme={customTheme}>
       <Box overflowY="scroll" height="100vh">
@@ -122,7 +125,13 @@ const LandingPage = () => {
             mt="20px"
           >
             <a href="/">
-              <Image justifySelf="center" src={logo} alt="Logo" w="350px" h="150px" />
+              <Image
+                justifySelf="center"
+                src={logo}
+                alt="Logo"
+                w="350px"
+                h="150px"
+              />
             </a>
             <Text fontSize="26px" fontFamily="body" color="#A210C6" mt="-20px">
               Login to your account
@@ -183,44 +192,19 @@ const LandingPage = () => {
               </Box> */}
               <Text fontSize="16px" fontFamily="Montserrat" mt="30px">
                 Don't have an account?{" "}
-                <ChakraLink onClick={onOpen} fontStyle="italic" color="#A210C6">
+                <ChakraLink
+                  onClick={handleOpenModal}
+                  fontStyle="italic"
+                  color="#A210C6"
+                >
                   Sign Up
                 </ChakraLink>
               </Text>
-              <Modal
-                blockScrollOnMount={false}
-                isOpen={isOpen}
-                onClose={onClose}
-              >
-                <ModalOverlay />
-                <ModalContent bg="gray">
-                  <ChakraLink
-                    fontStyle="italic"
-                    href="/customer-signup"
-                    color="#A210C6"
-                  >
-                    <Button
-                      mt="30px"
-                      bg="gray"
-                      color="black"
-                      w="300px"
-                      border="1px solid white"
-                    >
-                      Sign up
-                    </Button>
-                  </ChakraLink>
-                  <ModalCloseButton />
-                  <ModalFooter>
-                    <Button onClick={onClose} bg="black" color="white">
-                      Close
-                    </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
             </FormControl>
           </Box>
         </Box>
       </Box>
+      <GetStartedModal isOpen={showModal} onClose={handleCloseModal} />
     </ChakraProvider>
   );
 };
