@@ -120,20 +120,26 @@ const LandingPage = () => {
           <Box
             maxWidth={{ base: "90%", sm: "600px", md: "650px", lg: "700px" }}
             mx="auto"
-            textAlign={{ base: "center", md: "left" }}
+            textAlign={{ base: "center", md: "center" }}
+            // justify="center"
             height="100vh"
-            mt="20px"
+            mt={{ base: "30px", md: "60px" }}
           >
             <a href="/">
               <Image
-                justifySelf="center"
                 src={logo}
                 alt="Logo"
-                w="350px"
-                h="150px"
+                ml={{ base: "45px", md: "70px" }}
+                h={{ base: "80px", md: "100px" }}
+                w={{ base: "300px", md: "350px" }}
               />
             </a>
-            <Text fontSize="26px" fontFamily="body" color="#A210C6" mt="-20px">
+            <Text
+              mt={{ base: "5px", md: "5px" }}
+              fontSize="26px"
+              fontFamily="body"
+              color="#A210C6"
+            >
               Login to your account
             </Text>
             <FormControl isRequired mt="20px">

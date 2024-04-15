@@ -23,7 +23,6 @@ import "../../../styles/pages/LandingPage.css";
 import NavigationBar from "../../unAuthLayouts/NavigationBar";
 import Footer from "../../unAuthLayouts/Footer";
 
-
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -59,17 +58,21 @@ const LandingPage = () => {
         <Box overflowY="scroll" height="100vh">
           <NavigationBar />
           <Box
+            flexWrap="wrap"
             style={settingsContainerStyle}
-            marginTop="80px"
+            mt={{ base: "0px", md: "60px" }}
+            p={{ base: "20px", md: "0px" }}
             bg="white"
-            marginLeft="-400px"
+            ml={{ base: "0px", md: "60px" }}
+            justify="center"
             display="flex"
           >
-            <Box marginLeft="500px">
+            <Box>
               <Text
                 fontSize="28px"
                 fontWeight="bold"
                 textAlign="left"
+                fontFamily="heading"
                 color="#A210C6"
                 paddingTop="70px"
                 data-aos="fade-left"
@@ -78,8 +81,9 @@ const LandingPage = () => {
                 CONTACT US
               </Text>
               <Text
-                fontSize="64px"
+                fontSize={{ base: "32px", md: "48px", lg: "64px" }}
                 fontWeight="bold"
+                fontFamily="body"
                 textAlign="left"
                 color="#A210C6"
                 marginLeft="5px"
@@ -89,7 +93,7 @@ const LandingPage = () => {
                 hear from you
               </Text>
               <Text
-                fontSize="16px"
+                fontSize={{ base: "22px", md: "28px", lg: "24px" }}
                 textAlign="left"
                 color="#A210C6"
                 marginLeft="5px"
@@ -104,11 +108,10 @@ const LandingPage = () => {
             <Box
               borderRadius="10px"
               bg="white"
-              marginLeft="100px"
-              marginRight="-150px"
+              ml={{ base: "15px", md: "60px" }}
               marginTop="80px"
-              w="523px"
-              h="692px"
+              w={{ base: "323px", md: "523px" }}
+              h={{ base: "620px", md: "692px" }}
               overflow="hidden"
               boxShadow={`0px 0px 1px 2px #ECCFF4`}
               className="animate__animated animate__fadeIn animate__slow"
@@ -154,7 +157,7 @@ const LandingPage = () => {
                 bg="#A210C6"
                 color="white"
                 marginTop="10px"
-                marginLeft="-300px"
+                ml={{ base: "15px", md: "-300px" }}
               >
                 Send message
               </Button>
@@ -162,14 +165,15 @@ const LandingPage = () => {
           </Box>
 
           <Box
+            flexWrap="wrap"
             bg="#A210C6"
             paddingTop="60px"
-            marginLeft="-55px"
+            justify="center"
             marginTop="-250px"
             display="flex"
             color="white"
           >
-            <Box marginLeft="200px" marginTop="350px">
+            <Box ml={{ base: "0", md: "160px" }} marginTop="300px">
               <Flex>
                 <Image
                   src={AddressIcon}
@@ -196,14 +200,14 @@ const LandingPage = () => {
               </Text>
             </Box>
 
-            <Box marginLeft="450px" marginTop="350px" marginBottom="200px">
+            <Box
+              justify={{ base: "center", md: "" }}
+              ml={{ base: "80px", md: "400px" }}
+              mt={{ base: "100px", md: "300px" }}
+              mb={{ base: "100px", md: "200px" }}
+            >
               <Flex>
-                <Image
-                  src={EmailIcon}
-                  alt="Logo"
-                  w="35px"
-                  h="35px"
-                />
+                <Image src={EmailIcon} alt="Logo" w="35px" h="35px" />
                 <Text
                   fontSize="24px"
                   fontFamily="body"
@@ -218,14 +222,9 @@ const LandingPage = () => {
               <Text fontSize="16px" textAlign="left">
                 support@mikulhealth.com
               </Text>
-              <Box marginTop="10px">
+              <Box mt={{ base: "30px", md: "10px" }}>
                 <Flex>
-                  <Image
-                    src={PhoneIcon}
-                    alt="Logo"
-                    w="42px"
-                    h="42px"
-                  />
+                  <Image src={PhoneIcon} alt="Logo" w="42px" h="42px" />
                   <Text
                     fontSize="24px"
                     fontFamily="body"
@@ -247,8 +246,8 @@ const LandingPage = () => {
                   w="80px"
                   h="80px"
                   marginTop="2px"
-                  marginLeft="300px"
-                  marginBottom="-150px"
+                  ml={{ base: "180px", md: "300px" }}
+                  mb={{ base: "10px", md: "-150px" }}
                 />
               </a>
             </Box>

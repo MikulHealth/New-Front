@@ -175,9 +175,16 @@ const LandingPage = () => {
           rounded="md"
           bg="white"
         >
-           <a href="/">
-              <Image justifySelf="center" src={logo} alt="Logo" w="350px" h="150px" />
-            </a>
+          <a href="/">
+            <Image
+              justifySelf="center"
+              src={logo}
+              alt="Logo"
+              ml={{ base: "40px", md: "90px" }}
+              h={{ base: "80px", md: "100px" }}
+              w={{ base: "300px", md: "350px" }}
+            />
+          </a>
           <Text fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
             Create your account
           </Text>
@@ -231,9 +238,9 @@ const LandingPage = () => {
                 <FormLabel marginTop="20px">Date of Birth</FormLabel>
                 <Flex
                   alignItems="flex-start"
-                  border="1px solid" 
+                  border="1px solid"
                   borderColor="gray.200"
-                  p={2} 
+                  p={2}
                   borderRadius="8px"
                 >
                   <DatePicker

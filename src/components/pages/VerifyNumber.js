@@ -130,8 +130,9 @@ const LandingPage = () => {
               justifySelf="center"
               src={logo}
               alt="Logo"
-              w="350px"
-              h="150px"
+              ml={{ base: "40px", md: "90px" }}
+              h={{ base: "80px", md: "100px" }}
+              w={{ base: "300px", md: "350px" }}
             />
           </a>
           <Text fontSize="2xl" color="#A210C6">
