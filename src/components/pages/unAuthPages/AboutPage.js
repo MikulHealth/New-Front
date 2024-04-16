@@ -187,7 +187,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box marginLeft="90px">
+              <Box ml={{ base: "100px", md: "90px" }}>
                 <Image
                   src={Eye}
                   alt="Logo"
@@ -231,7 +231,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box ml={{base: "110px", md: "120px"}}>
+              <Box ml={{ base: "115px", md: "120px" }}>
                 <Image
                   src={Persona}
                   alt="Logo"
@@ -279,7 +279,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box ml={{base: "100px", md: "110px"}}>
+              <Box ml={{ base: "110px", md: "110px" }}>
                 <Image
                   src={Safety}
                   alt="Logo"
@@ -318,7 +318,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box marginLeft="90px">
+              <Box ml={{ base: "100px", md: "90px" }}>
                 <Image
                   src={Quality}
                   alt="Logo"
@@ -357,7 +357,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box ml={{base: "90px", md: "110px"}}>
+              <Box ml={{ base: "100px", md: "110px" }}>
                 <Image
                   src={Flexible}
                   alt="Logo"
@@ -651,13 +651,7 @@ const LandingPage = () => {
               Medics
             </Text>
           </Box>
-          <Flex
-            justify="center"
-            align="center"
-            wrap="wrap"
-            p="20px"
-         
-          >
+          <Flex justify="center" align="center" wrap="wrap" p="20px">
             <Box
               bg="white"
               p="20px"
@@ -665,9 +659,14 @@ const LandingPage = () => {
               flexDirection="column"
               alignItems="center"
               maxW="300px"
-             
             >
-              <Image ml={{base: "30px", md: "20px"}} src={Caregivers} alt="onboarded" w="200px" h="200px" />
+              <Image
+                ml={{ base: "30px", md: "20px" }}
+                src={Caregivers}
+                alt="onboarded"
+                w="200px"
+                h="200px"
+              />
               <Text
                 fontSize="xl"
                 fontFamily="heading"

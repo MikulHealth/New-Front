@@ -14,7 +14,6 @@ const Footer = ({ onFaqsClick }) => {
 
   return (
     <Box
-     
       bg="#A210C6"
       color="white"
       px={{ base: "4", md: "8" }}
@@ -22,8 +21,8 @@ const Footer = ({ onFaqsClick }) => {
       textAlign={{ base: "center", md: "center" }}
     >
       <Flex
-       maxWidth="1280px"
-       margin="0 auto"
+        maxWidth="1280px"
+        margin="0 auto"
         direction={{ base: "column", md: "row" }}
         justify="space-between"
         // align="start"
@@ -44,7 +43,7 @@ const Footer = ({ onFaqsClick }) => {
           <Text
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="bold"
-            textDecoration="underline"
+            // textDecoration="underline"
           >
             Quick Links
           </Text>
@@ -54,18 +53,17 @@ const Footer = ({ onFaqsClick }) => {
                 <NavLink to="/">Home</NavLink>
               </li>
               <li>
-                <NavLink to="/about">About</NavLink>
+                <NavLink to="/about">About Us</NavLink>
               </li>
               <li>
-                <NavLink to="/contact">Contact us</NavLink>
+                <NavLink to="/contact">Contact Us</NavLink>
+              </li>
+
+              <li>
+                <NavLink to="/">Terms of Use</NavLink>
               </li>
               <li>
-                <NavLink to="/join">Join Mikul Health</NavLink>
-              </li>
-              <li>
-                <ChakraLink href="https://wa.me/2347032579006">
-                  Terms and Privacy policy
-                </ChakraLink>
+                <NavLink to="/">Privacy Policy</NavLink>
               </li>
             </ul>
           </Box>
@@ -74,7 +72,7 @@ const Footer = ({ onFaqsClick }) => {
           <Text
             fontSize={{ base: "2xl", md: "3xl" }}
             fontWeight="bold"
-            textDecoration="underline"
+            // textDecoration="underline"
           >
             Socials
           </Text>

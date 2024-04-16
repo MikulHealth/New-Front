@@ -31,9 +31,9 @@ export default function NavigationBar() {
       case "/contact":
         setPageTitle("Contact");
         break;
-      case "/services":
-        setPageTitle("Services");
-        break;
+      // case "/services":
+      //   setPageTitle("Services");
+      //   break;
         case "/login":
           setPageTitle("Login");
           break;
@@ -122,9 +122,9 @@ export default function NavigationBar() {
             <NavLink to="/about" pageTitle={pageTitle}>
               About Us
             </NavLink>
-            <NavLink to="/servicesSection" pageTitle={pageTitle}>
+            {/* <NavLink to="/servicesSection" pageTitle={pageTitle}>
               Services
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/contact" pageTitle={pageTitle}>
               Contact Us
             </NavLink>

@@ -68,8 +68,8 @@ export default function Faqs() {
               >
                 <Accordion
                   allowToggle
-                  ml={{ base: "40px", md: "0px" }}
-                  w={{ base: "60%", md: "520px" }}
+                  // ml={{ base: "40px", md: "0px" }}
+                  w={{ base: "80%", md: "520px" }}
                   mt={{ base: "0", md: "0" }}
                   data-aos="fade-down"
                   data-aos-duration="10000"
@@ -296,7 +296,7 @@ export default function Faqs() {
                       />
                     </Box>
                     <Box marginLeft={{ base: "0", md: "500px" }}>
-                      <a href="https://example.com">
+                      <a href="https://wa.me/2347032579006">
                         <Image
                           src={WhatsAppIcon}
                           alt="Logo"
