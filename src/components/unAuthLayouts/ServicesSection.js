@@ -1,4 +1,4 @@
-import React, {useEffect } from "react";
+import React, { useEffect } from "react";
 import "animate.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -173,6 +173,8 @@ export default function ServicesSection() {
 const ServiceBox = ({ image, title, description }) => {
   return (
     <Box
+      maxWidth="1280px"
+      margin="0 auto"
       borderRadius="20px"
       data-aos="zoom-in"
       data-aos-duration="10000"
@@ -181,9 +183,7 @@ const ServiceBox = ({ image, title, description }) => {
       mt={{ base: "4", md: "0" }}
     >
       <Flex justifyContent="center" alignItems="center" mb="4">
-        <Image
-         src={image} 
-         alt={title} w="300px" h="300" />
+        <Image src={image} alt={title} w="300px" h="300" />
       </Flex>
       <Text
         color="white"

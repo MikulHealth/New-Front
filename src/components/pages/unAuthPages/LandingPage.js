@@ -10,20 +10,22 @@ import {
   ChakraProvider,
   keyframes,
   usePrefersReducedMotion,
+  useBreakpointValue,
+  Flex,
   Text,
   Divider,
 } from "@chakra-ui/react";
 import "animate.css";
 import MHNurse from "../../../assets/MHNurse.svg";
+import KudiratImg from "../../../assets/KudiratImg.svg";
+import JoyImg from "../../../assets/JoyImg.svg";
+import AdeolaImg from "../../../assets/AdeolaImg.svg";
+import GiftImg from "../../../assets/GiftImg.svg";
 import SignUp from "../../../assets/SignUp.svg";
 import SelectCare from "../../../assets/SelectService.svg";
 import GetMatched from "../../../assets/GetMatched.svg";
 import ReceieveCare from "../../../assets/RecieveCare.svg";
-import CenterMed from "../../../assets/CenterMedic.svg";
-import Kudirat from "../../../assets/Kudirat.svg";
-import Joy from "../../../assets/Josy.svg";
-import Adeola from "../../../assets/Adeola.svg";
-import Gift from "../../../assets/Gift.svg";
+// import CenterMed from "../../../assets/CenterMedic.svg";
 import "../../../styles/pages/LandingPage.css";
 import GetStartedModal from "../../unAuthLayouts/GetStarted";
 import AOS from "aos";
@@ -70,6 +72,21 @@ const LandingPage = () => {
   const [animation, setAnimation] = useState(rollIn);
   const prefersReducedMotion = usePrefersReducedMotion();
 
+  const responsivePadding = useBreakpointValue({
+    base: "4",
+    md: "8",
+    lg: "10",
+  });
+  const responsiveFontSize = useBreakpointValue({
+    base: "12px",
+    md: "15px",
+  });
+  const responsiveAvatarSize = useBreakpointValue({
+    base: "40px",
+    md: "100px",
+    lg: "125px",
+  });
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setAnimation(rollOut);
@@ -95,15 +112,17 @@ const LandingPage = () => {
       <Box
         style={settingsContainerStyle}
         flexWrap="wrap"
-        marginBottom={{ base: "50px", md: "100px" }}
-        marginTop={{ base: "5px", md: "50px" }}
+        // marginBottom={{ base: "50px", md: "100px" }}
+        // marginTop={{ base: "5px", md: "50px" }}
         display="flex"
         flexDirection={{ base: "column", md: "row" }}
         alignItems={{ base: "center", md: "flex-start" }}
         justifyContent={{ base: "center", md: "flex-start" }}
         textAlign={{ base: "center", md: "left" }}
-        px={{ base: "20px", md: "unset" }}
+        px={{ base: "20px", md: "5px" }}
         marginLeft={{ base: 0, md: "50px" }}
+        maxWidth="1280px"
+        margin="0 auto"
       >
         <HStack
           flexWrap="wrap"
@@ -123,7 +142,8 @@ const LandingPage = () => {
               fontWeight="bold"
               fontFamily="body"
             >
-              <span style={{ color: "#A210C6" }}>Healthcare</span> that you <br></br>
+              <span style={{ color: "#A210C6" }}>Healthcare</span> that you{" "}
+              <br></br>
               deserve at your fingertips.
             </Text>
             {/* <Text
@@ -145,7 +165,7 @@ const LandingPage = () => {
                 animation: animationStyle,
               }}
             >
-             {phrases[currentIndex]}
+              {phrases[currentIndex]}
             </Text>
             <Text
               marginTop="10px"
@@ -211,7 +231,7 @@ const LandingPage = () => {
       </Box>
       <Services />
       <Divider />
-      <Box flexWrap="wrap" bg="white">
+      <Box maxWidth="1280px" margin="0 auto" flexWrap="wrap" bg="white">
         <Box marginTop={{ base: "20px", md: "50px" }}>
           <Text
             fontSize={{ base: "36px", md: "48px" }}
@@ -331,7 +351,7 @@ const LandingPage = () => {
         </Box>
       </Box>
 
-      <Box flexWrap="wrap" bg="white">
+      <Box maxWidth="1280px" margin="0 auto" flexWrap="wrap" bg="white">
         <Divider />
 
         <Box marginTop={{ base: "10", md: "30px" }}>
@@ -344,7 +364,7 @@ const LandingPage = () => {
             Testimonials
           </Text>
           <Text
-            fontSize={{ base: "xl", md: "2xl" }}
+            fontSize={{ base: "18px", md: "22px", lg: "24px" }}
             fontFamily="body"
             color="black"
           >
@@ -353,12 +373,13 @@ const LandingPage = () => {
         </Box>
 
         <Box
-          padding={{ base: "20", md: "30px" }}
-          marginLeft={{ base: "0", md: "45px" }}
+          padding={{ base: "0px", md: "30px" }}
+          ml={{ base: "25", md: "45px" }}
+          mt={{ base: "10px" }}
           flexWrap="wrap"
           display="flex"
         >
-          <Box>
+          <Flex flexWrap="wrap">
             <Box
               justifyContent="center"
               alignItems="center"
@@ -367,14 +388,48 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box marginLeft="2px">
-                <Image
-                  src={Kudirat}
-                  alt="image"
-                  w="398px"
-                  h="191px"
-                  data-aos="fade-left"
-                  data-aos-duration="10000"
-                />
+                <Flex
+                  border="2px"
+                  borderColor="#A210C6"
+                  bg="white"
+                  boxShadow="base"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  align="center"
+                  w={{ base: " 298px", md: "498px" }}
+                  h={{ base: " 91px", md: "191px" }}
+                  p={responsivePadding}
+                >
+                  <Image
+                    borderRadius="full"
+                    boxSize={responsiveAvatarSize}
+                    src={KudiratImg}
+                    alt="Kudirat J."
+                    marginRight={{ md: "4" }}
+                  />
+                  <Box flex="1">
+                    <Text
+                      ml={{ base: "10px" }}
+                      fontSize={responsiveFontSize}
+                      color="black"
+                      fontFamily="body"
+                      textAlign="left"
+                    >
+                      They offer quality, affordable and accessible home care
+                      services. I highly recommend 👍
+                    </Text>
+                    <Text
+                      fontSize={responsiveFontSize}
+                      fontWeight="bold"
+                      color="black"
+                      fontFamily="body"
+                      mt={{ base: "2", md: "4" }}
+                      textAlign="left"
+                    >
+                      Kudirat J.
+                    </Text>
+                  </Box>
+                </Flex>
               </Box>
             </Box>
             <Box w="10" />
@@ -387,19 +442,53 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box>
-                <Image
-                  src={Adeola}
-                  alt="image"
-                  w="398px"
-                  h="191px"
-                  data-aos="fade-right"
-                  data-aos-duration="10000"
-                />
+                <Flex
+                  border="2px"
+                  borderColor="#A210C6"
+                  bg="white"
+                  w={{ base: " 298px", md: "498px" }}
+                  h={{ base: " 91px", md: "191px" }}
+                  boxShadow="base"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  align="center"
+                  p={responsivePadding}
+                >
+                  <Image
+                    borderRadius="full"
+                    boxSize={responsiveAvatarSize}
+                    src={JoyImg}
+                    alt="Kudirat J."
+                    marginRight={{ md: "4" }}
+                  />
+                  <Box flex="1">
+                    <Text
+                      ml={{ base: "10px" }}
+                      fontSize={responsiveFontSize}
+                      color="black"
+                      fontFamily="body"
+                      textAlign="left"
+                    >
+                      I like the fact that it isn't out of reach but affordable.
+                      The quality of care given is highly commendable.
+                    </Text>
+                    <Text
+                      fontSize={responsiveFontSize}
+                      fontWeight="bold"
+                      color="black"
+                      fontFamily="body"
+                      mt={{ base: "2", md: "4" }}
+                      textAlign="left"
+                    >
+                      Joy U.
+                    </Text>
+                  </Box>
+                </Flex>
               </Box>
             </Box>
-          </Box>
+          </Flex>
 
-          <Box
+          {/* <Box
             display={{ base: "none", lg: "block" }}
             justifyContent="center"
             alignItems="center"
@@ -417,9 +506,9 @@ const LandingPage = () => {
                 data-aos-duration="10000"
               />
             </Box>
-          </Box>
+          </Box> */}
 
-          <Box>
+          <Flex flexWrap="wrap">
             <Box
               justifyContent="center"
               alignItems="center"
@@ -428,17 +517,51 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box>
-                <Image
-                  src={Joy}
-                  alt="image"
-                  w="398px"
-                  h="191px"
-                  data-aos="fade-left"
-                  data-aos-duration="10000"
-                />
+                <Flex
+                  border="2px"
+                  borderColor="#A210C6"
+                  bg="white"
+                  w={{ base: " 298px", md: "498px" }}
+                  h={{ base: " 91px", md: "191px" }}
+                  boxShadow="base"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  align="center"
+                  p={responsivePadding}
+                >
+                  <Image
+                    borderRadius="full"
+                    boxSize={responsiveAvatarSize}
+                    src={AdeolaImg}
+                    alt="Adeola G."
+                    marginRight={{ md: "4" }}
+                  />
+                  <Box flex="1">
+                    <Text
+                      ml={{ base: "10px" }}
+                      fontSize={responsiveFontSize}
+                      color="black"
+                      fontFamily="body"
+                      textAlign="left"
+                    >
+                      Their standard of care is excellent. The caregiver was
+                      friendly and thoughtful.
+                    </Text>
+                    <Text
+                      fontSize={responsiveFontSize}
+                      fontWeight="bold"
+                      color="black"
+                      fontFamily="body"
+                      mt={{ base: "2", md: "4" }}
+                      textAlign="left"
+                    >
+                      Adeola G.
+                    </Text>
+                  </Box>
+                </Flex>
               </Box>
             </Box>
-
+            <Box w="10" />
             <Box
               justifyContent="center"
               alignItems="center"
@@ -447,17 +570,51 @@ const LandingPage = () => {
               flexDirection="row"
             >
               <Box>
-                <Image
-                  src={Gift}
-                  alt="image"
-                  w="398px"
-                  h="191px"
-                  data-aos="fade-right"
-                  data-aos-duration="10000"
-                />
+                <Flex
+                  border="2px"
+                  borderColor="#A210C6"
+                  bg="white"
+                  w={{ base: " 298px", md: "498px" }}
+                  h={{ base: " 91px", md: "191px" }}
+                  boxShadow="base"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  align="center"
+                  p={responsivePadding}
+                >
+                  <Image
+                    borderRadius="full"
+                    boxSize={responsiveAvatarSize}
+                    src={GiftImg}
+                    alt="Gift D."
+                    marginRight={{ md: "4" }}
+                  />
+                  <Box flex="1">
+                    <Text
+                      fontSize={responsiveFontSize}
+                      color="black"
+                      fontFamily="body"
+                      ml={{ base: "10px" }}
+                      textAlign="left"
+                    >
+                      Mikul Health is affordable and delivers great customer
+                      service .
+                    </Text>
+                    <Text
+                      fontSize={responsiveFontSize}
+                      fontWeight="bold"
+                      color="black"
+                      fontFamily="body"
+                      mt={{ base: "2", md: "4" }}
+                      textAlign="left"
+                    >
+                      Gift D.
+                    </Text>
+                  </Box>
+                </Flex>
               </Box>
             </Box>
-          </Box>
+          </Flex>
         </Box>
       </Box>
       <Faqs />

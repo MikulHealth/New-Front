@@ -14,6 +14,7 @@ const Footer = ({ onFaqsClick }) => {
 
   return (
     <Box
+     
       bg="#A210C6"
       color="white"
       px={{ base: "4", md: "8" }}
@@ -21,6 +22,8 @@ const Footer = ({ onFaqsClick }) => {
       textAlign={{ base: "center", md: "center" }}
     >
       <Flex
+       maxWidth="1280px"
+       margin="0 auto"
         direction={{ base: "column", md: "row" }}
         justify="space-between"
         // align="start"
@@ -75,24 +78,15 @@ const Footer = ({ onFaqsClick }) => {
           >
             Socials
           </Text>
-          <Flex
-            justify="center"
-            mt={{ base: "2", md: "4" }}
-          >
+          <Flex justify="center" mt={{ base: "2", md: "4" }}>
             <ChakraLink href="https://web.facebook.com/mikulhealthcare/?_rdc=1&_rdr://example.com">
-              <Image 
-              src={FBIcon}
-               alt="Facebook" w="32px" h="32px" mr="4" />
+              <Image src={FBIcon} alt="Facebook" w="32px" h="32px" mr="4" />
             </ChakraLink>
             <ChakraLink href="https://www.instagram.com/mikulhealth/">
-              <Image 
-              src={IGIcon}
-               alt="Instagram" w="32px" h="32px" mr="4" />
+              <Image src={IGIcon} alt="Instagram" w="32px" h="32px" mr="4" />
             </ChakraLink>
             <ChakraLink href="https://wa.me/message/3VO5QNBR2AB4L1://example.com">
-              <Image 
-              src={WHIcon}
-               alt="WhatsApp" w="32px" h="32px" />
+              <Image src={WHIcon} alt="WhatsApp" w="32px" h="32px" />
             </ChakraLink>
           </Flex>
         </Box>

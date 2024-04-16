@@ -24,9 +24,9 @@ export default function Faqs() {
   };
 
   return (
-    <Box flexWrap="wrap" bg="white">
+    <Flex justifyContent="center" flexWrap="wrap" bg="white">
       <Divider />
-      <Box textAlign="center">
+      <Box maxWidth="1280px" margin="0 auto" textAlign="center">
         <Flex>
           <Box
             marginTop={{ base: "20px", md: "50px" }}
@@ -55,7 +55,7 @@ export default function Faqs() {
           <Box
             flexWrap="wrap"
             display="flex"
-            marginLeft={{ base: "0", md: "80px" }}
+            // marginLeft={{ base: "0", md: "80px" }}
             width={{ base: "100%", md: "auto" }}
           >
             <Flex>
@@ -64,11 +64,12 @@ export default function Faqs() {
                 marginTop={{ base: "10px", md: "0" }}
                 p="1"
                 bgColor="white"
+                justify={{ base: "center", md: "block" }}
               >
                 <Accordion
                   allowToggle
                   ml={{ base: "40px", md: "0px" }}
-                  w={{ base: "80%", md: "520px" }}
+                  w={{ base: "60%", md: "520px" }}
                   mt={{ base: "0", md: "0" }}
                   data-aos="fade-down"
                   data-aos-duration="10000"
@@ -250,7 +251,11 @@ export default function Faqs() {
                   </AccordionItem>
                 </Accordion>
 
-                <Box  marginLeft={{ base: "10", md: "0px" }} marginTop={{ base: "10px", md: "-20px" }} flexWrap="wrap">
+                <Box
+                  marginLeft={{ base: "10", md: "0px" }}
+                  marginTop={{ base: "10px", md: "-20px" }}
+                  flexWrap="wrap"
+                >
                   <Box
                     display={{ base: "none", lg: "block" }}
                     bg="white"
@@ -309,6 +314,6 @@ export default function Faqs() {
           </Box>
         </Flex>
       </Box>
-    </Box>
+    </Flex>
   );
 }

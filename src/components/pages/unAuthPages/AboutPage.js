@@ -54,10 +54,12 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <Box >
+      <Box>
         <NavigationBar />
         <Box
           style={settingsContainerStyle}
+          maxWidth="1280px"
+          margin="0 auto"
           marginTop="-1px"
           bgImage={`url(${Folder})`}
           bgSize={{ base: "cover", md: "cover", lg: "cover" }}
@@ -101,7 +103,13 @@ const LandingPage = () => {
           pt="60px"
           ml={{ base: "-10px", md: "-40px", lg: "-40px" }}
         >
-          <Box justify="center" data-aos="fade-right" data-aos-duration="10000">
+          <Box
+            maxWidth="1280px"
+            margin="0 auto"
+            justify="center"
+            data-aos="fade-right"
+            data-aos-duration="10000"
+          >
             <Text
               fontSize={{ base: "22px", md: "28px" }}
               fontFamily="heading"
@@ -223,7 +231,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box marginLeft="100px">
+              <Box ml={{base: "110px", md: "120px"}}>
                 <Image
                   src={Persona}
                   alt="Logo"
@@ -271,7 +279,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box marginLeft="100px">
+              <Box ml={{base: "100px", md: "110px"}}>
                 <Image
                   src={Safety}
                   alt="Logo"
@@ -349,7 +357,7 @@ const LandingPage = () => {
               borderRadius="20px"
               flexDirection="row"
             >
-              <Box marginLeft="90px">
+              <Box ml={{base: "90px", md: "110px"}}>
                 <Image
                   src={Flexible}
                   alt="Logo"
@@ -382,7 +390,7 @@ const LandingPage = () => {
           </Flex>
         </Box>
 
-        <Box bg="white">
+        <Box maxWidth="1280px" margin="0 auto" bg="white">
           <Box mt="50px">
             <Text
               fontSize={{ base: "32px", md: "48px", lg: "64px" }}
@@ -424,7 +432,12 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="left">
+              <Text
+                fontFamily="heading"
+                fontSize="xl"
+                fontWeight="bold"
+                textAlign="left"
+              >
                 Michael Joshua. Co-founder, CEO
               </Text>
               <Text
@@ -480,7 +493,12 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text fontSize="xl" fontWeight="bold"  fontFamily="heading" textAlign="left">
+              <Text
+                fontSize="xl"
+                fontWeight="bold"
+                fontFamily="heading"
+                textAlign="left"
+              >
                 Jim Ofodum. Co-founde, Growth
               </Text>
               <Text
@@ -530,7 +548,12 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="left">
+              <Text
+                fontFamily="heading"
+                fontSize="xl"
+                fontWeight="bold"
+                textAlign="left"
+              >
                 Dr. Hafsat Jijiwa. Medical Director.
               </Text>
               <Text
@@ -585,7 +608,12 @@ const LandingPage = () => {
               data-aos="fade-right"
               data-aos-duration="10000"
             >
-              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="left">
+              <Text
+                fontFamily="heading"
+                fontSize="xl"
+                fontWeight="bold"
+                textAlign="left"
+              >
                 Dr. Sylvia Onoabhagbe. Product Designer
               </Text>
               <Text
@@ -607,7 +635,12 @@ const LandingPage = () => {
           </Flex>
         </Box>
 
-        <Box bg="white" mt={{ base: "400px", md: "150px" }}>
+        <Box
+          maxWidth="1280px"
+          margin="0 auto"
+          bg="white"
+          mt={{ base: "400px", md: "150px" }}
+        >
           <Box textAlign="center">
             <Text
               fontSize="48px"
@@ -623,7 +656,7 @@ const LandingPage = () => {
             align="center"
             wrap="wrap"
             p="20px"
-            // justifyContent={{ md: "space-between" }}
+         
           >
             <Box
               bg="white"
@@ -632,12 +665,18 @@ const LandingPage = () => {
               flexDirection="column"
               alignItems="center"
               maxW="300px"
+             
             >
-              <Image src={Caregivers} alt="onboarded" w="200px" h="200px" />
-              <Text fontSize="xl"  fontFamily="heading" fontWeight="bold" textAlign="center">
+              <Image ml={{base: "30px", md: "20px"}} src={Caregivers} alt="onboarded" w="200px" h="200px" />
+              <Text
+                fontSize="xl"
+                fontFamily="heading"
+                fontWeight="bold"
+                textAlign="center"
+              >
                 1000+ Caregivers Onboarded
               </Text>
-              <Text   fontFamily="body" textAlign="center">
+              <Text fontFamily="body" textAlign="center">
                 Getting started is quick <br />
                 and easy. Sign up with <br />
                 us to receive premium <br />
@@ -653,10 +692,15 @@ const LandingPage = () => {
               maxW="300px"
             >
               <Image src={Vetted} alt="vetted" w="200px" h="200px" />
-              <Text  fontFamily="heading" fontSize="xl" fontWeight="bold" textAlign="center">
+              <Text
+                fontFamily="heading"
+                fontSize="xl"
+                fontWeight="bold"
+                textAlign="center"
+              >
                 500+ Vetted
               </Text>
-              <Text  fontFamily="body" textAlign="center">
+              <Text fontFamily="body" textAlign="center">
                 Now that you are a part <br />
                 of our community, you <br />
                 can find the kind of <br />
