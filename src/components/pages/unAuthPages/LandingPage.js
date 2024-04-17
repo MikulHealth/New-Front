@@ -110,11 +110,8 @@ const LandingPage = () => {
     <ChakraProvider theme={customTheme}>
       <NavigationBar />
       <Box
-      overflow="hidden"
         style={settingsContainerStyle}
         flexWrap="wrap"
-        // marginBottom={{ base: "50px", md: "100px" }}
-        // marginTop={{ base: "5px", md: "50px" }}
         display="flex"
         flexDirection={{ base: "column", md: "row" }}
         alignItems={{ base: "center", md: "flex-start" }}
@@ -135,11 +132,11 @@ const LandingPage = () => {
             marginTop={{ base: "50px", md: "50px" }}
             width={{ base: "100%", md: "auto" }}
             mb={{ base: "20px", md: "unset" }}
-            textAlign={{ base: "center", md: "left" }}
+            textAlign="left"
+            justify="left"
           >
             <Text
               fontSize={{ base: "36px", md: "48px" }}
-              textAlign={{ base: "left", md: "left" }}
               fontWeight="bold"
               fontFamily="body"
             >
@@ -147,17 +144,9 @@ const LandingPage = () => {
               <br></br>
               deserve at your fingertips.
             </Text>
-            {/* <Text
-              marginTop="-10px"
-              textAlign={{ base: "center", md: "left" }}
-              fontSize={{ base: "36px", md: "48px" }}
-              fontWeight="bold"
-              fontFamily="body"
-            >
-             deserve at your fingertips, <br></br> {phrases[currentIndex]}
-            </Text> */}
+
             <Text
-              
+              mt="5px"
               textAlign={{ base: "left", md: "left" }}
               fontSize={{ base: "26px", md: "28px" }}
               fontWeight="bold"
@@ -183,8 +172,8 @@ const LandingPage = () => {
             </Text>
 
             <Button
-              marginTop={{ base: "10px", md: "50px" }}
-              marginBottom={{ base: "50px", md: "50px" }}
+              mt={{ base: "30px", md: "50px" }}
+              mb={{ base: "30px", md: "50px" }}
               bg="#A210C6"
               color="white"
               borderRadius="100px"
@@ -211,8 +200,8 @@ const LandingPage = () => {
         `}
         </style>
         <Box
-          marginTop={{ base: "0", md: "50px" }}
-          marginLeft={{ base: "0", md: "0px" }}
+          mt={{ base: "0", md: "50px" }}
+          ml={{ base: "0", md: "0px" }}
           padding={{ base: "50px", md: "0px" }}
           className="box"
           data-aos="zoom-out"
@@ -229,6 +218,7 @@ const LandingPage = () => {
             style={{ width: "100%", height: "100%" }}
           />
         </Box>
+        <Spacer />
       </Box>
       <Services />
       <Divider />
@@ -375,7 +365,8 @@ const LandingPage = () => {
 
         <Box
           padding={{ base: "0px", md: "30px" }}
-          ml={{ base: "25", md: "45px" }}
+          ml={{ base: "30px", md: "45px" }}
+          justify="center" 
           mt={{ base: "10px" }}
           flexWrap="wrap"
           display="flex"
@@ -386,7 +377,7 @@ const LandingPage = () => {
               alignItems="center"
               padding="20px"
               borderRadius="20px"
-              flexDirection="row"
+              // flexDirection="row"
             >
               <Box marginLeft="2px">
                 <Flex
@@ -440,7 +431,7 @@ const LandingPage = () => {
               alignItems="center"
               padding="20px"
               borderRadius="20px"
-              flexDirection="row"
+              // flexDirection="row"
             >
               <Box>
                 <Flex
@@ -515,7 +506,7 @@ const LandingPage = () => {
               alignItems="center"
               padding="20px"
               borderRadius="20px"
-              flexDirection="row"
+              // flexDirection="row"
             >
               <Box>
                 <Flex
@@ -568,7 +559,7 @@ const LandingPage = () => {
               alignItems="center"
               padding="20px"
               borderRadius="20px"
-              flexDirection="row"
+              // flexDirection="row"
             >
               <Box>
                 <Flex

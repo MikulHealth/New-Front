@@ -68,6 +68,7 @@ export default function Faqs() {
               >
                 <Accordion
                   allowToggle
+                 
                   // ml={{ base: "40px", md: "0px" }}
                   w={{ base: "80%", md: "520px" }}
                   mt={{ base: "0", md: "0" }}
@@ -86,7 +87,7 @@ export default function Faqs() {
                           as="span"
                           flex="1"
                           textAlign="left"
-                          fontSize="21px"
+                          fontSize={{ base: "16px", md: "18px" }}
                         >
                           How do I get matched with a medic?
                         </Box>
@@ -114,7 +115,7 @@ export default function Faqs() {
                           as="span"
                           flex="1"
                           textAlign="left"
-                          fontSize="21px"
+                          fontSize={{ base: "16px", md: "18px" }}
                         >
                           How safe am I?
                         </Box>
@@ -144,7 +145,7 @@ export default function Faqs() {
                           as="span"
                           flex="1"
                           textAlign="left"
-                          fontSize="21px"
+                          fontSize={{ base: "16px", md: "18px" }}
                         >
                           Can I request for a replacement?
                         </Box>
@@ -164,7 +165,7 @@ export default function Faqs() {
                   <AccordionItem
                     p={4}
                     my={3}
-                    fontSize="24px"
+                    fontSize={{ base: "16px", md: "18px" }}
                     className="custom-accordion-item"
                   >
                     <h2>
@@ -173,7 +174,7 @@ export default function Faqs() {
                           as="span"
                           flex="1"
                           textAlign="left"
-                          fontSize="21px"
+                          fontSize={{ base: "16px", md: "18px" }}
                         >
                           How long does it take to receive care?
                         </Box>
@@ -191,7 +192,7 @@ export default function Faqs() {
                   <AccordionItem
                     p={4}
                     my={3}
-                    fontSize="24px"
+                    fontSize={{ base: "16px", md: "18px" }}
                     className="custom-accordion-item"
                   >
                     <h2>
@@ -200,7 +201,7 @@ export default function Faqs() {
                           as="span"
                           flex="1"
                           textAlign="left"
-                          fontSize="21px"
+                          fontSize={{ base: "16px", md: "18px" }}
                         >
                           Can I get a customized service plan?
                         </Box>
@@ -229,7 +230,7 @@ export default function Faqs() {
                           as="span"
                           flex="1"
                           textAlign="left"
-                          fontSize="21px"
+                          fontSize={{ base: "16px", md: "18px" }}
                         >
                           How qualified are the medics?
                         </Box>
