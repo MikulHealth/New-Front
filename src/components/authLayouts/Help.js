@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// import HelppIcon from "../../assets/HelppIcon.svg";
+import HelppIcon from "../../assets/HelpIcon.svg";
 import { Box, Image } from "@chakra-ui/react";
 export default function Help() {
   const help = () => {
@@ -15,7 +15,7 @@ export default function Help() {
     >
       <Image
         onClick={help}
-        // src={HelppIcon}
+        src={HelppIcon}
         alt="Logo"
         w="70px"
         h="70px"

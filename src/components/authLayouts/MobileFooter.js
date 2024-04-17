@@ -1,10 +1,10 @@
 import React from "react";
 import { Flex, Image, Text, VStack, useDisclosure } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
-// import HomeIcon from "../../assets/HomeBlack.svg";
-// import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
-// import WalletIcon from "../../assets/Wallet.svg";
-// import HelpIcon from "../../assets/HelppIcon.svg";
+import HomeIcon from "../../assets/HomeBlack.svg";
+import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
+import WalletIcon from "../../assets/Wallet.svg";
+import HelpIcon from "../../assets/HelpIcon.svg";
 import LogoutModal from "../sections/LogoutModal";
 
 
@@ -40,7 +40,7 @@ const MobileFooter = () => {
         <NavLink to="/dashboard" style={listItemStyle}>
           <VStack>
             <Image 
-            // src={HomeIcon} 
+            src={HomeIcon} 
             alt="home" style={iconStyle} />
             <Text>Home</Text>
           </VStack>
@@ -49,7 +49,7 @@ const MobileFooter = () => {
         <NavLink to="/appointment" style={listItemStyle}>
           <VStack>
             <Image
-              // src={AppointmentsIcon}
+              src={AppointmentsIcon}
               alt="appointments"
               style={iconStyle}
             />
@@ -60,7 +60,7 @@ const MobileFooter = () => {
         <NavLink to="/wallet" style={listItemStyle}>
           <VStack>
             <Image
-            //  src={WalletIcon} 
+             src={WalletIcon} 
              alt="wallet" style={iconStyle} />
             <Text>Wallet</Text>
           </VStack>
@@ -69,7 +69,7 @@ const MobileFooter = () => {
         <NavLink to="/help" style={listItemStyle}>
           <VStack>
             <Image 
-            // src={HelpIcon}
+            src={HelpIcon}
              alt="Help" style={iconStyle} />
             <Text>Help</Text>
           </VStack>

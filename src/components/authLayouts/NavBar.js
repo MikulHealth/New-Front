@@ -22,14 +22,14 @@ import React, { useState} from "react";
 import { useSelector } from "react-redux";
 import UserDetailsModal from "../sections/UserDetails";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
-// import LogoutIcon from "../../assets/Logout.svg";
+import LogoutIcon from "../../assets/Logout.svg";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import LogoutModal from "../sections/LogoutModal";
-// import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
-// import HomeIcon from "../../assets/HomeBlack.svg";
-// import Wallet from "../../assets/Wallet.svg";
-// import serviceIcon from "../../assets/ServiceIcon.svg";
-// import SettingsIcon from "../../assets/SettingsIcon.svg";
+import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
+import HomeIcon from "../../assets/HomeBlack.svg";
+import Wallet from "../../assets/Wallet.svg";
+import serviceIcon from "../../assets/ServiceIcon.svg";
+import SettingsIcon from "../../assets/SettingsIcon.svg";
 
 const customTheme = extendTheme({
   components: {
@@ -130,7 +130,7 @@ export default function NavBar() {
                     alignItems="center"
                   >
                     <Image
-                    //  src={HomeIcon}
+                     src={HomeIcon}
                       alt="home" style={iconStyle} />
                     <Text style={listTextStyle}>Home</Text>
                   </Flex>
@@ -150,7 +150,7 @@ export default function NavBar() {
                     alignItems="center"
                   >
                     <Image
-                      // src={AppointmentsIcon}
+                      src={AppointmentsIcon}
                       alt="appointment"
                       style={iconStyle}
                     />
@@ -168,7 +168,7 @@ export default function NavBar() {
                     alignItems="center"
                   >
                     <Image 
-                    // src={Wallet} 
+                    src={Wallet} 
                     alt="wallet" style={iconStyle} />
                     <Text style={listTextStyle}>Wallet</Text>
                   </Flex>
@@ -197,7 +197,7 @@ export default function NavBar() {
                     alignItems="center"
                   >
                     <Image 
-                    // src={serviceIcon} 
+                    src={serviceIcon} 
                     alt="services" style={iconStyle} />
                     <Text style={listTextStyle}>Services</Text>
                   </Flex>
@@ -237,7 +237,7 @@ export default function NavBar() {
                   >
                     <Image
                       marginLeft="-5px"
-                      // src={SettingsIcon}
+                      src={SettingsIcon}
                       alt="settings"
                       style={iconStyle}
                     />
@@ -247,7 +247,7 @@ export default function NavBar() {
                 <NavLink onClick={handleOpenLogoutModal} style={listItemStyle}>
                   <Flex color="#A210C6">
                     <Image 
-                    // src={LogoutIcon} 
+                    src={LogoutIcon} 
                     alt="logout" style={iconStyle} />
                     <Text
                       style={listTextStyle}

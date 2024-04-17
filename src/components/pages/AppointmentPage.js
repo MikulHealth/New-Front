@@ -20,7 +20,7 @@ import {
   TabPanels,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
-// import familyIcon from "../../assets/family.svg";
+import familyIcon from "../../assets/Family.svg";
 import SearchAppointmentsModal from "../sections/SearchAppointmentByDate";
 import NavBar from "../authLayouts/NavBar";
 import AppointmentTab from "../authLayouts/AllAppointmentTab";
@@ -160,7 +160,7 @@ const AppointmentPage = () => {
           </VStack>
           <Box>
             <Image
-              // src={familyIcon}
+              src={familyIcon}
               alt="family icon"
               w={{ base: "80px", md: "150px" }}
               h={{ base: "80x", md: "150px" }}

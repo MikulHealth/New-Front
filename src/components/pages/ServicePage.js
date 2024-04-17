@@ -16,14 +16,9 @@ import {
   Flex,
   extendTheme,
 } from "@chakra-ui/react";
-// import PostPaturm from "../../assets/Postpatum.svg";
-// import Elderly from "../../assets/ElderlyCare.svg";
-// import Recovery from "../../assets/RecoveryCare.svg";
-// import Online from "../../assets/OnlineConsult.svg";
-// import Costom from "../../assets/CustomIcon.svg";
 import NavBar from "../authLayouts/NavBar";
-// import HelppIcon from "../../assets/HelppIcon.svg";
-// import Chevron from "../../assets/ChevronDown.svg";
+import HelppIcon from "../../assets/HelpIcon.svg";
+import Chevron from "../../assets/Chevron.svg";
 import MobileFooter from "../authLayouts/MobileFooter";
 
 const customTheme = extendTheme({
@@ -107,6 +102,7 @@ const ServicePage = () => {
       <VStack
         style={settingsContainerStyle}
         position="fixed"
+        overflow="scroll"
         ml={{ md: "225px" }}
         w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}
@@ -136,16 +132,14 @@ const ServicePage = () => {
                   onClick={service.onClick}
                 >
                   <Flex>
-                    <Image margin="15px" 
-                    // src={service.icon}
-                     w="30px" h="30px" />
-                    <Box marginLeft="10px" marginTop="15px">
+
+                    <Box margin="25px">
                       <Text fontSize={{ base: "16px", md: "20px" }}>
                         {service.title}
                       </Text>
                     </Box>
                     <Image
-                      // src={Chevron}
+                      src={Chevron}
                       marginLeft="830px"
                       marginTop="15px"
                       w="30px"
@@ -171,16 +165,14 @@ const ServicePage = () => {
                   _hover={{ color: "#A210C6" }}
                 >
                   <Flex>
-                    <Image margin="15px"
-                    //  src={Costom} 
-                     w="30px" h="30px" />
-                    <Box marginTop="15px">
+                   
+                    <Box margin="25px">
                       <Text fontSize={{ base: "16px", md: "20px" }}>
                         Customize service
                       </Text>
                     </Box>
                     <Image
-                      // src={Chevron}
+                      src={Chevron}
                       marginLeft="830px"
                       marginTop="15px"
                       w="30px"
@@ -199,7 +191,7 @@ const ServicePage = () => {
             >
               <NavLink to="/help">
                 <Image
-                  // src={HelppIcon}
+                  src={HelppIcon}
                   alt="Logo"
                   w="70px"
                   h="70px"

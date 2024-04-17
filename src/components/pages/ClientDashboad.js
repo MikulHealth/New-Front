@@ -22,14 +22,13 @@ import {
 import AOS from "aos";
 import "../../styles/pages/LandingPage.css";
 import BeneficiariesModal from "../sections/Beneficiaries";
-// import Tele from "../../assets/Telemed.svg";
-
+import Tele from "../../assets/Telemed.svg";
 import NavBar from "../authLayouts/NavBar";
-// import Services from "../../assets/Services.svg";
-// import BookIcon from "../../assets/appointment.svg";
-// import Beneficiary from "../../assets/Beneficiaries.svg";
-// import Report from "../../assets/MedicalRepoert.svg";
-// import CustomService from "../../assets/CustomeService.svg";
+import Services from "../../assets/Services.svg";
+import BookIcon from "../../assets/BookIcon.svg";
+import Beneficiary from "../../assets/Beneficiaries.svg";
+import Report from "../../assets/MedicalReport.svg";
+import CustomService from "../../assets/CustomizeService.svg";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import MobileFooter from "../authLayouts/MobileFooter";
 const customTheme = extendTheme({
@@ -263,7 +262,7 @@ const ClientDash = () => {
                 <VStack>
                   <Button
                     padding={{ base: "5px", md: "0" }}
-                    ml={{ base: "40px", md: "320px" }}
+                    ml={{ base: "25px", md: "320px" }}
                     w={{ base: "100px", md: "35%" }}
                     h={{ base: "30px", md: "50%" }}
                     fontSize={{ base: "12px", md: "16px" }}
@@ -280,10 +279,10 @@ const ClientDash = () => {
               </Flex>
               <VStack
                 mb={{ base: "20px", md: "0" }}
-                mt={{ base: "0px", md: "20px" }}
+                mt={{ base: "20px", md: "20px" }}
                 color="white"
               >
-                <Box ml={{ base: "-50px", md: "-490px" }}>
+                <Box ml={{ base: "-170px", md: "-490px" }}>
                   <Text
                     display={{ base: "none", md: "block" }}
                     justify="left"
@@ -295,7 +294,7 @@ const ClientDash = () => {
                   <Text
                     // marginBottom={{ base: "10px", md: "0" }}
                     justify="left"
-                    fontSize={{ base: "10px", md: "14px" }}
+                    fontSize={{ base: "14px", md: "14px" }}
                   >
                     Wema Bank 0124536789
                   </Text>
@@ -324,7 +323,7 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      // src={BookIcon}
+                      src={BookIcon}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
@@ -341,12 +340,12 @@ const ClientDash = () => {
                         ml={{ md: "30px" }}
                         color="black"
                       >
-                        Book Appointment
+                        Book appointment
                       </Text>
                       <Text
                         // display={{ base: "none", lg: "block" }}
                         textAlign="center"
-                        fontSize={{ base: "8px", md: "16px" }}
+                        fontSize={{ base: "12px", md: "16px" }}
                       >
                         Schedule your appointment
                       </Text>
@@ -366,7 +365,7 @@ const ClientDash = () => {
                     onClick={handleOpenAppointmentModal}
                     _hover={{ color: "#A210C6" }}
                   >
-                    Book Now
+                    book Now
                   </Text>
                 </Box>
 
@@ -391,7 +390,7 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      // src={Beneficiary}
+                      src={Beneficiary}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
@@ -408,7 +407,7 @@ const ClientDash = () => {
                       </Text>
                       <Text
                         textAlign="center"
-                        fontSize={{ base: "8px", md: "16px" }}
+                        fontSize={{ base: "12px", md: "16px" }}
                       >
                         Your friends and loved ones
                       </Text>
@@ -451,7 +450,7 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      // src={Services}
+                      src={Services}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
@@ -468,7 +467,7 @@ const ClientDash = () => {
                       </Text>
                       <Text
                         textAlign="center"
-                        fontSize={{ base: "8px", md: "16px" }}
+                        fontSize={{ base: "12px", md: "16px" }}
                       >
                         Explore a variety of our services
                       </Text>
@@ -513,31 +512,32 @@ const ClientDash = () => {
                     alignItems="center"
                   >
                     <Image
-                      // src={CustomService}
+                      src={CustomService}
                       margin={{ base: "10px", md: "15px" }}
                       w={{ base: "25px", md: "60px" }}
                       h={{ base: "25px", md: "60px" }}
                       borderRadius="100px"
                     />
                     <VStack
-                      mt={{ base: "-20px", md: "10px" }}
+                      mt={{ base: "-25px", md: "10px" }}
                       ml={{ base: "5px", md: "0" }}
                     >
                       <Text
-                        mt={{ base: "5px", md: "" }}
+                        mt={{ base: "2px", md: "" }}
                         textAlign="center"
                         fontSize={{ base: "14px", md: "20px" }}
                         fontFamily="heading"
                         color="black"
                       >
-                        Customize Service plans
+                        Custom plans
                       </Text>
                       <Text
                         textAlign="center"
-                        fontSize={{ base: "8px", md: "14px" }}
+                        fontSize={{ base: "12px", md: "14px" }}
+                        mt={{ base: "-15px", md: "0px" }}
                       >
-                        Choose the kind of service you want, how and when you
-                        want it
+                        The service you want, how and when you
+                        want it.
                       </Text>
                     </VStack>
                   </Box>
@@ -554,7 +554,7 @@ const ClientDash = () => {
                       color="#753FF6"
                       _hover={{ color: "#A210C6" }}
                     >
-                      Customize service
+                      customize service
                     </Text>
                   </NavLink>
                 </Box>
@@ -579,7 +579,7 @@ const ClientDash = () => {
                   alignItems="center"
                 >
                   <Image
-                    // src={Report}
+                    src={Report}
                     margin={{ base: "10px", md: "15px" }}
                     paddingTopt={{ base: "20px", md: "" }}
                     w={{ base: "25px", md: "60px" }}
@@ -593,11 +593,11 @@ const ClientDash = () => {
                       fontFamily="heading"
                       color="black"
                     >
-                      Medical Report
+                      Medical reports
                     </Text>
                     <Text
                       textAlign="center"
-                      fontSize={{ base: "8px", md: "16px" }}
+                      fontSize={{ base: "12px", md: "16px" }}
                     >
                       Access and view your reports
                     </Text>
@@ -677,7 +677,7 @@ const ClientDash = () => {
 
             <Box align="center" bg="#F6E4FC" borderRadius="10" h="30vh">
               <Image
-                // src={Tele}
+                src={Tele}
                 alt="Nurse and Patient"
                 w="150px"
                 h="150px"

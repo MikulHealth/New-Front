@@ -1,6 +1,6 @@
 import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
-// import WhatsAppIcon from "../../assets/WhatsApp.svg";
+import WhatsAppIcon from "../../assets/WhatsApp.svg";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import NavBar from "../authLayouts/NavBar";
 import { useNavigate } from "react-router-dom";
@@ -259,7 +259,7 @@ const HelpPage = () => {
                 <a href="https://wa.me/2347032579006">
                   <Image
                     // onClick={help}
-                    // src={WhatsAppIcon}
+                    src={WhatsAppIcon}
                     alt="Logo"
                     w="50px"
                     h="50px"
@@ -466,7 +466,7 @@ const HelpPage = () => {
                 <a href="https://wa.me/2347032579006">
                   <Image
                     // onClick={help}
-                    // src={WhatsAppIcon}
+                    src={WhatsAppIcon}
                     alt="Logo"
                     w={{ base: "50px", md: "70px" }}
                     h={{ base: "50px", md: "70px" }}

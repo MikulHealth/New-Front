@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { VStack, Box, Flex, Image, Text } from "@chakra-ui/react";
-
 import LogoutModal from "../sections/LogoutModal";
-// import logo from "../../assets/LogoColoured.svg";
-// import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
-// import HomeIcon from "../../assets/HomeBlack.svg";
-// import Wallet from "../../assets/Wallet.svg";
-// import serviceIcon from "../../assets/ServiceIcon.svg";
-// import SettingsIcon from "../../assets/SettingsIcon.svg";
-// import LogoutIcon from "../../assets/Logout.svg";
+import logo from "../../assets/LogoColoured.svg";
+import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
+import HomeIcon from "../../assets/HomeWhite.svg";
+import Wallet from "../../assets/Wallet.svg";
+import serviceIcon from "../../assets/ServiceIcon.svg";
+import SettingsIcon from "../../assets/SettingsIcon.svg";
+import LogoutIcon from "../../assets/Logout.svg";
 
 const LeftSideBar = () => {
   const navigate = useNavigate();
@@ -27,7 +26,6 @@ const LeftSideBar = () => {
     navigate("/");
   };
 
-  // Define a new component for NavLink with a violet background for the active state
   const NavLinkWithBackground = ({ icon, text, to }) => {
     const isActive = location.pathname === to;
     return (
@@ -58,43 +56,30 @@ const LeftSideBar = () => {
         h="100vh"
         ml="30px"
       >
-        <Image
-          // src={logo}
-          alt="Logo"
-          w="160px"
-          h="60px"
-          ml="20px"
-          mt="10px"
-        />
+        <Image src={logo} alt="Logo" w="160px" h="60px" ml="20px" mt="10px" />
         <VStack mt="45px" align="left" spacing={5}>
-          {/* Use NavLinkWithBackground for each NavLink */}
-          <NavLinkWithBackground 
-          // icon={HomeIcon}
-           text="Home" to="/dashboard" />
+          <NavLinkWithBackground icon={HomeIcon} text="Home" to="/dashboard" />
           <NavLinkWithBackground
-            // icon={AppointmentsIcon}
+            icon={AppointmentsIcon}
             text="Appointments"
             to="/appointment"
           />
-          <NavLinkWithBackground 
-          // icon={Wallet} 
-          text="Wallet" to="/wallet" />
+          <NavLinkWithBackground icon={Wallet} text="Wallet" to="/wallet" />
           <NavLinkWithBackground
-            // icon={serviceIcon}
+            icon={serviceIcon}
             text="Services"
             to="/services"
           />
           <NavLinkWithBackground
-            // icon={SettingsIcon}
+            icon={SettingsIcon}
             text="Settings"
             to="/settings"
           />
 
           <Box ml="10px" marginTop="70px" onClick={handleOpenLogoutModal}>
-            {/* For Logout, we keep it outside since it's a modal trigger, not a navigation link */}
             <Flex align="center" color="#A210C6">
               <Image
-                // src={LogoutIcon}
+                src={LogoutIcon}
                 alt="logout"
                 boxSize="24px"
                 marginRight="10px"
