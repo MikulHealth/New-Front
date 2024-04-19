@@ -16,7 +16,7 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  Image,
+  // Image,
   FormControl,
   FormLabel,
   InputGroup,
@@ -406,13 +406,13 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       placeholderText="select date of birth"
                       className="form-control"
                     />
-                    <Image
+                    {/* <Image
                       marginLeft="30px"
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
               </Flex>
@@ -492,13 +492,13 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       className="form-control"
                       minDate={new Date()}
                     />
-                    <Image
+                    {/* <Image
                       marginLeft="30px"
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
                 <Box w={{ base: "300px", md: "270px" }} ml={{ md: "5px" }}>
@@ -524,13 +524,13 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       minDate={new Date()}
                       style={{ border: "none" }}
                     />
-                    <Image
+                    {/* <Image
                       marginLeft="30px"
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
               </Flex>
@@ -614,14 +614,14 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     w={{ base: "300px", md: "550px" }}
                   />
-                  <Image
+                  {/* <Image
                     marginTop="10px"
                     marginLeft="-35px"
                     w="24px"
                     h="24px"
-                    // src={LocationIcon}
+                    src={LocationIcon}
                     alt="LocationIcon"
-                  />
+                  /> */}
                 </Flex>
               </Box>
               <Box ml={{ md: "5px" }}>

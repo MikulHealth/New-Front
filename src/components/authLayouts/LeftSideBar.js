@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { VStack, Box, Flex, Image, Text } from "@chakra-ui/react";
-import LogoutModal from "../sections/LogoutModal";
+// import LogoutModal from "../sections/LogoutModal";
 import logo from "../../assets/LogoColoured.svg";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import HomeIcon from "../../assets/HomeWhite.svg";
@@ -13,14 +13,10 @@ import LogoutIcon from "../../assets/Logout.svg";
 const LeftSideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const handleOpenLogoutModal = () => {
-    setShowLogoutModal(true);
-  };
+  // const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleConfirmLogout = () => {
-    setShowLogoutModal(false);
+    // setShowLogoutModal(false);
     localStorage.removeItem("token");
     localStorage.removeItem("phoneNumber");
     navigate("/");
@@ -76,7 +72,7 @@ const LeftSideBar = () => {
             to="/settings"
           />
 
-          <Box ml="10px" marginTop="70px" onClick={handleOpenLogoutModal}>
+          <Box ml="10px" marginTop="70px" onClick={handleConfirmLogout}>
             <Flex align="center" color="#A210C6">
               <Image
                 src={LogoutIcon}
@@ -97,11 +93,6 @@ const LeftSideBar = () => {
           mt="-566"
         />
       </Box>
-      <LogoutModal
-        isOpen={showLogoutModal}
-        onClose={() => setShowLogoutModal(false)}
-        onConfirm={handleConfirmLogout}
-      />
     </>
   );
 };

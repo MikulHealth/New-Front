@@ -201,6 +201,7 @@ const LandingPage = () => {
         </style>
         <Box
           mt={{ base: "0", md: "50px" }}
+          mb={{base: "0", ms: "50px"}}
           ml={{ base: "0", md: "0px" }}
           padding={{ base: "50px", md: "0px" }}
           className="box"

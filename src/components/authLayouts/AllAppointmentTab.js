@@ -17,6 +17,9 @@ import {
   Flex,
   Divider,
 } from "@chakra-ui/react";
+
+
+
 export default function AppointmentTab() {
   const toast = useToast();
   const [appointments, setAppointments] = useState([]);
@@ -134,7 +137,7 @@ export default function AppointmentTab() {
       overflow="scroll"
       marginLeft="2%"
       w={{ base: "100%", md: "45vw" }}
-      h={{ base: "60vh", md: "28vh" }}
+      h={{ base: "60vh", md: "30vh" }}
     >
       <VStack align="start" spacing={4}>
         {loading ? (

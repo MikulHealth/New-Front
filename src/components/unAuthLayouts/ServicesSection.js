@@ -36,6 +36,7 @@ export default function ServicesSection() {
         bg="#A210C6"
         px={{ base: "20px", md: "40px" }}
         py={{ base: "40px", md: "60px" }}
+        // mt={{md: "20px"}}
       >
         <Text
           fontSize={{ base: "2xl", md: "4xl" }}

@@ -101,9 +101,8 @@ const ServicePage = () => {
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}
-        position="fixed"
         overflow="scroll"
-        ml={{ md: "225px" }}
+        ml={{ md: "270px" }}
         w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}
       >
@@ -132,7 +131,6 @@ const ServicePage = () => {
                   onClick={service.onClick}
                 >
                   <Flex>
-
                     <Box margin="25px">
                       <Text fontSize={{ base: "16px", md: "20px" }}>
                         {service.title}
@@ -140,8 +138,9 @@ const ServicePage = () => {
                     </Box>
                     <Image
                       src={Chevron}
-                      marginLeft="830px"
-                      marginTop="15px"
+                      display={{ base: "none", md: "block" }}
+                      ml={{ md: "800px" }}
+                      marginTop="20px"
                       w="30px"
                       h="30px"
                       color="#A210C6"
@@ -164,8 +163,7 @@ const ServicePage = () => {
                   }}
                   _hover={{ color: "#A210C6" }}
                 >
-                  <Flex>
-                   
+                  <Flex mb={{ base: "30px", md: "0" }}>
                     <Box margin="25px">
                       <Text fontSize={{ base: "16px", md: "20px" }}>
                         Customize service
@@ -173,8 +171,9 @@ const ServicePage = () => {
                     </Box>
                     <Image
                       src={Chevron}
-                      marginLeft="830px"
-                      marginTop="15px"
+                      display={{ base: "none", md: "block" }}
+                      ml={{ md: "800px" }}
+                      marginTop="20px"
                       w="30px"
                       h="30px"
                       color="#A210C6"
@@ -186,8 +185,8 @@ const ServicePage = () => {
             </Box>
             <Box
               display={{ base: "none", md: "block" }}
-              marginTop="-85px"
-              marginLeft="900px"
+              marginTop="-50px"
+              ml={{ md: "1050px" }}
             >
               <NavLink to="/help">
                 <Image

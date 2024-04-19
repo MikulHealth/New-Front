@@ -74,7 +74,7 @@ const AppointmentPage = () => {
       <VStack
         style={settingsContainerStyle}
         position="fixed"
-        ml={{ md: "200px" }}
+        ml={{ md: "230px" }}
         w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}
       >
@@ -152,6 +152,7 @@ const AppointmentPage = () => {
               w={{ base: "140px", md: "190px" }}
               h={{ base: "30px", md: "40px" }}
               fontSize={{ base: "12px", md: "16px" }}
+              mb={{base: "20px", md: "0px"}}
               borderRadius="15px"
               leftIcon={<CheckIcon />}
             >

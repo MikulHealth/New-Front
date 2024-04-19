@@ -24,7 +24,7 @@ import UserDetailsModal from "../sections/UserDetails";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import LogoutIcon from "../../assets/Logout.svg";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import LogoutModal from "../sections/LogoutModal";
+// import LogoutModal from "../sections/LogoutModal";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import HomeIcon from "../../assets/HomeBlack.svg";
 import Wallet from "../../assets/Wallet.svg";
@@ -53,7 +53,6 @@ export default function NavBar() {
   const location = useLocation();
   // const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showUserDetailsModal, setShowUserDetailsModal] = useState(false);
 
   const handleOpenUserDetailsModal = () => {
@@ -64,12 +63,8 @@ export default function NavBar() {
     setShowUserDetailsModal(false);
   };
 
-  const handleOpenLogoutModal = () => {
-    setShowLogoutModal(true);
-  };
 
   const handleConfirmLogout = () => {
-    setShowLogoutModal(false);
     localStorage.removeItem("token");
     localStorage.removeItem("phoneNumber");
     navigate("/");
@@ -244,7 +239,7 @@ export default function NavBar() {
                     <Text style={listTextStyle}>Settings</Text>
                   </Flex>
                 </NavLink>
-                <NavLink onClick={handleOpenLogoutModal} style={listItemStyle}>
+                <NavLink onClick={handleConfirmLogout} style={listItemStyle}>
                   <Flex color="#A210C6">
                     <Image 
                     src={LogoutIcon} 
@@ -334,12 +329,6 @@ export default function NavBar() {
       <UserDetailsModal
         isOpen={showUserDetailsModal}
         onClose={handleCloseUserDetailsModal}
-      />
-
-      <LogoutModal
-        isOpen={showLogoutModal}
-        onClose={() => setShowLogoutModal(false)}
-        onConfirm={handleConfirmLogout}
       />
     </ChakraProvider>
   );

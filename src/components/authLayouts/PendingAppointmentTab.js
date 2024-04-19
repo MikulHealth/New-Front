@@ -28,25 +28,9 @@ import {
   Box,
   Text,
   Flex,
-  extendTheme,
+  // extendTheme,
   Divider,
 } from "@chakra-ui/react";
-
-const customTheme = extendTheme({
-  components: {
-    Link: {
-      baseStyle: {
-        _focus: {
-          boxShadow: "none",
-        },
-      },
-    },
-  },
-  fonts: {
-    body: "Montserrat, sans-serif",
-    heading: "Gill Sans MT, sans-serif",
-  },
-});
 
 export default function PendingApp() {
   const navigate = useNavigate();
@@ -248,8 +232,10 @@ export default function PendingApp() {
       overflow="scroll"
       w={{ base: "100%", md: "45vw" }}
       h={{ base: "60vh", md: "28vh" }}
-      theme={customTheme}
     >
+       <VStack align="start" spacing={4}>
+
+     
       {loading ? (
         <LoadingSpinner />
       ) : pendingAppointments.length === 0 ? (
@@ -279,7 +265,7 @@ export default function PendingApp() {
         <VStack align="start" spacing={4}>
           {pendingAppointments.map((appointment) => (
             <Box
-              ml={{ base: "20px" }}
+              // ml={{ base: "20px" }}
               fontSize={{ base: "12px", md: "16px" }}
               key={appointment.id}
             >
@@ -300,7 +286,7 @@ export default function PendingApp() {
                 </Text>
                 <Flex display={{ base: "none", md: "flex" }}>
                   <Text
-                    // ml={{ md: "60px" }}
+                    ml={{ md: "60px" }}
                     fontSize={{ base: "12px", md: "16px" }}
                     onClick={() => handleViewMore(appointment.id)}
                     style={{
@@ -360,6 +346,7 @@ export default function PendingApp() {
           ))}
         </VStack>
       )}
+        </VStack>
       {detailsModalOpen && selectedAppointment && (
         <Drawer
           isOpen={detailsModalOpen}

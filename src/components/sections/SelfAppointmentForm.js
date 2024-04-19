@@ -19,7 +19,7 @@ import {
   FormLabel,
   Input,
   Button,
-  Image,
+  // Image,
   Flex,
   Box,
   Select,
@@ -315,13 +315,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       className="form-control"
                       minDate={new Date()}
                     />
-                    <Image
+                    {/* <Image
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
                 <Box
@@ -349,13 +349,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       minDate={new Date()}
                       style={{ border: "none" }}
                     />
-                    <Image
+                    {/* <Image
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
               </Flex>
@@ -419,14 +419,14 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     w={{ base: "300px", md: "550px" }}
                   />
-                  <Image
+                  {/* <Image
                     marginTop="10px"
                     marginLeft="-35px"
                     w="24px"
                     h="24px"
-                    // src={LocationIcon}
+                    src={LocationIcon}
                     alt="LocationIcon"
-                  />
+                  /> */}
                 </Flex>
               </Box>
               <Box ml={{ md: "40px" }} marginTop="20px">

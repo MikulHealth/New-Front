@@ -16,7 +16,7 @@ import {
   Button,
   Input,
   Select,
-  Image,
+  // Image,
   Textarea,
   FormControl,
   FormLabel,
@@ -435,13 +435,13 @@ const BookBeneficiaryAppointmentModal = ({
                       className="form-control"
                       minDate={new Date()}
                     />
-                    <Image
+                    {/* <Image
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
                 <Box w={{ base: "297px", md: "270px" }} marginLeft="5px">
@@ -467,13 +467,13 @@ const BookBeneficiaryAppointmentModal = ({
                       minDate={new Date()}
                       style={{ border: "none" }}
                     />
-                    <Image
+                    {/* <Image
                       ml={{base: "50px", md: "30px"}}
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
               </Flex>
@@ -492,14 +492,14 @@ const BookBeneficiaryAppointmentModal = ({
                     onChange={handleInputChange}
                     w={{ base: "300px", md: "550px" }}
                   />
-                  <Image
+                  {/* <Image
                     marginTop="10px"
                     marginLeft="-35px"
                     w="24px"
                     h="24px"
-                    // src={LocationIcon}
+                    src={LocationIcon}
                     alt="LocationIcon"
-                  />
+                  /> */}
                 </Flex>
               </Box>
 
