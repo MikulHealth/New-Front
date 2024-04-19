@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 import SettingsSideBar from "../authLayouts/SettingsSideBar";
-// import BigSettingsIcon from "../../assets/BigSettingsIcon.svg";
+import BigSettingsIcon from "../../assets/BigSettingsIcon.svg";
 import MobileFooter from "../authLayouts/MobileFooter";
 
 const customTheme = extendTheme({
@@ -42,7 +42,7 @@ const SettingsPage = () => {
       <VStack
         style={settingsContainerStyle}
         position="fixed"
-        ml={{ md: "200px" }}
+        ml={{ md: "220px" }}
         w={{ base: "100%", md: "70%" }}
         h={{ base: "100%", md: "100%" }}
       >
@@ -51,7 +51,7 @@ const SettingsPage = () => {
           <SettingsSideBar />
           <Box display={{ base: "none", md: "block" }} mt={{ md: "20px" }}>
             <Image
-              // src={BigSettingsIcon}
+              src={BigSettingsIcon}
               alt="Settings Icon"
               boxSize={{ base: "24px", md: "50px" }}
               h={{ base: "156", md: "456px" }}
