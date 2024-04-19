@@ -45,7 +45,8 @@ export const UpdateCustomer = async (
     setLoading(true);
 
     const response = await axios.put(
-      "http://localhost:8080/v1/angel/updateCustomer",
+      // "http://localhost:8080/v1/angel/updateCustomer",
+      "https://backend-c1pz.onrender.com/v1/angel/updateCustomer",
       editedUser,
       config
     );
