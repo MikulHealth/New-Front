@@ -166,7 +166,7 @@ export default function AppointmentTab() {
             to begin.
           </Text>
         ) : (
-          <VStack align="start" spacing={4}>
+          <VStack overflow="scroll" align="start" spacing={4}>
             {appointments.map((appointment) => (
               <Box fontSize={{ base: "12px", md: "16px" }} key={appointment.id}>
                 <Flex>
@@ -229,7 +229,7 @@ export default function AppointmentTab() {
                 <Flex
                   fontSize={{ base: "12px", md: "16px" }}
                   display={{ base: "flex", md: "none" }}
-                  ml={{base: "235px", md: "0"}}
+                  ml={{base: "225px", md: "0"}}
 
                 >
                   <Text

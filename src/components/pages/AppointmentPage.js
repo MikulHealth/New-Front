@@ -177,6 +177,7 @@ const AppointmentPage = () => {
           ml={{ base: "-45px", md: "-400px" }}
           justifyContent="space-between"
           className="appointment-tabs"
+          overflow="scroll"
         >
           <VStack ml={{ base: "50px", md: "-100px" }}>
             <Tabs colorScheme="purple.100" mt={{ base: "", md: "40px" }}>

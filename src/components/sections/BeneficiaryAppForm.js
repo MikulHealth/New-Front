@@ -356,7 +356,7 @@ const BookBeneficiaryAppointmentModal = ({
           }`}
         </DrawerHeader>
         <DrawerCloseButton />
-        <DrawerBody>
+        <DrawerBody ml={{ base: "25px", md: "0" }}>
           <FormControl isRequired>
             <Box>
               <Flex flexWrap="wrap">

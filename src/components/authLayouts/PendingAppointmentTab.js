@@ -262,7 +262,7 @@ export default function PendingApp() {
           to begin.
         </Text>
       ) : (
-        <VStack align="start" spacing={4}>
+        <VStack overflow="scroll" align="start" spacing={4}>
           {pendingAppointments.map((appointment) => (
             <Box
               // ml={{ base: "20px" }}
@@ -316,7 +316,7 @@ export default function PendingApp() {
               <Flex
                 fontSize={{ base: "12px", md: "16px" }}
                 display={{ base: "flex", md: "none" }}
-                ml={{base: "240px", md: "0"}}
+                ml={{base: "230px", md: "0"}}
               >
                 <Text
                   onClick={() => handleViewMore(appointment.id)}
