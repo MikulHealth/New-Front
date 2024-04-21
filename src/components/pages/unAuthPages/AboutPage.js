@@ -684,7 +684,7 @@ const LandingPage = () => {
               alignItems="center"
               maxW="300px"
             >
-              <Image src={Vetted} alt="vetted" w="200px" h="200px" />
+              <Image src={Vetted} ml="30px" alt="vetted" w="200px" h="200px" />
               <Text
                 fontFamily="heading"
                 fontSize="xl"
