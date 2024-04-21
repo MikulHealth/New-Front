@@ -391,7 +391,7 @@ const LandingPage = () => {
         </Box>
 
         <Box maxWidth="1280px" margin="0 auto" bg="white">
-          <Box mt="50px">
+          <Box mt="30px">
             <Text
               fontSize={{ base: "28px", md: "38px", lg: "64px" }}
               fontWeight="bold"
@@ -401,7 +401,7 @@ const LandingPage = () => {
               Meet Our Team
             </Text>
           </Box>
-          <Flex mt={{ base: "0", md: "50px" }} justify="center" flexWrap="wrap">
+          <Flex mt={{ base: "-5", md: "50px" }} justify="center" flexWrap="wrap">
             <Box
               bg="white"
               justifyContent="center"
@@ -428,7 +428,7 @@ const LandingPage = () => {
               flexDirection="row"
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
-              mt={{ base: "-30px", md: "80px" }}
+              mt={{ base: "-50px", md: "80px" }}
               data-aos="fade-up"
               data-aos-duration="10000"
             >
@@ -457,7 +457,7 @@ const LandingPage = () => {
           </Flex>
 
           <Flex
-            mt={{ base: "0", md: "100px" }}
+            mt={{ base: "-40", md: "100px" }}
             justify="center"
             flexWrap="wrap"
           >
@@ -487,7 +487,7 @@ const LandingPage = () => {
               flexDirection="row"
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
-              mt={{ base: "-30px", md: "80px" }}
+              mt={{ base: "-50px", md: "80px" }}
               data-aos="fade-up"
               data-aos-duration="10000"
             >
@@ -514,7 +514,7 @@ const LandingPage = () => {
             </Box>
           </Flex>
 
-          <Flex mt={{ base: "0", md: "50px" }} justify="center" flexWrap="wrap">
+          <Flex mt={{ base: "-40", md: "50px" }} justify="center" flexWrap="wrap">
             <Box
               bg="white"
               justifyContent="center"
@@ -541,7 +541,7 @@ const LandingPage = () => {
               flexDirection="row"
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
-              mt={{ base: "-30px", md: "80px" }}
+              mt={{ base: "-50px", md: "80px" }}
               data-aos="fade-down"
               data-aos-duration="10000"
             >
@@ -569,7 +569,7 @@ const LandingPage = () => {
           </Flex>
 
           <Flex
-            mt={{ base: "0", md: "100px" }}
+            mt={{ base: "-40", md: "100px" }}
             justify="center"
             flexWrap="wrap"
           >
@@ -599,7 +599,7 @@ const LandingPage = () => {
               flexDirection="row"
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
-              mt={{ base: "-30px", md: "80px" }}
+              mt={{ base: "-50px", md: "80px" }}
               data-aos="fade-down"
               data-aos-duration="10000"
             >
@@ -614,7 +614,7 @@ const LandingPage = () => {
               <Text
                 textAlign="left"
                 marginTop="10px"
-                fontSize="20px"
+                fontSize={{ base: "16px", md: "18px" }}
                 fontFamily="body"
               >
                 She holds a Doctor of Optometry (O. D) degree, from the
@@ -633,7 +633,7 @@ const LandingPage = () => {
           maxWidth="1280px"
           margin="0 auto"
           bg="white"
-          mt={{ base: "400px", md: "150px" }}
+          mt={{ base: "300px", md: "150px" }}
         >
           <Box textAlign="center">
             <Text
@@ -669,10 +669,10 @@ const LandingPage = () => {
               >
                 1000+ Caregivers Onboarded
               </Text>
-              <Text fontFamily="body" textAlign="center">
-                Getting started is quick <br />
-                and easy. Sign up with <br />
-                us to receive premium <br />
+              <Text  fontSize={{ base: "16px", md: "18px" }} fontFamily="body" textAlign="center">
+                Getting started is quick 
+                and easy. Sign up with 
+                us to receive premium 
                 care
               </Text>
             </Box>
@@ -693,10 +693,10 @@ const LandingPage = () => {
               >
                 500+ Vetted
               </Text>
-              <Text fontFamily="body" textAlign="center">
-                Now that you are a part <br />
-                of our community, you <br />
-                can find the kind of <br />
+              <Text  fontSize={{ base: "16px", md: "18px" }} fontFamily="body" textAlign="center">
+                Now that you are a part 
+                of our community, you 
+                can find the kind of 
                 service you need
               </Text>
             </Box>
