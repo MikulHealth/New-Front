@@ -13,7 +13,7 @@ import {
   FormLabel,
   useToast,
   Box,
-  Image,
+  // Image,
   Textarea,
   Flex,
   Input,
@@ -187,13 +187,13 @@ const EditPendingAppointment = ({
                     minDate={new Date()}
                     value={formData?.startDate}
                   />
-                  <Image
+                  {/* <Image
                     marginLeft="205px"
                     w="24px"
                     h="24px"
-                    // src={CalenderIcon}
+                    src={CalenderIcon}
                     alt="CalenderIcon"
-                  />
+                  /> */}
                 </Flex>
               </Box>
               <Box w={{ base: "90%", md: "450px" }}>
@@ -220,13 +220,13 @@ const EditPendingAppointment = ({
                     style={{ border: "none" }}
                     value={formData?.endDate}
                   />
-                  <Image
+                  {/* <Image
                     marginLeft="205px"
                     w="24px"
                     h="24px"
-                    // src={CalenderIcon}
+                    src={CalenderIcon}
                     alt="CalenderIcon"
-                  />
+                  /> */}
                 </Flex>
               </Box>
 

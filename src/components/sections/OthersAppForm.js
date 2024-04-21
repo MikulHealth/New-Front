@@ -270,6 +270,36 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     calculateServiceCost();
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        };
+
+        const response = await axios.get(
+          // "http://localhost:8080/v1/appointment/all-customized-services",
+          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
+          config
+        );
+
+        if (response.data.success) {
+          setCustomizedPlans(response.data.data);
+        } else {
+          console.error("Failed to fetch custom services");
+        }
+      } catch (error) {
+        console.error("Error fetching custom services:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleSwitchChange = async () => {
     setLoading(true);
     try {
@@ -336,7 +366,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           <DrawerCloseButton />
           <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
           <DrawerBody>
-            <FormControl>
+            <FormControl ml={{ base: "25px", md: "0" }} w={{base: "100%", md: "0"}}>
               {/* <Box> */}
               <FormLabel fontWeight="bold">Enter Beneficiary details</FormLabel>
               <Flex display={{ base: "block", md: "flex" }}>
@@ -654,23 +684,23 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                 />
               </Box>
               {/* </Box> */}
-              <Flex justify="right" marginTop="10px">
-                <Text color="#A210C6" fontStyle="italic">
-                  Add to beneficiary list?
-                </Text>
-                <Switch
-                  marginLeft="10px"
-                  colorScheme="green"
-                  isChecked={addToBeneficiaryList}
-                  onChange={() => {
-                    setAddToBeneficiaryList(!addToBeneficiaryList);
-                    if (!addToBeneficiaryList) {
-                      handleSwitchChange();
-                    }
-                  }}
-                />
-              </Flex>
             </FormControl>
+            <Flex justify="right" marginTop="10px">
+              <Text color="#A210C6" fontStyle="italic">
+                Add to beneficiary list?
+              </Text>
+              <Switch
+                marginLeft="10px"
+                colorScheme="green"
+                isChecked={addToBeneficiaryList}
+                onChange={() => {
+                  setAddToBeneficiaryList(!addToBeneficiaryList);
+                  if (!addToBeneficiaryList) {
+                    handleSwitchChange();
+                  }
+                }}
+              />
+            </Flex>
           </DrawerBody>
           <DrawerFooter>
             <Button

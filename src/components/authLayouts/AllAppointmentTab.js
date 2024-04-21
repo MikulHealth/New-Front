@@ -136,7 +136,7 @@ export default function AppointmentTab() {
       className="all-appointment"
       overflow="scroll"
       marginLeft="2%"
-      w={{ base: "100%", md: "45vw" }}
+      w={{ base: "100%", md: "50vw" }}
       h={{ base: "60vh", md: "30vh" }}
     >
       <VStack align="start" spacing={4}>
@@ -229,6 +229,8 @@ export default function AppointmentTab() {
                 <Flex
                   fontSize={{ base: "12px", md: "16px" }}
                   display={{ base: "flex", md: "none" }}
+                  ml={{base: "235px", md: "0"}}
+
                 >
                   <Text
                     onClick={() => handleViewMore(appointment.id)}
@@ -242,7 +244,7 @@ export default function AppointmentTab() {
                     Details
                   </Text>
                   <Text
-                    ml={{ base: "150px" }}
+                    ml={{ base: "30px" }}
                     color={
                       appointment.appointmentCompleted
                         ? "green.500"

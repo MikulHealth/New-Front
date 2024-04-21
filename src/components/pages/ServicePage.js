@@ -101,14 +101,14 @@ const ServicePage = () => {
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}
-        overflow="scroll"
+        // overflow="scroll"
         ml={{ md: "270px" }}
         w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}
       >
         <VStack marginTop="10px">
           <NavBar />
-          <VStack mb={{ base: "100px", md: "0" }} overflow="scroll">
+          <VStack mb={{ base: "100px", md: "0" }}>
             <Box
               justifyContent={{ base: "center" }}
               ml={{ md: "-120px" }}
@@ -119,7 +119,7 @@ const ServicePage = () => {
                   key={index}
                   marginTop="20px"
                   marginLeft="8px"
-                  h="10vh"
+                  h={{base: "8vh", md: "10vh"}}
                   w={{ base: "90vw", md: "65vw" }}
                   borderRadius="15px"
                   paddingBottom="5px"
@@ -153,7 +153,7 @@ const ServicePage = () => {
                 <Box
                   marginTop="20px"
                   marginLeft="8px"
-                  h="10vh"
+                   h={{base: "8vh", md: "10vh"}}
                   w={{ base: "90vw", md: "65vw" }}
                   borderRadius="15px"
                   paddingBottom="5px"
@@ -186,7 +186,7 @@ const ServicePage = () => {
             <Box
               display={{ base: "none", md: "block" }}
               marginTop="-50px"
-              ml={{ md: "1050px" }}
+              ml={{ md: "1000px" }}
             >
               <NavLink to="/help">
                 <Image

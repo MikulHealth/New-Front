@@ -292,13 +292,14 @@ const EdithProfilePage = () => {
                   }}
                 />
 
-                <Image
+                {/* <Image
                   marginLeft="160px"
                   h="24px"
                   w="24px"
-                  // src={DateIcon}
+                  src={DateIcon}
                   alt="Date icon"
-                />
+                /> */}
+                
               </Flex>
             </FormControl>
             <FormControl marginTop="15px">

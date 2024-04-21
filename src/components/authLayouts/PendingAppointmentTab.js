@@ -38,7 +38,7 @@ export default function PendingApp() {
   // const { user } = useSelector((state) => state.userReducer);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [setSelectedAppointmentId] = useState();
+  // const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -68,7 +68,7 @@ export default function PendingApp() {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
   const handleEditAppointment = (id) => {
-    setSelectedAppointmentId(id);
+    // setSelectedAppointmentId(id);
     setEditModalOpen(true);
     setDetailsModalOpen(false);
   };
@@ -230,7 +230,7 @@ export default function PendingApp() {
       className="pending-appointment"
       marginLeft="2%"
       overflow="scroll"
-      w={{ base: "100%", md: "45vw" }}
+      w={{ base: "100%", md: "50vw" }}
       h={{ base: "60vh", md: "28vh" }}
     >
        <VStack align="start" spacing={4}>
@@ -277,7 +277,7 @@ export default function PendingApp() {
                   {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
                 </Text>
               </Flex>
-              <Flex>
+              <Flex >
                 <Text fontStyle="body" fontWeight="bold" color="black">
                   Booked on:
                 </Text>
@@ -316,6 +316,7 @@ export default function PendingApp() {
               <Flex
                 fontSize={{ base: "12px", md: "16px" }}
                 display={{ base: "flex", md: "none" }}
+                ml={{base: "240px", md: "0"}}
               >
                 <Text
                   onClick={() => handleViewMore(appointment.id)}
@@ -329,7 +330,7 @@ export default function PendingApp() {
                   Details
                 </Text>
                 <Text
-                  ml={{ base: "150px" }}
+                  ml={{ base: "30px" }}
                   onClick={() => handleCancelAppointment(appointment.id)}
                   style={{
                     color: "red",
@@ -435,7 +436,7 @@ export default function PendingApp() {
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
+                {/* <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Phone Number:
                   </Text>
@@ -443,8 +444,8 @@ export default function PendingApp() {
                     {selectedAppointment.recipientPhoneNumber ||
                       "Not available"}
                   </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
+                </Flex> */}
+                {/* <Divider my={4} borderColor="gray.500" /> */}
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Gender:

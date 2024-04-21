@@ -174,7 +174,7 @@ const AppointmentPage = () => {
 
         <Flex
           w={{ base: "", md: "50vh" }}
-          ml={{ base: "-75px", md: "-400px" }}
+          ml={{ base: "-45px", md: "-400px" }}
           justifyContent="space-between"
           className="appointment-tabs"
         >
@@ -212,10 +212,21 @@ const AppointmentPage = () => {
                 >
                   Completed
                 </Tab>
+                <Tab
+                  fontSize={{ base: "12px", md: "16px" }}
+                  color="red.500"
+                  fontWeight="bold"
+                >
+                Cancelled
+                </Tab>
+
               </TabList>
               <TabPanels ml={{ base: "-20px", md: "-30px" }}>
                 <TabPanel>
                   <AppointmentTab />
+                </TabPanel>
+                <TabPanel>
+                  <PendingApp />
                 </TabPanel>
                 <TabPanel>
                   <PendingApp />

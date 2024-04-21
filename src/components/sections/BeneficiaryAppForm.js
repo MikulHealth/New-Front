@@ -234,8 +234,10 @@ const BookBeneficiaryAppointmentModal = ({
   //   // Regular expression to match Nigerian phone numbers
   //   const nigerianPhoneNumberRegex = /^(?:\+234|234)([789]\d{9})$/;
   //   return nigerianPhoneNumberRegex.test(phoneNumber);
-  // };
 
+  
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -265,6 +267,8 @@ const BookBeneficiaryAppointmentModal = ({
 
     fetchData();
   }, []);
+
+
 
   useEffect(() => {
     // Set initial form values based on the selected beneficiary

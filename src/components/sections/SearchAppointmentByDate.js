@@ -53,9 +53,10 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          `http://localhost:8080/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
+          `https://backend-c1pz.onrender.com/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
             selectedDate
           )}`,
+          // "https://backend-c1pz.onrender.comhttps://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
           config
         );
 
@@ -94,7 +95,7 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = `http://localhost:8080/v1/appointment/findAppointmentDetails/${appointmentId}`;
+      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findAppointmentDetails/${appointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",

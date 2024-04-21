@@ -244,7 +244,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                       </Box>
                       <Flex
                         fontSize={{ base: "10px" }}
-                        ml={{ md: "250px" }}
+                        ml={{ md: "200px" }}
                         justifyContent="space-between"
                         marginTop="5px"
                       >

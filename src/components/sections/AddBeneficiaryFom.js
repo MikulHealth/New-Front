@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import {
-  FaPhoneAlt,
-} from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
 import {
   VStack,
   FormControl,
@@ -19,7 +17,7 @@ import {
   DrawerFooter,
   DrawerCloseButton,
   InputRightElement,
-  Image,
+  // Image,
   Box,
   useToast,
 } from "@chakra-ui/react";
@@ -134,11 +132,11 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
       <DrawerContent maxH="70vh" overflowY="auto">
         <DrawerHeader color="#A210C6">Add to Beneficiary list</DrawerHeader>
         <DrawerCloseButton />
-        <DrawerBody ml={{md: "45px"}}>
+        <DrawerBody ml={{ base: "25px", md: "45px" }}>
           <VStack align="start" spacing={4}>
-            <FormControl >
+            <FormControl>
               <FormLabel fontWeight="bold"> Enter Beneficiary name</FormLabel>
-              <Flex display={{base: "block", md: "flex"}}>
+              <Flex display={{ base: "block", md: "flex" }}>
                 <InputGroup>
                   <Input
                     name="recipientFirstname"
@@ -154,8 +152,8 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
                 <InputGroup>
                   <Input
                     name="recipientLastname"
-                    ml={{md: "-15px"}}
-                    mt={{base: "20px", md: "0"}}
+                    ml={{ md: "-15px" }}
+                    mt={{ base: "20px", md: "0" }}
                     placeholder="last name"
                     value={formData.recipientLastname}
                     onChange={handleInputChange}
@@ -182,7 +180,7 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
                     <option value="Female">Female</option>
                   </Select>
                 </Box>
-                <Box ml={{md: "5px"}} w={{ base: "300px", md: "270px" }}>
+                <Box ml={{ md: "5px" }} w={{ base: "300px", md: "270px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Date of Birth
                   </FormLabel>
@@ -206,13 +204,13 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
                       placeholderText="select date of birth"
                       className="form-control"
                     />
-                    <Image
+                    {/* <Image
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
-                      // src={CalenderIcon}
+                      src={CalenderIcon}
                       alt="CalenderIcon"
-                    />
+                    /> */}
                   </Flex>
                 </Box>
               </Flex>
@@ -235,7 +233,7 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
                     </InputRightElement>
                   </InputGroup>
                 </Box>
-                <Box ml={{md: "5px"}}>
+                <Box ml={{ md: "5px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Relationship with beneficiary{" "}
                   </FormLabel>
@@ -261,8 +259,8 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
                     <option value="Friend">Friend</option>
                     <option value="Colleague">Colleague</option>
                     <option value="Neighbour">Neighbour</option>
-                    <option value="MotherInLaw">Mother in-law</option>
-                    <option value="FatherInLaw">Father in-law</option>
+                    <option value="Mother In-Law">Mother in-law</option>
+                    <option value="Father In-Law">Father in-law</option>
                     <option value="Grandmother">Grand mother</option>
                     <option value="Grandfather">Grand father</option>
                   </Select>
@@ -271,8 +269,8 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
             </FormControl>
           </VStack>
         </DrawerBody>
-        <DrawerFooter >
-          <Box >
+        <DrawerFooter>
+          <Box>
             {/* <Button onClick={onClose} color="black" ml={3}>
               Cancel
             </Button> */}

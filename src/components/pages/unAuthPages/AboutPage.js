@@ -497,7 +497,7 @@ const LandingPage = () => {
                 fontFamily="heading"
                 textAlign="left"
               >
-                Jim Ofodum. Co-founde, Growth
+                Jim Ofodum. Co-founder, Growth
               </Text>
               <Text
                 textAlign="left"
