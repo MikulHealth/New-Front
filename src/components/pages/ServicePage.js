@@ -108,7 +108,7 @@ const ServicePage = () => {
       >
         <VStack marginTop="10px">
           <NavBar />
-          <VStack>
+          <VStack mb={{ base: "100px", md: "0" }} overflow="scroll">
             <Box
               justifyContent={{ base: "center" }}
               ml={{ md: "-120px" }}

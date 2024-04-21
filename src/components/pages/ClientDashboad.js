@@ -222,8 +222,9 @@ const ClientDash = () => {
       >
         <NavBar />
         <Flex
-          // overflow="scroll"
+          overflow={{base: "scroll", md: ""}}
           mt={{ base: "0", md: "30px" }}
+          mb={{ base: "150px", md: "0" }}
           flexDirection={{ base: "column", md: "row" }}
           alignItems={{ base: "center", md: "flex-start" }}
           justifyContent={{ base: "center", md: "flex-start" }}

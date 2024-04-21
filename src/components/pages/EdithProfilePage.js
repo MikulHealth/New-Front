@@ -223,8 +223,8 @@ const EdithProfilePage = () => {
       <VStack
         style={settingsContainerStyle}
         position="fixed"
-        ml={{ base: "40px", md: "280px" }}
-        w="70%"
+        ml={{ base: "10px", md: "180px" }}
+        w="90%"
         h="100vh"
       >
         <NavBar />

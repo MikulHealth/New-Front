@@ -111,11 +111,12 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <Box overflowY="scroll" height="100vh">
+      <Box overflow="hidden" height="100vh">
         <Box
           display={{ base: "block", md: "flex" }}
           paddingX={{ base: "1rem", md: "2rem" }}
           justifyContent="center"
+          overflow="hidden"
         >
           <Box
             maxWidth={{ base: "90%", sm: "600px", md: "650px", lg: "700px" }}

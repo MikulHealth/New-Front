@@ -229,7 +229,7 @@ const CustomizeServicePage = () => {
           <Box
             className="all-customized-services"
             textAlign="left"
-            w={{ base: "100%", md: "64vw" }}
+            // w={{ base: "100%", md: "64vw" }}
             h={{ base: "100%", md: "75vh" }}
             marginTop="10px"
           >
@@ -271,7 +271,7 @@ const CustomizeServicePage = () => {
                 marginTop="10px"
                 textAlign="left"
                 align="start"
-                w={{ base: "100%", md: "50vw" }}
+                // w={{ base: "50vh", md: "50vw" }}
                 spacing={4}
               >
                 {customizedServices.map((service) => (

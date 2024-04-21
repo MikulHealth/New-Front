@@ -61,6 +61,7 @@ const HelpPage = () => {
         <NavBar />
 
         <Box
+          mb={{ base: "100px", md: "0" }}
           overflow="scroll"
           display={{ base: "block", md: "none" }}
           marginTop="20px"
@@ -237,7 +238,7 @@ const HelpPage = () => {
                     If you have any issues, our Mikul Customer Care agents are
                     always happy to help. You can reach us via:
                   </Text>
-                  <Text >
+                  <Text>
                     Email:{" "}
                     <a
                       href="mailto:support@mikulhealth.com"

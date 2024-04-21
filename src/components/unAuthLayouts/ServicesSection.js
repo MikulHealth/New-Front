@@ -85,30 +85,32 @@ export default function ServicesSection() {
         </Flex>
 
         <Flex flexWrap="wrap" justifyContent="center" mt="10">
-          <Box
-            marginTop={{ base: "0", md: "50px" }}
-            marginBottom={{ base: "20px", md: "50px" }}
-            marginLeft={{ base: "0", md: "-100px" }}
-            padding={{ base: "90px", md: "0px" }}
-            className="box"
-            data-aos="zoom-out"
-            data-aos-duration="10000"
-            h={{ base: "auto", md: "500px" }}
-            w={{ base: "100%", md: "520px" }}
-            animation="zoomInOut 8s infinite"
-            overflow="hidden"
-            display={{ base: "block", lg: "block" }}
-          >
-            <Image
-              src={Doctor}
-              alt="Doctor"
-              style={{ width: "100%", height: "100%" }}
-            />
-          </Box>
+        <Box
+          mt={{ base: "0", md: "50px" }}
+          mb={{base: "0", ms: "50px"}}
+          ml={{ base: "0", md: "0px" }}
+          padding={{ base: "50px", md: "0px" }}
+          className="box"
+          data-aos="zoom-out"
+          data-aos-duration="10000"
+          h={{ base: "auto", md: "500px" }}
+          w={{ base: "100%", md: "520px" }}
+          animation="zoomInOut 8s infinite"
+          overflow="hidden"
+          display={{ base: "block", lg: "block" }}
+          maxWidth="300px"
+        >
+          <Image
+            src={Doctor}
+            alt="Nurse"
+            style={{ width: "100%", height: "100%" }}
+           
+          />
+        </Box>
 
           <Flex
             flexDirection="column"
-            ml="8"
+            ml={{base: "0", md: "20"}}
             marginTop={{ base: "0", md: "150px" }}
             textAlign={{ base: "center", md: "left" }}
           >

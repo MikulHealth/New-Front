@@ -52,13 +52,13 @@ const customTheme = extendTheme({
 });
 
 const rollIn = keyframes`
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 `;
 
 const rollOut = keyframes`
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(-100%); opacity: 0; }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100%); opacity: 0; }
 `;
 
 const phrases = ["Easy!", "Fast!", "Reliable!", "Secure!"];
@@ -136,7 +136,7 @@ const LandingPage = () => {
             justify="left"
           >
             <Text
-              fontSize={{ base: "36px", md: "48px" }}
+              fontSize={{ base: "30px", md: "48px" }}
               fontWeight="bold"
               fontFamily="body"
             >
@@ -212,11 +212,13 @@ const LandingPage = () => {
           animation="zoomInOut 8s infinite"
           overflow="hidden"
           display={{ base: "block", lg: "block" }}
+          maxWidth="300px"
         >
           <Image
             src={MHNurse}
             alt="Nurse"
             style={{ width: "100%", height: "100%" }}
+           
           />
         </Box>
         <Spacer />

@@ -72,8 +72,6 @@ export default function Faqs() {
                   // ml={{ base: "40px", md: "0px" }}
                   w={{ base: "80%", md: "520px" }}
                   mt={{ base: "0", md: "0" }}
-                  data-aos="fade-down"
-                  data-aos-duration="10000"
                 >
                   <AccordionItem
                     p={4}
@@ -272,7 +270,7 @@ export default function Faqs() {
                         alt="Logo"
                         w={{ base: "100%", md: "551px" }}
                         h={{ base: "auto", md: "280px" }}
-                        data-aos="fade-left"
+                        data-aos="fade-down"
                         data-aos-duration="10000"
                       />
                     </Box>
@@ -292,7 +290,7 @@ export default function Faqs() {
                         alt="Logo"
                         w={{ base: "100%", md: "551px" }}
                         h={{ base: "auto", md: "280px" }}
-                        data-aos="fade-right"
+                        data-aos="fade-up"
                         data-aos-duration="10000"
                       />
                     </Box>

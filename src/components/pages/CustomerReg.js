@@ -163,16 +163,17 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <ChakraProvider theme={customTheme}>
+    <ChakraProvider overflow="hidden" theme={customTheme}>
       {/* <NavigationBar /> */}
-      <Flex align="center" justify="center" height="100vh">
+      <Flex overflow="scroll" align="center" justify="center" height="100vh">
         <Box
           mb="300px"
           mt={{ base: "700px", md: "800px" }}
           width={{ base: "90%", sm: "500px" }}
+          h={{ base: "140%", md: "160%" }}
           p="6"
-          boxShadow="xl"
-          rounded="md"
+          // boxShadow="xl"
+          // rounded="md"
           bg="white"
         >
           <a href="/">
@@ -180,9 +181,10 @@ const LandingPage = () => {
               justifySelf="center"
               src={logo}
               alt="Logo"
-              ml={{ base: "40px", md: "90px" }}
+              ml={{ base: "20px", md: "90px" }}
               h={{ base: "80px", md: "100px" }}
               w={{ base: "300px", md: "350px" }}
+              // mt={{base: "10px", md: "20%"}}
             />
           </a>
           <Text fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
@@ -234,7 +236,7 @@ const LandingPage = () => {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </Select>
-              <Box marginLeft="1px" w="450px">
+              <Box marginLeft="1px" w="290px">
                 <FormLabel marginTop="20px">Date of Birth</FormLabel>
                 <Flex
                   alignItems="flex-start"
@@ -307,6 +309,17 @@ const LandingPage = () => {
               >
                 Submit
               </Button>
+              <Text fontSize="16px" fontFamily="Montserrat" mt="30px">
+                Already have an account?{" "}
+                <a
+                  href="/login"
+                  style={{ fontStyle: "italic", color: "#A210C6" }}
+                >
+                  {" "}
+               
+                  Login
+                </a>
+              </Text>
             </FormControl>
           </form>
         </Box>

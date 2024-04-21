@@ -73,7 +73,13 @@ const LeftSideBar = () => {
           />
 
           <Box ml="10px" marginTop="70px" onClick={handleConfirmLogout}>
-            <Flex align="center" color="#A210C6">
+            <Flex
+              style={{
+                cursor: "pointer",
+              }}
+              align="center"
+              color="#A210C6"
+            >
               <Image
                 src={LogoutIcon}
                 alt="logout"

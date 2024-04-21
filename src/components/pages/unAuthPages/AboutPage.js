@@ -409,7 +409,7 @@ const LandingPage = () => {
               padding={{ base: "10px", md: "20px" }}
               borderRadius="20px"
               flexDirection="row"
-              data-aos="fade-left"
+              data-aos="fade-up"
               data-aos-duration="10000"
               mt={{ base: "10px", md: "" }}
             >
@@ -429,7 +429,7 @@ const LandingPage = () => {
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
               mt={{ base: "-30px", md: "80px" }}
-              data-aos="fade-right"
+              data-aos="fade-up"
               data-aos-duration="10000"
             >
               <Text
@@ -470,7 +470,7 @@ const LandingPage = () => {
               padding={{ base: "10px", md: "20px" }}
               borderRadius="20px"
               flexDirection="row"
-              data-aos="fade-left"
+              data-aos="fade-down"
               data-aos-duration="10000"
               mt={{ base: "350px", md: "0" }}
             >
@@ -490,7 +490,7 @@ const LandingPage = () => {
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
               mt={{ base: "-30px", md: "80px" }}
-              data-aos="fade-right"
+              data-aos="fade-up"
               data-aos-duration="10000"
             >
               <Text
@@ -525,7 +525,7 @@ const LandingPage = () => {
               padding={{ base: "10px", md: "20px" }}
               borderRadius="20px"
               flexDirection="row"
-              data-aos="fade-left"
+              data-aos="fade-up"
               data-aos-duration="10000"
               mt={{ base: "350px", md: "0" }}
             >
@@ -545,7 +545,7 @@ const LandingPage = () => {
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
               mt={{ base: "-30px", md: "80px" }}
-              data-aos="fade-right"
+              data-aos="fade-down"
               data-aos-duration="10000"
             >
               <Text
@@ -585,7 +585,7 @@ const LandingPage = () => {
               padding={{ base: "10px", md: "20px" }}
               borderRadius="20px"
               flexDirection="row"
-              data-aos="fade-left"
+              data-aos="fade-up"
               data-aos-duration="10000"
               mt={{ base: "350px", md: "0" }}
             >
@@ -605,7 +605,7 @@ const LandingPage = () => {
               w={{ base: "366px", md: "656px" }}
               h={{ base: "100px", md: "275px" }}
               mt={{ base: "-30px", md: "80px" }}
-              data-aos="fade-right"
+              data-aos="fade-down"
               data-aos-duration="10000"
             >
               <Text

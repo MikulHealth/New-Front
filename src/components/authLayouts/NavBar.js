@@ -18,7 +18,7 @@ import {
   Image,
   Spacer,
 } from "@chakra-ui/react";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import UserDetailsModal from "../sections/UserDetails";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
@@ -63,7 +63,6 @@ export default function NavBar() {
     setShowUserDetailsModal(false);
   };
 
-
   const handleConfirmLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("phoneNumber");
@@ -106,7 +105,7 @@ export default function NavBar() {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <header style={{  top: 0, zIndex: 1000 }}>
+      <header style={{ top: 0, zIndex: 1000 }}>
         <Drawer size="xs" isOpen={isOpen} onClose={onClose} placement="left">
           <DrawerOverlay />
           <DrawerContent>
@@ -124,9 +123,7 @@ export default function NavBar() {
                     }
                     alignItems="center"
                   >
-                    <Image
-                     src={HomeIcon}
-                      alt="home" style={iconStyle} />
+                    <Image src={HomeIcon} alt="home" style={iconStyle} />
                     <Text style={listTextStyle}>Home</Text>
                   </Flex>
                 </NavLink>
@@ -162,9 +159,7 @@ export default function NavBar() {
                     }
                     alignItems="center"
                   >
-                    <Image 
-                    src={Wallet} 
-                    alt="wallet" style={iconStyle} />
+                    <Image src={Wallet} alt="wallet" style={iconStyle} />
                     <Text style={listTextStyle}>Wallet</Text>
                   </Flex>
                 </NavLink>
@@ -191,9 +186,7 @@ export default function NavBar() {
                     }
                     alignItems="center"
                   >
-                    <Image 
-                    src={serviceIcon} 
-                    alt="services" style={iconStyle} />
+                    <Image src={serviceIcon} alt="services" style={iconStyle} />
                     <Text style={listTextStyle}>Services</Text>
                   </Flex>
                 </NavLink>
@@ -240,10 +233,13 @@ export default function NavBar() {
                   </Flex>
                 </NavLink>
                 <NavLink onClick={handleConfirmLogout} style={listItemStyle}>
-                  <Flex color="#A210C6">
-                    <Image 
-                    src={LogoutIcon} 
-                    alt="logout" style={iconStyle} />
+                  <Flex
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    color="#A210C6"
+                  >
+                    <Image src={LogoutIcon} alt="logout" style={iconStyle} />
                     <Text
                       style={listTextStyle}
                       textDecoration={
