@@ -393,7 +393,7 @@ const LandingPage = () => {
         <Box maxWidth="1280px" margin="0 auto" bg="white">
           <Box mt="50px">
             <Text
-              fontSize={{ base: "32px", md: "48px", lg: "64px" }}
+              fontSize={{ base: "28px", md: "38px", lg: "64px" }}
               fontWeight="bold"
               textAlign="center"
               fontFamily="heading"
@@ -443,17 +443,15 @@ const LandingPage = () => {
               <Text
                 textAlign="left"
                 marginTop="10px"
-                fontSize="20px"
+                fontSize={{ base: "16px", md: "18px" }}
                 fontFamily="body"
               >
-                Software Engineer & a licensed nurse in Nigeria with over
-                <br></br>7 years of clinical experience in general nursing care{" "}
-                <br></br>
-                and patient management.<br></br>
-                Passionate about innovative revolution in the health <br></br>
-                industry, he has worked with two successful Health <br></br>
-                Tech startups. He is also the founder of an NGO, Rophe <br></br>
-                Global Foundation.
+                Software Engineer & a licensed nurse in Nigeria with over 7
+                years of clinical experience in general nursing care and patient
+                management. Passionate about innovative revolution in the health
+                industry, he has worked with two successful Health Tech
+                startups. He is also the founder of an NGO, Rophe Global
+                Foundation.
               </Text>
             </Box>
           </Flex>
@@ -504,15 +502,14 @@ const LandingPage = () => {
               <Text
                 textAlign="left"
                 marginTop="10px"
-                fontSize="20px"
+                fontSize={{ base: "16px", md: "18px" }}
                 fontFamily="body"
               >
-                Ejimonye, popularly referred to as Jim, is a trained <br></br>
-                financial technology professional who has worked <br></br>
-                with top African payment & telecoms companies.<br></br>
-                She co-founded a technology-enabled home cleaning <br></br>
-                brand called FICHAYA and co-owns a young <br></br>
-                professional's group called Konnect'd by Professionals.
+                Ejimonye, popularly referred to as Jim, is a trained financial
+                technology professional who has worked with top African payment
+                & telecoms companies. She co-founded a technology-enabled home
+                cleaning brand called FICHAYA and co-owns a young professional's
+                group called Konnect'd by Professionals.
               </Text>
             </Box>
           </Flex>
@@ -559,16 +556,14 @@ const LandingPage = () => {
               <Text
                 textAlign="left"
                 marginTop="10px"
-                fontSize="20px"
+                fontSize={{ base: "16px", md: "18px" }}
                 fontFamily="body"
               >
-                She holds a Bachelor of Medicine, Bachelor of Surgery <br></br>
-                (M.B.B.S) from Gulf Medical University, U.A.E. <br></br>
-                Dr. Jijiwa is a board certified family medicine <br></br>
-                physician seasoned with exemplary patient care. She <br></br>
-                has vast experience working with Home care <br></br>
-                companies in the U.S and is also <br></br>
-                passionate about public health.
+                She holds a Bachelor of Medicine, Bachelor of Surgery (M.B.B.S)
+                from Gulf Medical University, U.A.E. Dr. Jijiwa is a board
+                certified family medicine physician seasoned with exemplary
+                patient care. She has vast experience working with Home care
+                companies in the U.S and is also passionate about public health.
               </Text>
             </Box>
           </Flex>
@@ -622,13 +617,12 @@ const LandingPage = () => {
                 fontSize="20px"
                 fontFamily="body"
               >
-                She holds a Doctor of Optometry (O. D) degree, <br></br>
-                from the University of Benin, Edo state, Nigeria. <br></br>
-                She spent the first few years of her career<br></br>
-                working as a clinical optometrist, and has a lot of patient care
-                experience. <br></br>
-                She is also a trained product designer and is very<br></br>
-                passionate about building healthcare solutions for everyone.
+                She holds a Doctor of Optometry (O. D) degree, from the
+                University of Benin, Edo state, Nigeria. She spent the first few
+                years of her career working as a clinical optometrist, and has a
+                lot of patient care experience. She is also a trained product
+                designer and is very passionate about building healthcare
+                solutions for everyone.
                 <br></br>
               </Text>
             </Box>
@@ -643,7 +637,7 @@ const LandingPage = () => {
         >
           <Box textAlign="center">
             <Text
-              fontSize="48px"
+              fontSize={{ base: "28px", md: "38px", lg: "64px" }}
               fontWeight="bold"
               fontFamily="heading"
               color="black"
