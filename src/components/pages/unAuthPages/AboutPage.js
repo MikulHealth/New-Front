@@ -161,7 +161,7 @@ const LandingPage = () => {
                 marginTop="10px"
                 fontFamily="heading"
               >
-                Affordability & <br></br>
+                Affordability & 
                 Accessibility
               </Text>
               <Text
@@ -204,8 +204,8 @@ const LandingPage = () => {
                 fontFamily="heading"
                 marginTop="10px"
               >
-                Viscibility & <br></br>
-                Transperency{" "}
+                Visibility & 
+                Transperency
               </Text>
               <Text
                 fontSize={{ base: "16px", md: "18px" }}
