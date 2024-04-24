@@ -135,7 +135,6 @@ export default function AppointmentTab() {
     <Box
       className="all-appointment"
       overflow="scroll"
-      marginLeft="2%"
       w={{ base: "100%", md: "50vw" }}
       h={{ base: "60vh", md: "30vh" }}
     >
@@ -166,7 +165,7 @@ export default function AppointmentTab() {
             to begin.
           </Text>
         ) : (
-          <VStack overflow="scroll" align="start" spacing={4}>
+          <VStack align="start" spacing={4}>
             {appointments.map((appointment) => (
               <Box fontSize={{ base: "12px", md: "16px" }} key={appointment.id}>
                 <Flex>
@@ -184,7 +183,7 @@ export default function AppointmentTab() {
                   <Text ml={{ base: "10px", md: "5px" }} color="black">
                     {formatDateTime(appointment.createdAt)}
                   </Text>
-                  <Flex display={{ base: "none", md: "flex" }}>
+                  <Flex  ml={{ md: "130px"}} display={{ base: "none", md: "flex" }}>
                     <Text
                       fontSize={{ base: "12px", md: "16px" }}
                       onClick={() => handleViewMore(appointment.id)}

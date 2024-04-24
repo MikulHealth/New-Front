@@ -173,13 +173,13 @@ const AppointmentPage = () => {
         </Flex>
 
         <Flex
-          w={{ base: "", md: "50vh" }}
-          ml={{ base: "-45px", md: "-400px" }}
+          w={{ base: "", md: "50vw" }}
+          ml={{ base: "-90px", md: "-250px" }}
           justifyContent="space-between"
           className="appointment-tabs"
-          overflow="scroll"
+          
         >
-          <VStack ml={{ base: "50px", md: "-100px" }}>
+          <VStack ml={{ base: "100px", md: "0" }}>
             <Tabs colorScheme="purple.100" mt={{ base: "", md: "40px" }}>
               <TabList justifyContent="space-between">
                 <Tab
@@ -222,7 +222,7 @@ const AppointmentPage = () => {
                 </Tab>
 
               </TabList>
-              <TabPanels ml={{ base: "-20px", md: "-30px" }}>
+              <TabPanels ml={{ base: "-20px", md: "0px" }}>
                 <TabPanel>
                   <AppointmentTab />
                 </TabPanel>

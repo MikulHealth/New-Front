@@ -228,10 +228,9 @@ export default function PendingApp() {
   return (
     <Box
       className="pending-appointment"
-      marginLeft="2%"
       overflow="scroll"
       w={{ base: "100%", md: "50vw" }}
-      h={{ base: "60vh", md: "28vh" }}
+      h={{ base: "60vh", md: "30vh" }}
     >
        <VStack align="start" spacing={4}>
 
@@ -262,10 +261,9 @@ export default function PendingApp() {
           to begin.
         </Text>
       ) : (
-        <VStack overflow="scroll" align="start" spacing={4}>
+        <VStack  align="start" spacing={4}>
           {pendingAppointments.map((appointment) => (
             <Box
-              // ml={{ base: "20px" }}
               fontSize={{ base: "12px", md: "16px" }}
               key={appointment.id}
             >
@@ -284,7 +282,7 @@ export default function PendingApp() {
                 <Text ml={{ base: "10px", md: "5px" }} color="black">
                   {formatDateTime(appointment.createdAt)}
                 </Text>
-                <Flex display={{ base: "none", md: "flex" }}>
+                <Flex display={{ base: "none", md: "flex" }} ml={{ md: "130px"}} >
                   <Text
                     ml={{ md: "60px" }}
                     fontSize={{ base: "12px", md: "16px" }}
@@ -316,6 +314,7 @@ export default function PendingApp() {
               <Flex
                 fontSize={{ base: "12px", md: "16px" }}
                 display={{ base: "flex", md: "none" }}
+
                 ml={{base: "230px", md: "0"}}
               >
                 <Text

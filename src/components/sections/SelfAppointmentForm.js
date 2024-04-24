@@ -36,7 +36,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const [selectedDob] = useState(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [paymentData, setPaymentData] = useState({}); 
+  const [paymentData, setPaymentData] = useState({});
 
   const [formFields, setFormFields] = useState({
     startDate: null,
@@ -48,8 +48,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     recipientHealthHistory: "",
     costOfService: "",
   });
-
- 
 
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
@@ -178,7 +176,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           status: "success",
           duration: 6000,
         });
-     
+
         setPaymentData({
           costOfService: response.data.data.costOfService,
           appointmentId: response.data.data.id,
@@ -291,7 +289,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           <DrawerCloseButton />
           <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
           <DrawerBody>
-            <FormControl isRequired>
+            <FormControl>
               <Flex flexWrap="wrap" ml={{ md: "45px" }}>
                 <Box w={{ base: "300px", md: "270px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
@@ -304,6 +302,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}
                   >
                     <DatePicker
+                      isRequired
                       selected={selectedStartDate}
                       onChange={handleStartDateChange}
                       peekNextMonth
@@ -337,6 +336,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}
                   >
                     <DatePicker
+                      isRequired
                       selected={selectedEndDate}
                       onChange={handleEndDateChange}
                       peekNextMonth
@@ -363,6 +363,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                 <Box w={{ base: "300px", md: "270px" }} ml={{ md: "40px" }}>
                   <FormLabel fontWeight="bold">Service Plan </FormLabel>
                   <Select
+                    isRequired
                     name="servicePlan"
                     placeholder="preferred service plan"
                     w={{ base: "300px", md: "270px" }}
@@ -397,6 +398,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                 <Box ml={{ md: "5px" }}>
                   <FormLabel fontWeight="bold">Shift </FormLabel>
                   <Select
+                    isRequired
                     name="shift"
                     placeholder="select preferred shift"
                     w={{ base: "300px", md: "270px" }}
@@ -412,6 +414,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                 <FormLabel fontWeight="bold">Current Location </FormLabel>
                 <Flex>
                   <Input
+                    isRequired
                     name="currentLocation"
                     type="text"
                     placeholder="current Location"
@@ -436,6 +439,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                 </FormLabel>
                 <InputGroup>
                   <Input
+                    isRequired
                     padding="5px"
                     name="medicalReport"
                     type="file"

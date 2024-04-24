@@ -93,9 +93,8 @@ const LandingPage = () => {
       setTimeout(() => {
         setCurrentIndex((currentIndex + 1) % phrases.length);
         setAnimation(rollIn);
-      }, 500); // Half the interval to switch after fading out
-    }, 3000); // Change the text every 3 seconds
-
+      }, 500);
+    }, 3000); 
     return () => clearInterval(intervalId);
   }, [currentIndex]);
 
@@ -148,7 +147,7 @@ const LandingPage = () => {
             <Text
               mt="5px"
               textAlign={{ base: "left", md: "left" }}
-              fontSize={{ base: "26px", md: "28px" }}
+              fontSize={{ base: "26px", md: "48px" }}
               fontWeight="bold"
               fontFamily="body"
               css={{
