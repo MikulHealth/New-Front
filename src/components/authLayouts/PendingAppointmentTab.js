@@ -228,7 +228,7 @@ export default function PendingApp() {
   return (
     <Box
       className="pending-appointment"
-      overflow="scroll"
+      // overflow="scroll"
       w={{ base: "100%", md: "50vw" }}
       h={{ base: "60vh", md: "30vh" }}
     >

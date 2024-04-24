@@ -134,7 +134,7 @@ export default function AppointmentTab() {
   return (
     <Box
       className="all-appointment"
-      overflow="scroll"
+      // overflow="scroll"
       w={{ base: "100%", md: "50vw" }}
       h={{ base: "60vh", md: "30vh" }}
     >

@@ -222,7 +222,7 @@ const AppointmentPage = () => {
                 </Tab>
 
               </TabList>
-              <TabPanels ml={{ base: "-20px", md: "0px" }}>
+              <TabPanels ml={{ base: "-20px", md: "0px" }} overflow={{base: "scroll"}}>
                 <TabPanel>
                   <AppointmentTab />
                 </TabPanel>
