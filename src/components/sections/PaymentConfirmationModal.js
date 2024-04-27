@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import {
@@ -91,7 +91,7 @@ const PaymentConfirmationPage = () => {
   const verifyPayment = async () => {
     try {
       const token = localStorage.getItem("token");
-
+      console.log("ID is "+ appointmentId);
       // const apiUrl = `http://localhost:8080/v1/payment/verify/${appointmentId}`;
       const apiUrl = `https://backend-c1pz.onrender.com/v1/payment/verify/${appointmentId}`;
 
@@ -154,8 +154,11 @@ const PaymentConfirmationPage = () => {
     <Box height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
       <Box mb={4}>
         <Image
-        //  src={logo}
-          alt="Logo" w="100px" h="30px" />
+          //  src={logo}
+          alt="Logo"
+          w="100px"
+          h="30px"
+        />
       </Box>
       <Box color="white" mx="auto" w={paymentFormWidth}>
         <Text fontSize="24px" fontWeight="bold" mb={4}>
@@ -165,11 +168,21 @@ const PaymentConfirmationPage = () => {
           <Box color="black" p={4} bg="white" borderRadius="xl">
             <Text fontSize="20px" mb={4}>
               Hi {user?.firstName}, kindly pay the sum of{" "}
-              <Text as="span" textDecoration="underline"  fontWeight="bold" color="#510863">
-              {formattedCost(costOfService)}
+              <Text
+                as="span"
+                textDecoration="underline"
+                fontWeight="bold"
+                color="#510863"
+              >
+                {formattedCost(costOfService)}
               </Text>{" "}
               to proceed with your booking for{" "}
-              <Text as="span" textDecoration="underline" fontWeight="bold" color="#510863">
+              <Text
+                as="span"
+                textDecoration="underline"
+                fontWeight="bold"
+                color="#510863"
+              >
                 {beneficiary}'s
               </Text>{" "}
               care. You would be matched with a caregiver within 48hrs upon a
@@ -203,10 +216,8 @@ const PaymentConfirmationPage = () => {
                 onChange={handleInputChange}
                 mb={4}
               />
-              <Flex display={{base: "flex", md: "block"}}>
-
-              
-              <Button
+              <Flex display={{ base: "flex", md: "block" }}>
+                <Button
                   _hover={{ color: "" }}
                   bg="green.400"
                   color="white"
@@ -226,15 +237,15 @@ const PaymentConfirmationPage = () => {
                     />
                   </Box>
                 </Button>
-              <Button
-              marginLeft="5px"
-                bg="red.400"
-                color="white"
-                onClick={handleCancel}
-                _hover={{ bg: "red.500" }}
-              >
-                Cancel Payment
-              </Button>
+                <Button
+                  marginLeft="5px"
+                  bg="red.400"
+                  color="white"
+                  onClick={handleCancel}
+                  _hover={{ bg: "red.500" }}
+                >
+                  Cancel Payment
+                </Button>
               </Flex>
             </FormControl>
           </Box>

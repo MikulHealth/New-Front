@@ -30,7 +30,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
     console.log("Paying online...");
     const { id: appointmentId, costOfService, beneficiary } = paymentData;
 
-    console.log("beneficiary", beneficiary);
+    console.log("beneficiary", appointmentId);
 
     setTimeout(() => {
       navigate("/make-payment", {
