@@ -537,8 +537,7 @@ const ClientDash = () => {
                         fontSize={{ base: "12px", md: "14px" }}
                         mt={{ base: "-15px", md: "0px" }}
                       >
-                        The service you want, how and when you
-                        want it.
+                        The service you want, <br></br>how and when you want it.
                       </Text>
                     </VStack>
                   </Box>

@@ -12,8 +12,8 @@ import {
   Image,
 } from "@chakra-ui/react";
 // import RightArrow from "../../assets/RightArrow.svg";
-// import CardPayment from "../../assets/OnlinePayment.svg";
-// import Wallet from "../../assets/Wallet.svg";
+import CardPayment from "../../assets/OnlinePayment.svg";
+import Wallet from "../../assets/WalletIcon.svg";
 import { useNavigate } from "react-router-dom";
 function PaymentModal({ isOpen, onClose, paymentData }) {
   const navigate = useNavigate();
@@ -41,19 +41,20 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={{ base: "xs", sm: "md", md: "lg", lg: "xl" }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size={{ base: "xs", sm: "md", md: "lg", lg: "xl" }}
+    >
       <ModalOverlay />
       <ModalContent borderRadius="20px 20px 20px 0px" bg="#A210C6">
         <ModalHeader color="white">Choose payment method</ModalHeader>
         <ModalCloseButton color="white" />
-        <ModalBody p={[4, 6, 8]}>
+        <ModalBody paddingBottom="25px">
           <Box
             bg="white"
             marginLeft="8px"
-            h="12vh"
-            w={["full", "80vw", "37vw"]}
             borderRadius="15px"
-            paddingBottom="5px"
             onClick={handleWalletPayment}
             style={{
               cursor: "",
@@ -67,16 +68,19 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                 w="30px"
                 h="30px"
                 boxSize={["20px", "30px"]}
-                // src={Wallet}
+                src={Wallet}
                 alt="Settings"
               />
               <Box marginLeft="10px" padding="10px" paddingBottom="10px">
-                <Text fontSize={["lg", "xl"]} fontWeight="bold">Via Wallet</Text>
+                <Text fontSize={["lg", "xl"]} fontWeight="bold">
+                  Via Wallet
+                </Text>
                 <Text fontSize={["sm", "md"]}>
                   Make payment directly from your Mikul Health wallet
                 </Text>
               </Box>
               {/* <Image
+               display={{base: "none", md: "block"}}
                 marginLeft="15px"
                 marginTop="25px"
                 w="30px"
@@ -91,9 +95,6 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
             bg="white"
             marginTop="15px"
             marginLeft="8px"
-            h="12vh"
-            w={["full", "80vw", "37vw"]}
-            marginBottom="15px"
             borderRadius="15px"
             onClick={handleCardPayment}
             style={{
@@ -108,14 +109,19 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                 w="30px"
                 h="30px"
                 boxSize={["20px", "30px"]}
-                // src={CardPayment}
+                src={CardPayment}
                 alt="Settings"
               />
               <Box marginLeft="10px" padding="10px" paddingBottom="10px">
-                <Text fontSize={["lg", "xl"]} fontWeight="bold">Card Payment</Text>
-                <Text fontSize={["sm", "md"]}>Make payment for booking with card</Text>
+                <Text fontSize={["lg", "xl"]} fontWeight="bold">
+                  Card Payment
+                </Text>
+                <Text fontSize={["sm", "md"]}>
+                  Make payment for booking with card
+                </Text>
               </Box>
               {/* <Image
+              display={{base: "none", md: "block"}}
                 marginLeft="15px"
                 marginTop="25px"
                 w="30px"

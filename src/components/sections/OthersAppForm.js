@@ -194,7 +194,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         });
         setPaymentData({
           costOfService: response.data.data.costOfService,
-          appointmentId: response.data.data.id,
+          id: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
         setTimeout(() => {
@@ -366,7 +366,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           <DrawerCloseButton />
           <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
           <DrawerBody>
-            <FormControl ml={{ base: "25px", md: "0" }} w={{base: "100%", md: "0"}}>
+            <FormControl ml={{ base: "25px", md: "0" }} w={{base: "100%", md: ""}}>
               {/* <Box> */}
               <FormLabel fontWeight="bold">Enter Beneficiary details</FormLabel>
               <Flex display={{ base: "block", md: "flex" }}>
@@ -704,6 +704,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           </DrawerBody>
           <DrawerFooter>
             <Button
+            mb={{base: "20px", md: "0"}}
               w="150px"
               borderRadius="100px"
               isLoading={loading}

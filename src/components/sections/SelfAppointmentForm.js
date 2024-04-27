@@ -176,12 +176,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           status: "success",
           duration: 6000,
         });
-
+        console.log("Appointmend IDI "+ response.data.data.id)
         setPaymentData({
           costOfService: response.data.data.costOfService,
-          appointmentId: response.data.data.id,
+          id: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
+       
         setTimeout(() => {
           setIsPaymentModalOpen(true);
         }, 1000);
