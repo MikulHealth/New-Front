@@ -1,20 +1,22 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import LeftSideBar from "../authLayouts/LeftSideBar";
-// import {useSelector } from "react-redux";
-import { SearchIcon } from "@chakra-ui/icons";
+import { useSelector } from "react-redux";
+import { SearchIcon, CopyIcon, CheckIcon } from "@chakra-ui/icons";
 import {
   ChakraProvider,
   VStack,
   Input,
   Button,
-  // useToast,
+  useToast,
+  useClipboard,
   Image,
+  IconButton,
   Box,
   Text,
   Flex,
-
   FormControl,
   FormLabel,
   Modal,
@@ -23,12 +25,12 @@ import {
   ModalHeader,
   extendTheme,
   ModalBody,
-  Divider,
+  // Divider,
   ModalCloseButton,
 } from "@chakra-ui/react";
-// import Transfer from "../../assets/TransferPayment.svg";
-// import Online from "../../assets/OnlinePayment.svg";
-// import RightArrow from "../../assets/RightArrow.svg";
+import Transfer from "../../assets/TransferPayment.svg";
+import Online from "../../assets/WhiteOnlineIcon.svg";
+import RightArrow from "../../assets/WhiteArrow.svg";
 import NavBar from "../authLayouts/NavBar";
 import MobileFooter from "../authLayouts/MobileFooter";
 
@@ -55,86 +57,97 @@ const FundWalletModal = ({
   onOnlinePayment,
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl" borderRadius="15px">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size={{ base: "", md: "xl" }}
+      borderRadius="15px"
+    >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader marginLeft="200px">Fund Wallet</ModalHeader>
+        <ModalHeader mx={{ base: "10px", md: "200px" }}>
+          Fund Wallet
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Box
-            marginLeft="8px"
+            color="white"
+            bg="#A210C6"
+            mx="8px"
             border="1px solid black"
-            h="12vh"
-            w="37vw"
+            h={{ base: "15vh", md: "12vh" }}
+            w={{ base: "90vw", md: "37vw" }}
             borderRadius="15px"
-            paddingBottom="5px"
+            pb="5px"
             onClick={onBankTransfer}
             style={{
               cursor: "pointer",
             }}
-            _hover={{ color: "#A210C6" }}
+            // _hover={{ color: "#A210C6" }}
           >
             <Flex>
               <Image
-                marginLeft="15px"
-                marginTop="15px"
+                ml="15px"
+                mt="15px"
                 w="50px"
                 h="50px"
-                // src={Transfer}
-                alt="Settings"
+                src={Transfer}
+                alt="Bank Transfer"
               />
-              <Box marginLeft="10px" padding="10px" paddingBottom="10px">
+              <Box ml="10px" p="10px">
                 <Text>Via Bank Transfer</Text>
                 <Text>Direct bank transfer to your Mikul wallet account</Text>
               </Box>
               <Image
-                marginLeft="15px"
-                marginTop="25px"
+                ml="15px"
+                mt="25px"
                 w="30px"
                 h="30px"
-                // src={RightArrow}
-                alt="Settings"
+                src={RightArrow}
+                alt="Proceed"
               />
             </Flex>
           </Box>
           <Box
-            marginTop="15px"
-            marginLeft="8px"
+            color="white"
+            bg="#A210C6"
+            mt="15px"
+            mx="8px"
             border="1px solid black"
-            h="12vh"
-            w="37vw"
-            marginBottom="15px"
+            h={{ base: "15vh", md: "12vh" }}
+            w={{ base: "90vw", md: "37vw" }}
+            mb="15px"
             borderRadius="15px"
             onClick={onOnlinePayment}
             style={{
               cursor: "pointer",
             }}
-            _hover={{ color: "#A210C6" }}
+            // _hover={{ color: "#A210C6" }}
           >
             <Flex>
               <Image
-                marginLeft="15px"
-                marginTop="15px"
+                ml="15px"
+                mt="15px"
                 w="50px"
                 h="50px"
-                // src={Online}
-                alt="Settings"
+                src={Online}
+                alt="Online Payment"
               />
-              <Box marginLeft="10px" padding="10px" paddingBottom="10px">
+              <Box ml="10px" p="10px">
                 <Text>Online Payment</Text>
                 <Text>Fund your Mikul wallet with a debit card</Text>
               </Box>
               <Image
-                marginLeft="70px"
-                marginTop="25px"
+                ml={{ base: "auto", md: "70px" }} // Responsive margin for the arrow image
+                mt="25px"
                 w="30px"
                 h="30px"
-                // src={RightArrow}
-                alt="Settings"
+                src={RightArrow}
+                alt="Proceed"
                 style={{
                   cursor: "pointer",
                 }}
-                _hover={{ color: "#A210C6" }}
+                // _hover={{ color: "#A210C6" }}
               />
             </Flex>
           </Box>
@@ -145,48 +158,77 @@ const FundWalletModal = ({
 };
 
 const BankTransferModal = ({ isOpen, onClose, bankDetails }) => {
+  const { hasCopied, onCopy } = useClipboard(bankDetails.accountNumber);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader marginLeft="130px">Bank Transfer</ModalHeader>
+        <ModalHeader mx={{ base: "10px", md: "130px" }}>
+          Bank Transfer
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text marginTop="-10px">
+          <Text mt="-10px">
             This is your Mikul Health account number. Please refresh this page
             after making a transfer to this account number either via your bank
             app or bank USSD code
           </Text>
           <Flex
+            color="white"
+            bg="#A210C6"
             borderRadius="15px"
             border="1px solid black"
-            marginLeft="10px"
-            padding="10px"
-            marginTop="10px"
+            mx="10px"
+            p="10px"
+            mt="10px"
+            // flexDirection={{ base: "column", md: "row" }}
           >
             <Text>Bank Name:</Text>
-            <Text marginLeft="200"> {bankDetails.bankName}</Text>
+            <Text ml={{ base: "150px", md: "180px" }}>
+              {bankDetails.bankName}
+            </Text>
           </Flex>
           <Flex
+            color="white"
+            bg="#A210C6"
             borderRadius="15px"
             border="1px solid black"
-            marginLeft="10px"
-            padding="10px"
-            marginTop="20px"
+            mx="10px"
+            p="10px"
+            mt="20px"
+            // flexDirection={{ base: "column", md: "row" }}
           >
             <Text>Account Name:</Text>
-            <Text marginLeft="140"> {bankDetails.accountName}</Text>
+            <Text ml={{ base: "100px", md: "135px" }}>
+              {bankDetails.accountName}
+            </Text>
           </Flex>
           <Flex
+            color="white"
+            bg="#A210C6"
             borderRadius="15px"
             border="1px solid black"
-            marginLeft="10px"
-            padding="10px"
-            marginTop="20px"
-            marginBottom="20px"
+            mx="10px"
+            p="10px"
+            mt="20px"
+            mb="20px"
+            // flexDirection={{ base: "column", md: "row" }}
           >
             <Text>Account Number:</Text>
-            <Text marginLeft="145"> {bankDetails.accountNumber}</Text>
+            <Text ml={{ base: "75px", md: "110px" }}>
+              {bankDetails.accountNumber}
+            </Text>
+            <IconButton
+              icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+              onClick={onCopy}
+              mt="-1"
+              size="sm"
+              aria-label="Copy account number"
+              color="white"
+              bg={hasCopied ? "#A210C6" : "#A210C6"}
+              _hover={{ bg: "transparent" }}
+            />
           </Flex>
         </ModalBody>
       </ModalContent>
@@ -196,18 +238,75 @@ const BankTransferModal = ({ isOpen, onClose, bankDetails }) => {
 
 const OnlinePaymentModal = ({ isOpen, onClose }) => {
   const [amount, setAmount] = useState("");
+  const { user } = useSelector((state) => state.userReducer);
+  const customerId = user?.userId;
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const method = "CARD";
+  const navigate = useNavigate();
 
-  const handleAmountSubmission = () => {
-    // Handle the submission of the entered amount here
-    console.log("Amount submitted:", amount);
-    // You can perform further actions like making a deposit or calling an API here
+  
+  const handleAmountSubmission = async () => {
+    setLoading(true);
+  
+    try {
+      const token = localStorage.getItem("token");
+     
+      // const apiUrl = `http://localhost:8080/v1/api/wallets/deposit?customerId=${encodeURIComponent(customerId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
+      const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/deposit?customerId=${encodeURIComponent(customerId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
+      
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+  
+     
+      const response = await axios.post(apiUrl, {}, { headers });
+  
+      if (response.data.success) {
+        setLoading(false);
+  
+        toast({
+          title: "Wallet Funded",
+          status: "success",
+          duration: 6000,
+        });
+        setAmount("")
+        setTimeout(() => {
+          navigate("/navigate"); 
+        }, 3000);
+
+      } else {
+        setLoading(false);
+  
+        console.error("Error Funding Wallet");
+        const errorMessage = response.data
+          ? response.data.message
+          : "Unknown error";
+        toast({
+          title: "Funding failed",
+          description: errorMessage,
+          status: "error",
+          duration: 6000,
+        });
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("An error occurred:", error);
+      toast({
+        title: "Error Funding Wallet",
+        description: error.response?.data?.message || "Unknown error",
+        status: "error",
+        duration: 6000,
+      });
+    }
   };
-
+  
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader marginLeft="130px">Online Payment</ModalHeader>
+        <ModalHeader>Online Payment</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl>
@@ -221,15 +320,17 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
             />
           </FormControl>
           <Button
-            marginTop="10px"
-            marginBottom="20px"
-            marginLeft="130px"
+            mt="10px"
+            mb="20px"
             bg="#A210C6"
             color="white"
+            isLoading={loading}
+            loadingText="Processing..."
             onClick={handleAmountSubmission}
-            _hover={{ backgroundColor: "blue.500" }}
+            // _hover={{ backgroundColor: "blue.500" }}
+            width={{ base: "full", md: "auto" }}
           >
-            Make deposit
+            {loading ? "Processing..." : "Make deposit"}
           </Button>
         </ModalBody>
       </ModalContent>
@@ -241,11 +342,10 @@ const WalletPage = () => {
   const [showFundWalletModal, setShowFundWalletModal] = useState(false);
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const toast = useToast();
-  const balance = 0.0;
-  // const { user } = useSelector((state) => state.userReducer);
-
+  const { user } = useSelector((state) => state.userReducer);
+  const balance = user?.walletBalance;
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
   };
@@ -270,12 +370,12 @@ const WalletPage = () => {
     setShowOnlinePaymentModal(true);
   };
 
-  const openCreditpage = () => {
-    navigate("/credit");
-  };
-  const openDebitpage = () => {
-    navigate("/debit");
-  };
+  // const openCreditpage = () => {
+  //   navigate("/credit");
+  // };
+  // const openDebitpage = () => {
+  //   navigate("/debit");
+  // };
 
   const handleCloseOnlinePaymentModal = () => {
     setShowOnlinePaymentModal(false);
@@ -292,7 +392,7 @@ const WalletPage = () => {
         h={{ base: "100%", md: "100%" }}
       >
         <NavBar />
-        <Box
+        <Flex
           marginTop="10px"
           border="1px solid gray"
           borderRadius="md"
@@ -317,82 +417,92 @@ const WalletPage = () => {
               Search transaction by date
             </Text>
           </Flex>
-        </Box>
+        </Flex>
         <Box
-          marginTop="10px"
+          textAlign="center"
+          justifySelf="center"
+          w={{ base: "375px", md: "100%" }}
+          h={{ base: "180px", md: "30%" }}
+          mt={{ base: "4px", md: "0" }}
+          mb={{ base: "5px", md: "30" }}
+          paddingBottom={{ base: "20px", md: "" }}
           bg="#A210C6"
-          w={{ base: "90vw", md: "70vw" }}
-          ml={{ base: "20px", md: "10px" }}
-          h={{ base: "19vh", md: "25vh" }}
           borderRadius="20px"
-          display="flex"
         >
-          <Flex  w={{ base: "90vw", md: "80vw" }}>
-            <VStack marginLeft="20px">
+          <Flex w={{ base: "90vw", md: "80vw" }}>
+            <Box ml={{ base: "10px", md: "20px" }} paddingTop="5px">
               <Text
-                fontSize={{ base: "12px", md: "16px" }}
+                fontSize="16px"
                 fontFamily="body"
                 color="white"
-                textAlign="left"
-                mt={{ base: "10px", md: "20px" }}
+                marginTop="20px"
               >
                 Mikul Health Savings Account
               </Text>
               <Text
+                marginTop="5px"
                 color="white"
-                fontSize={{ base: "12px", md: "16px" }}
-                marginLeft="-80%"
+                fontSize="22px"
+                textAlign="left"
               >
-                ₦ {balance.toFixed(2)}
+                ₦{balance}
               </Text>
+            </Box>
+            <VStack>
+              <Button
+                padding={{ base: "5px", md: "0" }}
+                ml={{ base: "25px", md: "520px" }}
+                w={{ base: "100px", md: "35%" }}
+                h={{ base: "30px", md: "50%" }}
+                fontSize={{ base: "12px", md: "16px" }}
+                borderRadius="15px"
+                color="#A210C6"
+                marginTop="20px"
+                onClick={handleOpenFundWalletModal}
+                bg="white"
+                // leftIcon={<ExternalLinkIcon />}
+              >
+                Fund wallet
+              </Button>
             </VStack>
-            <Button
-              padding={{ base: "5px", md: "0" }}
-              ml={{ base: "40px", md: "460px" }}
-              w={{ base: "100px", md: "200px" }}
-              h={{ base: "30px", md: "40px" }}
-              fontSize={{ base: "12px", md: "16px" }}
-              borderRadius="15px"
-              color="#A210C6"
-              marginTop="20px"
-              onClick={handleOpenFundWalletModal}
-              bg="white"
-              _hover={{ color: "" }}
-            >
-              Fund wallet
-            </Button>
           </Flex>
-          <Flex marginLeft={{ base: "5px", md: "56px" }} marginTop="100px">
-            <VStack
+          <Flex
+            ml={{ base: "10px", md: "20px" }}
+            mt={{ base: "40px", md: "50px" }}
+          >
+            <Box
               marginBottom={{ base: "50px", md: "0" }}
-              marginLeft={{ base: "-50px", md: "-935px" }}
+              // marginLeft={{ base: "-50px", md: "-935px" }}
               color="white"
             >
-              <Text fontSize={{ base: "12px", md: "16px" }}>Wallet ID:</Text>
-              <Text fontFamily="body" fontSize="16px">
+              <Text textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
+                Wallet ID:
+              </Text>
+              <Text textAlign="left" fontFamily="body" fontSize="16px">
                 Wema Bank 0124536789
               </Text>
-            </VStack>
-            <Flex
-              display={{ base: "flex", md: "flex" }}
-              marginLeft={{ base: "", md: "500px" }}
-            >
-              <VStack color="white">
-                <Text fontSize="14px">Total funded</Text>
-                <Text color="white" fontSize="12px" marginLeft="-44px">
-                  ₦{balance.toFixed(2)}
+            </Box>
+            <Flex marginLeft={{ base: "40px", md: "500px" }}>
+              <Box color="white">
+                <Text textAlign="left" fontSize="12px">
+                  Total funded
                 </Text>
-              </VStack>
-              <VStack color="white" marginLeft="50px">
-                <Text fontSize="14px">Total spent</Text>
-                <Text color="white" fontSize="12px" marginLeft="-34px">
-                  ₦{balance.toFixed(2)}
+                <Text textAlign="left" color="white" fontSize="12px">
+                  ₦{balance}
                 </Text>
-              </VStack>
+              </Box>
+              <Box color="white" marginLeft="10px">
+                <Text textAlign="left" fontSize="12px">
+                  Total spent
+                </Text>
+                <Text textAlign="left" color="white" fontSize="12px">
+                  ₦{balance}
+                </Text>
+              </Box>
             </Flex>
           </Flex>
         </Box>
-        <Box>
+        {/* <Box>
           <VStack>
             <Text
               fontSize="28px"
@@ -445,9 +555,9 @@ const WalletPage = () => {
             borderColor="gray.500"
             width="60%"
           />
-        </Box>
+        </Box> */}
         {/* <Help/> */}
-        <MobileFooter/>
+        <MobileFooter />
       </VStack>
       <FundWalletModal
         isOpen={showFundWalletModal}

@@ -54,7 +54,7 @@ const ClientDash = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userReducer);
-  const balance = 0.0;
+  const balance = user?.walletBalance;
   const noPendingAppointments = user?.numberOfPendingAppointments;
   const activeAppointments = user?.numberOfActiveAppointments;
   const completedAppointments = user?.numberOfCompletedAppointments;
@@ -242,7 +242,7 @@ const ClientDash = () => {
             >
               {" "}
               <Flex>
-                <VStack marginLeft="20px" paddingTop="5px">
+                <Box marginLeft="20px" paddingTop="5px">
                   <Text
                     fontSize="16px"
                     fontFamily="body"
@@ -252,14 +252,14 @@ const ClientDash = () => {
                     Mikul Health Savings Account
                   </Text>
                   <Text
-                    marginTop="-10px"
+                    marginTop="5px"
                     color="white"
                     fontSize="22px"
-                    marginLeft="-70%"
+                    textAlign="left"
                   >
-                    ₦{balance.toFixed(2)}
+                    ₦{balance}
                   </Text>
-                </VStack>
+                </Box>
                 <VStack>
                   <Button
                     padding={{ base: "5px", md: "0" }}
@@ -274,7 +274,7 @@ const ClientDash = () => {
                     bg="white"
                     // leftIcon={<ExternalLinkIcon />}
                   >
-                    fund wallet
+                    Open wallet
                   </Button>
                 </VStack>
               </Flex>

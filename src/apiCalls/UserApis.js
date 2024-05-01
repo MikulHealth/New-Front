@@ -13,7 +13,7 @@ export const GetCurrentUser = async () => {
       },
     };
     const response = await axios.get(
-      //   "http://localhost:8080/v1/angel/getCurrentUser",
+        // "http://localhost:8080/v1/angel/getCurrentUser",
       "https://backend-c1pz.onrender.com/v1/angel/getCurrentUser",
       config
     );
