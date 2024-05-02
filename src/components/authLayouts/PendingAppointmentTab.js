@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../utils/Spiner";
 // import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BookAppointmentModal from "../sections/BookAppointment";
 import { EditIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
@@ -31,9 +31,14 @@ import {
   // extendTheme,
   Divider,
 } from "@chakra-ui/react";
+import PaymentModal from "../sections/PaymentMethod";
+
 
 export default function PendingApp() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); 
+  const [paymentData, setPaymentData] = useState({}); 
   const toast = useToast();
   // const { user } = useSelector((state) => state.userReducer);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
@@ -55,15 +60,25 @@ export default function PendingApp() {
   };
 
   const handlePayment = (selectedAppointment) => {
-    const appointmentId = selectedAppointment.id;
-    const costOfService = selectedAppointment.costOfService;
-    const beneficiary =
-      selectedAppointment.recipientFirstname +
-      " " +
-      selectedAppointment.recipientLastname;
-    navigate("/make-payment", {
-      state: { costOfService, appointmentId, beneficiary },
+    // const appointmentId = selectedAppointment.id;
+    // const costOfService = selectedAppointment.costOfService;
+    // const beneficiary =
+    //   selectedAppointment.recipientFirstname +
+    //   " " +
+    //   selectedAppointment.recipientLastname;
+    // navigate("/make-payment", {
+    //   state: { costOfService, appointmentId, beneficiary },
+    // });
+
+    
+    setPaymentData({
+      costOfService: selectedAppointment.costOfService,
+      appointmentId: selectedAppointment.id,
+      beneficiary: `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`,
     });
+    setTimeout(() => {
+      setIsPaymentModalOpen(true);
+    }, 1000);
   };
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
@@ -663,6 +678,11 @@ export default function PendingApp() {
       <BookAppointmentModal
         isOpen={showAppointmentModal}
         onClose={handleCloseAppointmentModal}
+      />
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        paymentData={paymentData}
       />
     </Box>
   );

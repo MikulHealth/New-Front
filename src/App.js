@@ -30,6 +30,8 @@ import CustomizeServicePage from "./components/pages/CustomizeServicePage";
 import BookButton from "./components/authLayouts/BookButton";
 import ServicesSection from "./components/unAuthLayouts/ServicesSection";
 import Faqs from "./components/unAuthLayouts/Faqs";
+import WalletPaymentPage from "./components/sections/WalletPayment";
+
 function App() {
   return (
     <div className="App">
@@ -58,6 +60,7 @@ function App() {
           <Route path="/details" element={<UserDetailsModal />}></Route>
           <Route path="/verifyPhone" element={<VerifyOtpDash />}></Route>
           <Route path="/make-payment" element={<PaymentConfirmationPage />} />
+          <Route path="/wallet-confirmation" element={<WalletPaymentPage />} />
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/settings" element={<SettingsPage />} />

@@ -8,11 +8,13 @@ import BookAppointmentModal from "../sections/BookAppointment";
 import MatchedAppointmentsModal from "../sections/MatchedAppointmentsModal";
 import PayForAppointmentModal from "../sections/PayForAppointment";
 import Help from "../authLayouts/Help";
-
+import { CopyIcon, CheckIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
+  useClipboard,
+  IconButton,
   VStack,
   Image,
   extendTheme,
@@ -60,6 +62,9 @@ const ClientDash = () => {
   const completedAppointments = user?.numberOfCompletedAppointments;
   const [pendingAppointment, setPendingAppointment] = useState(null);
   // const [setShowSkeleton] = useState(true);
+  const accountNumber = "0124536789"
+  const { hasCopied, onCopy } = useClipboard(accountNumber);
+
   const [apiMessage] = useState("");
   const [showPayAppointmentModal, setShowPayAppointmentModal] = useState(false);
   // const [matchedAppointments, setMatchedAppointments] = useState([]);
@@ -251,14 +256,24 @@ const ClientDash = () => {
                   >
                     Mikul Health Savings Account
                   </Text>
-                  <Text
-                    marginTop="5px"
-                    color="white"
-                    fontSize="22px"
-                    textAlign="left"
-                  >
-                    ₦{balance}
-                  </Text>
+                  <Flex>
+                    <Text
+                      marginTop="2px"
+                      color="white"
+                      fontSize={{ base: "18px", md: "22px" }}
+                      textAlign="left"
+                    >
+                      ₦{balance}
+                    </Text>
+                    <Text
+                      ml="5px"
+                      mt={{ base: "8px", md: "12px" }}
+                      fontSize="12px"
+                      color="white"
+                    >
+                      balance
+                    </Text>
+                  </Flex>
                 </Box>
                 <VStack>
                   <Button
@@ -283,22 +298,32 @@ const ClientDash = () => {
                 mt={{ base: "20px", md: "20px" }}
                 color="white"
               >
-                <Box ml={{ base: "-170px", md: "-490px" }}>
-                  <Text
-                    display={{ base: "none", md: "block" }}
-                    justify="left"
-                    ml={{ base: "5px", md: "-95px" }}
-                    fontSize={{ base: "10px", md: "14px" }}
-                  >
-                    Wallet ID:
-                  </Text>
-                  <Text
-                    // marginBottom={{ base: "10px", md: "0" }}
-                    justify="left"
-                    fontSize={{ base: "14px", md: "14px" }}
-                  >
-                    Wema Bank 0124536789
-                  </Text>
+                <Box ml={{ base: "-160px", md: "-430px" }}>
+                  <Flex>
+                    <Text
+                      textAlign="left"
+                      fontSize={{ base: "12px", md: "16px" }}
+                    >
+                      Wema Bank
+                    </Text>
+                    <Text
+                      ml="10px"
+                      textAlign="left"
+                      fontSize={{ base: "12px", md: "16px" }}
+                    >
+                      {accountNumber}
+                    </Text>
+                    <IconButton
+                      icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                      onClick={onCopy}
+                      mt="-2px"
+                      size="sm"
+                      aria-label="Copy account number"
+                      color="white"
+                      bg={hasCopied ? "#A210C6" : "#A210C6"}
+                      _hover={{ bg: "transparent" }}
+                    />
+                  </Flex>
                 </Box>
               </VStack>
             </Box>

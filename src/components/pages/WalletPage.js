@@ -138,7 +138,7 @@ const FundWalletModal = ({
                 <Text>Fund your Mikul wallet with a debit card</Text>
               </Box>
               <Image
-                ml={{ base: "auto", md: "70px" }} // Responsive margin for the arrow image
+                ml={{ base: "auto", md: "70px" }} 
                 mt="25px"
                 w="30px"
                 h="30px"
@@ -344,6 +344,9 @@ const WalletPage = () => {
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
   // const navigate = useNavigate();
   // const toast = useToast();
+  const accountNumber = "0124536789"
+  const { hasCopied, onCopy } = useClipboard(accountNumber);
+
   const { user } = useSelector((state) => state.userReducer);
   const balance = user?.walletBalance;
   const settingsContainerStyle = {
@@ -420,7 +423,7 @@ const WalletPage = () => {
         </Flex>
         <Box
           textAlign="center"
-          justifySelf="center"
+          ml={{base: "15px", md: "0"}}
           w={{ base: "375px", md: "100%" }}
           h={{ base: "180px", md: "30%" }}
           mt={{ base: "4px", md: "0" }}
@@ -430,7 +433,7 @@ const WalletPage = () => {
           borderRadius="20px"
         >
           <Flex w={{ base: "90vw", md: "80vw" }}>
-            <Box ml={{ base: "10px", md: "20px" }} paddingTop="5px">
+            <Box ml={{ base: "20px", md: "40px" }} paddingTop="5px">
               <Text
                 fontSize="16px"
                 fontFamily="body"
@@ -439,19 +442,23 @@ const WalletPage = () => {
               >
                 Mikul Health Savings Account
               </Text>
+              <Flex>
               <Text
-                marginTop="5px"
+                marginTop="2px"
                 color="white"
-                fontSize="22px"
+                fontSize={{base: "18px", md: "22px"}}
                 textAlign="left"
               >
                 ₦{balance}
               </Text>
+              <Text ml="5px" mt={{base: "8px", md: "12px"}} fontSize="12px" color="white">balance</Text>
+              </Flex>
+              
             </Box>
             <VStack>
               <Button
                 padding={{ base: "5px", md: "0" }}
-                ml={{ base: "25px", md: "520px" }}
+                ml={{ base: "30px", md: "520px" }}
                 w={{ base: "100px", md: "35%" }}
                 h={{ base: "30px", md: "50%" }}
                 fontSize={{ base: "12px", md: "16px" }}
@@ -467,22 +474,38 @@ const WalletPage = () => {
             </VStack>
           </Flex>
           <Flex
-            ml={{ base: "10px", md: "20px" }}
-            mt={{ base: "40px", md: "50px" }}
+            ml={{ base: "20px", md: "40px" }}
+            mt={{ base: "30px", md: "50px" }}
           >
             <Box
-              marginBottom={{ base: "50px", md: "0" }}
+              marginBottom={{ base: "50px", md: "50px" }}
               // marginLeft={{ base: "-50px", md: "-935px" }}
               color="white"
             >
               <Text textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
                 Wallet ID:
               </Text>
-              <Text textAlign="left" fontFamily="body" fontSize="16px">
-                Wema Bank 0124536789
-              </Text>
+              <Flex>
+              <Text textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
+              Wema Bank
+            </Text>
+              <Text ml="10px" textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
+              {accountNumber}
+            </Text>
+            <IconButton
+              icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+              onClick={onCopy}
+              mt="-2px"
+              size="sm"
+              aria-label="Copy account number"
+              color="white"
+              bg={hasCopied ? "#A210C6" : "#A210C6"}
+              _hover={{ bg: "transparent" }}
+            />
+              </Flex>
+              
             </Box>
-            <Flex marginLeft={{ base: "40px", md: "500px" }}>
+            <Flex marginLeft={{ base: "15px", md: "500px" }}>
               <Box color="white">
                 <Text textAlign="left" fontSize="12px">
                   Total funded

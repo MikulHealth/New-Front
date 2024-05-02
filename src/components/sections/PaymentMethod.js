@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { SetUser } from "../../redux/userSlice";
 import {
   Modal,
   ModalOverlay,
@@ -11,46 +12,86 @@ import {
   Flex,
   Image,
 } from "@chakra-ui/react";
-// import RightArrow from "../../assets/RightArrow.svg";
 import CardPayment from "../../assets/OnlinePayment.svg";
 import Wallet from "../../assets/WalletIcon.svg";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { GetCurrentUser } from "../../apiCalls/UserApis";
+import InsufficientFundsModal from "./InsufficientFundsModal";
+
 function PaymentModal({ isOpen, onClose, paymentData }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.userReducer);
+  const balance = user?.walletBalance;
+  const [showInsufficientModal, setShowInsufficientModal] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // setLoading(true);
+
+      if (localStorage.getItem("token")) {
+        try {
+          console.log("Calling GetCurrentUser API");
+          const response = await GetCurrentUser();
+
+          if (response.success) {
+            console.log("API response:", response.data);
+            dispatch(SetUser(response.data));
+          } else {
+            console.error("API request failed:", response.error);
+          }
+        } catch (error) {
+          console.error("Error in GetCurrentUser API:", error);
+        } finally {
+          // setLoading(false);
+          // setShowSkeleton(false);
+        }
+      } else {
+        navigate("/login");
+      }
+    };
+
+    fetchData();
+  }, [navigate, dispatch]);
 
   const handleWalletPayment = () => {
     console.log("Paying with wallet...");
-    // Here you'd add logic for wallet payment
-    // For example, API call to process wallet payment with the `paymentData` provided
-    // ...
-    onClose(); // Close the modal after payment
+    console.log("User balance..." + balance);
+    const { costOfService } = paymentData;
+    console.log("cos..." + costOfService / 100)
+    const COS = costOfService / 100;
+
+    if (balance > COS) {
+      setTimeout(() => {
+        navigate("/wallet-confirmation", {
+          state: { ...paymentData },
+        });
+      }, 1000);
+      onClose();
+    } else {
+      setShowInsufficientModal(true); 
+    }
   };
 
   const handleCardPayment = () => {
     console.log("Paying online...");
-    const { id: appointmentId, costOfService, beneficiary } = paymentData;
-
-    console.log("beneficiary", appointmentId);
-
     setTimeout(() => {
       navigate("/make-payment", {
-        state: { costOfService, appointmentId, beneficiary },
+        state: { ...paymentData },
       });
     }, 1000);
     onClose();
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      size={{ base: "xs", sm: "md", md: "lg", lg: "xl" }}
-    >
-      <ModalOverlay />
-      <ModalContent borderRadius="20px 20px 20px 0px" bg="#A210C6">
-        <ModalHeader color="white">Choose payment method</ModalHeader>
-        <ModalCloseButton color="white" />
-        <ModalBody paddingBottom="25px">
+    <>
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <ModalOverlay />
+        <ModalContent bg="#A210C6">
+          <ModalHeader color="white" textAlign="center">Choose Payment Method</ModalHeader>
+          <ModalCloseButton color="white" />
+          <ModalBody paddingBottom="25px">
           <Box
             bg="white"
             marginLeft="8px"
@@ -133,8 +174,15 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
             </Flex>
           </Box>
         </ModalBody>
-      </ModalContent>
-    </Modal>
+        </ModalContent>
+      </Modal>
+      {showInsufficientModal && (
+        <InsufficientFundsModal
+          isOpen={showInsufficientModal}
+          onClose={() => setShowInsufficientModal(false)}
+        />
+      )}
+    </>
   );
 }
 
