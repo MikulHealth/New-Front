@@ -273,7 +273,7 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
         });
         setAmount("")
         setTimeout(() => {
-          navigate("/navigate"); 
+          navigate("/dashboard"); 
         }, 3000);
 
       } else {
