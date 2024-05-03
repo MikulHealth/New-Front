@@ -189,7 +189,7 @@ const handleWalletPayment = async () => {
                   onClick={handleCancel}
                   _hover={{ bg: "red.500" }}
                 >
-                  Cancel Payment
+                  Cancel payment
                 </Button>
               </Flex>
           

@@ -75,6 +75,24 @@ const ClientDash = () => {
     AOS.init();
   }, []);
 
+  // const formatBalance = (balance) => {
+  //   return balance.toLocaleString('en-NG', {
+  //     style: 'currency',
+  //     currency: 'NGN'
+  //   });
+  // };
+
+//   function formatBalance(num) {
+//     // Check if num is a number
+//     if (typeof num === 'number') {
+//         return '₦' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '₦1,');
+//     }
+//     return '₦0.00'; // Default display if num is not a number
+// }
+
+//  console.log(currencyFormat(2665));
+  
+
   useEffect(() => {
     const fetchPendingData = async () => {
       try {
@@ -238,7 +256,7 @@ const ClientDash = () => {
             <Box
               textAlign="center"
               w={{ base: "375px", md: "100%" }}
-              h={{ base: "130px", md: "30%" }}
+              h={{ base: "140px", md: "30%" }}
               mt={{ base: "4px", md: "0" }}
               mb={{ base: "5px", md: "30" }}
               paddingBottom={{ base: "20px", md: "" }}
@@ -263,7 +281,8 @@ const ClientDash = () => {
                       fontSize={{ base: "18px", md: "22px" }}
                       textAlign="left"
                     >
-                      ₦{balance}
+                      {/* ₦{formatBalance(balance)} */}
+                      ₦ {balance}.00
                     </Text>
                     <Text
                       ml="5px"

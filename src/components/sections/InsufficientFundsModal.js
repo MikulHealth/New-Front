@@ -9,10 +9,12 @@ import {
   ModalCloseButton,
   Button,
   Text,
+//   Box,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { WarningIcon } from "@chakra-ui/icons";
-function InsufficientFundsModal({ isOpen, onClose }) {
+
+function InsufficientFundsModal({ isOpen, onClose, amountNeeded }) {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -30,15 +32,17 @@ function InsufficientFundsModal({ isOpen, onClose }) {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {" "}
-          <WarningIcon w={10} h={10} color="yellow.400" />{" "}
-          <Text color="#A210C6"> Insufficient Funds </Text>
+          {/* <Box display="flex" alignItems="center" justifyContent="center"> */}
+            <WarningIcon w={10} h={10} color="yellow.400" />
+            <Text color="#A210C6" marginLeft={2}>Insufficient Funds</Text>
+          {/* </Box> */}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text fontSize="md" mb={4}>
-            You do not have enough funds to pay for this service. Kindly
-            fund your wallet with the necessary amount to proceed.
+            You do not have enough funds to pay for this service. Please fund your wallet with at least
+            <Text color="#A210C6" as="span" fontWeight="bold"> {' ' + amountNeeded} </Text>
+            to proceed.
           </Text>
         </ModalBody>
         <ModalFooter>

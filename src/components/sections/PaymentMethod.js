@@ -24,6 +24,8 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
   const balance = user?.walletBalance;
+  const [amountNeeded, setAmountNeeded] = useState(0);
+
   const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 
   useEffect(() => {
@@ -58,11 +60,12 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   const handleWalletPayment = () => {
     console.log("Paying with wallet...");
     console.log("User balance..." + balance);
+    console.log(paymentData)
     const { costOfService } = paymentData;
     console.log("cos..." + costOfService / 100)
-    const COS = costOfService / 100;
+    const formattedCost = costOfService / 100;
 
-    if (balance > COS) {
+    if (balance > formattedCost) {
       setTimeout(() => {
         navigate("/wallet-confirmation", {
           state: { ...paymentData },
@@ -70,6 +73,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       }, 1000);
       onClose();
     } else {
+      setAmountNeeded(formattedCost); 
       setShowInsufficientModal(true); 
     }
   };
@@ -89,7 +93,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent bg="#A210C6">
-          <ModalHeader color="white" textAlign="center">Choose Payment Method</ModalHeader>
+          <ModalHeader color="white" textAlign="center">How do you want to pay?</ModalHeader>
           <ModalCloseButton color="white" />
           <ModalBody paddingBottom="25px">
           <Box
@@ -180,6 +184,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
         <InsufficientFundsModal
           isOpen={showInsufficientModal}
           onClose={() => setShowInsufficientModal(false)}
+          amountNeeded={amountNeeded.toFixed(2)}
         />
       )}
     </>

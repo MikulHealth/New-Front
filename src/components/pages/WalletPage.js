@@ -349,6 +349,8 @@ const WalletPage = () => {
 
   const { user } = useSelector((state) => state.userReducer);
   const balance = user?.walletBalance;
+  const walletTotalCredit = user?.walletTotalCredit;
+  const walletTotalDebit = user?.walletTotalDebit;
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
   };
@@ -449,7 +451,7 @@ const WalletPage = () => {
                 fontSize={{base: "18px", md: "22px"}}
                 textAlign="left"
               >
-                ₦{balance}
+                ₦ {balance}.00
               </Text>
               <Text ml="5px" mt={{base: "8px", md: "12px"}} fontSize="12px" color="white">balance</Text>
               </Flex>
@@ -511,7 +513,7 @@ const WalletPage = () => {
                   Total funded
                 </Text>
                 <Text textAlign="left" color="white" fontSize="12px">
-                  ₦{balance}
+                  ₦ {walletTotalCredit}.00
                 </Text>
               </Box>
               <Box color="white" marginLeft="10px">
@@ -519,7 +521,7 @@ const WalletPage = () => {
                   Total spent
                 </Text>
                 <Text textAlign="left" color="white" fontSize="12px">
-                  ₦{balance}
+                  ₦ {walletTotalDebit}.00
                 </Text>
               </Box>
             </Flex>
