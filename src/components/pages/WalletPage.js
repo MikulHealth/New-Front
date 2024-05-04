@@ -535,8 +535,8 @@ const WalletPage = () => {
         </Box>
        
         <Flex
-          w={{ base: "", md: "50vw" }}
-          ml={{ base: "-90px", md: "-250px" }}
+          w={{ base: "100%", md: "50vw" }}
+          ml={{ base: "-140", md: "-250px" }}
           justifyContent="space-between"
           className="transaction-tabs"
           

@@ -85,7 +85,7 @@ export default function TransactionTab() {
             No transaction yet. click on fund wallet to begin
           </Text>
         ) : (
-          <VStack align="start" spacing={4}>
+          <VStack   ml={{ base: "20px", md: "" }} align="start" spacing={4}>
             {transactions.map((transaction) => (
               <Box fontSize={{ base: "12px", md: "16px" }} key={transaction.id}>
                 <Flex>
@@ -135,48 +135,7 @@ export default function TransactionTab() {
                     {`${transaction.id}`}
                   </Text>
                 </Flex>
-                <Flex
-                  fontSize={{ base: "12px", md: "16px" }}
-                  display={{ base: "flex", md: "none" }}
-                  ml={{ base: "225px", md: "0" }}
-                >
-                  <Text
-                    // onClick={() => handleViewMore(appointment.id)}
-                    style={{
-                      color: "#A210C6",
-                      fontStyle: "italic",
-                      cursor: "pointer",
-                    }}
-                    _hover={{ color: "#A210C6" }}
-                  >
-                    Details
-                  </Text>
-                  {/* <Text
-                    ml={{ base: "30px" }}
-                    color={
-                      appointment.appointmentCompleted
-                        ? "green.500"
-                        : appointment.appointmentActive
-                        ? "blue.500"
-                        : appointment.appointmentMatched
-                        ? "yellow.500"
-                        : appointment.appointmentPending
-                        ? "yellow.500"
-                        : "black"
-                    }
-                    fontStyle="italic"
-                  >
-                    {appointment.appointmentCompleted
-                      ? "Completed"
-                      : appointment.appointmentActive
-                      ? "Active"
-                      : appointment.appointmentMatched
-                      ? "Paired"
-                      : appointment.appointmentPending
-                      ? "Pending"
-                      : "Unknown"}
-                  </Text> */}
-                </Flex>
+               
                 <Divider my={4} borderColor="gray.500" />
               </Box>
             ))}
