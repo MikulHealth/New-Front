@@ -137,6 +137,21 @@ const ClientDash = () => {
     });
   };
 
+  const formatAmount = (amount) => {
+    // Convert amount to a number just in case it's passed as a string
+    const num = Number(amount);
+    return num.toLocaleString();
+  
+    // if (num >= 1000000) {
+    //   return num.toLocaleString(); // Formats number with commas as thousands separators
+    // } else if (num >= 100000) {
+    //   return num.toLocaleString(); // Same formatting for hundreds of thousands
+    // } else {
+    //   // For any amount below 100,000, we need to round it to the nearest thousand if it's not already
+    //   return Math.round(num / 1000) * 1000;
+    // }
+  };
+
   // useEffect(() => {
   //   const fetchMatchedAppointments = async () => {
   //     try {
@@ -282,7 +297,7 @@ const ClientDash = () => {
                       textAlign="left"
                     >
                       {/* ₦{formatBalance(balance)} */}
-                      ₦ {balance}.00
+                      ₦ {formatAmount(balance)}.00
                     </Text>
                     <Text
                       ml="5px"

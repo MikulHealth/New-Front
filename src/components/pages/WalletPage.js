@@ -5,6 +5,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import { useSelector } from "react-redux";
 import { SearchIcon, CopyIcon, CheckIcon } from "@chakra-ui/icons";
+import AllTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
+import DebitTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
+import CreditTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
 import {
   ChakraProvider,
   VStack,
@@ -25,6 +28,12 @@ import {
   ModalHeader,
   extendTheme,
   ModalBody,
+  Tab,
+  Tabs,
+  TabList,
+  TabPanels,
+  TabPanel,
+
   // Divider,
   ModalCloseButton,
 } from "@chakra-ui/react";
@@ -342,8 +351,6 @@ const WalletPage = () => {
   const [showFundWalletModal, setShowFundWalletModal] = useState(false);
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
-  // const navigate = useNavigate();
-  // const toast = useToast();
   const accountNumber = "0124536789"
   const { hasCopied, onCopy } = useClipboard(accountNumber);
 
@@ -374,13 +381,12 @@ const WalletPage = () => {
   const handleOpenOnlinePaymentModal = () => {
     setShowOnlinePaymentModal(true);
   };
-
-  // const openCreditpage = () => {
-  //   navigate("/credit");
-  // };
-  // const openDebitpage = () => {
-  //   navigate("/debit");
-  // };
+  const formatAmount = (amount) => {
+   
+    const num = Number(amount);
+    return num.toLocaleString('en-US');
+  
+  };
 
   const handleCloseOnlinePaymentModal = () => {
     setShowOnlinePaymentModal(false);
@@ -451,7 +457,7 @@ const WalletPage = () => {
                 fontSize={{base: "18px", md: "22px"}}
                 textAlign="left"
               >
-                ₦ {balance}.00
+                ₦ {formatAmount(balance)}.00
               </Text>
               <Text ml="5px" mt={{base: "8px", md: "12px"}} fontSize="12px" color="white">balance</Text>
               </Flex>
@@ -513,7 +519,7 @@ const WalletPage = () => {
                   Total funded
                 </Text>
                 <Text textAlign="left" color="white" fontSize="12px">
-                  ₦ {walletTotalCredit}.00
+                  ₦ {formatAmount(walletTotalCredit)}.00
                 </Text>
               </Box>
               <Box color="white" marginLeft="10px">
@@ -521,67 +527,66 @@ const WalletPage = () => {
                   Total spent
                 </Text>
                 <Text textAlign="left" color="white" fontSize="12px">
-                  ₦ {walletTotalDebit}.00
+                  ₦ {formatAmount(walletTotalDebit)}.00
                 </Text>
               </Box>
             </Flex>
           </Flex>
         </Box>
-        {/* <Box>
-          <VStack>
-            <Text
-              fontSize="28px"
-              fontFamily="heading"
-              color="black"
-              marginLeft="-780px"
-              // marginTop="20px"
-            >
-              Recent activity
-            </Text>
-          </VStack>
+       
+        <Flex
+          w={{ base: "", md: "50vw" }}
+          ml={{ base: "-90px", md: "-250px" }}
+          justifyContent="space-between"
+          className="transaction-tabs"
+          
+        >
+          <VStack ml={{ base: "100px", md: "0" }}>
+            <Tabs colorScheme="purple.100" mt={{ base: "", md: "-15px" }}>
+              <TabList ml="10px">
+                <Tab
+                  fontSize={{ base: "12px", md: "16px" }}
+                  color="#A210C6"
+                  fontWeight="bold"
+                 
+                >
+                  All
+                </Tab>
 
-          <Flex marginLeft="-70px" marginTop="10px">
-            <Text
-              style={{
-                cursor: "pointer",
-                textDecoration: "underline",
-                textDecorationThickness: "5px",
-              }}
-              _hover={{ color: "#A210C6" }}
-              marginLeft="15px"
-            >
-              All
-            </Text>{" "}
-            <Text
-              style={{
-                cursor: "pointer",
-              }}
-              _hover={{ color: "#A210C6" }}
-              marginLeft="50px"
-              onClick={openCreditpage}
-            >
-              Credit
-            </Text>{" "}
-            <Text
-              style={{
-                cursor: "pointer",
-              }}
-              _hover={{ color: "#A210C6" }}
-              marginLeft="50px"
-              onClick={openDebitpage}
-            >
-              Debit
-            </Text>
-          </Flex>
-          <Divider
-            marginTop="-10%"
-            marginLeft="2%"
-            my={4}
-            borderColor="gray.500"
-            width="60%"
-          />
-        </Box> */}
-        {/* <Help/> */}
+                <Tab
+                  fontSize={{ base: "12px", md: "16px" }}
+                  color="green.500"
+                  fontWeight="bold"
+                  ml="50px"
+                >
+                  Credit
+                </Tab>
+
+                <Tab
+                  fontSize={{ base: "12px", md: "16px" }}
+                  color="red.500"
+                  fontWeight="bold"
+                  ml="50px"
+                >
+                  Debit
+                </Tab>
+              </TabList>
+              <TabPanels ml={{ base: "-20px", md: "0px" }} overflow={{base: "scroll"}}>
+                <TabPanel>
+                  <AllTransactionTabs />
+                </TabPanel>
+                <TabPanel>
+                  <CreditTransactionTabs />
+                </TabPanel>
+                <TabPanel>
+                  <DebitTransactionTabs />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+            <MobileFooter />
+          </VStack>
+          {/* <Help /> */}
+        </Flex>
         <MobileFooter />
       </VStack>
       <FundWalletModal
