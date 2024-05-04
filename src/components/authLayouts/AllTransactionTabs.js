@@ -18,7 +18,7 @@ export default function TransactionTab() {
 
         const response = await axios.get(
         //   "http://localhost:8080/v1/api/wallets/transactions",
-            "https://backend-c1pz.onrender.com/v1/wallets/transactions",
+            "https://backend-c1pz.onrender.com/v1/api/wallets/transactions",
           config
         );
 
