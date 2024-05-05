@@ -37,7 +37,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [isShiftDisabled, setIsShiftDisabled] = useState(false);
+
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const [selectedDob] = useState(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -45,7 +46,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
   const [formFields, setFormFields] = useState({
     startDate: null,
-    endDate: null,
+    // endDate: null,
     shift: "",
     servicePlan: "",
     currentLocation: "",
@@ -69,38 +70,34 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     setFormFields({ ...formFields, startDate: date });
   };
 
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
-    setFormFields({ ...formFields, endDate: date });
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+  
     if (name === "servicePlan") {
       // Find the selected plan object
-      const selectedPlan = customizedPlans.find((plan) => plan.name === value);
-
+      const selectedPlan = customizedPlans.find(plan => plan.name === value);
+  
       console.log("Selected Plan:", selectedPlan);
-      console.log(
-        "Cost of Service:",
-        selectedPlan ? selectedPlan.costOfService : "N/A"
-      );
-
+      console.log("Cost of Service:", selectedPlan ? selectedPlan.costOfService : "N/A");
+  
       if (selectedPlan) {
         setFormFields({
           ...formFields,
           [name]: value,
           shift: selectedPlan.shift,
-          costOfService: parseFloat(selectedPlan.costOfService),
+          costOfService: parseFloat(selectedPlan.costOfService.replace(/[,]/g, '')), // assuming costOfService is a string with commas
           medicSpecialization: selectedPlan.preferredCaregiver,
         });
+        setIsShiftDisabled(true); // Disable shift selection for customized plans
       } else {
-        setFormFields({ ...formFields, [name]: value });
+        setFormFields({ ...formFields, [name]: value, shift: '', costOfService: '' }); // Reset shift and cost when no plan is selected or switched to non-customized
+        setIsShiftDisabled(false); // Enable shift selection for non-customized plans
       }
     } else {
       setFormFields({ ...formFields, [name]: value });
     }
   };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,7 +158,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       const formDataWithDates = {
         ...formFields,
         startDate: formatDateWithDayAdjustment(selectedStartDate),
-        endDate: formatDateWithDayAdjustment(selectedEndDate),
+        // endDate: formatDateWithDayAdjustment(selectedEndDate),
         recipientDOB: formatDateWithDayAdjustment(selectedDob),
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
@@ -176,7 +173,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       if (response.data.success) {
         setLoading(false);
         setFormFields({
-          startDate: null,
+          // startDate: null,
           endDate: null,
           shift: "",
           servicePlan: "",
@@ -209,26 +206,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // const validateForm = () => {
-  //   if (
-  //     !formFields.startDate ||
-  //     !formFields.endDate ||
-  //     !formFields.shift ||
-  //     !formFields.servicePlan ||
-  //     !formFields.currentLocation ||
-  //     !formFields.medicSpecialization ||
-  //     !formFields.recipientHealthHistory
-  //   ) {
-  //     toast({
-  //       title: "Please fill all required fields",
-  //       status: "error",
-  //       duration: 3000,
-  //       isClosable: true,
-  //     });
-  //     return false;
-  //   }
-  //   return true;
-  // };
 
   const calculateServiceCost = () => {
     const { servicePlan, shift } = formFields;
@@ -300,7 +277,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           <DrawerBody>
             <FormControl>
               <Flex flexWrap="wrap" ml={{ md: "45px" }}>
-                <Box w={{ base: "300px", md: "270px" }}>
+                <Box w={{ base: "300px", md: "550px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
@@ -332,19 +309,19 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     /> */}
                   </Flex>
                 </Box>
-                <Box
+                {/* <Box
                   w={{ base: "300px", md: "270px" }}
                   ml={{ md: "5px" }}
                   marginTop="20px"
-                >
-                  <FormLabel fontWeight="bold">End Date</FormLabel>
+                > */}
+                  {/* <FormLabel fontWeight="bold">End Date</FormLabel>
                   <Flex
                     h="6vh"
                     paddingTop="5px"
                     paddingLeft="15px"
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
+                  > */}
+                    {/* <DatePicker
                       isRequired
                       selected={selectedEndDate}
                       onChange={handleEndDateChange}
@@ -357,7 +334,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       className="form-control"
                       minDate={new Date()}
                       style={{ border: "none" }}
-                    />
+                    /> */}
                     {/* <Image
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
@@ -366,8 +343,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       alt="CalenderIcon"
                     /> */}
                   </Flex>
-                </Box>
-              </Flex>
+                {/* </Box> */}
+              {/* </Flex> */}
               <Flex flexWrap="wrap" marginTop="20px">
                 <Box w={{ base: "300px", md: "270px" }} ml={{ md: "40px" }}>
                   <FormLabel fontWeight="bold">Service Plan </FormLabel>
@@ -413,6 +390,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     w={{ base: "300px", md: "270px" }}
                     value={formFields.shift}
                     onChange={handleInputChange}
+                    disabled={isShiftDisabled}
                   >
                     <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
                     <option value="Live-in (24hrs)">Live-in (24hrs)</option>

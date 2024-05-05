@@ -42,12 +42,13 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedDob, setSelectedDob] = useState(null);
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const [addToBeneficiaryList, setAddToBeneficiaryList] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
+  const [shiftDisabled, setShiftDisabled] = useState(false);
+
 
   const [formFields, setFormFields] = useState({
     recipientFirstname: "",
@@ -60,7 +61,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     servicePlan: "",
     costOfService: "",
     startDate: "",
-    endDate: "",
     relationship: "",
     medicalReport: "",
   });
@@ -69,39 +69,28 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
+  
     if (name === "servicePlan") {
-      // Find the selected plan object
-      const selectedPlan = customizedPlans.find((plan) => plan.name === value);
-
+      const selectedPlan = customizedPlans.find(plan => plan.name === value);
+  
       if (selectedPlan) {
         setFormFields({
           ...formFields,
           [name]: value,
           shift: selectedPlan.shift,
-          // Removing comma and decimal point and parsing as integer
-          costOfService: parseInt(
-            selectedPlan.costOfService.replace(/[,]/g, "")
-          ),
+          costOfService: parseInt(selectedPlan.costOfService.replace(/[,]/g, "")),
           medicSpecialization: selectedPlan.preferredCaregiver,
         });
+        setShiftDisabled(true);  // Disable shift selection because it's a customized plan
       } else {
-        setFormFields({ ...formFields, [name]: value });
+        setFormFields({ ...formFields, [name]: value, shift: '' });
+        setShiftDisabled(false);  // Enable shift selection for non-customized plans
       }
-    } else if (name === "DOB") {
-      setSelectedDob(value);
-      setFormFields({
-        ...formFields,
-        recipientDOB: value,
-      });
     } else {
-      setFormFields({
-        ...formFields,
-        [name]: value,
-      });
+      setFormFields({ ...formFields, [name]: value });
     }
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -141,11 +130,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     setFormFields({ ...formFields, recipientDOB: date });
   };
 
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
-    setFormFields({ ...formFields, endDate: date });
-  };
-
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
 
@@ -179,8 +163,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
       const formDataWithDates = {
         ...formFields,
         startDate: formatDateWithDayAdjustment(formFields.startDate),
-        endDate: formatDateWithDayAdjustment(formFields.endDate),
-        recipientDOB: formatDateWithDayAdjustment(formFields.recipientDOB),
+         recipientDOB: formatDateWithDayAdjustment(formFields.recipientDOB),
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
       };
@@ -202,7 +185,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           servicePlan: "",
           costOfService: "",
           startDate: "",
-          endDate: "",
           relationship: "",
           medicalReport: "",
         });
@@ -310,8 +292,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
       // const apiUrl = "http://localhost:8080/v1/appointment/addNewBeneficiary";
-      const apiUrl =
-        "https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary";
+      const apiUrl ="https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary";
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -501,7 +482,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                 </Box>
               </Flex>
               <Flex flexWrap="wrap" ml={{ md: "5px" }}>
-                <Box w={{ base: "300px", md: "270px" }}>
+                <Box w={{ base: "300px", md: "550px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
@@ -533,39 +514,9 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     /> */}
                   </Flex>
                 </Box>
-                <Box w={{ base: "300px", md: "270px" }} ml={{ md: "5px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
-                    End Date
-                  </FormLabel>
-                  <Flex
-                    h="6vh"
-                    padding="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
-                      selected={selectedEndDate}
-                      onChange={handleEndDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to end"
-                      className="form-control"
-                      minDate={new Date()}
-                      style={{ border: "none" }}
-                    />
-                    {/* <Image
-                      marginLeft="30px"
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
+              
                   </Flex>
-                </Box>
-              </Flex>
+                
               <Flex flexWrap="wrap">
                 <Box ml={{ md: "5px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
@@ -626,6 +577,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     w={{ base: "300px", md: "270px" }}
                     value={formFields.shift}
                     onChange={handleInputChange}
+                    disabled={shiftDisabled}
                   >
                     <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
                     <option value="Live-in (24hrs)">Live-in (24hrs)</option>

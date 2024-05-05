@@ -41,7 +41,7 @@ const BookBeneficiaryAppointmentModal = ({
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [isShiftDisabled, setIsShiftDisabled] = useState(false);
   const [customizedPlans, setCustomizedPlans] = useState([]);
   // const navigate = useNavigate();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -59,7 +59,7 @@ const BookBeneficiaryAppointmentModal = ({
     medicalReport: null,
     medicSpecialization: "",
     startDate: null,
-    endDate: null,
+    // endDate: null,
     relationship: selectedBeneficiary.relationship,
     costOfService: "",
   });
@@ -79,59 +79,60 @@ const BookBeneficiaryAppointmentModal = ({
 
     return adjustedDate.toISOString().split("T")[0];
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
     if (name === "servicePlan") {
       // Find the selected plan object
-      const selectedPlan = customizedPlans.find((plan) => plan.name === value);
-
+      const selectedPlan = customizedPlans.find(plan => plan.name === value);
+      
       console.log("Selected Plan:", selectedPlan);
-      console.log(
-        "Cost of Service:",
-        selectedPlan ? selectedPlan.costOfService : "N/A"
-      );
-
-      // Set the shift and costOfService based on the selected plan
+      console.log("Cost of Service:", selectedPlan ? selectedPlan.costOfService : "N/A");
+      
       if (selectedPlan) {
-        setFormPages({
-          ...formPages,
+        // Customized plan has been selected
+        setFormPages(prev => ({
+          ...prev,
           [name]: value,
           shift: selectedPlan.shift,
           costOfService: parseFloat(selectedPlan.costOfService),
           medicSpecialization: selectedPlan.preferredCaregiver,
-        });
+        }));
+        setIsShiftDisabled(true);  // Disable shift selection
       } else {
-        setFormPages({ ...formPages, [name]: value });
+        // No customized plan selected or switching to a non-customized plan
+        setFormPages(prev => ({
+          ...prev,
+          [name]: value,
+          shift: '',  // Clear shift as no plan may define default value
+          costOfService: 0,  // Reset or set default cost
+        }));
+        setIsShiftDisabled(false);  // Enable shift selection
       }
     } else {
-      setFormPages({ ...formPages, [name]: value });
+      setFormPages(prev => ({
+        ...prev,
+        [name]: value
+      }));
     }
   };
+  
 
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
     setFormPages({ ...formPages, startDate: date });
   };
 
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
-    setFormPages({ ...formPages, endDate: date });
-  };
 
   const handleFormSubmit = async () => {
     setLoading(true);
 
-    if (!validateStartDates()) {
-      setLoading(false);
-      return;
-    }
 
     const fieldNameMappings = {
       shift: "Shift",
       servicePlan: "Service Plan",
       startDate: "Start Date",
-      endDate: "End Date",
+      // endDate: "End Date",
       currentLocation: "Current Location",
     };
 
@@ -139,7 +140,7 @@ const BookBeneficiaryAppointmentModal = ({
       "shift",
       "servicePlan",
       "startDate",
-      "endDate",
+      // "endDate",
       "currentLocation",
     ];
 
@@ -172,7 +173,7 @@ const BookBeneficiaryAppointmentModal = ({
       const formDataWithDates = {
         ...formPages,
         startDate: formatDateWithDayAdjustment(formPages.startDate),
-        endDate: formatDateWithDayAdjustment(formPages.endDate),
+        // endDate: formatDateWithDayAdjustment(formPages.endDate),
         customerPhoneNumber: user.phoneNumber,
       };
 
@@ -189,7 +190,7 @@ const BookBeneficiaryAppointmentModal = ({
           medicalReport: null,
           medicSpecialization: "",
           startDate: null,
-          endDate: null,
+          // endDate: null,
           costOfService: "",
         });
         toast.success("Appointment saved");
@@ -214,13 +215,7 @@ const BookBeneficiaryAppointmentModal = ({
     }
   };
 
-  const validateStartDates = () => {
-    if (!formPages.startDate || !formPages.endDate) {
-      toast.error("Dates required");
-      return false;
-    }
-    return true;
-  };
+ 
   // const validateNigerianPhoneNumber = (phoneNumber) => {
   //   // Regular expression to match Nigerian phone numbers
   //   const nigerianPhoneNumberRegex = /^(?:\+234|234)([789]\d{9})$/;
@@ -278,7 +273,7 @@ const BookBeneficiaryAppointmentModal = ({
         medicalReport: null,
         medicSpecialization: "",
         startDate: null,
-        endDate: null,
+        // endDate: null,
 
         relationship: selectedBeneficiary.relationship || "",
       });
@@ -325,8 +320,6 @@ const BookBeneficiaryAppointmentModal = ({
   }, [
     formPages,
     customizedPlans,
-    // formPages.servicePlan, // specific property instead of the whole formPages object
-    // formPages.shift       // specific property instead of the whole formPages object
   ]);
   
   useEffect(() => {
@@ -411,6 +404,7 @@ const BookBeneficiaryAppointmentModal = ({
                     w={{ base: "300px", md: "270px" }}
                     value={formPages.shift}
                     onChange={handleInputChange}
+                    disabled={isShiftDisabled}
                   >
                     <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
 
@@ -419,7 +413,7 @@ const BookBeneficiaryAppointmentModal = ({
                 </Box>
               </Flex>
               <Flex flexWrap="wrap" ml={{ md: "40px" }}>
-                <Box w={{ base: "300px", md: "270px" }}>
+                <Box  w={{ base: "300px", md: "550px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
@@ -450,39 +444,9 @@ const BookBeneficiaryAppointmentModal = ({
                     /> */}
                   </Flex>
                 </Box>
-                <Box w={{ base: "297px", md: "270px" }} marginLeft="5px">
-                  <FormLabel fontWeight="bold" marginTop="20px">
-                    End Date
-                  </FormLabel>
-                  <Flex
-                    h="6vh"
-                    padding="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
-                      selected={selectedEndDate}
-                      onChange={handleEndDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to end"
-                      className="form-control"
-                      minDate={new Date()}
-                      style={{ border: "none" }}
-                    />
-                    {/* <Image
-                      ml={{base: "50px", md: "30px"}}
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
                   </Flex>
-                </Box>
-              </Flex>
+                {/* </Box> */}
+              {/* </Flex> */}
 
               <Box ml={{ md: "40px" }}>
                 <FormLabel fontWeight="bold" marginTop="20px">
