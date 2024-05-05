@@ -18,13 +18,17 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useToast,
+  // useToast,
   Image,
   Box,
   Text,
   Flex,
   extendTheme,
 } from "@chakra-ui/react";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 import LoadingSpinner from "../../utils/Spiner";
 // import HelppIcon from "../../assets/HelppIcon.svg";
@@ -51,7 +55,7 @@ const customTheme = extendTheme({
 
 const CustomizeServicePage = () => {
   const navigate = useNavigate();
-  const toast = useToast();
+  // const toast = useToast();
   const [customizedServices, setCustomizedServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
@@ -97,19 +101,10 @@ const CustomizeServicePage = () => {
       const response = await axios.post(apiUrl, {}, { headers });
 
       if (response.data.success) {
-        toast({
-          title: response.data.message,
-          status: "success",
-          duration: 6000,
-        });
+        toast.success("Plan removed");
         fetchData();
       } else {
-        toast({
-          title: "Error canceling appointment",
-          description: response.data.message,
-          status: "error",
-          duration: 6000,
-        });
+        toast.error("Erroe removing plan");
         console.error("Error canceling appointment");
       }
     } catch (error) {
@@ -177,7 +172,7 @@ const CustomizeServicePage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [toast]);
+  }, []);
 
   const handleOpenCustomizePlanFormModal = () => {
     setShowCustomizeModal(true);
@@ -197,6 +192,17 @@ const CustomizeServicePage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
+       <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}

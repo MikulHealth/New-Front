@@ -11,7 +11,7 @@ import {
   VStack,
   Input,
   Button,
-  useToast,
+  // useToast,
   Checkbox,
   FormControl,
   FormLabel,
@@ -26,6 +26,10 @@ import {
   DrawerCloseButton,
   extendTheme,
 } from "@chakra-ui/react";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const customTheme = extendTheme({
   components: {
@@ -52,7 +56,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [costOfService, setCostOfService] = useState(0);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const toast = useToast();
+  // const toast = useToast();
   const [setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -204,36 +208,21 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         // Handle the response data here
         console.log("Response data:", response.data);
         if (response.data.success) {
-          // Display success toast
-          toast({
-            title: "Customized Plan Saved",
-            status: "success",
-            duration: 6000,
-          });
+          toast.success("Customized Plan Saved");
           handleConfirmationModalClose();
           onClose();
           setTimeout(() => {
             navigate("/services");
-          }, 2000);
+          }, 5000);
         } else {
           // Display error toast
-          toast({
-            title: "Error",
-            description: response.data.message,
-            status: "error",
-            duration: 6000,
-          });
+          toast.error("Customized plan failed to save");
         }
       })
       .catch((error) => {
         console.error("Error:", error);
         // Display error toast
-        toast({
-          title: "Error",
-          description: "An error occurred while processing your request.",
-          status: "error",
-          duration: 6000,
-        });
+        toast.error("Customized Plan Saved");
         // Optionally, handle errors and display error messages to the user
       });
   };
@@ -241,6 +230,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   return (
     <>
       <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size="lg">
+      
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
@@ -345,6 +335,17 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         placement="right"
         size="lg"
       >
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />

@@ -12,17 +12,19 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  useToast,
+  // useToast,
   Image,
   ChakraProvider,
   extendTheme,
 } from "@chakra-ui/react";
-import { UnlockIcon } from "@chakra-ui/icons";
 // import NavigationBar from "../unAuthLayouts/NavigationBar";
 // import Google from "../../assets/GoogleIcon.svg";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../../styles/pages/LandingPage.css";
+
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const customTheme = extendTheme({
   components: {
@@ -39,14 +41,13 @@ const customTheme = extendTheme({
 });
 
 const LandingPage = () => {
-  const toast = useToast();
+  // const toast = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [phoneInput, setPhoneInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
   const handlePhoneInputChange = (e) => setPhoneInput(e.target.value);
   const handlePasswordInputChange = (e) => setPasswordInput(e.target.value);
   const handleClick = () => setShow(!show);
@@ -65,32 +66,18 @@ const LandingPage = () => {
           password: passwordInput,
         }),
       });
-
+    
       if (response.ok) {
+        toast.success("Login successfull");
         const responseData = await response.json();
         localStorage.setItem("token", responseData.access_token);
-        toast({
-          title: "Login successful",
-          description: responseData.message,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom-right",
-          icon: <UnlockIcon />,
-        });
         setTimeout(() => {
           navigate("/dashboard");
         }, 3000);
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData.message);
-        toast({
-          title: "Login failed",
-          description: errorData.message,
-          status: "failed",
-          duration: 5000,
-          isClosable: true,
-        });
+        toast.error(errorData.message);
       }
     } catch (error) {
       console.error("Login failed:", error.message);
@@ -113,7 +100,9 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <Box overflow="hidden" height="100vh">
+           <Box overflow="hidden" height="100vh">
+           <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+   
         <Box
           display={{ base: "block", md: "flex" }}
           paddingX={{ base: "1rem", md: "2rem" }}

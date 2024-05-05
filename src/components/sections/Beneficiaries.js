@@ -14,17 +14,20 @@ import {
   Flex,
   Progress,
   Spinner,
-  useToast,
+  // useToast,
   Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
 import AddBeneficiaryForm from "./AddBeneficiaryFom";
 import BookBeneficiaryAppointmentModal from "./BeneficiaryAppForm";
 import { AddIcon } from "@chakra-ui/icons";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const BeneficiariesModal = ({ isOpen, onClose }) => {
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const toast = useToast();
+  // const toast = useToast();
   const [isAddBeneficiaryFormOpen, setAddBeneficiaryFormOpen] = useState(false);
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [selectedBeneficiaryId, setSelectedBeneficiaryId] = useState(null);
@@ -84,8 +87,8 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
     if (isOpen) {
       fetchBeneficiaries();
     }
-  }, [isOpen, toast]);
-  
+  }, [isOpen]);
+
   const formatDateTime = (dateTimeString) => {
     const options = {
       year: "numeric",
@@ -124,32 +127,18 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
       );
 
       if (response.data.success) {
-        toast({
-          title: response.data.message,
-          status: "success",
-          duration: 6000,
-        });
+        toast.success("Beneficiary removed");
         // Update the list of beneficiaries after removal
         const updatedBeneficiaries = beneficiaries.filter(
           (beneficiary) => beneficiary.id !== selectedBeneficiaryId
         );
         setBeneficiaries(updatedBeneficiaries);
       } else {
-        toast({
-          title: "Request failed",
-          description: response.message,
-          status: "error",
-          duration: 6000,
-        });
+        toast.success("Request failed");
         console.error("Failed to remove beneficiary");
       }
     } catch (error) {
-      toast({
-        title: "Request failed",
-        description: "Error removing beneficiary:",
-        status: "error",
-        duration: 6000,
-      });
+      toast.success("Request failed");
       console.error("Error removing beneficiary:", error);
     } finally {
       setConfirmationModalOpen(false);
@@ -165,6 +154,17 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         placement="right"
         size={{ base: "md", md: "lg" }}
       >
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader fontSize="lg" fontWeight="bold" color="#A210C6">

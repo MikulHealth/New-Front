@@ -19,13 +19,16 @@ import {
   InputRightElement,
   // Image,
   Box,
-  useToast,
+  // useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
 // import CalenderIcon from "../../assets/CalenderIcon.svg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
   const [selectedDob, setSelectedDob] = useState(null);
@@ -44,8 +47,6 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
     language: "",
     relationship: "",
   });
-
-  const toast = useToast();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -97,37 +98,35 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
 
       if (response.data.success) {
         setLoading(false);
-        toast({
-          title: response.data.message,
-          status: "success",
-          duration: 6000,
-        });
-        onClose();
-        setTimeout(() => {}, 3000);
+        toast.success("Beneficiary added");
+        // setFormData({ ...formData})
+        setTimeout(() => { onClose();}, 5000);
+       
       } else {
         setLoading(false);
-        toast({
-          title: response.data.message,
-          description: response.message,
-          status: "error",
-          duration: 6000,
-        });
+        toast.error(response.data.message);
         console.error("Failed to add beneficiary");
       }
     } catch (error) {
       setLoading(false);
-      toast({
-        title: "Error adding a new beneficiary",
-        description: "Beneficiary may exist already",
-        status: "error",
-        duration: 6000,
-      });
+      toast.error("Error adding beneficiary");
       console.error("Error adding beneficiary:", error);
     }
   };
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+       <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <DrawerOverlay />
       <DrawerContent maxH="70vh" overflowY="auto">
         <DrawerHeader color="#A210C6">Add to Beneficiary list</DrawerHeader>

@@ -4,7 +4,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import {
   Box,
-  useToast,
+  // useToast,
   // extendTheme,
   Text,
   // Link as ChakraLink,
@@ -19,6 +19,9 @@ import {
 import { PaystackButton } from "react-paystack";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Whitelogo.svg";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // const customTheme = extendTheme({
 //   components: {
@@ -39,7 +42,7 @@ import logo from "../../assets/Whitelogo.svg";
 const PaymentConfirmationPage = () => {
   const navigate = useNavigate();
   const [loading] = useState(false);
-  const toast = useToast();
+  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
@@ -80,18 +83,14 @@ const PaymentConfirmationPage = () => {
   };
 
   const handlePaymentFailure = (error) => {
-    toast({
-      title: "Payment Failed",
-      description: "There was an issue processing your payment.",
-      status: "error",
-      duration: 6000,
-    });
+    toast.error("Payment failed, please try again later");
   };
 
   const verifyPayment = async () => {
+    toast.success("Please wait, while we verify your payment");
     try {
       const token = localStorage.getItem("token");
-      console.log("ID is "+ appointmentId);
+      console.log("ID is " + appointmentId);
       // const apiUrl = `http://localhost:8080/v1/payment/verify/${appointmentId}`;
       const apiUrl = `https://backend-c1pz.onrender.com/v1/payment/verify/${appointmentId}`;
 
@@ -104,13 +103,6 @@ const PaymentConfirmationPage = () => {
       console.log(response.data);
 
       if (response.data.status === true) {
-        toast({
-          title: "Payment verified",
-          description: "We will match you with a suitable caregiver soon.",
-          status: "success",
-          duration: 8000,
-        });
-
         setPaymentData({
           email: "",
           amount: " ",
@@ -119,21 +111,17 @@ const PaymentConfirmationPage = () => {
           phone: " ",
           publicKey: " ",
         });
-
-        setTimeout(() => {}, 3000);
-        navigate("/dashboard");
-        window.location.reload();
+        toast.success("Payment verified");
+        setTimeout(() => {
+          navigate("/dashboard")
+        }, 5000);
+        // window.location.reload();
       } else {
-        toast({
-          title: "Verification failed",
-          description: response.data.message,
-          status: "error",
-          duration: 6000,
-        });
+        toast.error("Payment verification failed, please cancel and try again");
         console.error("Payment verification failed");
       }
     } catch (error) {
-      // Handle error
+      toast.error("Payment verification failed, please cancel and try again");
       console.error("An error occurred during payment verification:", error);
     }
   };
@@ -144,7 +132,7 @@ const PaymentConfirmationPage = () => {
 
   const handleCancel = () => {
     navigate("/dashboard");
-    window.location.reload();
+    // window.location.reload();
   };
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -152,13 +140,19 @@ const PaymentConfirmationPage = () => {
 
   return (
     <Box height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Box mb={4}>
-        <Image
-           src={logo}
-          alt="Logo"
-          w="100px"
-          h="30px"
-        />
+        <Image src={logo} alt="Logo" w="100px" h="30px" />
       </Box>
       <Box color="white" mx="auto" w={paymentFormWidth}>
         <Text fontSize="24px" fontWeight="bold" mb={4}>

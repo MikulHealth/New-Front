@@ -11,7 +11,7 @@ import {
   Button,
   FormControl,
   FormLabel,
-  useToast,
+  // useToast,
   Box,
   // Image,
   Textarea,
@@ -20,13 +20,16 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
+
 const EditPendingAppointment = ({
   isOpen,
   onClose,
   appointmentDetails,
   onSubmit,
 }) => {
-  const toast = useToast();
+  // const toast = useToast();
   const [formData, setFormData] = useState(appointmentDetails);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -101,23 +104,14 @@ const EditPendingAppointment = ({
       );
 
       if (response.data.success) {
-        toast({
-          title: "Appointment Updated",
-          status: "success",
-          duration: 6000,
-        });
-        onClose();
+        toast.success("Appointment updated");
+        setTimeout(() => { onClose();}, 4000);
       } else {
         console.error("Error updating appointment details");
         const errorMessage = response.data
           ? response.data.message
           : "Unknown error";
-        toast({
-          title: "Update failed",
-          description: errorMessage,
-          status: "error",
-          duration: 6000,
-        });
+          toast.error(errorMessage);
       }
     } catch (error) {
       console.error("Error updating appointment details:", error);
@@ -135,6 +129,17 @@ const EditPendingAppointment = ({
   return (
     <>
       <Drawer isOpen={isOpen} onClose={onClose} size="md">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader color="#A210C6">Edit appointment</DrawerHeader>

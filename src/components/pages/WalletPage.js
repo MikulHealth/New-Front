@@ -5,15 +5,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import { useSelector } from "react-redux";
 import { SearchIcon, CopyIcon, CheckIcon } from "@chakra-ui/icons";
-import AllTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
-import DebitTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
-import CreditTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
+import AllTransactionTabs from "../../components/authLayouts/AllTransactionTabs";
+import DebitTransactionTabs from "../../components/authLayouts/AllTransactionTabs";
+import CreditTransactionTabs from "../../components/authLayouts/AllTransactionTabs";
 import {
   ChakraProvider,
   VStack,
   Input,
   Button,
-  useToast,
+  // useToast,
   useClipboard,
   Image,
   IconButton,
@@ -42,6 +42,8 @@ import Online from "../../assets/WhiteOnlineIcon.svg";
 import RightArrow from "../../assets/WhiteArrow.svg";
 import NavBar from "../authLayouts/NavBar";
 import MobileFooter from "../authLayouts/MobileFooter";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const customTheme = extendTheme({
   components: {
@@ -147,7 +149,7 @@ const FundWalletModal = ({
                 <Text>Fund your Mikul wallet with a debit card</Text>
               </Box>
               <Image
-                ml={{ base: "auto", md: "70px" }} 
+                ml={{ base: "auto", md: "70px" }}
                 mt="25px"
                 w="30px"
                 h="30px"
@@ -250,69 +252,67 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
   const customerId = user?.userId;
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
+  // const toast = useToast();
   const method = "CARD";
   const navigate = useNavigate();
 
-  
   const handleAmountSubmission = async () => {
     setLoading(true);
-  
+
     try {
       const token = localStorage.getItem("token");
-     
+
       // const apiUrl = `http://localhost:8080/v1/api/wallets/deposit?customerId=${encodeURIComponent(customerId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/deposit?customerId=${encodeURIComponent(customerId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
-      
+      const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/deposit?customerId=${encodeURIComponent(
+        customerId
+      )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
+        method
+      )}`;
+
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-  
-     
+
       const response = await axios.post(apiUrl, {}, { headers });
-  
+
       if (response.data.success) {
         setLoading(false);
-  
-        toast({
-          title: "Wallet Funded",
-          status: "success",
-          duration: 6000,
-        });
-        setAmount("")
+        toast.success("Wallet funded successfull");
+        setAmount("");
         setTimeout(() => {
-          navigate("/dashboard"); 
-        }, 3000);
-
+          navigate("/dashboard");
+        }, 5000);
       } else {
         setLoading(false);
-  
+
         console.error("Error Funding Wallet");
         const errorMessage = response.data
           ? response.data.message
           : "Unknown error";
-        toast({
-          title: "Funding failed",
-          description: errorMessage,
-          status: "error",
-          duration: 6000,
-        });
+        toast.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast({
-        title: "Error Funding Wallet",
-        description: error.response?.data?.message || "Unknown error",
-        status: "error",
-        duration: 6000,
-      });
+      toast.error("Error funding wallet");
     }
   };
-  
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Online Payment</ModalHeader>
@@ -351,7 +351,7 @@ const WalletPage = () => {
   const [showFundWalletModal, setShowFundWalletModal] = useState(false);
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
-  const accountNumber = "0124536789"
+  const accountNumber = "0124536789";
   const { hasCopied, onCopy } = useClipboard(accountNumber);
 
   const { user } = useSelector((state) => state.userReducer);
@@ -382,10 +382,8 @@ const WalletPage = () => {
     setShowOnlinePaymentModal(true);
   };
   const formatAmount = (amount) => {
-   
     const num = Number(amount);
-    return num.toLocaleString('en-US');
-  
+    return num.toLocaleString("en-US");
   };
 
   const handleCloseOnlinePaymentModal = () => {
@@ -431,7 +429,7 @@ const WalletPage = () => {
         </Flex>
         <Box
           textAlign="center"
-          ml={{base: "15px", md: "0"}}
+          ml={{ base: "15px", md: "0" }}
           w={{ base: "375px", md: "100%" }}
           h={{ base: "180px", md: "30%" }}
           mt={{ base: "4px", md: "0" }}
@@ -451,17 +449,23 @@ const WalletPage = () => {
                 Mikul Health Savings Account
               </Text>
               <Flex>
-              <Text
-                marginTop="2px"
-                color="white"
-                fontSize={{base: "18px", md: "22px"}}
-                textAlign="left"
-              >
-                ₦ {formatAmount(balance)}.00
-              </Text>
-              <Text ml="5px" mt={{base: "8px", md: "12px"}} fontSize="12px" color="white">balance</Text>
+                <Text
+                  marginTop="2px"
+                  color="white"
+                  fontSize={{ base: "18px", md: "22px" }}
+                  textAlign="left"
+                >
+                  ₦ {formatAmount(balance)}.00
+                </Text>
+                <Text
+                  ml="5px"
+                  mt={{ base: "8px", md: "12px" }}
+                  fontSize="12px"
+                  color="white"
+                >
+                  balance
+                </Text>
               </Flex>
-              
             </Box>
             <VStack>
               <Button
@@ -494,24 +498,27 @@ const WalletPage = () => {
                 Wallet ID:
               </Text>
               <Flex>
-              <Text textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
-              Wema Bank
-            </Text>
-              <Text ml="10px" textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
-              {accountNumber}
-            </Text>
-            <IconButton
-              icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-              onClick={onCopy}
-              mt="-2px"
-              size="sm"
-              aria-label="Copy account number"
-              color="white"
-              bg={hasCopied ? "#A210C6" : "#A210C6"}
-              _hover={{ bg: "transparent" }}
-            />
+                <Text textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
+                  Wema Bank
+                </Text>
+                <Text
+                  ml="10px"
+                  textAlign="left"
+                  fontSize={{ base: "12px", md: "16px" }}
+                >
+                  {accountNumber}
+                </Text>
+                <IconButton
+                  icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                  onClick={onCopy}
+                  mt="-2px"
+                  size="sm"
+                  aria-label="Copy account number"
+                  color="white"
+                  bg={hasCopied ? "#A210C6" : "#A210C6"}
+                  _hover={{ bg: "transparent" }}
+                />
               </Flex>
-              
             </Box>
             <Flex marginLeft={{ base: "15px", md: "500px" }}>
               <Box color="white">
@@ -533,13 +540,12 @@ const WalletPage = () => {
             </Flex>
           </Flex>
         </Box>
-       
+
         <Flex
           w={{ base: "100%", md: "50vw" }}
           ml={{ base: "-140", md: "-250px" }}
           justifyContent="space-between"
           className="transaction-tabs"
-          
         >
           <VStack ml={{ base: "100px", md: "0" }}>
             <Tabs colorScheme="purple.100" mt={{ base: "", md: "-15px" }}>
@@ -548,7 +554,6 @@ const WalletPage = () => {
                   fontSize={{ base: "12px", md: "16px" }}
                   color="#A210C6"
                   fontWeight="bold"
-                 
                 >
                   All
                 </Tab>
@@ -571,7 +576,10 @@ const WalletPage = () => {
                   Debit
                 </Tab>
               </TabList>
-              <TabPanels ml={{ base: "-20px", md: "0px" }} overflow={{base: "scroll"}}>
+              <TabPanels
+                ml={{ base: "-20px", md: "0px" }}
+                overflow={{ base: "scroll" }}
+              >
                 <TabPanel>
                   <AllTransactionTabs />
                 </TabPanel>

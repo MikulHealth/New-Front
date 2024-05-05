@@ -26,14 +26,19 @@ import {
   Flex,
   Box,
   Select,
-  useToast,
+  // useToast,
   Switch,
   Text,
   Textarea,
 } from "@chakra-ui/react";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
+
 const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
-  const toast = useToast();
+  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -186,15 +191,25 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
 
       if (response.data.success) {
         setLoading(false);
-
-        toast({
-          title: "Appointment Saved",
-          status: "success",
-          duration: 6000,
+        setFormFields({
+          recipientFirstname: "",
+          recipientLastname: "",
+          recipientPhoneNumber: "",
+          recipientGender: "",
+          recipientDOB: "",
+          currentLocation: "",
+          shift: "",
+          servicePlan: "",
+          costOfService: "",
+          startDate: "",
+          endDate: "",
+          relationship: "",
+          medicalReport: "",
         });
+        toast.success("Appointment saved");
         setPaymentData({
           costOfService: response.data.data.costOfService,
-          id: response.data.data.id,
+          appointmentId: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
         setTimeout(() => {
@@ -207,22 +222,12 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         const errorMessage = response.data
           ? response.data.message
           : "Unknown error";
-        toast({
-          title: "Booking failed",
-          description: errorMessage,
-          status: "error",
-          duration: 6000,
-        });
+          toast.error(errorMessage.message);
       }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast({
-        title: "Error booking appointment",
-        description: error.response?.data?.message || "Unknown error",
-        status: "error",
-        duration: 6000,
-      });
+      toast.error("Error booking appointment");
     }
   };
 
@@ -328,39 +333,36 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
 
       if (response.data.success) {
         setLoading(false);
-        toast({
-          title: "Beneficiary Added",
-          status: "success",
-          duration: 6000,
-        });
+        toast.success("Beneficiary added");
       } else {
         setLoading(false);
         console.error("Error adding beneficiary");
         const errorMessage = response.data
           ? response.data.message
           : "Unknown error";
-        toast({
-          title: "Adding beneficiary failed",
-          description: errorMessage,
-          status: "error",
-          duration: 6000,
-        });
+          toast.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast({
-        title: "Error adding beneficiary",
-        description: error.response?.data?.message || "Unknown error",
-        status: "error",
-        duration: 6000,
-      });
+      toast.error("Error adding beneficiary");
     }
   };
 
   return (
     <>
       <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />

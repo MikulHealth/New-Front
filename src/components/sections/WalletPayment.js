@@ -4,7 +4,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import {
   Box,
-  useToast,
+  // useToast,
   // extendTheme,
   Text,
   // Link as ChakraLink,
@@ -16,6 +16,10 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Whitelogo.svg";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 // const customTheme = extendTheme({
 //   components: {
@@ -36,7 +40,7 @@ import logo from "../../assets/Whitelogo.svg";
 const WalletPaymentPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
+  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
@@ -88,11 +92,7 @@ const handleWalletPayment = async () => {
       if (response.data.success) {
         setLoading(false);
   
-        toast({
-          title: "Payment Successful",
-          status: "success",
-          duration: 6000,
-        });
+        toast.success("Payment successful");
        
         setTimeout(() => {
           navigate("/dashboard"); 
@@ -105,28 +105,18 @@ const handleWalletPayment = async () => {
         const errorMessage = response.data
           ? response.data.message
           : "Unknown error";
-        toast({
-          title: "Payment failed",
-          description: errorMessage,
-          status: "error",
-          duration: 6000,
-        });
+          toast.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast({
-        title: "Error Making payment",
-        description: error.response?.data?.message || "Unknown error",
-        status: "error",
-        duration: 6000,
-      });
+      toast.error("Error making payment");
     }
   };
 
   const handleCancel = () => {
     navigate("/dashboard");
-    window.location.reload();
+    // window.location.reload();
   };
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -134,6 +124,17 @@ const handleWalletPayment = async () => {
 
   return (
     <Box height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Box mb={4}>
         <Image
            src={logo}

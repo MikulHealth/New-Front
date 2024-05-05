@@ -12,7 +12,7 @@ import {
   DrawerBody,
   DrawerFooter,
   DrawerCloseButton,
-  useToast,
+  // useToast,
   Button,
   Input,
   Select,
@@ -26,13 +26,18 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 // import { useNavigate } from "react-router-dom";
 const BookBeneficiaryAppointmentModal = ({
   isOpen,
   onClose,
   selectedBeneficiary,
 }) => {
-  const toast = useToast();
+  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -177,55 +182,41 @@ const BookBeneficiaryAppointmentModal = ({
 
       if (response.data.success) {
         setLoading(false);
-
-        toast({
-          title: "Appointment Saved",
-          status: "success",
-          duration: 6000,
+        setFormPages({
+          currentLocation: "",
+          shift: "",
+          servicePlan: "",
+          medicalReport: null,
+          medicSpecialization: "",
+          startDate: null,
+          endDate: null,
+          costOfService: "",
         });
+        toast.success("Appointment saved");
+        
         setPaymentData({
           costOfService: response.data.data.costOfService,
-          id: response.data.data.id,
+          appointmentId: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
         setTimeout(() => {
           setIsPaymentModalOpen(true);
-        }, 1000);
+        }, 4000);
       } else {
         setLoading(false);
-
         console.error("Error booking appointment");
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown error";
-        toast({
-          title: "Booking failed",
-          description: errorMessage,
-          status: "error",
-          duration: 6000,
-        });
+        toast.error(response.data.message);
       }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast({
-        title: "Error booking appointment",
-        description: error.response?.data?.message || "Unknown error",
-        status: "error",
-        duration: 6000,
-      });
+      toast.error("Error booking appointment");
     }
   };
 
   const validateStartDates = () => {
     if (!formPages.startDate || !formPages.endDate) {
-      toast({
-        title: "Appointment Dates Required",
-        description: "Please select both start and end dates.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      toast.error("Dates required");
       return false;
     }
     return true;
@@ -346,6 +337,17 @@ const BookBeneficiaryAppointmentModal = ({
   return (
     <>
      <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+     <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <DrawerOverlay />
       <DrawerContent>
         <DrawerHeader color="#510863">

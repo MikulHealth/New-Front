@@ -23,12 +23,17 @@ import {
   Flex,
   Box,
   Select,
-  useToast,
+  // useToast,
   InputGroup,
   Textarea,
 } from "@chakra-ui/react";
+
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const SelfAppointmentModal = ({ isOpen, onClose }) => {
-  const toast = useToast();
+  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -170,45 +175,37 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
       if (response.data.success) {
         setLoading(false);
-
-        toast({
-          title: "Appointment Saved",
-          status: "success",
-          duration: 6000,
+        setFormFields({
+          startDate: null,
+          endDate: null,
+          shift: "",
+          servicePlan: "",
+          currentLocation: "",
+          medicalReport: "",
+          recipientHealthHistory: "",
+          costOfService: "",
         });
+        toast.success("Appointment saved");
         console.log("Appointmend IDI "+ response.data.data.id)
         setPaymentData({
           costOfService: response.data.data.costOfService,
-          id: response.data.data.id,
+          appointmentId: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
        
         setTimeout(() => {
           setIsPaymentModalOpen(true);
-        }, 1000);
+        }, 4000);
         // onClose()
       } else {
         setLoading(false);
-        console.error("Error booking appointment");
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown error";
-        toast({
-          title: "Booking failed",
-          description: errorMessage,
-          status: "error",
-          duration: 6000,
-        });
+        console.error(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast({
-        title: "Error booking appointment",
-        description: error.response?.data?.message || "Unknown error",
-        status: "error",
-        duration: 6000,
-      });
+      toast.error("Error bokking appointment");
     }
   };
 
@@ -285,6 +282,17 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         size={{ base: "md", md: "lg" }}
         placement="right"
       >
+         <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />

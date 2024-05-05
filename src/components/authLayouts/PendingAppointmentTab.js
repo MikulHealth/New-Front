@@ -24,7 +24,7 @@ import {
   ModalFooter,
   useMediaQuery,
   Button,
-  useToast,
+  // useToast,
   Box,
   Text,
   Flex,
@@ -33,13 +33,16 @@ import {
 } from "@chakra-ui/react";
 import PaymentModal from "../sections/PaymentMethod";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 export default function PendingApp() {
   // const navigate = useNavigate();
   
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); 
   const [paymentData, setPaymentData] = useState({}); 
-  const toast = useToast();
+  // const toast = useToast();
   // const { user } = useSelector((state) => state.userReducer);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -124,7 +127,7 @@ export default function PendingApp() {
 
   useEffect(() => {
     fetchData();
-  }, [toast]);
+  }, []);
 
   const formattedCost = (cost) => {
     // Divide costOfService by 100 to represent the amount in naira
@@ -196,20 +199,13 @@ export default function PendingApp() {
       const response = await axios.post(apiUrl, {}, { headers });
 
       if (response.data.success) {
-        toast({
-          title: response.data.message,
-          status: "success",
-          duration: 6000,
-        });
+         toast.success(response.data.message);
+       
         localStorage.removeItem("appointmentId");
         fetchData();
       } else {
-        toast({
-          title: "Error canceling appointment",
-          description: response.data.message,
-          status: "error",
-          duration: 6000,
-        });
+        toast.error("error canceling appointment");
+       
         console.error("Error canceling appointment");
       }
     } catch (error) {
@@ -247,6 +243,17 @@ export default function PendingApp() {
       w={{ base: "100%", md: "50vw" }}
       h={{ base: "60vh", md: "30vh" }}
     >
+       <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
        <VStack align="start" spacing={4}>
 
      
