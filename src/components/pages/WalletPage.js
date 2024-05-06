@@ -278,7 +278,7 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
 
       if (response.data.success) {
         setLoading(false);
-        toast.success("Wallet funded successfull");
+        toast.success("Wallet funded successfully");
         setAmount("");
         setTimeout(() => {
           navigate("/dashboard");

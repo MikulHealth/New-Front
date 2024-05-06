@@ -126,7 +126,7 @@ const LandingPage = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (!agreeToTerms) {
-    toast.error ("You have to accept our terms and conditions to continue");
+    toast.warning("You have to accept our terms and conditions to continue");
     return;
   }
 

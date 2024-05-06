@@ -46,8 +46,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
         } catch (error) {
           console.error("Error in GetCurrentUser API:", error);
         } finally {
-          // setLoading(false);
-          // setShowSkeleton(false);
+        
         }
       } else {
         navigate("/login");
@@ -62,10 +61,8 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
     console.log("User balance..." + balance);
     console.log(paymentData)
     const { costOfService } = paymentData;
-    console.log("cos..." + costOfService / 100)
-    const formattedCost = costOfService / 100;
-
-    if (balance > formattedCost) {
+   
+    if (balance > costOfService) {
       setTimeout(() => {
         navigate("/wallet-confirmation", {
           state: { ...paymentData },
@@ -73,7 +70,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       }, 1000);
       onClose();
     } else {
-      setAmountNeeded(formattedCost); 
+      setAmountNeeded(costOfService); 
       setShowInsufficientModal(true); 
     }
   };
