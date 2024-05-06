@@ -39,23 +39,22 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  // const [inputs, setInputs] = useState(new Array(6).fill(""));
   const [inputs, setInputs] = useState(Array(6).fill(""));
 
-  useEffect(() => {
-    console.log("Current OTP input state:", inputs.join(""));
-  }, [inputs]);
+  // useEffect(() => {
+  //   console.log("Current OTP input state:", inputs.join(""));
+  // }, [inputs]);
 
   const handleInputChange = (value, index) => {
     let newInputs = [...inputs];
     newInputs[index] = value;
     setInputs(newInputs);
-    console.log(`Input at index ${index} changed to:`, value); // Debug output
-    console.log("Current state of inputs:", newInputs.join("")); // Debug output of full state
+    // console.log(`Input at index ${index} changed to:`, value); 
+    // console.log("Current state of inputs:", newInputs.join("")); 
   };
 
   useEffect(() => {
-    console.log("Updated state of inputs:", inputs.join("")); // Logs state after updates
+    console.log("Updated state of inputs:", inputs.join("")); 
   }, [inputs]); // Depend on 'inputs' to trigger this effect
 
   const resendOtp = async () => {
@@ -64,27 +63,14 @@ const LandingPage = () => {
       const response = await axios.post(
         // "http://localhost:8080/api/v1/sms/verify-number",
         " https://backend-c1pz.onrender.com/api/v1/sms/verify-number",
-       
+
         { phoneNumber: number },
         { headers: { "Content-Type": "application/json" } }
       );
       console.log(response);
-      toast({
-        title: "OTP Resent",
-        description: "A new OTP has been sent to your phone.",
-        status: "info",
-        duration: 5000,
-        isClosable: true,
-      });
+      toast.error("A new OTP has been sent to your phone.");
     } catch (error) {
-      toast({
-        title: "Failed to Resend OTP",
-        description:
-          "Unable to resend OTP at this time. Please try again later.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      toast.error("Unable to resend OTP at this time. Please try again later.");
     }
   };
 
@@ -93,9 +79,7 @@ const LandingPage = () => {
 
     try {
       const enteredOtp = inputs.join("");
-
       console.log("Collected OTP:", enteredOtp); // Debugging log
-
       const number = localStorage.getItem("phoneNumber");
       const response = await axios.post(
         // "http://localhost:8080/api/v1/sms/verify-otp",
@@ -104,24 +88,21 @@ const LandingPage = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      toast({
-        title: response.data.message,
-        description: "Your phone number has been verified.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-
-      navigate("/login");
+      if (response.data.success) {
+        setLoading(false);
+        toast.success(response.data.message);
+        setTimeout(() => {
+          navigate("/login");
+        }, 5000);
+      } else {
+        setLoading(false);
+        console.error("Error verifying otp");
+        toast.error(response.data.message);
+      }
     } catch (error) {
-      toast({
-        title: "Verification Failed",
-        description:
-          "Wrong or expired OTP, confirm the code sent or click 'resend code' for a new code",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      toast.error(
+        "Wrong or expired OTP, confirm the code sent or click 'resend code' for a new code"
+      );
     } finally {
       setLoading(false);
     }

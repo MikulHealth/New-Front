@@ -20,6 +20,7 @@ import {
   extendTheme,
   ChakraProvider,
   Text,
+  Skeleton,
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "../../styles/pages/LandingPage.css";
@@ -61,7 +62,7 @@ const ClientDash = () => {
   const activeAppointments = user?.numberOfActiveAppointments;
   const completedAppointments = user?.numberOfCompletedAppointments;
   const [pendingAppointment, setPendingAppointment] = useState(null);
-  // const [setShowSkeleton] = useState(true);
+  const [loading, setLoading] = useState(true);
   const accountNumber = "0124536789"
   const { hasCopied, onCopy } = useClipboard(accountNumber);
 
@@ -204,7 +205,7 @@ const ClientDash = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // setLoading(true);
+      setLoading(true);
 
       if (localStorage.getItem("token")) {
         try {
@@ -220,8 +221,8 @@ const ClientDash = () => {
         } catch (error) {
           console.error("Error in GetCurrentUser API:", error);
         } finally {
-          // setLoading(false);
-          // setShowSkeleton(false);
+          setLoading(false);
+         
         }
       } else {
         navigate("/login");
@@ -249,6 +250,9 @@ const ClientDash = () => {
         h={{ base: "100%", md: "100%" }}
       >
         <NavBar />
+        {loading ? (
+          <Skeleton height="40vh" width="70vw" startColor="#f0f0f0" endColor="#cfcfcf" fadeDuration={0.6} />
+        ) : (
         <Flex
           // overflow={{base: "scroll", md: ""}}
           mt={{ base: "0", md: "30px" }}
@@ -737,6 +741,7 @@ const ClientDash = () => {
             <Help />
           </Box>
         </Flex>
+         )}
         <MobileFooter />
       </VStack>
 

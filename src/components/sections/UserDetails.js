@@ -101,7 +101,7 @@ const UserDetailsDrawer = ({ isOpen, onClose }) => {
               ></Avatar>
               <VStack
                 ml={{ md: "20px" }}
-                marginTop="30px"
+                mt={{ base: "30px", md: "70px" }}
                 align="center"
                 spacing={4}
               >
@@ -112,11 +112,11 @@ const UserDetailsDrawer = ({ isOpen, onClose }) => {
                     fontWeight="bold"
                   >{`${user?.firstName} ${user?.lastName}`}</Text>
                 </Text>
-                <Divider my={1} borderColor="gray.500" />
+                {/* <Divider my={1} borderColor="gray.500" />
                 <Text>
                   Home address:{" "}
                   <Text as="span" fontWeight="bold">{`${user?.address}`}</Text>
-                </Text>
+                </Text> */}
                 <Divider my={1} borderColor="gray.500" />
                 <Text>
                   Email:{" "}

@@ -7,6 +7,9 @@ import LoadingSpinner from "../../utils/Spiner";
 import logo from "../../assets/Logo.svg";
 import { Link } from "react-router-dom";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   Box,
   Button,
@@ -20,7 +23,6 @@ import {
   InputGroup,
   InputRightElement,
   InputLeftAddon,
-  useToast,
   Flex,
   Select,
   Modal,
@@ -70,7 +72,6 @@ const LandingPage = () => {
   const [imageLoading, setImageLoading] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -86,96 +87,113 @@ const LandingPage = () => {
 
   const handleTermsChange = (e) => {
     setAgreeToTerms(e.target.checked);
-    setIsTermsOpen(true); // Open the modal when checkbox is checked
+    setIsTermsOpen(true); 
   };
 
   const closeTermsModal = () => setIsTermsOpen(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!agreeToTerms) {
-      toast({
-        title: "Terms and Conditions",
-        description: "You must agree to the terms and conditions to continue",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        // "https://backend-c1pz.onrender.com/v1/angel/join",
-        "http://localhost:8080/v1/angel/join",
-        formData,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      // Storing phoneNumber in localStorage before sending OTP
-      localStorage.setItem("phoneNumber", formData.phoneNumber);
-      toast({
-        title: "Registration Successful",
-        description: response.data.message,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-      // Call sendOtp function after successful registration
-      await sendOtp();
-      navigate("/verify-number");
-    } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: error.response ? error.response.data : "Network error",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const sendOtp = async () => {
-    try {
-      const number = localStorage.getItem("phoneNumber");
-      const response = await axios.post(
-        // "http://localhost:8080/api/v1/sms/verify-number",
-        "https://backend-c1pz.onrender.com/api/v1/sms/verify-number",
-        { phoneNumber: number },
-        { headers: { "Content-Type": "application/json" } }
-      );
-      console.log(response);
-      toast({
-        title: "OTP Resent",
-        description: "A new OTP has been sent to your phone.",
-        status: "info",
-        duration: 5000,
-        isClosable: true,
-      });
-    } catch (error) {
-      toast({
-        title: "Failed to send OTP",
-        description: "Unable to send OTP at this time. Please try again later.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+// const sendOtp = async () => {
+//   try {
+//     const number = localStorage.getItem("phoneNumber");
+//     const response = await axios.post(
+//       "http://localhost:8080/api/v1/sms/verify-number",
+//        // "https://backend-c1pz.onrender.com/api/v1/sms/verify-number"
+//       { phoneNumber: number },
+//       { headers: { "Content-Type": "application/json" } }
+//     );
+//     console.log(response);
+//     if (response.data.success) {
+//       setLoading(false);
+//       toast.success(response.data.message);
+//       return true;  // Return true to indicate success
+//     } else {
+//       setLoading(false);
+//       console.error("Error registering");
+//       toast.error(response.data.message);
+//       return false;  // Return false to indicate failure
+//     }
+//   } catch (error) {
+//     setLoading(false);
+//     const message = error.response && error.response.data && error.response.data.message
+//       ? error.response.data.message
+//       : "Unable to send OTP.";
+//     toast.error(message);
+//     return false;  
+//   }
+// };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!agreeToTerms) {
+    toast.error ("You have to accept our terms and conditions to continue");
+    return;
+  }
+
+  function getValidNigerianPhoneNumber(phoneNumber) {
+    // Regular expression for validating a Nigerian phone number
+    // Matches +234 followed by 10 digits or starts with 0 followed by 10 digits starting with 7, 8, or 9
+    const pattern = /^(?:\+234|0)[789]\d{9}$/;
+  
+    if (pattern.test(phoneNumber)) {
+      // Transform +234 to 0 format if needed
+      if (phoneNumber.startsWith('+234')) {
+        return '0' + phoneNumber.slice(4);  // Remove '+234' and prepend '0'
+      }
+      return phoneNumber;  
     }
-  };
+    return null;  
+  }
+  
+
+  const validPhoneNumber = getValidNigerianPhoneNumber(formData.phoneNumber);
+  if (!validPhoneNumber) {
+    toast.warning("Please enter a valid Nigerian phone number");
+    return;
+  }
+
+  setLoading(true);
+  try {
+    // Include the valid and adjusted phone number in formData
+    const updatedFormData = { ...formData, phoneNumber: validPhoneNumber };
+    const response = await axios.post(
+      // "http://localhost:8080/v1/angel/join",
+      "https://backend-c1pz.onrender.com/v1/angel/join",
+      updatedFormData,
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    if (response.data.success) {
+        // toast.success(response.data.message);
+        toast.success("Registration successfull, kindly login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 5000);
+
+      // localStorage.setItem("phoneNumber", formData.phoneNumber);
+      // const otpSent = await sendOtp(); 
+      // if (otpSent) {
+      //   toast.success(response.data.message);
+      //   navigate("/verify-number");
+      // }
+
+    } else {
+      setLoading(false);
+      console.error("Error registering");
+      toast.error(response.data.message);
+    }
+  } catch (error) {
+    toast.error("Registration Failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const postImage = async (image) => {
     setImageLoading(true);
     if (image === undefined) {
-      toast({
-        title: "Error",
-        description: "Please select an image",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      toast.warning("Please select an image");
       return;
     }
     console.log(image);
@@ -207,13 +225,7 @@ const LandingPage = () => {
         setImageLoading(false);
       }
     } else {
-      toast({
-        title: "Error",
-        description: "Please select a valid image file",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      toast.warning("Please select a calid image file");
       return;
     }
   };
@@ -224,6 +236,17 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider overflow="hidden" theme={customTheme}>
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Flex overflow="scroll" align="center" justify="center" height="100vh">
         <Box
           mb="300px"
@@ -360,9 +383,9 @@ const LandingPage = () => {
               onChange={handleTermsChange}
               mt="4"
             >
-              By continuing, you agree to{" "}
+              Click to view and accept{" "}
               <Text as="span" color="#A210C6">
-                Mikul Health's terms and condition.
+                Mikul Health's policy.
               </Text>
             </Checkbox>
 
