@@ -65,10 +65,10 @@ const handleWalletPayment = async () => {
     // const apiUrl = `http://localhost:8080/v1/api/wallets/withdraw?customerId=${encodeURIComponent(customerId)}&appointmentId=${encodeURIComponent(appointmentId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
     const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw?customerId=${encodeURIComponent(customerId)}&appointmentId=${encodeURIComponent(appointmentId)}&amount=${encodeURIComponent(costOfService)}&method=${encodeURIComponent(method)}`;
   
-    console.log("Amount being sent:", amount);
+    // console.log("Amount being sent:", amount);
     const payload = {
         customerId: encodeURIComponent(customerId),
-        amount: encodeURIComponent(amount),
+        amount: encodeURIComponent(costOfService),
         method: encodeURIComponent(method)
     };
     console.log("Payload:", payload);
