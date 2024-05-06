@@ -84,7 +84,7 @@ const PaymentConfirmationPage = () => {
   };
 
   const verifyPayment = async () => {
-    toast.success("Please wait, while we verify your payment");
+    toast.warning("Please wait, while we verify your payment");
     try {
       const token = localStorage.getItem("token");
       console.log("ID is " + appointmentId);
