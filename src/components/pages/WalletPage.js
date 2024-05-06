@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,7 +13,7 @@ import {
   VStack,
   Input,
   Button,
-  // useToast,
+  Skeleton,
   useClipboard,
   Image,
   IconButton,
@@ -353,7 +353,7 @@ const WalletPage = () => {
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
   const accountNumber = "0124536789";
   const { hasCopied, onCopy } = useClipboard(accountNumber);
-
+  const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
   const balance = user?.walletBalance;
   const walletTotalCredit = user?.walletTotalCredit;
@@ -361,6 +361,14 @@ const WalletPage = () => {
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
   };
+
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [user]); // Dependency on user state to re-trigger when user state changes
 
   const handleOpenFundWalletModal = () => {
     setShowFundWalletModal(true);
@@ -401,200 +409,220 @@ const WalletPage = () => {
         h={{ base: "100%", md: "100%" }}
       >
         <NavBar />
-        <Flex
-          marginTop="10px"
-          border="1px solid gray"
-          borderRadius="md"
-          padding="3px"
-          w={{ base: "89vw", md: "70vw" }}
-          h={{ base: "7vw", md: "5vh" }}
-          ml={{ base: "20px", md: "10px" }}
-        >
-          <Flex ml={{ md: "10px" }}>
-            <SearchIcon boxSize={4} marginRight="10px" marginTop="5px" />
-            <Text
-              fontSize="16px"
-              fontFamily="body"
-              mt={{ md: "2px" }}
-              style={{
-                fontStyle: "italic",
-                cursor: "pointer",
-              }}
-              _hover={{ color: "#A210C6" }}
-              // onClick={handleOpenSearchAppointmentsModal}
+        {loading ? (
+          <Skeleton
+            ml={{ base: "20px", md: "0" }}
+            w={{ base: "375px", md: "70vw" }}
+            h={{ base: "189px", md: "40vh" }}
+            startColor="#f0f0f0"
+            endColor="#cfcfcf"
+            fadeDuration={0.6}
+          />
+        ) : (
+          <Box>
+            <Flex
+              marginTop="10px"
+              border="1px solid gray"
+              borderRadius="md"
+              padding="3px"
+              w={{ base: "89vw", md: "70vw" }}
+              h={{ base: "7vw", md: "5vh" }}
+              ml={{ base: "20px", md: "0" }}
+              mb={{ base: "5px", md: "10px" }}
             >
-              Search transaction by date
-            </Text>
-          </Flex>
-        </Flex>
-        <Box
-          textAlign="center"
-          ml={{ base: "15px", md: "0" }}
-          w={{ base: "375px", md: "100%" }}
-          h={{ base: "180px", md: "30%" }}
-          mt={{ base: "4px", md: "0" }}
-          mb={{ base: "5px", md: "30" }}
-          paddingBottom={{ base: "20px", md: "" }}
-          bg="#A210C6"
-          borderRadius="20px"
-        >
-          <Flex w={{ base: "90vw", md: "80vw" }}>
-            <Box ml={{ base: "20px", md: "40px" }} paddingTop="5px">
-              <Text
-                fontSize="16px"
-                fontFamily="body"
-                color="white"
-                marginTop="20px"
-              >
-                Mikul Health Savings Account
-              </Text>
-              <Flex>
+              <Flex ml={{ md: "10px" }}>
+                <SearchIcon boxSize={4} marginRight="10px" marginTop="5px" />
                 <Text
-                  marginTop="2px"
-                  color="white"
-                  fontSize={{ base: "18px", md: "22px" }}
-                  textAlign="left"
+                  fontSize="16px"
+                  fontFamily="body"
+                  mt={{ md: "2px" }}
+                  style={{
+                    fontStyle: "italic",
+                    cursor: "pointer",
+                  }}
+                  _hover={{ color: "#A210C6" }}
+                  // onClick={handleOpenSearchAppointmentsModal}
                 >
-                  ₦ {formatAmount(balance)}.00
-                </Text>
-                <Text
-                  ml="5px"
-                  mt={{ base: "8px", md: "12px" }}
-                  fontSize="12px"
-                  color="white"
-                >
-                  balance
+                  Search transaction by date
                 </Text>
               </Flex>
-            </Box>
-            <VStack>
-              <Button
-                padding={{ base: "5px", md: "0" }}
-                ml={{ base: "30px", md: "520px" }}
-                w={{ base: "100px", md: "35%" }}
-                h={{ base: "30px", md: "50%" }}
-                fontSize={{ base: "12px", md: "16px" }}
-                borderRadius="15px"
-                color="#A210C6"
-                marginTop="20px"
-                onClick={handleOpenFundWalletModal}
-                bg="white"
-                // leftIcon={<ExternalLinkIcon />}
-              >
-                Fund wallet
-              </Button>
-            </VStack>
-          </Flex>
-          <Flex
-            ml={{ base: "20px", md: "40px" }}
-            mt={{ base: "30px", md: "50px" }}
-          >
-            <Box
-              marginBottom={{ base: "50px", md: "50px" }}
-              // marginLeft={{ base: "-50px", md: "-935px" }}
-              color="white"
-            >
-              <Text textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
-                Wallet ID:
-              </Text>
-              <Flex>
-                <Text textAlign="left" fontSize={{ base: "12px", md: "16px" }}>
-                  Wema Bank
-                </Text>
-                <Text
-                  ml="10px"
-                  textAlign="left"
-                  fontSize={{ base: "12px", md: "16px" }}
-                >
-                  {accountNumber}
-                </Text>
-                <IconButton
-                  icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-                  onClick={onCopy}
-                  mt="-2px"
-                  size="sm"
-                  aria-label="Copy account number"
-                  color="white"
-                  bg={hasCopied ? "#A210C6" : "#A210C6"}
-                  _hover={{ bg: "transparent" }}
-                />
-              </Flex>
-            </Box>
-            <Flex marginLeft={{ base: "15px", md: "500px" }}>
-              <Box color="white">
-                <Text textAlign="left" fontSize="12px">
-                  Total funded
-                </Text>
-                <Text textAlign="left" color="white" fontSize="12px">
-                  ₦ {formatAmount(walletTotalCredit)}.00
-                </Text>
-              </Box>
-              <Box color="white" marginLeft="10px">
-                <Text textAlign="left" fontSize="12px">
-                  Total spent
-                </Text>
-                <Text textAlign="left" color="white" fontSize="12px">
-                  ₦ {formatAmount(walletTotalDebit)}.00
-                </Text>
-              </Box>
             </Flex>
-          </Flex>
-        </Box>
-
-        <Flex
-          w={{ base: "100%", md: "50vw" }}
-          ml={{ base: "-140", md: "-250px" }}
-          justifyContent="space-between"
-          className="transaction-tabs"
-        >
-          <VStack ml={{ base: "100px", md: "0" }}>
-            <Tabs colorScheme="purple.100" mt={{ base: "", md: "-15px" }}>
-              <TabList ml="10px">
-                <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
-                  color="#A210C6"
-                  fontWeight="bold"
-                >
-                  All
-                </Tab>
-
-                <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
-                  color="green.500"
-                  fontWeight="bold"
-                  ml="50px"
-                >
-                  Credit
-                </Tab>
-
-                <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
-                  color="red.500"
-                  fontWeight="bold"
-                  ml="50px"
-                >
-                  Debit
-                </Tab>
-              </TabList>
-              <TabPanels
-                ml={{ base: "-20px", md: "0px" }}
-                overflow={{ base: "scroll" }}
+            <Box
+              textAlign="center"
+              ml={{ base: "15px", md: "0" }}
+              w={{ base: "375px", md: "70vw" }}
+              h={{ base: "180px", md: "35%" }}
+              mt={{ base: "4px", md: "0" }}
+              mb={{ base: "5px", md: "30" }}
+              paddingBottom={{ base: "20px", md: "" }}
+              bg="#A210C6"
+              borderRadius="20px"
+            >
+              <Flex w={{ base: "90vw", md: "80vw" }}>
+                <Box ml={{ base: "20px", md: "40px" }} paddingTop="5px">
+                  <Text
+                    fontSize="16px"
+                    fontFamily="body"
+                    color="white"
+                    marginTop="20px"
+                  >
+                    Mikul Health Savings Account
+                  </Text>
+                  <Flex>
+                    <Text
+                      marginTop="2px"
+                      color="white"
+                      fontSize={{ base: "18px", md: "22px" }}
+                      textAlign="left"
+                    >
+                      ₦ {formatAmount(balance)}.00
+                    </Text>
+                    <Text
+                      ml="5px"
+                      mt={{ base: "8px", md: "12px" }}
+                      fontSize="12px"
+                      color="white"
+                    >
+                      balance
+                    </Text>
+                  </Flex>
+                </Box>
+                <VStack>
+                  <Button
+                    padding={{ base: "5px", md: "0" }}
+                    ml={{ base: "30px", md: "520px" }}
+                    w={{ base: "100px", md: "35%" }}
+                    h={{ base: "30px", md: "50%" }}
+                    fontSize={{ base: "12px", md: "16px" }}
+                    borderRadius="15px"
+                    color="#A210C6"
+                    marginTop="20px"
+                    onClick={handleOpenFundWalletModal}
+                    bg="white"
+                    // leftIcon={<ExternalLinkIcon />}
+                  >
+                    Fund wallet
+                  </Button>
+                </VStack>
+              </Flex>
+              <Flex
+                ml={{ base: "20px", md: "40px" }}
+                mt={{ base: "30px", md: "50px" }}
               >
-                <TabPanel>
-                  <AllTransactionTabs />
-                </TabPanel>
-                <TabPanel>
-                  <CreditTransactionTabs />
-                </TabPanel>
-                <TabPanel>
-                  <DebitTransactionTabs />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-            <MobileFooter />
-          </VStack>
-          {/* <Help /> */}
-        </Flex>
+                <Box
+                  marginBottom={{ base: "50px", md: "50px" }}
+                  // marginLeft={{ base: "-50px", md: "-935px" }}
+                  color="white"
+                >
+                  <Text
+                    textAlign="left"
+                    fontSize={{ base: "12px", md: "16px" }}
+                  >
+                    Wallet ID:
+                  </Text>
+                  <Flex>
+                    <Text
+                      textAlign="left"
+                      fontSize={{ base: "12px", md: "16px" }}
+                    >
+                      Wema Bank
+                    </Text>
+                    <Text
+                      ml="10px"
+                      textAlign="left"
+                      fontSize={{ base: "12px", md: "16px" }}
+                    >
+                      {accountNumber}
+                    </Text>
+                    <IconButton
+                      icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                      onClick={onCopy}
+                      mt="-2px"
+                      size="sm"
+                      aria-label="Copy account number"
+                      color="white"
+                      bg={hasCopied ? "#A210C6" : "#A210C6"}
+                      _hover={{ bg: "transparent" }}
+                    />
+                  </Flex>
+                </Box>
+                <Flex marginLeft={{ base: "15px", md: "500px" }}>
+                  <Box color="white">
+                    <Text textAlign="left" fontSize="12px">
+                      Total funded
+                    </Text>
+                    <Text textAlign="left" color="white" fontSize="12px">
+                      ₦ {formatAmount(walletTotalCredit)}.00
+                    </Text>
+                  </Box>
+                  <Box color="white" marginLeft="10px">
+                    <Text textAlign="left" fontSize="12px">
+                      Total spent
+                    </Text>
+                    <Text textAlign="left" color="white" fontSize="12px">
+                      ₦ {formatAmount(walletTotalDebit)}.00
+                    </Text>
+                  </Box>
+                </Flex>
+              </Flex>
+            </Box>
+
+            <Flex
+              w={{ base: "100%", md: "50vw" }}
+              ml={{ base: "-50", md: "5px" }}
+              justifyContent="space-between"
+              className="transaction-tabs"
+            >
+              <VStack ml={{ base: "100px", md: "0" }}>
+                <Tabs colorScheme="purple.100" mt={{ base: "", md: "-15px" }}>
+                  <TabList ml="10px">
+                    <Tab
+                      fontSize={{ base: "12px", md: "16px" }}
+                      color="#A210C6"
+                      fontWeight="bold"
+                    >
+                      All
+                    </Tab>
+
+                    <Tab
+                      fontSize={{ base: "12px", md: "16px" }}
+                      color="green.500"
+                      fontWeight="bold"
+                      ml="50px"
+                    >
+                      Credit
+                    </Tab>
+
+                    <Tab
+                      fontSize={{ base: "12px", md: "16px" }}
+                      color="red.500"
+                      fontWeight="bold"
+                      ml="50px"
+                    >
+                      Debit
+                    </Tab>
+                  </TabList>
+                  <TabPanels
+                    ml={{ base: "-20px", md: "0px" }}
+                    overflow={{ base: "scroll" }}
+                  >
+                    <TabPanel>
+                      <AllTransactionTabs />
+                    </TabPanel>
+                    <TabPanel>
+                      <CreditTransactionTabs />
+                    </TabPanel>
+                    <TabPanel>
+                      <DebitTransactionTabs />
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+                <MobileFooter />
+              </VStack>
+              {/* <Help /> */}
+            </Flex>
+          </Box>
+        )}
         <MobileFooter />
       </VStack>
       <FundWalletModal
