@@ -414,9 +414,10 @@ const WalletPage = () => {
             ml={{ base: "20px", md: "0" }}
             w={{ base: "375px", md: "70vw" }}
             h={{ base: "189px", md: "40vh" }}
-            startColor="#f0f0f0"
-            endColor="#cfcfcf"
+            startColor="#E552FF"
+            endColor="#A210C6"
             fadeDuration={0.6}
+            borderRadius="20px"
           />
         ) : (
           <Box>
