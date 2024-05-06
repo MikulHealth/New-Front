@@ -22,6 +22,12 @@ function InsufficientFundsModal({ isOpen, onClose, amountNeeded }) {
     onClose();
   };
 
+  
+  const formattedCost = (cost) => {
+    const num = Number(cost);
+    return num.toLocaleString("en-US");
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -41,7 +47,7 @@ function InsufficientFundsModal({ isOpen, onClose, amountNeeded }) {
         <ModalBody>
           <Text fontSize="md" mb={4}>
             You do not have enough funds to pay for this service. Please fund your wallet with at least
-            <Text color="#A210C6" as="span" fontWeight="bold"> {' ' + amountNeeded} </Text>
+            <Text color="#A210C6" as="span" fontWeight="bold"> {' ₦' + formattedCost(amountNeeded)} </Text>
             to proceed.
           </Text>
         </ModalBody>

@@ -181,7 +181,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
         <InsufficientFundsModal
           isOpen={showInsufficientModal}
           onClose={() => setShowInsufficientModal(false)}
-          amountNeeded={amountNeeded.toFixed(2)}
+          amountNeeded={amountNeeded}
         />
       )}
     </>
