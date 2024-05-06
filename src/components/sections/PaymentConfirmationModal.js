@@ -46,10 +46,12 @@ const PaymentConfirmationPage = () => {
   const { user } = useSelector((state) => state.userReducer);
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
+  const amountInKobo = parseInt(costOfService * 100); 
+
 
   const [paymentData, setPaymentData] = useState({
     email: user?.email || "",
-    amount: costOfService,
+    amount: amountInKobo,
     reference: appointmentId,
     name: `${user?.firstName || ""} ${user?.lastName || ""}`,
     phone: user?.phoneNumber || "",
@@ -67,15 +69,10 @@ const PaymentConfirmationPage = () => {
     });
   };
 
+  
   const formattedCost = (cost) => {
-    // Divide costOfService by 100 to represent the amount in naira
-    const costInNaira = cost / 100;
-
-    // Format the costOfService as naira with the last two zeros separated by a dot
-    const formattedCost =
-      "₦ " + costInNaira.toLocaleString("en-NG", { maximumFractionDigits: 2 });
-
-    return formattedCost;
+    const num = Number(cost);
+    return num.toLocaleString("en-US");
   };
 
   const handlePaymentSuccess = (response) => {
@@ -168,7 +165,7 @@ const PaymentConfirmationPage = () => {
                 fontWeight="bold"
                 color="#510863"
               >
-                {formattedCost(costOfService)}
+                 ₦{formattedCost(costOfService)}.00
               </Text>{" "}
               to proceed with your booking for{" "}
               <Text

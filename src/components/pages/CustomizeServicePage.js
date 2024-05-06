@@ -344,7 +344,7 @@ const CustomizeServicePage = () => {
                               Cost of service:
                             </Text>
                             <Text ml={{ base: "5px", md: "5px" }} color="black">
-                              {`${formattedCost(service.costOfService)}`}
+                              {`${formattedCost(service.costOfService)}.00`}
                             </Text>
                           </Flex>
                         </Box>

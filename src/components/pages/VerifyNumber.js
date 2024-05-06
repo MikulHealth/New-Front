@@ -39,19 +39,32 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const [inputs, setInputs] = useState(new Array(6).fill(""));
+  // const [inputs, setInputs] = useState(new Array(6).fill(""));
+  const [inputs, setInputs] = useState(Array(6).fill(""));
+
+  useEffect(() => {
+    console.log("Current OTP input state:", inputs.join(""));
+  }, [inputs]);
 
   const handleInputChange = (value, index) => {
-    const newInputs = [...inputs];
+    let newInputs = [...inputs];
     newInputs[index] = value;
     setInputs(newInputs);
+    console.log(`Input at index ${index} changed to:`, value); // Debug output
+    console.log("Current state of inputs:", newInputs.join("")); // Debug output of full state
   };
+
+  useEffect(() => {
+    console.log("Updated state of inputs:", inputs.join("")); // Logs state after updates
+  }, [inputs]); // Depend on 'inputs' to trigger this effect
 
   const resendOtp = async () => {
     try {
       const number = localStorage.getItem("phoneNumber");
       const response = await axios.post(
-        "http://localhost:8080/api/v1/sms/verify-number",
+        // "http://localhost:8080/api/v1/sms/verify-number",
+        " https://backend-c1pz.onrender.com/api/v1/sms/verify-number",
+       
         { phoneNumber: number },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -77,8 +90,12 @@ const LandingPage = () => {
 
   const handleVerify = async () => {
     setLoading(true);
+
     try {
       const enteredOtp = inputs.join("");
+
+      console.log("Collected OTP:", enteredOtp); // Debugging log
+
       const number = localStorage.getItem("phoneNumber");
       const response = await axios.post(
         // "http://localhost:8080/api/v1/sms/verify-otp",
@@ -95,7 +112,7 @@ const LandingPage = () => {
         isClosable: true,
       });
 
-      navigate("/dashboard");
+      navigate("/login");
     } catch (error) {
       toast({
         title: "Verification Failed",
@@ -142,12 +159,19 @@ const LandingPage = () => {
             Please input the 6 digit code sent to your phone number
           </Text>
           <HStack>
-            <PinInput
-              type="numeric"
-              onComplete={(value) => handleInputChange(value)}
+            {/* <PinInput
+              onChange={(value, index) => handleInputChange(value, index)}
             >
               {Array.from({ length: 6 }, (_, index) => (
-                <PinInputField key={index} w="50px" h="50px" />
+                <PinInputField key={index} />
+              ))}
+            </PinInput> */}
+            <PinInput>
+              {Array.from({ length: 6 }, (_, index) => (
+                <PinInputField
+                  key={index}
+                  onChange={(e) => handleInputChange(e.target.value, index)}
+                />
               ))}
             </PinInput>
           </HStack>
@@ -157,7 +181,7 @@ const LandingPage = () => {
               fontStyle="italic"
               color="#A210C6"
               onClick={resendOtp}
-              isLoading={loading} // Display loading spinner when loading is true
+              isLoading={loading}
             >
               resend code
             </Button>

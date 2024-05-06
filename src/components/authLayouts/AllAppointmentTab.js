@@ -94,13 +94,9 @@ export default function AppointmentTab() {
     }
   };
 
-  const formattedCost = (cost) => {
-    const costInNaira = cost / 100;
-
-    const formattedCost =
-      "₦ " + costInNaira.toLocaleString("en-NG", { maximumFractionDigits: 2 });
-
-    return formattedCost;
+  const formattedCost = (amount) => {
+    const num = Number(amount);
+    return num.toLocaleString();
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -439,8 +435,8 @@ export default function AppointmentTab() {
                     Cost of service
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formattedCost(selectedAppointment.costOfService) ||
-                      "Not availabe"}
+                  ₦{formattedCost(selectedAppointment.costOfService) ||
+                      "Not availabe"}.00
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />

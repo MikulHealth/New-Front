@@ -111,21 +111,20 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   
       const totalCost = costPerDay * parseInt(duration);
       return totalCost.toLocaleString("en-NG", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        
       });
-    }, [medicSpecialization, shift, duration]); // Include all dependencies used in `calculateCost`
+    }, [medicSpecialization, shift, duration]); 
   
     useEffect(() => {
       const calculatedCost = calculateCost();
       setCostOfService(calculatedCost);
-    }, [calculateCost]); // Now `calculateCost` is included in the dependency array
+    }, [calculateCost]);  
   
 
   const formattedCost = (cost) => {
-    // Format the costOfService as naira with the last two zeros separated by a dot
+
     const formattedCost =
-      "₦ " + cost.toLocaleString("en-NG", { maximumFractionDigits: 2 });
+      "₦ " + cost.toLocaleString("en-NG");
 
     return formattedCost;
   };
@@ -377,7 +376,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
             </Flex>
             <Flex>
               <Text fontWeight="bold">Cost of Service:</Text>
-              <Text marginLeft="5px">{formattedCost(costOfService)}</Text>{" "}
+              <Text marginLeft="5px">{formattedCost(costOfService)}.00</Text>{" "}
             </Flex>
             <Flex>
               <Text fontWeight="bold">Name of service:</Text>

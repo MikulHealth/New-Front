@@ -28,7 +28,6 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -72,32 +71,41 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "servicePlan") {
       // Find the selected plan object
-      const selectedPlan = customizedPlans.find(plan => plan.name === value);
-  
+      const selectedPlan = customizedPlans.find((plan) => plan.name === value);
+
       console.log("Selected Plan:", selectedPlan);
-      console.log("Cost of Service:", selectedPlan ? selectedPlan.costOfService : "N/A");
-  
+      console.log(
+        "Cost of Service:",
+        selectedPlan ? selectedPlan.costOfService : "N/A"
+      );
+
       if (selectedPlan) {
         setFormFields({
           ...formFields,
           [name]: value,
           shift: selectedPlan.shift,
-          costOfService: parseFloat(selectedPlan.costOfService.replace(/[,]/g, '')), // assuming costOfService is a string with commas
+          costOfService: parseFloat(
+            selectedPlan.costOfService.replace(/[,]/g, "")
+          ), // assuming costOfService is a string with commas
           medicSpecialization: selectedPlan.preferredCaregiver,
         });
         setIsShiftDisabled(true); // Disable shift selection for customized plans
       } else {
-        setFormFields({ ...formFields, [name]: value, shift: '', costOfService: '' }); // Reset shift and cost when no plan is selected or switched to non-customized
+        setFormFields({
+          ...formFields,
+          [name]: value,
+          shift: "",
+          costOfService: "",
+        }); // Reset shift and cost when no plan is selected or switched to non-customized
         setIsShiftDisabled(false); // Enable shift selection for non-customized plans
       }
     } else {
       setFormFields({ ...formFields, [name]: value });
     }
   };
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -183,13 +191,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           costOfService: "",
         });
         toast.success("Appointment saved");
-        console.log("Appointmend IDI "+ response.data.data.id)
+        console.log("Appointmend IDI " + response.data.data.id);
         setPaymentData({
           costOfService: response.data.data.costOfService,
           appointmentId: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
-       
+
         setTimeout(() => {
           setIsPaymentModalOpen(true);
         }, 4000);
@@ -206,7 +214,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     }
   };
 
-
   const calculateServiceCost = () => {
     const { servicePlan, shift } = formFields;
 
@@ -214,30 +221,27 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
     switch (servicePlan) {
       case "Elderly care by a Licensed Nurse":
-        costOfService = shift === "Day Shift (8hrs)" ? 18000000 : 22000000;
+        costOfService = shift === "Day Shift (8hrs)" ? 180000 : 220000;
         break;
       case "Elderly care by a Nurse Assistant":
-        costOfService = shift === "Day Shift (8hrs)" ? 12000000 : 15000000;
+        costOfService = shift === "Day Shift (8hrs)" ? 120000 : 150000;
         break;
       case "Postpartum care":
       case "Recovery care":
-        costOfService = shift === "Day Shift (8hrs)" ? 20000000 : 25000000;
+        costOfService = shift === "Day Shift (8hrs)" ? 200000 : 250000;
         break;
       case "Nanny care":
-        costOfService = shift === "Day Shift (8hrs)" ? 7000000 : 9000000;
+        costOfService = shift === "Day Shift (8hrs)" ? 70000 : 90000;
         break;
       case "Short home visit":
-        costOfService = 1500000;
+        costOfService = 15000;
         break;
       default:
         const customPlan = customizedPlans.find(
           (plan) => plan.name === servicePlan
         );
         if (customPlan) {
-          // Adding two decimal places to costOfService for custom plans
-          costOfService = parseInt(
-            customPlan.costOfService.replace(/[,]/g, "")
-          );
+          costOfService = customPlan.costOfService;
         } else {
           costOfService = 0;
         }
@@ -259,17 +263,17 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         size={{ base: "md", md: "lg" }}
         placement="right"
       >
-         <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
@@ -314,14 +318,14 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   ml={{ md: "5px" }}
                   marginTop="20px"
                 > */}
-                  {/* <FormLabel fontWeight="bold">End Date</FormLabel>
+                {/* <FormLabel fontWeight="bold">End Date</FormLabel>
                   <Flex
                     h="6vh"
                     paddingTop="5px"
                     paddingLeft="15px"
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}
                   > */}
-                    {/* <DatePicker
+                {/* <DatePicker
                       isRequired
                       selected={selectedEndDate}
                       onChange={handleEndDateChange}
@@ -335,15 +339,15 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       minDate={new Date()}
                       style={{ border: "none" }}
                     /> */}
-                    {/* <Image
+                {/* <Image
                       ml={{ base: "50px", md: "30px" }}
                       w="24px"
                       h="24px"
                       src={CalenderIcon}
                       alt="CalenderIcon"
                     /> */}
-                  </Flex>
-                {/* </Box> */}
+              </Flex>
+              {/* </Box> */}
               {/* </Flex> */}
               <Flex flexWrap="wrap" marginTop="20px">
                 <Box w={{ base: "300px", md: "270px" }} ml={{ md: "40px" }}>

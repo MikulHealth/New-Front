@@ -50,14 +50,8 @@ const WalletPaymentPage = () => {
 
  
   const formattedCost = (cost) => {
-    // Divide costOfService by 100 to represent the amount in naira
-    const costInNaira = cost / 100;
-
-    // Format the costOfService as naira with the last two zeros separated by a dot
-    const formattedCost =
-      "₦ " + costInNaira.toLocaleString("en-NG", { maximumFractionDigits: 2 });
-
-    return formattedCost;
+    const num = Number(cost);
+    return num.toLocaleString("en-US");
   };
 
 const handleWalletPayment = async () => {
@@ -157,7 +151,7 @@ const handleWalletPayment = async () => {
                 fontWeight="bold"
                 color="#510863"
               >
-                {formattedCost(costOfService)}
+                ₦{formattedCost(costOfService)}
               </Text>{" "}
               to proceed with your booking for{" "}
               <Text

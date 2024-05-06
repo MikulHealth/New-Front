@@ -128,16 +128,10 @@ export default function PendingApp() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const formattedCost = (cost) => {
-    // Divide costOfService by 100 to represent the amount in naira
-    const costInNaira = cost / 100;
-
-    // Format the costOfService as naira with the last two zeros separated by a dot
-    const formattedCost =
-      "₦ " + costInNaira.toLocaleString("en-NG", { maximumFractionDigits: 2 });
-
-    return formattedCost;
+  
+  const formattedCost = (amount) => {
+    const num = Number(amount);
+    return num.toLocaleString();
   };
 
   const formatDate = (dateString) => {
@@ -551,8 +545,8 @@ export default function PendingApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formattedCost(selectedAppointment.costOfService) ||
-                        "Not availabe"}
+                    ₦{formattedCost(selectedAppointment.costOfService) ||
+                        "Not availabe"}.00
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
