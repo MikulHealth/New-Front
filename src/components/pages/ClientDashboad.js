@@ -250,7 +250,7 @@ const ClientDash = () => {
         <NavBar />
         {loading ? (
           <Skeleton
-          ml={{ base: "20px", md: "0" }}
+          ml={{ base: "10px", md: "0" }}
           w={{ base: "375px", md: "70vw" }}
           h={{ base: "189px", md: "40vh" }}
           startColor="#E552FF"
