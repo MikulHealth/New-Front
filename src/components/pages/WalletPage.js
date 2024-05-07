@@ -415,7 +415,7 @@ const WalletPage = () => {
             w={{ base: "375px", md: "70vw" }}
             h={{ base: "189px", md: "40vh" }}
             startColor="#E552FF"
-            endColor="#A210C6"
+            endColor="#870DA5"
             fadeDuration={0.6}
             borderRadius="20px"
           />

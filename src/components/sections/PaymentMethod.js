@@ -46,7 +46,6 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
         } catch (error) {
           console.error("Error in GetCurrentUser API:", error);
         } finally {
-        
         }
       } else {
         navigate("/login");
@@ -59,10 +58,15 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   const handleWalletPayment = () => {
     console.log("Paying with wallet...");
     console.log("User balance..." + balance);
-    console.log(paymentData)
+    console.log(paymentData);
     const { costOfService } = paymentData;
-   
-    if (balance > costOfService) {
+    console.log("COS " + costOfService);
+    const numericBalance = Number(balance);
+
+  const numericCostOfService = Number(paymentData.costOfService);  
+  console.log("Numeric Cost of Service:", numericCostOfService);
+
+    if (numericBalance > numericCostOfService) {
       setTimeout(() => {
         navigate("/wallet-confirmation", {
           state: { ...paymentData },
@@ -70,8 +74,8 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       }, 1000);
       onClose();
     } else {
-      setAmountNeeded(costOfService); 
-      setShowInsufficientModal(true); 
+      setAmountNeeded(numericCostOfService);
+      setShowInsufficientModal(true);
     }
   };
 
@@ -85,43 +89,52 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
     onClose();
   };
 
+  const formatAmount = (amount) => {
+    const num = Number(amount);
+    return num.toLocaleString();
+  };
+
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent bg="#A210C6">
-          <ModalHeader color="white" textAlign="center">How do you want to pay?</ModalHeader>
+          <ModalHeader color="white" textAlign="center">
+            The Cost for the service is ₦{formatAmount(paymentData.costOfService)} <br></br>
+            How do you want to pay?
+          </ModalHeader>
           <ModalCloseButton color="white" />
           <ModalBody paddingBottom="25px">
-          <Box
-            bg="white"
-            marginLeft="8px"
-            borderRadius="15px"
-            onClick={handleWalletPayment}
-            style={{
-              cursor: "",
-            }}
-            _hover={{ color: "#A210C6" }}
-          >
-            <Flex>
-              <Image
-                marginLeft="15px"
-                marginTop="15px"
-                w="30px"
-                h="30px"
-                boxSize={["20px", "30px"]}
-                src={Wallet}
-                alt="Settings"
-              />
-              <Box marginLeft="10px" padding="10px" paddingBottom="10px">
-                <Text fontSize={["lg", "xl"]} fontWeight="bold">
-                  Via Wallet
-                </Text>
-                <Text fontSize={["sm", "md"]}>
-                  Make payment directly from your Mikul Health wallet
-                </Text>
-              </Box>
-              {/* <Image
+            <Box
+              bg="white"
+              marginLeft="8px"
+              borderRadius="15px"
+              onClick={handleWalletPayment}
+              style={{
+                cursor: "",
+              }}
+              _hover={{ color: "#A210C6" }}
+            >
+              <Flex>
+                <Image
+                  marginLeft="15px"
+                  marginTop="15px"
+                  w="30px"
+                  h="30px"
+                  boxSize={["20px", "30px"]}
+                  src={Wallet}
+                  alt="Settings"
+                />
+                <Box marginLeft="10px" padding="10px" paddingBottom="10px">
+                  <Text fontSize={["lg", "xl"]} fontWeight="bold">
+                    Via Wallet
+                  </Text>
+                  <Text fontSize={["sm", "md"]}>
+                    Make payment directly from your Mikul Health wallet
+                  </Text>
+                </Box>
+                {/* <Image
                display={{base: "none", md: "block"}}
                 marginLeft="15px"
                 marginTop="25px"
@@ -131,38 +144,38 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                 src={RightArrow}
                 alt="Settings"
               /> */}
-            </Flex>
-          </Box>
-          <Box
-            bg="white"
-            marginTop="15px"
-            marginLeft="8px"
-            borderRadius="15px"
-            onClick={handleCardPayment}
-            style={{
-              cursor: "",
-            }}
-            _hover={{ color: "#A210C6" }}
-          >
-            <Flex>
-              <Image
-                marginLeft="15px"
-                marginTop="15px"
-                w="30px"
-                h="30px"
-                boxSize={["20px", "30px"]}
-                src={CardPayment}
-                alt="Settings"
-              />
-              <Box marginLeft="10px" padding="10px" paddingBottom="10px">
-                <Text fontSize={["lg", "xl"]} fontWeight="bold">
-                  Card Payment
-                </Text>
-                <Text fontSize={["sm", "md"]}>
-                  Make payment for booking with card
-                </Text>
-              </Box>
-              {/* <Image
+              </Flex>
+            </Box>
+            <Box
+              bg="white"
+              marginTop="15px"
+              marginLeft="8px"
+              borderRadius="15px"
+              onClick={handleCardPayment}
+              style={{
+                cursor: "",
+              }}
+              _hover={{ color: "#A210C6" }}
+            >
+              <Flex>
+                <Image
+                  marginLeft="15px"
+                  marginTop="15px"
+                  w="30px"
+                  h="30px"
+                  boxSize={["20px", "30px"]}
+                  src={CardPayment}
+                  alt="Settings"
+                />
+                <Box marginLeft="10px" padding="10px" paddingBottom="10px">
+                  <Text fontSize={["lg", "xl"]} fontWeight="bold">
+                    Card Payment
+                  </Text>
+                  <Text fontSize={["sm", "md"]}>
+                    Make payment for booking with card
+                  </Text>
+                </Box>
+                {/* <Image
               display={{base: "none", md: "block"}}
                 marginLeft="15px"
                 marginTop="25px"
@@ -172,9 +185,9 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                 src={RightArrow}
                 alt="Settings"
               /> */}
-            </Flex>
-          </Box>
-        </ModalBody>
+              </Flex>
+            </Box>
+          </ModalBody>
         </ModalContent>
       </Modal>
       {showInsufficientModal && (
