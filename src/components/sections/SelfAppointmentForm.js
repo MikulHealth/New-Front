@@ -288,12 +288,12 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
           <Text p="40px" pt="5px">
             <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
-            <br /> Please note, except short home visit and any of your custom
-            plan, all the services listed under <strong>
+            <br /> Please note, all the services listed under <strong>
               "Service Plan"
             </strong>{" "}
-            are for monthly subscription with 24hrs shift and 8hrs (day) shift,
-            and they expire after one moneth of start of care. You can create a
+            are for monthly subscription with 24hrs shift or 8hrs (day) shift,
+            and they expire after one month of start of care. With the exception of short home visit and any custom
+            plan. You can create a
             custom plan here{" "}
             <Link
               to="/customize-service"
@@ -309,76 +309,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
           <DrawerBody>
             <FormControl ml={{ base: "25px", md: "0" }}>
-              <Flex flexWrap="wrap" ml={{ md: "45px" }}>
-                <Box w={{ base: "300px", md: "550px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
-                    Start Date
-                  </FormLabel>
-                  <Flex
-                    h="6vh"
-                    paddingTop="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
-                      isRequired
-                      selected={selectedStartDate}
-                      onChange={handleStartDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to start"
-                      className="form-control"
-                      minDate={new Date()}
-                    />
-                    {/* <Image
-                      ml={{ base: "50px", md: "30px" }}
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
-                  </Flex>
-                </Box>
-                {/* <Box
-                  w={{ base: "300px", md: "270px" }}
-                  ml={{ md: "5px" }}
-                  marginTop="20px"
-                > */}
-                {/* <FormLabel fontWeight="bold">End Date</FormLabel>
-                  <Flex
-                    h="6vh"
-                    paddingTop="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  > */}
-                {/* <DatePicker
-                      isRequired
-                      selected={selectedEndDate}
-                      onChange={handleEndDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to end"
-                      className="form-control"
-                      minDate={new Date()}
-                      style={{ border: "none" }}
-                    /> */}
-                {/* <Image
-                      ml={{ base: "50px", md: "30px" }}
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
-              </Flex>
-              {/* </Box> */}
-              {/* </Flex> */}
-              <Flex flexWrap="wrap" marginTop="20px">
+            <Flex flexWrap="wrap" marginTop="20px">
                 <Box w={{ base: "300px", md: "270px" }} ml={{ md: "40px" }}>
                   <FormLabel fontWeight="bold">Service Plan </FormLabel>
                   <Select
@@ -430,7 +361,42 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   </Select>
                 </Box>
               </Flex>
-              <Box ml={{ md: "40px" }} marginTop="20px">
+            
+
+              <Flex flexWrap="wrap" ml={{ md: "45px" }}>
+                <Box  w={{ base: "300px", md: "270px" }}>
+                  <FormLabel fontWeight="bold" marginTop="20px">
+                    Start Date
+                  </FormLabel>
+                  <Flex
+                    h="6vh"
+                    paddingTop="5px"
+                    paddingLeft="15px"
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  >
+                    <DatePicker
+                      isRequired
+                      selected={selectedStartDate}
+                      onChange={handleStartDateChange}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      dateFormat="dd-MM-yyyy"
+                      placeholderText="preferred date to start"
+                      className="form-control"
+                      minDate={new Date()}
+                    />
+                    {/* <Image
+                      ml={{ base: "50px", md: "30px" }}
+                      w="24px"
+                      h="24px"
+                      src={CalenderIcon}
+                      alt="CalenderIcon"
+                    /> */}
+                  </Flex>
+                </Box>
+                <Box ml={{ md: "5px" }} marginTop="20px">
                 <FormLabel fontWeight="bold">Current Location </FormLabel>
                 <Flex>
                   <Input
@@ -440,7 +406,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     placeholder="current Location"
                     value={formFields.currentLocation}
                     onChange={handleInputChange}
-                    w={{ base: "300px", md: "550px" }}
+                    w={{ base: "300px", md: "270px" }}
                   />
                   {/* <Image
                     marginTop="10px"
@@ -452,6 +418,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   /> */}
                 </Flex>
               </Box>
+              </Flex>
+             
+            
               <Box ml={{ md: "40px" }} marginTop="20px">
                 <FormLabel fontWeight="bold">
                   Upload necessary document (test results, medical report,

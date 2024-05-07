@@ -343,15 +343,15 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
-          <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
+          <DrawerHeader color="#A210C6">Book Appointment</DrawerHeader>
           <Text p="40px" pt="5px">
             <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
-            <br /> Please note, except short home visit and any of your custom
-            plan, all the services listed under <strong>
+            <br /> Please note, all the services listed under <strong>
               "Service Plan"
             </strong>{" "}
-            are for monthly subscription with 24hrs shift and 8hrs (day) shift,
-            and they expire after one moneth of start of care. You can create a
+            are for monthly subscription with 24hrs shift or 8hrs (day) shift,
+            and they expire after one month of start of care. With the exception of short home visit and any custom
+            plan. You can create a
             custom plan here{" "}
             <Link
               to="/customize-service"
@@ -497,42 +497,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   </Select>
                 </Box>
               </Flex>
-              <Flex flexWrap="wrap" ml={{ md: "5px" }}>
-                <Box w={{ base: "300px", md: "550px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
-                    Start Date
-                  </FormLabel>
-
-                  <Flex
-                    h="6vh"
-                    padding="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
-                      selected={selectedStartDate}
-                      onChange={handleStartDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to start"
-                      className="form-control"
-                      minDate={new Date()}
-                    />
-                    {/* <Image
-                      marginLeft="30px"
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
-                  </Flex>
-                </Box>
-              
-                  </Flex>
-                
               <Flex flexWrap="wrap">
                 <Box ml={{ md: "5px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
@@ -600,8 +564,40 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   </Select>
                 </Box>
               </Flex>
+              <Flex flexWrap="wrap" ml={{ md: "5px" }}>
+                <Box  w={{ base: "300px", md: "270px" }}>
+                  <FormLabel fontWeight="bold" marginTop="20px">
+                    Start Date
+                  </FormLabel>
 
-              <Box ml={{ md: "5px" }}>
+                  <Flex
+                    h="6vh"
+                    padding="5px"
+                    paddingLeft="15px"
+                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                  >
+                    <DatePicker
+                      selected={selectedStartDate}
+                      onChange={handleStartDateChange}
+                      peekNextMonth
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      dateFormat="dd-MM-yyyy"
+                      placeholderText="preferred date to start"
+                      className="form-control"
+                      minDate={new Date()}
+                    />
+                    {/* <Image
+                      marginLeft="30px"
+                      w="24px"
+                      h="24px"
+                      src={CalenderIcon}
+                      alt="CalenderIcon"
+                    /> */}
+                  </Flex>
+                </Box>
+                <Box ml={{ md: "5px" }}>
                 <FormLabel fontWeight="bold" marginTop="20px">
                   Current Location{" "}
                 </FormLabel>
@@ -612,7 +608,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     placeholder="current Location"
                     value={formFields.currentLocation}
                     onChange={handleInputChange}
-                    w={{ base: "300px", md: "550px" }}
+                    w={{ base: "300px", md: "270px" }}
                   />
                   {/* <Image
                     marginTop="10px"
@@ -624,6 +620,11 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   /> */}
                 </Flex>
               </Box>
+                  </Flex>
+                
+
+
+             
               <Box ml={{ md: "5px" }}>
                 <FormLabel fontWeight="bold" marginTop="20px">
                   Upload necessary document (test results, medical report,
@@ -679,7 +680,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
               borderRadius="100px"
               isLoading={loading}
               loadingText="Processing..."
-              bg="#510863"
+              bg="#A210C6"
               color="white"
               onClick={handleFormSubmit}
             >
