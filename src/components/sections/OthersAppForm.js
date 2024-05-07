@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import LocationIcon from "../../assets/LocationIcon.svg";
-// import CalenderIcon from "../../assets/CalenderIcon.svg";
+import { WarningIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 import { FaPhoneAlt } from "react-icons/fa";
 import PaymentModal from "./PaymentMethod";
 import {
@@ -78,7 +77,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           ...formFields,
           [name]: value,
           shift: selectedPlan.shift,
-          costOfService: parseInt(selectedPlan.costOfService.replace(/[,]/g, "")),
+          costOfService: parseFloat(selectedPlan.costOfService.replace(/[,]/g, "")),
           medicSpecialization: selectedPlan.preferredCaregiver,
         });
         setShiftDisabled(true);  // Disable shift selection because it's a customized plan
@@ -345,6 +344,26 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
           <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
+          <Text p="40px" pt="5px">
+            <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+            <br /> Please note, except short home visit and any of your custom
+            plan, all the services listed under <strong>
+              "Service Plan"
+            </strong>{" "}
+            are for monthly subscription with 24hrs shift and 8hrs (day) shift,
+            and they expire after one moneth of start of care. You can create a
+            custom plan here{" "}
+            <Link
+              to="/customize-service"
+              style={{
+                color: "#A210C6",
+                fontWeight: "bold",
+                fontStyle: "italic",
+              }}
+            >
+              create plan
+            </Link>
+          </Text>
           <DrawerBody>
             <FormControl ml={{ base: "25px", md: "0" }} w={{base: "100%", md: ""}}>
               {/* <Box> */}

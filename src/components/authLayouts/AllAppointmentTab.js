@@ -94,11 +94,6 @@ export default function AppointmentTab() {
     }
   };
 
-  const formattedCost = (amount) => {
-    const num = Number(amount);
-    return num.toLocaleString();
-  };
-
   const formatDateTime = (dateTimeString) => {
     const options = {
       year: "numeric",
@@ -435,7 +430,7 @@ export default function AppointmentTab() {
                     Cost of service
                   </Text>
                   <Text marginLeft="20px" color="black">
-                  ₦{formattedCost(selectedAppointment.costOfService) ||
+                  ₦{selectedAppointment.costOfService ||
                       "Not availabe"}.00
                   </Text>
                 </Flex>
@@ -445,7 +440,7 @@ export default function AppointmentTab() {
                     Start Date:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment.startDate) ||
+                    {selectedAppointment.startDate ||
                       "Not availabe"}
                   </Text>
                 </Flex>

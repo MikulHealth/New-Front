@@ -90,30 +90,38 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   ];
 
 
-    const calculateCost = useCallback(() => {
-      let costPerDay = 0;
+  const calculateCost = useCallback(() => {
+    let costPerDay = 0;
+    if (!medicSpecialization || !shift || !duration) {
+      console.error("Missing input for cost calculation");
+      return "N/A"; // Return "N/A" or similar if inputs are incomplete
+    }
   
+    if (medicSpecialization === "Nurse Assistant") {
+      costPerDay = 6000;
+    } else {
+      costPerDay = 12000;
+    }
+  
+    if (shift === "Day Shift") {
+      costPerDay *= 1;
+    } else if (shift === "Live-in") {
       if (medicSpecialization === "Nurse Assistant") {
-        costPerDay = 6000;
+        costPerDay = 10000;
       } else {
-        costPerDay = 12000;
+        costPerDay = 16000;
       }
+    }
   
-      if (shift === "Day Shift") {
-        costPerDay *= 1;
-      } else if (shift === "Live-in") {
-        if (medicSpecialization === "Nurse Assistant") {
-          costPerDay = 10000;
-        } else {
-          costPerDay = 16000;
-        }
-      }
+    const numDays = parseInt(duration);
+    if (isNaN(numDays)) {
+      console.error("Invalid duration for cost calculation");
+      return "N/A";
+    }
   
-      const totalCost = costPerDay * parseInt(duration);
-      return totalCost.toLocaleString("en-NG", {
-        
-      });
-    }, [medicSpecialization, shift, duration]); 
+    const totalCost = costPerDay * numDays;
+    return totalCost.toLocaleString("en-NG");
+  }, [medicSpecialization, shift, duration]);
   
     useEffect(() => {
       const calculatedCost = calculateCost();

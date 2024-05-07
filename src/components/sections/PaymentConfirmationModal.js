@@ -165,7 +165,7 @@ const PaymentConfirmationPage = () => {
                 fontWeight="bold"
                 color="#510863"
               >
-                 ₦{formattedCost(costOfService)}.00
+                 ₦{formattedCost(costOfService)}
               </Text>{" "}
               to proceed with your booking for{" "}
               <Text

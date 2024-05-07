@@ -129,10 +129,6 @@ export default function PendingApp() {
     fetchData();
   }, []);
   
-  const formattedCost = (amount) => {
-    const num = Number(amount);
-    return num.toLocaleString();
-  };
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -545,7 +541,7 @@ export default function PendingApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                    ₦{formattedCost(selectedAppointment.costOfService) ||
+                    ₦{selectedAppointment.costOfService||
                         "Not availabe"}.00
                     </Text>
                   </Flex>

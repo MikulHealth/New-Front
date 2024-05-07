@@ -74,7 +74,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       }, 1000);
       onClose();
     } else {
-      setAmountNeeded(numericCostOfService);
+      setAmountNeeded(costOfService);
       setShowInsufficientModal(true);
     }
   };
@@ -100,11 +100,12 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent bg="#A210C6">
-          <ModalHeader color="white" textAlign="center">
+        <ModalCloseButton color="white" />
+          <ModalHeader mt="20px" color="white" textAlign="center">
             The Cost for the service is ₦{formatAmount(paymentData.costOfService)} <br></br>
             How do you want to pay?
           </ModalHeader>
-          <ModalCloseButton color="white" />
+          
           <ModalBody paddingBottom="25px">
             <Box
               bg="white"

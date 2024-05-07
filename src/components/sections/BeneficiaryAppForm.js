@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-// import LocationIcon from "../../assets/LocationIcon.svg";
-// import CalenderIcon from "../../assets/CalenderIcon.svg";
 import PaymentModal from "./PaymentMethod";
 import {
   InputGroup,
@@ -12,38 +10,35 @@ import {
   DrawerBody,
   DrawerFooter,
   DrawerCloseButton,
-  // useToast,
   Button,
   Input,
   Select,
-  // Image,
   Textarea,
   FormControl,
   FormLabel,
+  Text,
   Box,
   Flex,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-
+import { WarningIcon } from "@chakra-ui/icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 
 
-// import { useNavigate } from "react-router-dom";
 const BookBeneficiaryAppointmentModal = ({
   isOpen,
   onClose,
   selectedBeneficiary,
 }) => {
-  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [isShiftDisabled, setIsShiftDisabled] = useState(false);
   const [customizedPlans, setCustomizedPlans] = useState([]);
-  // const navigate = useNavigate();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({}); 
 
@@ -59,7 +54,6 @@ const BookBeneficiaryAppointmentModal = ({
     medicalReport: null,
     medicSpecialization: "",
     startDate: null,
-    // endDate: null,
     relationship: selectedBeneficiary.relationship,
     costOfService: "",
   });
@@ -95,7 +89,7 @@ const BookBeneficiaryAppointmentModal = ({
           ...prev,
           [name]: value,
           shift: selectedPlan.shift,
-          costOfService: parseFloat(selectedPlan.costOfService),
+          costOfService: parseFloat(selectedPlan.costOfService.replace(/[,]/g, "")),
           medicSpecialization: selectedPlan.preferredCaregiver,
         }));
         setIsShiftDisabled(true);  // Disable shift selection
@@ -132,7 +126,6 @@ const BookBeneficiaryAppointmentModal = ({
       shift: "Shift",
       servicePlan: "Service Plan",
       startDate: "Start Date",
-      // endDate: "End Date",
       currentLocation: "Current Location",
     };
 
@@ -140,7 +133,6 @@ const BookBeneficiaryAppointmentModal = ({
       "shift",
       "servicePlan",
       "startDate",
-      // "endDate",
       "currentLocation",
     ];
 
@@ -173,12 +165,10 @@ const BookBeneficiaryAppointmentModal = ({
       const formDataWithDates = {
         ...formPages,
         startDate: formatDateWithDayAdjustment(formPages.startDate),
-        // endDate: formatDateWithDayAdjustment(formPages.endDate),
         customerPhoneNumber: user.phoneNumber,
       };
 
       const requestBody = JSON.stringify(formDataWithDates);
-
       const response = await axios.post(apiUrl, requestBody, { headers });
 
       if (response.data.success) {
@@ -190,7 +180,6 @@ const BookBeneficiaryAppointmentModal = ({
           medicalReport: null,
           medicSpecialization: "",
           startDate: null,
-          // endDate: null,
           costOfService: "",
         });
         toast.success("Appointment saved");
@@ -341,13 +330,34 @@ const BookBeneficiaryAppointmentModal = ({
       />
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader color="#510863">
+        <DrawerHeader textAlign="center" color="#510863">
           {" "}
           Book Appointment for{" "}
           {`${selectedBeneficiary.recipientFirstName || ""} ${
             selectedBeneficiary.recipientLastName || ""
           }`}
+          
         </DrawerHeader>
+        <Text p="40px" pt="5px">
+            <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+            <br /> Please note, except short home visit and any of your custom
+            plan, all the services listed under <strong>
+              "Service Plan"
+            </strong>{" "}
+            are for monthly subscription with 24hrs shift and 8hrs (day) shift,
+            and they expire after one moneth of start of care. You can create a
+            custom plan here{" "}
+            <Link
+              to="/customize-service"
+              style={{
+                color: "#A210C6",
+                fontWeight: "bold",
+                fontStyle: "italic",
+              }}
+            >
+              create plan
+            </Link>
+          </Text>
         <DrawerCloseButton />
         <DrawerBody ml={{ base: "25px", md: "0" }}>
           <FormControl isRequired>

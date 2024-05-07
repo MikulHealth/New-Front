@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import LocationIcon from "../../assets/LocationIcon.svg";
+import { WarningIcon } from "@chakra-ui/icons";
 // import CalenderIcon from "../../assets/CalenderIcon.svg";
 import PaymentModal from "./PaymentMethod";
 import {
@@ -19,11 +21,10 @@ import {
   FormLabel,
   Input,
   Button,
-  // Image,
   Flex,
   Box,
   Select,
-  // useToast,
+  Text,
   InputGroup,
   Textarea,
 } from "@chakra-ui/react";
@@ -71,41 +72,47 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
+  
     if (name === "servicePlan") {
-      // Find the selected plan object
       const selectedPlan = customizedPlans.find((plan) => plan.name === value);
-
+  
       console.log("Selected Plan:", selectedPlan);
-      console.log(
-        "Cost of Service:",
-        selectedPlan ? selectedPlan.costOfService : "N/A"
-      );
-
       if (selectedPlan) {
-        setFormFields({
-          ...formFields,
-          [name]: value,
-          shift: selectedPlan.shift,
-          costOfService: parseFloat(
-            selectedPlan.costOfService.replace(/[,]/g, "")
-          ), // assuming costOfService is a string with commas
-          medicSpecialization: selectedPlan.preferredCaregiver,
-        });
-        setIsShiftDisabled(true); // Disable shift selection for customized plans
+        console.log("Cost of Service (raw):", selectedPlan.costOfService); // Check the raw value
+  
+        // Check if the property exists and is not null
+        if (selectedPlan.costOfService) {
+          const cleanedCost = selectedPlan.costOfService.replace(/[,]/g, "");
+          console.log("Cleaned Cost of Service:", cleanedCost); // Log cleaned value
+  
+          const parsedCost = parseFloat(cleanedCost);
+          console.log("Parsed Cost of Service:", parsedCost); // Log parsed value
+  
+          setFormFields({
+            ...formFields,
+            [name]: value,
+            shift: selectedPlan.shift,
+            costOfService: parsedCost,
+            medicSpecialization: selectedPlan.preferredCaregiver,
+          });
+        } else {
+          console.log("Cost of Service is undefined or null");
+        }
+        setIsShiftDisabled(true);
       } else {
         setFormFields({
           ...formFields,
           [name]: value,
           shift: "",
           costOfService: "",
-        }); // Reset shift and cost when no plan is selected or switched to non-customized
-        setIsShiftDisabled(false); // Enable shift selection for non-customized plans
+        });
+        setIsShiftDisabled(false);
       }
     } else {
       setFormFields({ ...formFields, [name]: value });
     }
   };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -277,9 +284,31 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
-          <DrawerHeader color="#510863">Book Appointment</DrawerHeader>
+          <DrawerHeader color="#A210C6">Book Appointment</DrawerHeader>
+
+          <Text p="40px" pt="5px">
+            <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+            <br /> Please note, except short home visit and any of your custom
+            plan, all the services listed under <strong>
+              "Service Plan"
+            </strong>{" "}
+            are for monthly subscription with 24hrs shift and 8hrs (day) shift,
+            and they expire after one moneth of start of care. You can create a
+            custom plan here{" "}
+            <Link
+              to="/customize-service"
+              style={{
+                color: "#A210C6",
+                fontWeight: "bold",
+                fontStyle: "italic",
+              }}
+            >
+              create plan
+            </Link>
+          </Text>
+
           <DrawerBody>
-            <FormControl>
+            <FormControl ml={{ base: "25px", md: "0" }}>
               <Flex flexWrap="wrap" ml={{ md: "45px" }}>
                 <Box w={{ base: "300px", md: "550px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
@@ -458,7 +487,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
               w="150px"
               isLoading={loading}
               loadingText="Processing..."
-              bg="#510863"
+              bg="#A210C6"
               color="white"
               onClick={handleFormSubmit}
               borderRadius="100px"
