@@ -15,7 +15,6 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  // Image,
   FormControl,
   FormLabel,
   InputGroup,
@@ -25,7 +24,6 @@ import {
   Flex,
   Box,
   Select,
-  // useToast,
   Switch,
   Text,
   Textarea,
@@ -37,7 +35,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
-  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -63,8 +60,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     relationship: "",
     medicalReport: "",
   });
-
-  // const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -166,9 +161,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
       };
-
       const requestBody = JSON.stringify(formDataWithDates);
-
       const response = await axios.post(apiUrl, requestBody, { headers });
 
       if (response.data.success) {

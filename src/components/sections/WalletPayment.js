@@ -40,15 +40,9 @@ import "react-toastify/dist/ReactToastify.css";
 const WalletPaymentPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const location = useLocation();
-  const { costOfService, appointmentId, beneficiary } = location.state;
-
-  console.log("cost ", costOfService);
-  console.log("ID ", appointmentId);
-
- 
+  const { costOfService, appointmentId, beneficiary } = location.state; 
   const formattedCost = (cost) => {
     const num = Number(cost);
     return num.toLocaleString("en-US");
@@ -56,7 +50,7 @@ const WalletPaymentPage = () => {
 
 const handleWalletPayment = async () => {
     setLoading(true);
-    console.log("Paying with wallet...");
+   
     const customerId = user?.userId;
      
     
@@ -65,14 +59,6 @@ const handleWalletPayment = async () => {
     // const apiUrl = `http://localhost:8080/v1/api/wallets/withdraw?customerId=${encodeURIComponent(customerId)}&appointmentId=${encodeURIComponent(appointmentId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
     const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw?customerId=${encodeURIComponent(customerId)}&appointmentId=${encodeURIComponent(appointmentId)}&amount=${encodeURIComponent(costOfService)}&method=${encodeURIComponent(method)}`;
   
-    // console.log("Amount being sent:", amount);
-    const payload = {
-        customerId: encodeURIComponent(customerId),
-        amount: encodeURIComponent(costOfService),
-        method: encodeURIComponent(method)
-    };
-    console.log("Payload:", payload);
-
     try {
       const token = localStorage.getItem("token"); 
       const headers = {
@@ -80,8 +66,7 @@ const handleWalletPayment = async () => {
         Authorization: `Bearer ${token}`,
       };
   
-      // Making the API call to withdraw from the wallet
-      const response = await axios.post(apiUrl, {}, { headers });
+       const response = await axios.post(apiUrl, {}, { headers });
   
       if (response.data.success) {
         setLoading(false);

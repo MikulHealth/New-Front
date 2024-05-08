@@ -252,7 +252,6 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
   const customerId = user?.userId;
   const [loading, setLoading] = useState(false);
-  // const toast = useToast();
   const method = "CARD";
   const navigate = useNavigate();
 
@@ -368,7 +367,7 @@ const WalletPage = () => {
       setLoading(false);
     }, 3000);
     return () => clearTimeout(timer);
-  }, [user]); // Dependency on user state to re-trigger when user state changes
+  }, [user]); 
 
   const handleOpenFundWalletModal = () => {
     setShowFundWalletModal(true);

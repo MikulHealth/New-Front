@@ -59,12 +59,10 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     const fetchData = async () => {
       if (localStorage.getItem("token")) {
         try {
-          console.log("Calling GetCurrentUser API");
-          const response = await GetCurrentUser();
+           const response = await GetCurrentUser();
 
           if (response.success) {
-            console.log("API response:", response.data);
-            setUser(response.data);
+             setUser(response.data);
           } else {
             console.error("API request failed:", response.error);
           }
@@ -203,8 +201,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
 
       if (response.success) {
         setLoading(false);
-        console.log("User details updated successfully:", response.data);
-        navigate("/dashboard");
+         navigate("/dashboard");
         window.location.reload();
       } else {
         console.error("Failed to update user details:", response.error);

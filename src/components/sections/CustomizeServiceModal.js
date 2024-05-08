@@ -56,7 +56,6 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [costOfService, setCostOfService] = useState(0);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  // const toast = useToast();
   const [setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -93,8 +92,8 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const calculateCost = useCallback(() => {
     let costPerDay = 0;
     if (!medicSpecialization || !shift || !duration) {
-      console.error("Missing input for cost calculation");
-      return "N/A"; // Return "N/A" or similar if inputs are incomplete
+      toast.error("Kindly fill in the right input");
+       return "N/A"; 
     }
   
     if (medicSpecialization === "Nurse Assistant") {
@@ -115,25 +114,21 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   
     const numDays = parseInt(duration);
     if (isNaN(numDays)) {
-      console.error("Invalid duration for cost calculation");
+      toast.error("Invalid duration for cost calculation");
       return "N/A";
     }
   
     const totalCost = costPerDay * numDays;
-    return totalCost.toLocaleString("en-NG");
+    return totalCost;
   }, [medicSpecialization, shift, duration]);
   
     useEffect(() => {
       const calculatedCost = calculateCost();
       setCostOfService(calculatedCost);
     }, [calculateCost]);  
-  
-
   const formattedCost = (cost) => {
-
     const formattedCost =
       "₦ " + cost.toLocaleString("en-NG");
-
     return formattedCost;
   };
 
@@ -143,20 +138,17 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
 
       if (localStorage.getItem("token")) {
         try {
-          console.log("Calling GetCurrentUser API");
           const response = await GetCurrentUser();
 
           if (response.success) {
-            console.log("API response:", response.data);
-            dispatch(SetUser(response.data));
+             dispatch(SetUser(response.data));
           } else {
             console.error("API request failed:", response.error);
           }
         } catch (error) {
           console.error("Error in GetCurrentUser API:", error);
         } finally {
-          //   setLoading(false);
-          //   setShowSkeleton(false);
+          
         }
       } else {
         navigate("/login");
@@ -183,11 +175,8 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   };
   console.log("Response from Custom-plan", user?.phoneNumber);
   const handleSubmit = () => {
-    // Retrieve the token from local storage
     const token = localStorage.getItem("token");
-
-    // Create the request body
-    const requestBody = {
+ const requestBody = {
       selectedServices: selectedServices,
       frequency: frequency,
       duration: duration,
@@ -196,8 +185,6 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
       costOfService: costOfService,
       name: name,
     };
-
-    // Send the API request using Axios
     axios
       .post(
         // "http://localhost:8080/v1/appointment/save-customized-service",
@@ -206,15 +193,12 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            // Include the authorization header with the token
             Authorization: `Bearer ${token}`,
           },
         }
       )
       .then((response) => {
-        // Handle the response data here
-        console.log("Response data:", response.data);
-        if (response.data.success) {
+          if (response.data.success) {
           toast.success("Customized Plan Saved");
           handleConfirmationModalClose();
           onClose();
@@ -222,16 +206,12 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
             navigate("/services");
           }, 5000);
         } else {
-          // Display error toast
           toast.error("Customized plan failed to save");
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
-        // Display error toast
-        toast.error("Customized Plan Saved");
-        // Optionally, handle errors and display error messages to the user
-      });
+         toast.error("Customized Plan Saved");
+          });
   };
 
   return (

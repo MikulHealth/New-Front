@@ -26,11 +26,9 @@ const UserDetailsDrawer = ({ isOpen, onClose }) => {
     const fetchData = async () => {
       if (localStorage.getItem("token")) {
         try {
-          console.log("Calling GetCurrentUser API");
-          const response = await GetCurrentUser();
+           const response = await GetCurrentUser();
 
           if (response.success) {
-            console.log("API response:", response.data);
             setUser(response.data);
           } else {
             console.error("API request failed:", response.error);

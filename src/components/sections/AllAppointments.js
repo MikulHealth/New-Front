@@ -49,7 +49,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
             status: "success",
             duration: 6000,
           });
-          console.log("appointment status",  response.data.data)
           setAppointments(response.data.data);
         
         } else {
@@ -96,7 +95,6 @@ const AppointmentModal = ({ isOpen, onClose }) => {
       const response = await axios.get(apiUrl, { headers });
 
       if (response && response.data && response.data.success) {
-        console.log("Appointment details:", response.data.data);
         setSelectedAppointment(response.data.data.data);
         setDetailsModalOpen(true);
       } else {

@@ -51,7 +51,6 @@ const customTheme = extendTheme({
 });
 
 const ClientDash = () => {
-  // const [loading, setLoading] = useState(false);
   const [isBeneficiariesModalOpen, setBeneficiariesModalOpen] = useState(false);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const navigate = useNavigate();
@@ -65,7 +64,6 @@ const ClientDash = () => {
   const [loading, setLoading] = useState(true);
   const accountNumber = "0124536789";
   const { hasCopied, onCopy } = useClipboard(accountNumber);
-
   const [apiMessage] = useState("");
   const [showPayAppointmentModal, setShowPayAppointmentModal] = useState(false);
   // const [matchedAppointments, setMatchedAppointments] = useState([]);
@@ -76,22 +74,7 @@ const ClientDash = () => {
     AOS.init();
   }, []);
 
-  // const formatBalance = (balance) => {
-  //   return balance.toLocaleString('en-NG', {
-  //     style: 'currency',
-  //     currency: 'NGN'
-  //   });
-  // };
 
-  //   function formatBalance(num) {
-  //     // Check if num is a number
-  //     if (typeof num === 'number') {
-  //         return '₦' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '₦1,');
-  //     }
-  //     return '₦0.00'; // Default display if num is not a number
-  // }
-
-  //  console.log(currencyFormat(2665));
 
   useEffect(() => {
     const fetchPendingData = async () => {
@@ -110,7 +93,6 @@ const ClientDash = () => {
 
         if (response.data.success) {
           checkUnpaidAppointments(response.data.data);
-          console.log("This are pending appointments:", response.data.data);
         } else {
           console.error("Failed to fetch appointments");
         }
@@ -128,7 +110,6 @@ const ClientDash = () => {
     appointments.forEach((appointmentData) => {
       const appointment = appointmentData.appointment;
       if (!appointment.paid) {
-        console.log("This is the un-paid appointment:", appointment);
         setPendingAppointment(appointment);
         setTimeout(() => {
           setShowPayAppointmentModal(true);
@@ -208,11 +189,10 @@ const ClientDash = () => {
 
       if (localStorage.getItem("token")) {
         try {
-          console.log("Calling GetCurrentUser API");
+        
           const response = await GetCurrentUser();
 
           if (response.success) {
-            console.log("API response:", response.data);
             dispatch(SetUser(response.data));
           } else {
             console.error("API request failed:", response.error);

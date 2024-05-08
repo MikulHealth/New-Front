@@ -192,7 +192,7 @@ const LandingPage = () => {
       toast.warning("Please select an image");
       return;
     }
-    console.log(image);
+   
     if (image.type === "image/jpeg" || image.type === "image/png") {
       const data = new FormData();
       data.append("file", image);
@@ -236,7 +236,7 @@ const LandingPage = () => {
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={false} 
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
@@ -381,7 +381,7 @@ const LandingPage = () => {
             >
               Click to view and accept{" "}
               <Text as="span" color="#A210C6">
-                Mikul Health's policy.
+                Mikul Health's Terms and conditions
               </Text>
             </Checkbox>
 
@@ -414,14 +414,14 @@ const LandingPage = () => {
       </Flex>
 
       {/* Terms Modal */}
-      <Modal isOpen={isTermsOpen} onClose={closeTermsModal} size="full">
+      <Modal isOpen={isTermsOpen} onClose={closeTermsModal} size="full" theme={customTheme}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Terms of Use & Privacy Policy</ModalHeader>
+          <ModalHeader fontFamily="heading">TERMS AND CONDITION & PRIVACY POLICY</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text mb="4">
-              <strong>BACKGROUND:</strong>
+            <Text fontSize="18px" mb="4" fontFamily="body">
+              <strong >BACKGROUND:</strong>
               <br />
               (A) These Terms of Service together with any and all other
               documents connected with these Terms of Service set out the terms
@@ -682,7 +682,7 @@ const LandingPage = () => {
             </Text>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr="3" onClick={closeTermsModal}>
+            <Button  bg="#A210C6" color="white" mr="3" onClick={closeTermsModal}>
               Close
             </Button>
           </ModalFooter>

@@ -53,11 +53,9 @@ const MatchedAppointmentsModal = ({
     !Array.isArray(matchedAppointments) ||
     matchedAppointments.length === 0;
 
-  console.log("Response from Matched modal", apiMessage);
-
   const handleViewMore = async (id) => {
     await fetchAndDisplayAppointmentDetails(id);
-    console.log(`View more details for appointment with ID: ${id}`);
+    // console.log(`View more details for appointment with ID: ${id}`);
   };
 
   const formatDate = (dateString) => {

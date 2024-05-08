@@ -80,7 +80,6 @@ export default function AppointmentTab() {
       const response = await axios.get(apiUrl, { headers });
 
       if (response && response.data && response.data.success) {
-        console.log("Appointment details:", response.data.data);
         setSelectedAppointment(response.data.data.data);
         setDetailsModalOpen(true);
       } else {

@@ -17,7 +17,6 @@ export const GetCurrentUser = async () => {
       "https://backend-c1pz.onrender.com/v1/angel/getCurrentUser",
       config
     );
-    console.log(response.data + "this is response from getCurrentUser");
     return response.data;
   } catch (error) {
     console.log(error);

@@ -38,15 +38,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 export default function PendingApp() {
-  // const navigate = useNavigate();
-  
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); 
   const [paymentData, setPaymentData] = useState({}); 
-  // const toast = useToast();
-  // const { user } = useSelector((state) => state.userReducer);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  // const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -63,17 +58,6 @@ export default function PendingApp() {
   };
 
   const handlePayment = (selectedAppointment) => {
-    // const appointmentId = selectedAppointment.id;
-    // const costOfService = selectedAppointment.costOfService;
-    // const beneficiary =
-    //   selectedAppointment.recipientFirstname +
-    //   " " +
-    //   selectedAppointment.recipientLastname;
-    // navigate("/make-payment", {
-    //   state: { costOfService, appointmentId, beneficiary },
-    // });
-
-    
     setPaymentData({
       costOfService: selectedAppointment.costOfService,
       appointmentId: selectedAppointment.id,
@@ -86,7 +70,6 @@ export default function PendingApp() {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
   const handleEditAppointment = (id) => {
-    // setSelectedAppointmentId(id);
     setEditModalOpen(true);
     setDetailsModalOpen(false);
   };
@@ -153,7 +136,6 @@ export default function PendingApp() {
       const response = await axios.get(apiUrl, { headers });
 
       if (response && response.data && response.data.success) {
-        console.log("Appointment details:", response.data.data);
         setSelectedAppointment(response.data.data.data);
         setDetailsModalOpen(true);
       } else {
@@ -649,7 +631,7 @@ export default function PendingApp() {
             </ModalBody>
             <ModalFooter>
               <Button
-                bg="#510863"
+                bg="#A210C6"
                 color="white"
                 onClick={handleCancelModalClose}
               >

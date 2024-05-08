@@ -46,7 +46,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
   const [formFields, setFormFields] = useState({
     startDate: null,
-    // endDate: null,
     shift: "",
     servicePlan: "",
     currentLocation: "",
@@ -78,21 +77,14 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   
       console.log("Selected Plan:", selectedPlan);
       if (selectedPlan) {
-        console.log("Cost of Service (raw):", selectedPlan.costOfService); // Check the raw value
-  
-        // Check if the property exists and is not null
-        if (selectedPlan.costOfService) {
-          const cleanedCost = selectedPlan.costOfService.replace(/[,]/g, "");
-          console.log("Cleaned Cost of Service:", cleanedCost); // Log cleaned value
-  
-          const parsedCost = parseFloat(cleanedCost);
-          console.log("Parsed Cost of Service:", parsedCost); // Log parsed value
-  
+           if (selectedPlan.costOfService) {
+          const cleanedCost = selectedPlan.costOfService;
+         
           setFormFields({
             ...formFields,
             [name]: value,
             shift: selectedPlan.shift,
-            costOfService: parsedCost,
+            costOfService: cleanedCost,
             medicSpecialization: selectedPlan.preferredCaregiver,
           });
         } else {
@@ -173,8 +165,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       const formDataWithDates = {
         ...formFields,
         startDate: formatDateWithDayAdjustment(selectedStartDate),
-        // endDate: formatDateWithDayAdjustment(selectedEndDate),
-        recipientDOB: formatDateWithDayAdjustment(selectedDob),
+         recipientDOB: formatDateWithDayAdjustment(selectedDob),
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
 
@@ -182,15 +173,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       };
 
       const requestBody = JSON.stringify(formDataWithDates);
-
       const response = await axios.post(apiUrl, requestBody, { headers });
 
       if (response.data.success) {
         setLoading(false);
         setFormFields({
-          // startDate: null,
-          endDate: null,
-          shift: "",
+          startDate: null,
+           shift: "",
           servicePlan: "",
           currentLocation: "",
           medicalReport: "",
@@ -198,8 +187,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           costOfService: "",
         });
         toast.success("Appointment saved");
-        console.log("Appointmend IDI " + response.data.data.id);
-        setPaymentData({
+          setPaymentData({
           costOfService: response.data.data.costOfService,
           appointmentId: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
@@ -208,8 +196,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         setTimeout(() => {
           setIsPaymentModalOpen(true);
         }, 4000);
-        // onClose()
-      } else {
+       } else {
         setLoading(false);
         console.error(response.data.message);
         toast.error(response.data.message);
@@ -254,13 +241,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         }
         break;
     }
-
-    setFormFields({ ...formFields, costOfService });
+    setFormFields(prevFields => ({ ...prevFields, costOfService }));
   };
 
   useEffect(() => {
     calculateServiceCost();
-  });
+  });  
+  
 
   return (
     <>

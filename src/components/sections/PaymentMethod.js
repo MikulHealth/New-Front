@@ -25,26 +25,19 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   const { user } = useSelector((state) => state.userReducer);
   const balance = user?.walletBalance;
   const [amountNeeded, setAmountNeeded] = useState(0);
-
   const [showInsufficientModal, setShowInsufficientModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      // setLoading(true);
-
       if (localStorage.getItem("token")) {
         try {
-          console.log("Calling GetCurrentUser API");
           const response = await GetCurrentUser();
 
           if (response.success) {
-            console.log("API response:", response.data);
             dispatch(SetUser(response.data));
           } else {
-            console.error("API request failed:", response.error);
           }
         } catch (error) {
-          console.error("Error in GetCurrentUser API:", error);
         } finally {
         }
       } else {
@@ -56,15 +49,9 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   }, [navigate, dispatch]);
 
   const handleWalletPayment = () => {
-    console.log("Paying with wallet...");
-    console.log("User balance..." + balance);
-    console.log(paymentData);
     const { costOfService } = paymentData;
-    console.log("COS " + costOfService);
     const numericBalance = Number(balance);
-
-  const numericCostOfService = Number(paymentData.costOfService);  
-  console.log("Numeric Cost of Service:", numericCostOfService);
+    const numericCostOfService = Number(paymentData.costOfService);
 
     if (numericBalance > numericCostOfService) {
       setTimeout(() => {
@@ -80,7 +67,6 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   };
 
   const handleCardPayment = () => {
-    console.log("Paying online...");
     setTimeout(() => {
       navigate("/make-payment", {
         state: { ...paymentData },
@@ -94,18 +80,18 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
     return num.toLocaleString();
   };
 
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent bg="#A210C6">
-        <ModalCloseButton color="white" />
+          <ModalCloseButton color="white" />
           <ModalHeader mt="20px" color="white" textAlign="center">
-            The Cost for the service is ₦{formatAmount(paymentData.costOfService)} <br></br>
+            The Cost for the service is ₦
+            {formatAmount(paymentData.costOfService)} <br></br>
             How do you want to pay?
           </ModalHeader>
-          
+
           <ModalBody paddingBottom="25px">
             <Box
               bg="white"
