@@ -92,7 +92,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const calculateCost = useCallback(() => {
     let costPerDay = 0;
     if (!medicSpecialization || !shift || !duration) {
-      toast.error("Kindly fill in the right input");
+      // toast.error("Kindly fill in the right input");
        return "N/A"; 
     }
   
