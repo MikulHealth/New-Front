@@ -62,6 +62,8 @@ const EdithProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [image] = useState();
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const inputRef = React.useRef();
 
   // const formatDate = (dateString) => {
   //   const options = { year: "numeric", month: "long", day: "numeric" };
@@ -73,6 +75,10 @@ const EdithProfilePage = () => {
   //   const formattedDate = date.toLocaleDateString(undefined, options);
   //   return formattedDate;
   // };
+
+  const handleClick = () => {
+    inputRef.current.click();
+  };
 
   const [formData, setFormData] = useState({
     firstName: user?.firstName,
@@ -109,7 +115,6 @@ const EdithProfilePage = () => {
       });
     }
   };
-
 
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);
@@ -236,8 +241,7 @@ const EdithProfilePage = () => {
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}
-        // overflowY="scroll"
-        // overflowX="hidden"
+        position="fixed"
         ml={{ base: "10px", md: "180px" }}
         w="90%"
         h="100vh"
@@ -298,6 +302,10 @@ const EdithProfilePage = () => {
                   showYearDropdown
                   dropdownMode="select"
                   className="form-control"
+                  style={{
+                    border: "none",
+                    display: "",
+                  }}
                 />
 
                 {/* <Image
@@ -321,17 +329,6 @@ const EdithProfilePage = () => {
               />
             </FormControl>
             {/* <FormControl marginTop="15px">
-              <FormLabel fontSize="16px">Phone number</FormLabel>
-              <Input
-                type="tel"
-                name="phoneNumber"
-                value={formData?.phoneNumber}
-                onChange={handleInputChange}
-                borderColor="black"
-                _hover={{ color: "" }}
-              />
-            </FormControl> */}
-            <FormControl marginTop="15px">
               <FormLabel fontSize="16px">Home Address</FormLabel>
               <Input
                 type="text"
@@ -341,7 +338,7 @@ const EdithProfilePage = () => {
                 borderColor="black"
                 _hover={{ color: "" }}
               />
-            </FormControl>
+            </FormControl> */}
             {/* <FormControl marginTop="15px">
                   <FormLabel>Gender </FormLabel>
                   <Select
@@ -365,7 +362,11 @@ const EdithProfilePage = () => {
             </Button>
           </VStack>
 
-          <Box marginLeft="30px" width="15%">
+          <Box marginLeft="30px" width="20%">
+            <Text textAlign="left">
+              Click on the image to select a new picture before the change
+              picture button
+            </Text>
             <Box
               borderRadius="10px"
               marginTop="30px"
@@ -377,53 +378,49 @@ const EdithProfilePage = () => {
               boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
             >
               <Avatar
-                style={{
-                  cursor: "pointer",
-                }}
+                cursor="pointer"
                 h="120px"
                 w="100px"
                 src={formData?.image}
                 name={formData?.firstName}
                 bg="#A210C6"
-              ></Avatar>
-
+                onClick={handleClick}
+              />
               <Input
-                marginTop="30px"
-                marginBottom="20px"
-                id="fileInput"
-                name="image"
+                ref={inputRef}
                 type="file"
                 accept="image/*"
-                borderColor="black"
-                padding="5px"
-                _hover={{ color: "" }}
-                onChange={(e) => {
-                  handleImageChange(e.target.files[0], formData, setFormData);
-                }}
+                onChange={(e) =>
+                  handleImageChange(e.target.files[0], formData, setFormData)
+                }
+                hidden
+                id="fileInput"
+                name="image"
               />
-            </Box>
-            <Box mt="70px">
-              {imageLoading && <LoadingSpinner size={20} />}
-              <Button
-                fontSize="15px"
-                ml="60px"
-                borderColor="#A210C6" 
-                borderWidth="2px" 
-                bg="white"
-                _hover={{
-                  bg: "gray.100",
-                  borderColor: "purple.800", 
-                }}
-                onClick={handleOpenConfirmationModal}
-              >
-                Change picture
-              </Button>
+
+              <Box mt="30px">
+                {imageLoading && <LoadingSpinner size={20} />}
+                <Button
+                  fontSize="15px"
+                  ml="10px"
+                  borderColor="#A210C6"
+                  borderWidth="2px"
+                  bg="white"
+                  _hover={{
+                    bg: "gray.100",
+                    borderColor: "purple.800",
+                  }}
+                  onClick={handleOpenConfirmationModal}
+                >
+                  Change picture
+                </Button>
+              </Box>
               <Button
                 borderColor="#A210C6"
                 borderWidth="2px"
                 bg="white"
                 mt="10px"
-                ml="30px"
+                ml="-25px"
                 style={{}}
                 _hover={{
                   bg: "gray.100",
@@ -455,6 +452,10 @@ const EdithProfilePage = () => {
               >
                 Edit Profile
               </Text>
+              <Text textAlign="left">
+                Click on the image to select a new picture before the change
+                picture button
+              </Text>
             </Box>
             <Button
               onClick={handleback}
@@ -481,41 +482,36 @@ const EdithProfilePage = () => {
               boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
             >
               <Avatar
-                style={{
-                  cursor: "pointer",
-                }}
+                cursor="pointer"
                 h="120px"
                 w="100px"
                 src={formData?.image}
                 name={formData?.firstName}
                 bg="#A210C6"
-              ></Avatar>
-
+                onClick={handleClick}
+              />
               <Input
-                marginTop="30px"
-                marginBottom="20px"
-                id="fileInput"
-                name="image"
+                ref={inputRef}
                 type="file"
                 accept="image/*"
-                borderColor="black"
-                padding="5px"
-                _hover={{ color: "" }}
-                onChange={(e) => {
-                  handleImageChange(e.target.files[0], formData, setFormData);
-                }}
+                onChange={(e) =>
+                  handleImageChange(e.target.files[0], formData, setFormData)
+                }
+                hidden
+                id="fileInput"
+                name="image"
               />
             </Box>
-            <Flex marginTop="60px">
+            <Flex marginTop="10px">
               {imageLoading && <LoadingSpinner size={20} />}
               <Button
                 fontSize="15px"
-                borderColor="#A210C6" // Border color set to a custom color
-                borderWidth="2px" // Defines the thickness of the border
-                bg="white" // Background color set to white
+                borderColor="#A210C6"
+                borderWidth="2px"
+                bg="white"
                 _hover={{
-                  bg: "gray.100", // Light gray background on hover for visual feedback
-                  borderColor: "purple.800", // Optionally change border color on hover
+                  bg: "gray.100",
+                  borderColor: "purple.800",
                 }}
                 onClick={handleOpenConfirmationModal}
               >
@@ -537,7 +533,6 @@ const EdithProfilePage = () => {
               borderWidth="2px"
               bg="white"
               mt="10px"
-             
               style={{}}
               _hover={{
                 bg: "gray.100",
@@ -583,10 +578,7 @@ const EdithProfilePage = () => {
                 >
                   <Box marginRight="10px"></Box>
                   <DatePicker
-                    selected={
-                      selectedDate ||
-                      (formData.dob ? new Date(formData.dob) : null)
-                    }
+                    selected={selectedDate}
                     onChange={(date) => handleDOBChange(date)}
                     dateFormat="dd/MM/yyyy"
                     placeholderText="dd/mm/yyyy"
@@ -600,6 +592,7 @@ const EdithProfilePage = () => {
                       marginTop: "60px",
                       marginLeft: "50px",
                       display: "",
+                      border: "none",
                     }}
                   />
 
@@ -636,7 +629,7 @@ const EdithProfilePage = () => {
                   _hover={{ color: "" }}
                 /> */}
 
-                <FormLabel marginTop="15px" fontSize="16px">
+                {/* <FormLabel marginTop="15px" fontSize="16px">
                   Home Address
                 </FormLabel>
                 <Input
@@ -646,7 +639,7 @@ const EdithProfilePage = () => {
                   onChange={handleInputChange}
                   borderColor="black"
                   _hover={{ color: "" }}
-                />
+                /> */}
               </FormControl>
               {/* <FormControl marginTop="15px">
                   <FormLabel>Gender </FormLabel>
