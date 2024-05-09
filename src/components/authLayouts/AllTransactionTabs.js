@@ -85,9 +85,9 @@ export default function TransactionTab() {
             No transaction yet. click on fund wallet to begin
           </Text>
         ) : (
-          <VStack   ml={{ base: "20px", md: "" }} align="start" spacing={4}>
+          <VStack  mb={{base: "200px", md: "0"}} ml={{ base: "20px", md: "" }} align="start" spacing={4}>
             {transactions.map((transaction) => (
-              <Box fontSize={{ base: "12px", md: "16px" }} key={transaction.id}>
+              <Box  fontSize={{ base: "12px", md: "16px" }} key={transaction.id}>
                 <Flex>
                   <Text fontWeight="bold" color="black">
                     Amount:

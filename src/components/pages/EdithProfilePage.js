@@ -91,31 +91,67 @@ const EdithProfilePage = () => {
     image: user?.image,
   });
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+
+  //   if (name !== "dob") {
+  //     setFormData({
+  //       ...formData,
+  //       [name]: value,
+  //     });
+  //   } else {
+  //     handleDOBChange(value);
+  //   }
+  // };
+
+  // const handleDOBChange = (date) => {
+  //   if (date) {
+  //     const adjustedDate = new Date(date);
+  //     adjustedDate.setDate(adjustedDate.getDate() + 1);
+  //     setSelectedDate(adjustedDate);
+  //     setFormData({
+  //       ...formData,
+  //       dob: adjustedDate.toISOString().split("T")[0],
+  //     });
+  //   }
+  // };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    if (name !== "dob") {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    } else {
-      handleDOBChange(value);
-    }
+    // Update the formData state by creating a new object with updated fields
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
+
+  // const handleDOBChange = (date) => {
+  //     if (date) {
+  //         const adjustedDate = new Date(date);
+  //         // Ensure we handle time zone offset if needed
+  //         adjustedDate.setDate(adjustedDate.getDate() + 1);
+  //         setSelectedDate(adjustedDate);
+
+  //         // Directly set the formData for dob without waiting for selectedDate to be set
+  //         setFormData(prevFormData => ({
+  //             ...prevFormData,
+  //             dob: adjustedDate.toISOString().split("T")[0],
+  //         }));
+  //     } else {
+  //         // Handle case where date is cleared or invalid
+  //         setSelectedDate(null);
+  //         setFormData(prevFormData => ({
+  //             ...prevFormData,
+  //             dob: '',
+  //         }));
+  //     }
+  // };
 
   const handleDOBChange = (date) => {
-    if (date) {
-      const adjustedDate = new Date(date);
-      adjustedDate.setDate(adjustedDate.getDate() + 1);
-      setSelectedDate(adjustedDate);
-      setFormData({
-        ...formData,
-        dob: adjustedDate.toISOString().split("T")[0],
-      });
-    }
+    setSelectedDate(date);
+    setFormData({ ...formData, dob: date });
   };
-
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);
   };
@@ -174,29 +210,41 @@ const EdithProfilePage = () => {
     }
   };
 
+  const formatDateToUTC = (selectedDate) => {
+    if (!selectedDate) return "";
+
+    if (isNaN(new Date(selectedDate))) {
+      console.error("Invalid date:", selectedDate);
+      return "";
+    }
+
+    const adjustedDate = new Date(selectedDate);
+    adjustedDate.setDate(adjustedDate.getDate() + 1);
+
+    return adjustedDate.toISOString().split("T")[0];
+  };
+
   const handleSubmit = async () => {
     handleCloseConfirmationModal();
     setLoading(true);
     try {
       await handleImageChange(image, formData, setFormData);
 
-      // Add one day to the selected date
-      const modifiedDate = selectedDate
-        ? new Date(selectedDate.getTime())
-        : null;
+      const formatDateWithDayAdjustment = (selectedDate) =>
+        formatDateToUTC(new Date(selectedDate));
 
-      // Format the modified date to match the backend expectations
-      const formattedDate = modifiedDate
-        ? modifiedDate.toISOString().split("T")[0]
-        : "";
-
-      const dataToSend = {
+      const formDataWithDate = {
         ...formData,
-        dob: formattedDate,
+        startDate: formatDateWithDayAdjustment(formData.dob),
       };
 
+      // const dataToSend = {
+      //   ...formData,
+      //   dob: formattedDate,
+      // };
+
       const response = await UpdateCustomer(
-        dataToSend,
+        formDataWithDate,
         toast,
         setLoading,
         "You will be re-directed to the dashboard"

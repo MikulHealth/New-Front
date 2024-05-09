@@ -516,28 +516,28 @@ const WalletPage = () => {
                 >
                   <Text
                     textAlign="left"
-                    fontSize={{ base: "12px", md: "16px" }}
+                    fontSize={{ base: "10px", md: "16px" }}
                   >
                     Wallet ID:
                   </Text>
                   <Flex>
                     <Text
                       textAlign="left"
-                      fontSize={{ base: "12px", md: "16px" }}
+                      fontSize={{ base: "10px", md: "16px" }}
                     >
                       Wema Bank
                     </Text>
                     <Text
                       ml="10px"
                       textAlign="left"
-                      fontSize={{ base: "12px", md: "16px" }}
+                      fontSize={{ base: "10px", md: "16px" }}
                     >
                       {accountNumber}
                     </Text>
                     <IconButton
                       icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
                       onClick={onCopy}
-                      mt="-2px"
+                      mt="-5px"
                       size="sm"
                       aria-label="Copy account number"
                       color="white"
@@ -548,15 +548,15 @@ const WalletPage = () => {
                 </Box>
                 <Flex marginLeft={{ base: "15px", md: "500px" }}>
                   <Box color="white">
-                    <Text textAlign="left" fontSize="12px">
+                    <Text textAlign="left" fontSize="10px">
                       Total funded
                     </Text>
-                    <Text textAlign="left" color="white" fontSize="12px">
+                    <Text textAlign="left" color="white" fontSize="10px">
                       ₦ {formatAmount(walletTotalCredit)}.00
                     </Text>
                   </Box>
                   <Box color="white" marginLeft="10px">
-                    <Text textAlign="left" fontSize="12px">
+                    <Text textAlign="left" fontSize="10px">
                       Total spent
                     </Text>
                     <Text textAlign="left" color="white" fontSize="12px">

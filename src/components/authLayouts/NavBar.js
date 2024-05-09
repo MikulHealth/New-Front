@@ -66,7 +66,7 @@ export default function NavBar() {
   const handleConfirmLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("phoneNumber");
-    navigate("/");
+    navigate("/login");
   };
 
   const listItemStyle = {
@@ -260,9 +260,10 @@ export default function NavBar() {
           marginTop="20px"
           direction={{ base: "row", md: "row" }}
           width="100%"
-          px={{ base: "10px", md: "20px" }}
+          px={{ base: "20px", md: "20px" }}
           spacing={10}
-          justifyContent={{ base: "space-between", md: "flex-start" }}
+          // ml="20px"
+          justifyContent={{ base: "flex-start", md: "flex-start" }}
         >
           <IconButton
             aria-label="Open navigation"
@@ -298,16 +299,18 @@ export default function NavBar() {
               fontSize={{ base: "16", md: "24px" }}
               color="#A210C6"
               fontWeight="bold"
+              
             >
               {pageTitle}
             </Heading>
           )}
-          <Spacer />
+         <Spacer/>
+         
           <Box
             style={{ cursor: "pointer" }}
             onClick={handleOpenUserDetailsModal}
             display={{ base: "block", md: "flex" }}
-            ml={{ base: "5px", md: "550px" }}
+            ml={{ base: "50px", md: "450px" }}
             justifyContent="flex-end"
           >
             <Avatar

@@ -206,7 +206,7 @@ const CustomizeServicePage = () => {
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}
-        position="fixed"
+        overflow={{base: "hidden", md: "scroll"}}
         ml={{ md: "250px" }}
         w={{ base: "100%", md: "70%" }}
         h={{ base: "100%", md: "100%" }}
@@ -227,7 +227,6 @@ const CustomizeServicePage = () => {
           Back
         </Button>
         <Box
-          overflow={{ base: "scroll", md: "none" }}
           w={{ base: "100%", md: "90%" }}
           h={{ base: "100%", md: "100%" }}
           ml={{ base: "40px", md: "0" }}
@@ -235,7 +234,6 @@ const CustomizeServicePage = () => {
           <Box
             className="all-customized-services"
             textAlign="left"
-            // w={{ base: "100%", md: "64vw" }}
             h={{ base: "100%", md: "75vh" }}
             marginTop="10px"
           >
@@ -278,10 +276,11 @@ const CustomizeServicePage = () => {
                 textAlign="left"
                 align="start"
                 // w={{ base: "50vh", md: "50vw" }}
+                overflow="hidden"
                 spacing={4}
               >
                 {customizedServices.map((service) => (
-                  <Box marginTop="20px" key={service.id}>
+                  <Box  w={{ base: "120%", md: "" }} marginTop="20px" key={service.id}>
                     <Box
                       padding="20px"
                       borderColor="#A210C6"
@@ -424,7 +423,7 @@ const CustomizeServicePage = () => {
                 <Button
                   color="green"
                   marginTop="20px"
-                  mb={{ base: "100px", md: "60px" }}
+                  mb={{ base: "150px", md: "60px" }}
                   ml={{ base: "10px", md: "10px" }}
                   leftIcon={<AddIcon />}
                   onClick={handleOpenCustomizePlanFormModal}
@@ -435,7 +434,7 @@ const CustomizeServicePage = () => {
             )}
           </Box>
 
-          <Box marginLeft="910px" marginTop="-150px">
+          <Box display={{base: "none", md: "none"}} marginLeft="910px" marginTop="-150px">
             <Image
               onClick={help}
               // src={HelppIcon}

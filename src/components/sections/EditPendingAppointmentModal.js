@@ -32,7 +32,6 @@ const EditPendingAppointment = ({
   // const toast = useToast();
   const [formData, setFormData] = useState(appointmentDetails);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -52,11 +51,6 @@ const EditPendingAppointment = ({
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
     setFormData({ ...formData, startDate: date });
-  };
-
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
-    setFormData({ ...formData, endDate: date });
   };
 
   const handleConfirmationCancel = () => {
@@ -87,8 +81,7 @@ const EditPendingAppointment = ({
       const formDataWithDates = {
         ...formData,
         startDate: formatDateWithDayAdjustment(formData.startDate),
-        endDate: formatDateWithDayAdjustment(formData.endDate),
-      };
+       };
 
       const requestBody = formDataWithDates;
 
@@ -191,39 +184,6 @@ const EditPendingAppointment = ({
                     className="form-control"
                     minDate={new Date()}
                     value={formData?.startDate}
-                  />
-                  {/* <Image
-                    marginLeft="205px"
-                    w="24px"
-                    h="24px"
-                    src={CalenderIcon}
-                    alt="CalenderIcon"
-                  /> */}
-                </Flex>
-              </Box>
-              <Box w={{ base: "90%", md: "450px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
-                  End Date
-                </FormLabel>
-                <Flex
-                  h="6vh"
-                  padding="5px"
-                  paddingLeft="15px"
-                  style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                >
-                  <DatePicker
-                    selected={selectedEndDate}
-                    onChange={handleEndDateChange}
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
-                    dateFormat="dd-MM-yyyy"
-                    placeholderText="preferred date to end"
-                    className="form-control"
-                    minDate={new Date()}
-                    style={{ border: "none" }}
-                    value={formData?.endDate}
                   />
                   {/* <Image
                     marginLeft="205px"

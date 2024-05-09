@@ -461,7 +461,7 @@ const HelpPage = () => {
               </Box>
               <Box
                 ml={{ base: "150px", md: "100px" }}
-                mb={{ base: "50px" }}
+                mb={{ base: "150px" }}
                 mt={{ base: "-50px", md: "50px" }}
               >
                 <a href="https://wa.me/2347032579006">
