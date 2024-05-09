@@ -443,6 +443,7 @@ const EdithProfilePage = () => {
           mt={{ md: "30px" }}
           ml={{ base: "30px" }}
           mb={{ base: "60px" }}
+          w="360px"
         >
           <Flex justifyContent="space-between" margin="20px">
             <Box>
@@ -547,7 +548,7 @@ const EdithProfilePage = () => {
               Change phone number
             </Button>
             <Box marginTop="15px" w="100%">
-              <FormControl w="280px">
+              <FormControl w="350px">
                 <FormLabel fontSize="16px">First Name</FormLabel>
                 <Input
                   type="text"
@@ -577,8 +578,8 @@ const EdithProfilePage = () => {
                   border="1px solid black"
                   borderRadius="6px"
                   paddingTop="10px"
-                  h="6vh"
-                  w="280px"
+                  h="5vh"
+                  w="350px"
                 >
                   <Box marginRight="10px"></Box>
                   <DatePicker
