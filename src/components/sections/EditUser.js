@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { GetCurrentUser, UpdateCustomer } from "../../apiCalls/UserApis";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   Modal,
@@ -13,7 +13,6 @@ import {
   Input,
   Button,
   Progress,
-  useToast,
   Image,
   Box,
   Text,
@@ -25,6 +24,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../utils/Spiner";
 import UpdatePhoneNumber from "./UpdatePhoneNumber";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditProfileModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -43,26 +44,28 @@ const EditProfileModal = ({ isOpen, onClose }) => {
   });
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const toast = useToast();
 
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      undefined,
-      options
-    );
-    return formattedDate;
-  };
-
+  // const formatDate = (dateString) => {
+  //   const options = { year: "numeric", month: "long", day: "numeric" };
+  //   // Create a new date object from the dateString
+  //   const date = new Date(dateString);
+  //   // Subtract one day
+  //   date.setDate(date.getDate() - 1);
+  //   // Format the adjusted date
+  //   const formattedDate = date.toLocaleDateString(undefined, options);
+  //   return formattedDate;
+  // };
+  
+  // const fdate = formatDate(editedUser.dob)
 
   useEffect(() => {
     const fetchData = async () => {
       if (localStorage.getItem("token")) {
         try {
-           const response = await GetCurrentUser();
+          const response = await GetCurrentUser();
 
           if (response.success) {
-             setUser(response.data);
+            setUser(response.data);
           } else {
             console.error("API request failed:", response.error);
           }
@@ -77,10 +80,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     fetchData();
   }, [navigate]);
 
- 
-
   useEffect(() => {
-   
     setEditedUser({
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
@@ -92,7 +92,6 @@ const EditProfileModal = ({ isOpen, onClose }) => {
       dob: user?.dob || "",
     });
   }, [user]);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -107,13 +106,6 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleDOBChange = (dobValue) => {
-    setSelectedDate(dobValue);
-    setEditedUser({
-      ...editedUser,
-      dob: dobValue,
-    });
-  };
 
   const handleImageChange = async (image, editedUser, setEditedUser) => {
     setImageLoading(true);
@@ -176,38 +168,50 @@ const EditProfileModal = ({ isOpen, onClose }) => {
   const handleCloseConfirmationModal = () => {
     setConfirmationModalOpen(false);
   };
+  
+
+  const handleDOBChange = (date) => {
+    // Create a new date object from the selected date
+    const adjustedDate = new Date(date);
+    // Subtract one day
+    adjustedDate.setDate(adjustedDate.getDate() - 1);
+  
+    setSelectedDate(adjustedDate); // Update state with adjusted date
+    setEditedUser({
+      ...editedUser,
+      dob: adjustedDate.toISOString().split('T')[0] // Send the date as YYYY-MM-DD format
+    });
+  };
+  
 
   const handleSubmit = async () => {
     handleCloseConfirmationModal();
     setLoading(true);
     try {
       await handleImageChange(image, editedUser, setEditedUser);
-      // Format the date to match the backend expectations
-      const formattedDate = selectedDate
-        ? selectedDate.toISOString().split("T")[0]
-        : "";
-
+      // Assuming selectedDate is already in the correct format
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+  
       const dataToSend = {
         ...editedUser,
-        dob: formattedDate,
+        dob: formattedDate, // Use the ISO string date
       };
 
-      const response = await UpdateCustomer(
-        dataToSend,
-        toast,
-        setLoading,
-        "You will be re-directed to the dashboard"
-      );
+      const response = await UpdateCustomer(dataToSend);
 
       if (response.success) {
         setLoading(false);
-         navigate("/dashboard");
-        window.location.reload();
+        toast.success("Update Successful");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
       } else {
+        setLoading(false);
         console.error("Failed to update user details:", response.error);
       }
     } catch (error) {
       console.error("Failed to update user details:", error);
+      setLoading(false);
     }
   };
 
@@ -221,6 +225,17 @@ const EditProfileModal = ({ isOpen, onClose }) => {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Edit Profile</ModalHeader>
@@ -294,7 +309,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
                     <option value="Female">Female</option>
                   </Select>
                 </Box>
-                <Box marginLeft="10px">
+                {/* <Box marginLeft="10px">
                   <FormLabel>Date of Birth</FormLabel>
                   <DatePicker
                     name="dob"
@@ -304,14 +319,14 @@ const EditProfileModal = ({ isOpen, onClose }) => {
                     maxDate={new Date()}
                     peekNextMonth
                     showMonthDropdown
-                    value={formatDate(editedUser.dob)}
+                    value={fdate}
                     showYearDropdown
                     dropdownMode="select"
                     dateFormat="yyyy-MM-dd"
                     placeholderText="Select your date of birth"
                     className="form-control"
                   />
-                </Box>
+                </Box> */}
               </Flex>
               <Input
                 name="address"

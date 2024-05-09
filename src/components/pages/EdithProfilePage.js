@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import {  UpdateCustomer } from "../../apiCalls/UserApis";
+import { UpdateCustomer } from "../../apiCalls/UserApis";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import DateIcon from "../../assets/DateIcon.svg";
 import NavBar from "../authLayouts/NavBar";
 import LeftSideBar from "../authLayouts/LeftSideBar";
@@ -18,14 +21,12 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  useToast,
   Avatar,
   Image,
   Box,
   Text,
   Flex,
-
-  Divider,
+  // Divider,
   FormControl,
   extendTheme,
   FormLabel,
@@ -54,7 +55,6 @@ const customTheme = extendTheme({
 const EdithProfilePage = () => {
   const navigate = useNavigate();
   // const dispatch = useDispatch();
-  const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
@@ -65,10 +65,12 @@ const EdithProfilePage = () => {
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      undefined,
-      options
-    );
+    // Create a new date object from the dateString
+    const date = new Date(dateString);
+    // Subtract one day
+    date.setDate(date.getDate() - 1);
+    // Format the adjusted date
+    const formattedDate = date.toLocaleDateString(undefined, options);
     return formattedDate;
   };
 
@@ -96,19 +98,30 @@ const EdithProfilePage = () => {
     }
   };
 
-  const handleDOBChange = (dobValue) => {
-    // Check if 'dobValue' is provided, if not, use the current date
-    const newDate = dobValue ? new Date(dobValue) : new Date();
-
-    // Update the 'selectedDate' state
-    setSelectedDate(newDate);
-
-    // Update the 'formData' with the formatted date or an empty string if 'dobValue' is falsy
-    setFormData({
-      ...formData,
-      dob: dobValue ? newDate.toISOString().split("T")[0] : "",
-    });
+  const handleDOBChange = (date) => {
+    if (date) {
+      const adjustedDate = new Date(date);
+      adjustedDate.setDate(adjustedDate.getDate() + 1);
+      setSelectedDate(adjustedDate);
+      setFormData({
+        ...formData,
+        dob: adjustedDate.toISOString().split("T")[0],
+      });
+    }
   };
+
+  // const handleDOBChange = (date) => {
+  //   // Create a new date object from the selected date
+  //   const adjustedDate = new Date(date);
+  //   // Subtract one day
+  //   adjustedDate.setDate(adjustedDate.getDate() - 1);
+
+  //   setSelectedDate(adjustedDate); // Update state with adjusted date
+  //   setEditedUser({
+  //     ...editedUser,
+  //     dob: adjustedDate.toISOString().split('T')[0] // Send the date as YYYY-MM-DD format
+  //   });
+  // };
 
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);
@@ -176,7 +189,7 @@ const EdithProfilePage = () => {
 
       // Add one day to the selected date
       const modifiedDate = selectedDate
-        ? new Date(selectedDate.getTime() + 86400000)
+        ? new Date(selectedDate.getTime())
         : null;
 
       // Format the modified date to match the backend expectations
@@ -198,15 +211,17 @@ const EdithProfilePage = () => {
 
       if (response.success) {
         setLoading(false);
-        console.log("User details updated successfully:", response.data);
-        setTimeout(() => {}, 7000);
-        navigate("/dashboard");
-        window.location.reload();
+        toast.success("Update Successfull");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 5000);
       } else {
         console.error("Failed to update user details:", response.error);
+        toast.error("Failed to update user details");
       }
     } catch (error) {
       console.error("Failed to update user details:", error);
+      toast.error("Error updating user details");
     }
   };
   const settingsContainerStyle = {
@@ -219,10 +234,22 @@ const EdithProfilePage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}
-        position="fixed"
+        // overflowY="scroll"
+        // overflowX="hidden"
         ml={{ base: "10px", md: "180px" }}
         w="90%"
         h="100vh"
@@ -231,11 +258,11 @@ const EdithProfilePage = () => {
         <Flex
           display={{ base: "none", md: "flex" }}
           mt={{ md: "30px" }}
-          ml={{ base: "50px", md: "120px" }}
+          ml={{ base: "50px", md: "40px" }}
         >
           <SettingsSideBar />
 
-          <VStack marginLeft="-40px" spacing={-10}>
+          <VStack mb="40px" ml="10px" spacing={-10}>
             <Text fontWeight="bold" fontSize="20px">
               Edit profile
             </Text>
@@ -272,24 +299,17 @@ const EdithProfilePage = () => {
               >
                 <Box marginRight="10px"></Box>
                 <DatePicker
-                  selected={
-                    selectedDate ||
-                    (formData.dob ? new Date(formData.dob) : null)
-                  }
-                  onChange={(date) => handleDOBChange(date)}
+                  selected={selectedDate}
+                  onChange={handleDOBChange}
                   dateFormat="dd/MM/yyyy"
                   placeholderText="dd/mm/yyyy"
                   maxDate={new Date()}
+                  value={formData?.dob}
                   peekNextMonth
                   showMonthDropdown
                   showYearDropdown
                   dropdownMode="select"
-                  value={formatDate(formData.dob)}
-                  style={{
-                    marginTop: "60px",
-                    marginLeft: "50px",
-                    display: "",
-                  }}
+                  className="form-control"
                 />
 
                 {/* <Image
@@ -299,7 +319,6 @@ const EdithProfilePage = () => {
                   src={DateIcon}
                   alt="Date icon"
                 /> */}
-                
               </Flex>
             </FormControl>
             <FormControl marginTop="15px">
@@ -313,6 +332,17 @@ const EdithProfilePage = () => {
                 _hover={{ color: "" }}
               />
             </FormControl>
+            {/* <FormControl marginTop="15px">
+              <FormLabel fontSize="16px">Phone number</FormLabel>
+              <Input
+                type="tel"
+                name="phoneNumber"
+                value={formData?.phoneNumber}
+                onChange={handleInputChange}
+                borderColor="black"
+                _hover={{ color: "" }}
+              />
+            </FormControl> */}
             <FormControl marginTop="15px">
               <FormLabel fontSize="16px">Home Address</FormLabel>
               <Input
@@ -384,40 +414,38 @@ const EdithProfilePage = () => {
                 }}
               />
             </Box>
-            <Flex marginTop="80px">
+            <Box mt="70px">
               {imageLoading && <LoadingSpinner size={20} />}
               <Button
                 fontSize="15px"
-                borderColor="#A210C6"
-                marginLeft="50px"
-                bg="none"
-                _hover={{ color: "" }}
+                ml="60px"
+                borderColor="#A210C6" 
+                borderWidth="2px" 
+                bg="white"
+                _hover={{
+                  bg: "gray.100",
+                  borderColor: "purple.800", 
+                }}
                 onClick={handleOpenConfirmationModal}
               >
                 Change picture
               </Button>
-              <Divider orientation="vertical" borderColor="black" my={1} />
               <Button
-                _hover={{ color: "" }}
-                bg="none"
-                fontSize="15px"
-                color="red"
-                marginLeft="75px"
+                borderColor="#A210C6"
+                borderWidth="2px"
+                bg="white"
+                mt="10px"
+                ml="30px"
+                style={{}}
+                _hover={{
+                  bg: "gray.100",
+                  borderColor: "purple.800",
+                }}
+                onClick={handlePhoneModalOpen}
               >
-                Delete picture
+                Change phone number
               </Button>
-            </Flex>
-            <Button
-              bg="gray"
-              color="white"
-              marginTop="5px"
-              marginLeft="35px"
-              style={{}}
-              _hover={{ color: "" }}
-              onClick={handlePhoneModalOpen}
-            >
-              Change phone number
-            </Button>
+            </Box>
           </Box>
         </Flex>
 
@@ -426,7 +454,7 @@ const EdithProfilePage = () => {
           display={{ base: "block", md: "none" }}
           mt={{ md: "30px" }}
           ml={{ base: "30px" }}
-          mb={{base: "60px"}}
+          mb={{ base: "60px" }}
         >
           <Flex justifyContent="space-between" margin="20px">
             <Box>
@@ -493,14 +521,19 @@ const EdithProfilePage = () => {
               {imageLoading && <LoadingSpinner size={20} />}
               <Button
                 fontSize="15px"
-                borderColor="#A210C6"
-                bg="none"
-                _hover={{ color: "" }}
+                borderColor="#A210C6" // Border color set to a custom color
+                borderWidth="2px" // Defines the thickness of the border
+                bg="white" // Background color set to white
+                _hover={{
+                  bg: "gray.100", // Light gray background on hover for visual feedback
+                  borderColor: "purple.800", // Optionally change border color on hover
+                }}
                 onClick={handleOpenConfirmationModal}
               >
                 Change picture
               </Button>
-              <Divider orientation="vertical" borderColor="black" my={1} />
+
+              {/* <Divider orientation="vertical" borderColor="black" my={1} />
               <Button
                 _hover={{ color: "" }}
                 bg="none"
@@ -508,7 +541,7 @@ const EdithProfilePage = () => {
                 color="red"
               >
                 Delete picture
-              </Button>
+              </Button> */}
             </Flex>
             <Button
               bg="gray"
@@ -597,6 +630,18 @@ const EdithProfilePage = () => {
                   _hover={{ color: "" }}
                 />
 
+                {/* <FormLabel marginTop="15px" fontSize="16px">
+                  Phone number
+                </FormLabel>
+                <Input
+                  type="tel"
+                  name="phoneNumber"
+                  value={formData?.phoneNumber}
+                  onChange={handleInputChange}
+                  borderColor="black"
+                  _hover={{ color: "" }}
+                /> */}
+
                 <FormLabel marginTop="15px" fontSize="16px">
                   Home Address
                 </FormLabel>
@@ -634,7 +679,7 @@ const EdithProfilePage = () => {
             </Box>
           </VStack>
         </Flex>
-        <MobileFooter/>
+        <MobileFooter />
       </VStack>
 
       <Modal

@@ -77,10 +77,11 @@ const LandingPage = () => {
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData.message);
-        toast.error(errorData.message);
+        toast.error("Wrong passowd or phone number");
       }
     } catch (error) {
       console.error("Login failed:", error.message);
+      toast.error("Wrong passowd or phone number");
     } finally {
       setLoading(false);
     }

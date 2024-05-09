@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GetCurrentUser, UpdateCustomer } from "../../apiCalls/UserApis";
-import axios from "axios";
+// import axios from "axios";
+import { WarningIcon } from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,
@@ -11,12 +12,13 @@ import {
   ModalFooter,
   FormControl,
   Input,
-  useToast,
   Box,
   Text,
   Button,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   return (
@@ -42,15 +44,16 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
 const SettingsModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
-  const toast = useToast();
   const navigate = useNavigate();
   const [editedUser, setEditedUser] = useState({
     firstName: "",
     lastName: "",
     address: "",
     email: "",
+    dob: "",
     phoneNumber: "",
     image: "",
+    gender: "",
   });
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
@@ -84,6 +87,8 @@ const SettingsModal = ({ isOpen, onClose }) => {
       email: user?.email || "",
       phoneNumber: user?.phoneNumber || "",
       image: user?.image || "",
+      dob: user?.dob || "",
+      gender: user?.gender || "",
     });
   }, [user]);
 
@@ -117,19 +122,16 @@ const SettingsModal = ({ isOpen, onClose }) => {
     try {
       const response = await UpdateCustomer(
         editedUser,
-        toast,
-        setLoading,
-        "Phone number updated. Sending OTP..."
       );
 
-      if (response.success) {
-        localStorage.setItem("token", response.data.data);
-        console.log(response.data);
-
+      if (response.data.success) {
+        // localStorage.setItem("token", response.data.data);
         setLoading(false);
-        console.log("User details updated successfully:", response.data);
-
-        handleVerify();
+        toast.success("Phone number updated successfully, Kindly login with the new number");
+        setTimeout(() => {
+          navigate("/login");
+        }, 5000);
+        // handleVerify();
       } else {
         console.error("Failed to update user details:", response.error);
       }
@@ -140,58 +142,75 @@ const SettingsModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleVerify = async () => {
-    try {
-      setLoading(true);
-      localStorage.setItem("phoneNumber", editedUser.phoneNumber);
-      const number = localStorage.getItem("phoneNumber");
-      const verifyNumberResponse = await axios.post(
-        "http://localhost:8080/api/v1/sms/verify-number",
-        {
-          phoneNumber: number,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setLoading(false);
-      toast({
-        title: "OTP Sent",
-        description: verifyNumberResponse.data.message,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+  // const handleVerify = async () => {
+  //   try {
+  //     setLoading(true);
+  //     localStorage.setItem("phoneNumber", editedUser.phoneNumber);
+  //     const number = localStorage.getItem("phoneNumber");
+  //     const verifyNumberResponse = await axios.post(
+  //       "http://localhost:8080/api/v1/sms/verify-number",
+  //       {
+  //         phoneNumber: number,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     setLoading(false);
+  //     toast({
+  //       title: "OTP Sent",
+  //       description: verifyNumberResponse.data.message,
+  //       status: "success",
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
 
-      setTimeout(() => {
-        navigate("/verifyPhone");
-      }, 2000);
-    } catch (error) {
-      toast({
-        title: "Update Failed",
-        description: error.response.data.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setTimeout(() => {
+  //       navigate("/verifyPhone");
+  //     }, 2000);
+  //   } catch (error) {
+  //     toast({
+  //       title: "Update Failed",
+  //       description: error.response.data.message,
+  //       status: "error",
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Update Phone Number</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>
+            {/* <Text>
               Kindly enter a valid phone number. We would send an OTP to verify
               the new phone number upon submission. You will also have to log in
+              again after verifying the new phone number.
+            </Text> */}
+             <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+            <br />
+            <Text>
+              Kindly enter a valid phone number. You will also have to log in
               again after verifying the new phone number.
             </Text>
             <FormControl marginTop="15px">

@@ -3,12 +3,12 @@ import LeftSideBar from "../authLayouts/LeftSideBar";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../authLayouts/NavBar";
 import "react-datepicker/dist/react-datepicker.css";
+import { WarningIcon } from "@chakra-ui/icons";
 import {
   ChakraProvider,
   VStack,
   Input,
   Button,
-  useToast,
   InputGroup,
   InputRightElement,
   Box,
@@ -22,6 +22,9 @@ import {
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import SettingsSideBar from "../authLayouts/SettingsSideBar";
 import MobileFooter from "../authLayouts/MobileFooter";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const customTheme = extendTheme({
   components: {
@@ -41,7 +44,6 @@ const customTheme = extendTheme({
 
 const ChangePasswordPage = () => {
   const navigate = useNavigate();
-  const toast = useToast();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -129,7 +131,8 @@ const ChangePasswordPage = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/v1/angel/change-password",
+        // "http://localhost:8080/v1/angel/change-password",
+        "https://backend-c1pz.onrender.com/v1/angel/change-password",
         {
           method: "POST",
           headers: {
@@ -144,35 +147,20 @@ const ChangePasswordPage = () => {
         }
       );
 
-      const responseData = await response.json(); // Parse the response JSON
+      const responseData = await response.json();
 
       if (response.ok && responseData.success) {
-        toast({
-          title: "Password Updated",
-          description: response.message,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
+        toast.success("Password changed, Kindly login with the new password");
+        setTimeout(() => {
+          navigate("/login");
+        }, 5000);
       } else {
         console.error("API error:", responseData.message);
-        toast({
-          title: "Password reset failed",
-          description: responseData.message,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
+        toast.error("Password reset failed");
       }
     } catch (error) {
       console.error("Network error:", error.message);
-      toast({
-        title: "Network Error",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      toast.error("Network error");
     }
 
     // Reset the form fields after saving changes
@@ -191,6 +179,17 @@ const ChangePasswordPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}
@@ -209,9 +208,15 @@ const ChangePasswordPage = () => {
           <Box className="change-password" p={3}>
             {" "}
             <VStack w="30vw" marginLeft="10px">
+              <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+              <Text textAlign="left">
+                Please note, you will have to log in again after reseting your
+                password.
+              </Text>
+
               <Text
                 textAlign="left"
-                fontSize={{ base: "12px" }}
+                fontSize={{ base: "12px", md: "20px" }}
                 marginTop="3px"
                 marginBottom="20px"
               >
@@ -305,6 +310,7 @@ const ChangePasswordPage = () => {
         >
           <Flex justifyContent="space-between">
             <Box>
+             
               <Text
                 textAlign="left"
                 fontSize={{ base: "18px" }}
@@ -327,10 +333,17 @@ const ChangePasswordPage = () => {
               Back
             </Button>
           </Flex>
+          
           <Box className="change-password" p={3}>
+          <WarningIcon ml="10px" mb="5px" w={10} h={10} color="yellow.400" />
+              <Text ml="12px" mb="5px" textAlign="left">
+                Please note, you will have to log in again after reseting your
+                password.
+              </Text>
             {" "}
             <VStack ml="15px" w="100%">
               <FormControl w="280px">
+
                 <FormLabel>Old Password</FormLabel>
                 <InputGroup>
                   <Input

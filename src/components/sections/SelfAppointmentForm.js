@@ -38,7 +38,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [isShiftDisabled, setIsShiftDisabled] = useState(false);
-
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const [selectedDob] = useState(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);

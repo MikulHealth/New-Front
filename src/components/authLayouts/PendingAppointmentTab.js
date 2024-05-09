@@ -540,16 +540,6 @@ export default function PendingApp() {
                   <Divider my={4} borderColor="gray.500" />
                   <Flex marginTop="5px">
                     <Text fontWeight="bold" color="black">
-                      End Date:
-                    </Text>
-                    <Text marginLeft="20px" color="black">
-                      {formatDate(selectedAppointment.endDate) ||
-                        "Not availabe"}
-                    </Text>
-                  </Flex>
-                  <Divider my={4} borderColor="gray.500" />
-                  <Flex marginTop="5px">
-                    <Text fontWeight="bold" color="black">
                       Medical Report:
                     </Text>
                     <Text marginLeft="20px" color="black">
