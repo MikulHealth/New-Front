@@ -655,7 +655,7 @@ const EdithProfilePage = () => {
                 </FormControl> */}
               <Button
                 marginTop="10px"
-                marginBottom="50px"
+                marginBottom="100px"
                 color="white"
                 bg="#A210C6"
                 onClick={handleOpenConfirmationModal}
