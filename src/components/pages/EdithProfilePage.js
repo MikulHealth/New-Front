@@ -63,16 +63,16 @@ const EdithProfilePage = () => {
   const [image] = useState();
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    // Create a new date object from the dateString
-    const date = new Date(dateString);
-    // Subtract one day
-    date.setDate(date.getDate() - 1);
-    // Format the adjusted date
-    const formattedDate = date.toLocaleDateString(undefined, options);
-    return formattedDate;
-  };
+  // const formatDate = (dateString) => {
+  //   const options = { year: "numeric", month: "long", day: "numeric" };
+  //   // Create a new date object from the dateString
+  //   const date = new Date(dateString);
+  //   // Subtract one day
+  //   date.setDate(date.getDate() - 1);
+  //   // Format the adjusted date
+  //   const formattedDate = date.toLocaleDateString(undefined, options);
+  //   return formattedDate;
+  // };
 
   const [formData, setFormData] = useState({
     firstName: user?.firstName,
@@ -110,18 +110,6 @@ const EdithProfilePage = () => {
     }
   };
 
-  // const handleDOBChange = (date) => {
-  //   // Create a new date object from the selected date
-  //   const adjustedDate = new Date(date);
-  //   // Subtract one day
-  //   adjustedDate.setDate(adjustedDate.getDate() - 1);
-
-  //   setSelectedDate(adjustedDate); // Update state with adjusted date
-  //   setEditedUser({
-  //     ...editedUser,
-  //     dob: adjustedDate.toISOString().split('T')[0] // Send the date as YYYY-MM-DD format
-  //   });
-  // };
 
   const handleOpenConfirmationModal = () => {
     setConfirmationModalOpen(true);
@@ -544,11 +532,16 @@ const EdithProfilePage = () => {
               </Button> */}
             </Flex>
             <Button
-              bg="gray"
-              color="white"
-              marginTop="10px"
+              borderColor="#A210C6"
+              borderWidth="2px"
+              bg="white"
+              mt="10px"
+             
               style={{}}
-              _hover={{ color: "" }}
+              _hover={{
+                bg: "gray.100",
+                borderColor: "purple.800",
+              }}
               onClick={handlePhoneModalOpen}
             >
               Change phone number
@@ -601,7 +594,7 @@ const EdithProfilePage = () => {
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
-                    value={formatDate(formData.dob)}
+                    value={formData.dob}
                     style={{
                       marginTop: "60px",
                       marginLeft: "50px",
