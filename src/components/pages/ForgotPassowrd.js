@@ -52,8 +52,8 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/v1/angel/forgotPassword",
-        // "https://backend-c1pz.onrender.com/v1/angel/forgotPassword",
+        // "http://localhost:8080/v1/angel/forgotPassword",
+        "https://backend-c1pz.onrender.com/v1/angel/forgotPassword",
         JSON.stringify({ emailOrPhone }),
         { headers: { "Content-Type": "application/json" } }
       );
