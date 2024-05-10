@@ -177,11 +177,12 @@ const AppointmentPage = () => {
           ml={{ base: "-90px", md: "-250px" }}
           justifyContent="space-between"
           className="appointment-tabs"
+          overflow={{base: "scroll", md: ""}}
           
         >
-          <VStack ml={{ base: "100px", md: "0" }}>
-            <Tabs colorScheme="purple.100" mt={{ base: "", md: "40px" }}>
-              <TabList justifyContent="space-between">
+          <VStack  ml={{ base: "110px", md: "0" }}>
+            <Tabs  mb="20px" colorScheme="purple.100" mt={{ base: "", md: "40px" }}>
+              <TabList justifyContent="space-evenly">
                 <Tab
                   fontSize={{ base: "12px", md: "16px" }}
                   color="#A210C6"
@@ -194,6 +195,7 @@ const AppointmentPage = () => {
                   fontSize={{ base: "12px", md: "16px" }}
                   color="yellow.500"
                   fontWeight="bold"
+                 
                 >
                   Pending
                 </Tab>
@@ -202,6 +204,7 @@ const AppointmentPage = () => {
                   fontSize={{ base: "12px", md: "16px" }}
                   color="green.500"
                   fontWeight="bold"
+                 
                 >
                   Active
                 </Tab>
@@ -210,6 +213,7 @@ const AppointmentPage = () => {
                   fontSize={{ base: "12px", md: "16px" }}
                   color="blue.500"
                   fontWeight="bold"
+                
                 >
                   Completed
                 </Tab>

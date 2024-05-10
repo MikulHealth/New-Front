@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   VStack,
   Text,
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -11,9 +10,8 @@ import {
   ModalBody,
   ModalFooter,
   Box,
-  Flex,
   Progress,
-  Divider,
+
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -22,23 +20,23 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const SearchTransactionModal = ({ isOpen, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [transactions, setTransactions] = useState([]); const [transactionsModalOpen, setTransactionsModalOpen] = useState(false);
-//   const [searchTrigger, setSearchTrigger] = useState(false);
+  const [transactions, setTransactions] = useState([]);
   const { user } = useSelector((state) => state.userReducer);
   const id = user?.userId;
 
   const formatDateToISO = (date) => {
-    return date ? date.toISOString().split('T')[0] : '';  
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + 1);
+    return date ? newDate.toISOString().split("T")[0] : "";
   };
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      if (!selectedDate) return;  
+    if (!selectedDate) return;
 
+    const fetchTransactions = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
@@ -47,19 +45,23 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
             Authorization: `Bearer ${token}`,
           },
         };
-        const customerId = id;
         const formattedDate = formatDateToISO(selectedDate);
-        const url = `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/transactions/by-date?date=${formattedDate}`;
-        // const url = `http://localhost:8080/v1/api/wallets/${customerId}/transactions/by-date?date=${formattedDate}`;
-      
+        const url = `https://backend-c1pz.onrender.com/v1/api/wallets/${id}/transactions/by-date?date=${formattedDate}`;
+        // const url = `http://localhost:8080/v1/api/wallets/${id}/transactions/by-date?date=${formattedDate}`;
+
         const response = await axios.get(url, config);
 
         if (response.data && response.data.success) {
-          setTransactions(response.data);
-          console.log("Transactions "+ response.data)
-          toast.success("Transactions loaded successfully");
+          if (response.data.data.length > 0) {
+            setTransactions(response.data.data);
+            toast.success("Transactions loaded successfully");
+          } else {
+            setTransactions([]);
+            toast.warning("No transactions found for this date.");
+          }
         } else {
-            toast.error("Failed to fetch transactions");
+          setTransactions([]);
+          toast.error(response.data.message || "Failed to fetch transactions");
         }
       } catch (error) {
         console.error("Error fetching transactions:", error);
@@ -72,12 +74,10 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
     fetchTransactions();
   }, [selectedDate, id, isOpen]);
 
-
   const handleDateChange = (date) => {
-    // const nextDay = new Date(date);
-    // nextDay.setDate(date.getDate());
+    // const newDate = new Date(date);
+    // newDate.setDate(newDate.getDate() + 1);
     setSelectedDate(date);
-    // setSearchTrigger(true);
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -89,25 +89,11 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
       minute: "numeric",
       second: "numeric",
     };
-    const formattedDateTime = new Date(dateTimeString).toLocaleDateString(
-      undefined,
-      options
-    );
-    return formattedDateTime;
+    return new Date(dateTimeString).toLocaleDateString(undefined, options);
   };
 
-//   const formatDate = (dateString) => {
-//     const options = { year: "numeric", month: "long", day: "numeric" };
-//     const formattedDate = new Date(dateString).toLocaleDateString(
-//       undefined,
-//       options
-//     );
-//     return formattedDate;
-//   };
-
   const formatAmount = (amount) => {
-    const num = Number(amount);
-    return num.toLocaleString("en-US");
+    return Number(amount).toLocaleString("en-US");
   };
 
   return (
@@ -120,7 +106,7 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
           setTransactions([]);
         }}
         size="xl"
-        borderRadius="0px"
+        isCentered
       >
         <ToastContainer
           position="top-right"
@@ -134,164 +120,79 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
           pauseOnHover
         />
         <ModalOverlay />
-        <ModalContent h="70vh" maxH="80vh" overflowY="auto">
-          <ModalHeader color="#A210C6">Search transaction(s)</ModalHeader>
-
+        <ModalContent>
+          <ModalHeader color="#A210C6">Search Transactions</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Progress marginBottom="20px" size="xs" isIndeterminate />
-            <Flex align="center" justify="center">
-              <Box>
-                <Flex>
-                  <Flex
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    _hover={{ color: "#A210C6" }}
-                    align="center"
-                    mb={4}
-                  >
-                    <Text fontWeight="bold" color="black" marginRight="10px">
-                      Select Date:{" "}
-                    </Text>
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={handleDateChange}
-                      maxDate={new Date()}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="here"
-                      className="form-control"
+            <Box
+              style={{
+                cursor: "pointer",
+              }}
+              _hover={{ color: "#A210C6" }}
+              mb="20px"
+            >
+              <DatePicker
+                selected={selectedDate}
+                onChange={handleDateChange}
+                maxDate={new Date()}
+                peekNextMonth
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                dateFormat="dd-MM-yyyy"
+                placeholderText="Select a date"
+              />
+            </Box>
+
+            {loading ? (
+              <Progress size="xs" isIndeterminate />
+            ) : (
+              transactions.length > 0 && (
+                <VStack
+                  mt="20px"
+                  mb="20px"
+                  spacing={4}
+                  overflowY="auto"
+                  maxH="60vh"
+                >
+                  {transactions.map((transaction, index) => (
+                    <Box
                       style={{
-                        border: "1px solid #ced4da",
-                        borderRadius: "4px",
-                        marginLeft: "10px",
+                        boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
+                        transition: "transform 0.3s ease-in-out",
                       }}
-                    />
-                  </Flex>
-                  <Button
-                    bg="#A210C6"
-                    onClick={() => handleDateChange(new Date())}
-                    mb={4}
-                    color="white"
-                    h="4vh"
-                    w="10vw"
-                    isLoading={loading}
-                    loadingText="Searching..."
-                    marginLeft="10px"
-                  >
-                    {loading ? "Searching..." : "Search"}
-                  </Button>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex>
-                  {transactionsModalOpen && transactions && (
-                    <Modal
-                      isOpen={transactionsModalOpen}
-                      onClose={() => {
-                        setTransactionsModalOpen(false);
-                        handleDateChange(null);
-                      }}
-                      size="3xl"
+                      key={index}
+                      p={4}
+                      shadow="md"
+                      borderWidth="1px"
+                      mb="20px"
                     >
-                      <ModalOverlay />
-                      <ModalContent overflowY="auto">
-                        <ModalHeader color="#A210C6">
-                          Appointment Details
-                        </ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                          <VStack
-                            mb={{ base: "200px", md: "0" }}
-                            ml={{ base: "20px", md: "" }}
-                            align="start"
-                            spacing={4}
-                          >
-                            {transactions.map((transaction) => (
-                              <Box
-                                fontSize={{ base: "12px", md: "16px" }}
-                                key={transaction.id}
-                              >
-                                <Flex>
-                                  <Text fontWeight="bold" color="black">
-                                    Amount:
-                                  </Text>
-                                  <Text
-                                    ml={{ base: "10px", md: "5px" }}
-                                    color="black"
-                                  >
-                                    {formatAmount(transaction.amount)}.00
-                                  </Text>
-                                </Flex>
-                                <Flex>
-                                  <Text fontWeight="bold" color="black">
-                                    Date:
-                                  </Text>
-                                  <Text
-                                    ml={{ base: "10px", md: "5px" }}
-                                    color="black"
-                                  >
-                                    {formatDateTime(
-                                      transaction.transactionDate
-                                    )}
-                                  </Text>
-                                </Flex>
-
-                                <Flex>
-                                  <Text fontWeight="bold" color="black">
-                                    Method:
-                                  </Text>
-                                  <Text ml={{ base: "10px", md: "5px" }}>
-                                    {transaction.method === "WALLET"
-                                      ? "Wallet payment"
-                                      : "Card payment"}
-                                  </Text>
-                                </Flex>
-                                <Flex>
-                                  <Text fontWeight="bold" color="black">
-                                    Type:
-                                  </Text>
-                                  <Text
-                                    ml={{ base: "10px", md: "5px" }}
-                                    color={
-                                      transaction.type === "CREDIT"
-                                        ? "green.500"
-                                        : "red.500"
-                                    }
-                                  >
-                                    {transaction.type === "CREDIT"
-                                      ? "Credit transaction"
-                                      : "Debit transaction"}
-                                  </Text>
-                                </Flex>
-                                <Flex>
-                                  <Text fontWeight="bold" color="black">
-                                    Reference:
-                                  </Text>
-                                  <Text
-                                    ml={{ base: "10px", md: "5px" }}
-                                    color="black"
-                                  >
-                                    {`${transaction.id}`}
-                                  </Text>
-                                </Flex>
-
-                                <Divider my={4} borderColor="gray.500" />
-                              </Box>
-                            ))}
-                          </VStack>
-                        </ModalBody>
-                      </ModalContent>
-                    </Modal>
-                  )}
-                </Flex>
-              </Box>
-            </Flex>
+                      <Text>Amount: {formatAmount(transaction.amount)}</Text>
+                      <Text>
+                        Date: {formatDateTime(transaction.transactionDate)}
+                      </Text>
+                      <Text>Method: {transaction.method}</Text>
+                      <Text>Reference: {transaction.id}</Text>
+                      <Text
+                        color={
+                          transaction.type === "CREDIT"
+                            ? "green.500"
+                            : "red.500"
+                        }
+                      >
+                        {transaction.type === "CREDIT"
+                          ? "Credit transaction"
+                          : "Debit transaction"}
+                      </Text>
+                    </Box>
+                  ))}
+                </VStack>
+              )
+            )}
           </ModalBody>
-          <ModalFooter></ModalFooter>
+          <ModalFooter>
+           
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

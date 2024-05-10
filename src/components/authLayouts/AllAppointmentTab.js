@@ -218,7 +218,7 @@ export default function AppointmentTab() {
                 <Flex
                   fontSize={{ base: "12px", md: "16px" }}
                   display={{ base: "flex", md: "none" }}
-                  ml={{base: "225px", md: "0"}}
+                  ml={{base: "150px", md: "0"}}
 
                 >
                   <Text

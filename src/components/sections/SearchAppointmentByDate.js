@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   VStack,
   Text,
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -13,12 +12,13 @@ import {
   Box,
   Flex,
   Progress,
-  useToast,
-  Divider,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SearchAppointmentsModal = ({ isOpen, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -28,7 +28,6 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [searchTrigger, setSearchTrigger] = useState(false);
-  const toast = useToast();
 
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
@@ -61,20 +60,11 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
         );
 
         if (response.data.success) {
-          toast({
-            title: response.data.message,
-            status: "success",
-            duration: 6000,
-          });
+          toast.success(response.data.message);
           setAppointments(response.data.data);
           setNoAppointmentsFound(response.data.data.length === 0);
         } else {
-          toast({
-            title: response.data.message,
-            description: response.message,
-            status: "error",
-            duration: 6000,
-          });
+          toast.success(response.data.message);
           setAppointments([]);
           console.error("Failed to fetch appointments");
         }
@@ -90,12 +80,13 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
       setLoading(true);
       fetchAppointments();
     }
-  }, [selectedDate, searchTrigger, isOpen, toast]);
+  }, [selectedDate, searchTrigger, isOpen]);
 
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
       const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findAppointmentDetails/${appointmentId}`;
+      // const apiUrl = `http://localhost:8080/v1/appointment/findAppointmentDetails/${appointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -165,90 +156,87 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
           setAppointments([]);
         }}
         size="xl"
-        borderRadius="0px"
+        isCentered
       >
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <ModalOverlay />
-        <ModalContent h="70vh" maxH="80vh" overflowY="auto">
+        <ModalContent>
           <ModalHeader color="#A210C6">Search appointments</ModalHeader>
-
           <ModalCloseButton />
           <ModalBody>
-            <Progress marginBottom="20px" size="xs" isIndeterminate />
-            <Flex align="center" justify="center">
-              <Box>
-                <Flex>
-                  <Flex
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    _hover={{ color: "#A210C6" }}
-                    align="center"
-                    mb={4}
-                  >
-                    <Text fontWeight="bold" color="black" marginRight="10px">
-                      Select Date:{" "}
-                    </Text>
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={handleDateChange}
-                      maxDate={new Date()}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="here"
-                      className="form-control"
-                      style={{
-                        border: "1px solid #ced4da",
-                        borderRadius: "4px",
-                        marginLeft: "10px",
-                      }}
-                    />
-                  </Flex>
-                  <Button
-                    bg="#A210C6"
-                    onClick={() => handleDateChange(new Date())}
-                    mb={4}
-                    color="white"
-                    h="4vh"
-                    w="10vw"
-                    isLoading={loading}
-                    loadingText="Searching..."
-                    marginLeft="10px"
-                  >
-                    {loading ? "Searching..." : "Search"}
-                  </Button>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex>
+            {loading ? (
+              <Progress size="xs" isIndeterminate />
+            ) : (
+              <Box mb="40px">
+                <DatePicker
+                  _hover={{ color: "#A210C6" }}
+                  selected={selectedDate}
+                  onChange={handleDateChange}
+                  maxDate={new Date()}
+                  peekNextMonth
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                  dateFormat="dd-MM-yyyy"
+                  placeholderText="Select a date"
+                  className="form-control"
+                  // style={{
+                  //   border: "1px solid #ced4da",
+                  //   borderRadius: "4px",
+                  //   marginLeft: "10px",
+                  //   cursor: "pointer",
+                  //   // marginBottom: "40px",
+                  // }}
+                />
+
+                <Flex mt="20px">
                   {noAppointmentsFound ? (
                     <Text>No appointments found for the selected date.</Text>
                   ) : (
-                    <VStack align="start" spacing={4} width="100%">
+                    <VStack spacing={4} width="100%">
                       {appointments.map((appointment) => (
-                        <Box key={appointment.id}>
-                          <Flex>
+                        <Box
+                          style={{
+                            boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
+                            transition: "transform 0.3s ease-in-out",
+                          }}
+                          key={appointment.id}
+                          p={4}
+                          shadow="md"
+                          borderWidth="1px"
+                        >
+                          <Flex flexDirection={{base: "column", md: "row"}}>
                             <Text fontWeight="bold" color="black">
                               Care beneficiary:
                             </Text>
-                            <Text marginLeft="5px" color="black">
+                            <Text ml={{md: "5px"}} color="black">
                               {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                             </Text>
                           </Flex>
-                          <Flex>
-                            <Flex>
+                            <Flex flexDirection={{base: "column", md: "row"}}>
                               <Text fontWeight="bold" color="black">
                                 Booked on:
                               </Text>
-                              <Text marginLeft="5px" color="black">
+                              <Text ml={{md: "5px"}} color="black">
                                 {formatDateTime(appointment.createdAt)}
                               </Text>
                               <Text
                                 fontSize="16px"
+                                ml={{md: "60px"}}
+                                mt={{base: "10px", md: "0"}}
                                 onClick={() => handleViewMore(appointment.id)}
                                 style={{
-                                  marginLeft: "60px",
+                                  
                                   color: "#A210C6",
                                   fontStyle: "italic",
                                   cursor: "pointer",
@@ -258,15 +246,13 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
                                 Details
                               </Text>
                             </Flex>
-                          </Flex>
-                          <Divider my={4} borderColor="gray.500" />
                         </Box>
                       ))}
                     </VStack>
                   )}
                 </Flex>
               </Box>
-            </Flex>
+            )}
           </ModalBody>
           <ModalFooter></ModalFooter>
         </ModalContent>
