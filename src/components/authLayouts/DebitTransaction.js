@@ -24,8 +24,8 @@ export default function TransactionTab() {
         };
 
         const response = await axios.get(
-            // `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/debits`, 
-            `http://localhost:8080/v1/api/wallets/${customerId}/debits`, 
+            `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/debits`, 
+            // `http://localhost:8080/v1/api/wallets/${customerId}/debits`, 
           config
         );
 

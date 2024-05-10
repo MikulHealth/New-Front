@@ -50,8 +50,8 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
         };
         const customerId = id;
         const formattedDate = formatDateToISO(selectedDate);
-        // const url = `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/transactions/by-date?date=${formattedDate}`;
-        const url = `http://localhost:8080/v1/api/wallets/${customerId}/transactions/by-date?date=${formattedDate}`;
+        const url = `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/transactions/by-date?date=${formattedDate}`;
+        // const url = `http://localhost:8080/v1/api/wallets/${customerId}/transactions/by-date?date=${formattedDate}`;
       
         const response = await axios.get(url, config);
 

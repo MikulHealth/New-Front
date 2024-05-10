@@ -23,8 +23,8 @@ export default function TransactionTab() {
         };
 
         const response = await axios.get(
-            // `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/credits`, 
-            `http://localhost:8080/v1/api/wallets/${customerId}/credits`, 
+            `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/credits`, 
+            // `http://localhost:8080/v1/api/wallets/${customerId}/credits`, 
           config
         );
 
