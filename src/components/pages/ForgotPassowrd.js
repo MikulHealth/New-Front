@@ -95,9 +95,9 @@ const ForgotPassword = () => {
               src={logo}
               alt="Logo"
               ml={{ base: "30px", md: "30px" }}
-              h={{ base: "80px", md: "100px" }}
-              mt="30px"
-              w={{ base: "300px", md: "350px" }}
+              h={{ base: "100px", md: "200px" }}
+              // mt="10px"
+              w={{ base: "100px", md: "200px" }}
             />
           </a>
         </Box>
@@ -106,14 +106,14 @@ const ForgotPassword = () => {
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          marginTop="30px"
+          // marginTop="10px"
           paddingX="1rem"
         >
           <Text
             fontFamily="body"
             fontSize={{ base: "24px", md: "32px" }}
             color="#A210C6"
-            marginTop="30px"
+            marginTop="10px"
             textAlign="center"
           >
             Let's reset your password
