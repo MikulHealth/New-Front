@@ -79,9 +79,11 @@ const LandingPage = () => {
 
       if (response.data.success) {
         toast.success(
-          "Password reset successfully!"
+          "Password reset successfull!"
         );
-        navigate("/login"); 
+        setTimeout(() => {
+          navigate("/login");
+        }, 5000);
       } else {
       
         toast.error(

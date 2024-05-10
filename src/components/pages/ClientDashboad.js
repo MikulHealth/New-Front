@@ -199,6 +199,7 @@ const ClientDash = () => {
           }
         } catch (error) {
           console.error("Error in GetCurrentUser API:", error);
+          navigate("/login");
         } finally {
           setLoading(false);
         }

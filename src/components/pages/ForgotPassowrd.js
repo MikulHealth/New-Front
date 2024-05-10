@@ -14,6 +14,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import AOS from "aos";
+import { useNavigate  } from "react-router-dom";
 import "aos/dist/aos.css";
 import "../../styles/pages/LandingPage.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -38,7 +39,7 @@ const customTheme = extendTheme({
 const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [emailAddress, setEmailOrPhone] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     AOS.init();
   }, []);
@@ -62,6 +63,9 @@ const ForgotPassword = () => {
         toast.success(
           "Kindly check your email to find the password reset link"
         );
+        setTimeout(() => {
+          navigate("/");
+        }, 5000);
       } else {
         console.error("Forgot password failed:", response.data.message);
         toast.error(response.data.message);

@@ -1,35 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LoadingSpinner from "../../utils/Spiner";
-import BookAppointmentModal from "../sections/BookAppointment";
-import { CloseIcon } from "@chakra-ui/icons";
-import {
-  VStack,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-  Button,
-  useToast,
-  Box,
-  Text,
-  Flex,
-  Divider,
-} from "@chakra-ui/react";
+import { VStack, useToast, Box, Text, Flex, Divider } from "@chakra-ui/react";
 
-
-
-export default function AppointmentTab() {
+import { useSelector } from "react-redux";
+export default function TransactionTab() {
   const toast = useToast();
-  const [appointments, setAppointments] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-  useEffect(() => {
+  const { user } = useSelector((state) => state.userReducer);
+  const id = user?.userId;
+  
+
+
+ useEffect(() => {
     const fetchData = async () => {
       try {
+        const customerId = id; 
         const config = {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -37,72 +24,32 @@ export default function AppointmentTab() {
         };
 
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/allAppointments",
-          "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
+            // `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/debits`, 
+            `http://localhost:8080/v1/api/wallets/${customerId}/debits`, 
           config
         );
 
-        if (response.data.success) {
-          setAppointments(response.data.data);
+        if (response.data && response.data.success) {
+          setTransactions(response.data.data);
         } else {
-          console.error("Failed to fetch appointments");
+          console.error("Failed to fetch transactions");
         }
       } catch (error) {
-        console.error("Error fetching appointments:", error);
+        console.error("Error fetching transactions:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [toast]);
+  }, [toast, id]); 
 
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      undefined,
-      options
-    );
-    return formattedDate;
+  const formatAmount = (amount) => {
+    const num = Number(amount);
+    return num.toLocaleString('en-US');
+  
   };
-
-  const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
-    try {
-      const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/findAppointmentDetails/${appointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findAppointmentDetails/${appointmentId}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.get(apiUrl, { headers });
-
-      if (response && response.data && response.data.success) {
-        console.log("Appointment details:", response.data.data);
-        setSelectedAppointment(response.data.data.data);
-        setDetailsModalOpen(true);
-      } else {
-        console.error("Error fetching appointment details");
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching appointment details:",
-        error
-      );
-    }
-  };
-
-  const formattedCost = (cost) => {
-    const costInNaira = cost / 100;
-
-    const formattedCost =
-      "₦ " + costInNaira.toLocaleString("en-NG", { maximumFractionDigits: 2 });
-
-    return formattedCost;
-  };
-
+  
   const formatDateTime = (dateTimeString) => {
     const options = {
       year: "numeric",
@@ -119,394 +66,88 @@ export default function AppointmentTab() {
     return formattedDateTime;
   };
 
-  const handleViewMore = async (id) => {
-    await fetchAndDisplayAppointmentDetails(id);
-    console.log(`View more details for appointment with ID: ${id}`);
-  };
-
-  const handleOpenAppointmentModal = () => {
-    setShowAppointmentModal(true);
-  };
-
-  const handleCloseAppointmentModal = () => {
-    setShowAppointmentModal(false);
-  };
   return (
     <Box
-      className="all-appointment"
-      // overflow="scroll"
-      w={{ base: "100%", md: "50vw" }}
-      h={{ base: "60vh", md: "30vh" }}
+      className="all-transaction"
+      sx={{
+        w: { base: "100%", md: "40vw" },
+        h: { base: "60vh", md: "30vh" },
+        overflowY: "auto", 
+        '&::-webkit-scrollbar': {
+        //   display: "none"  
+        },
+        msOverflowStyle: "none",  // IE and Edge
+        scrollbarWidth: "none"  // Firefox
+      }}
     >
       <VStack align="start" spacing={4}>
         {loading ? (
           <LoadingSpinner />
-        ) : appointments.length === 0 ? (
+        ) : transactions.length === 0 ? (
           <Text
             fontSize={{ base: "10px", md: "16px" }}
             ml={{ base: "10px", md: "35px" }}
           >
-            No appointments yet. Click{" "}
-            <button
-              style={{
-                color: "#A210C6",
-                fontStyle: "italic",
-                textDecoration: "none",
-                cursor: "pointer",
-                border: "none",
-                background: "none",
-                padding: "0",
-                font: "inherit",
-              }}
-              onClick={handleOpenAppointmentModal}
-            >
-              book appointment
-            </button>{" "}
-            to begin.
+            No transaction yet. click on fund wallet to begin
           </Text>
         ) : (
-          <VStack align="start" spacing={4}>
-            {appointments.map((appointment) => (
-              <Box fontSize={{ base: "12px", md: "16px" }} key={appointment.id}>
+          <VStack  mb={{base: "200px", md: "0"}} ml={{ base: "20px", md: "" }} align="start" spacing={4}>
+            {transactions.map((transaction) => (
+              <Box  fontSize={{ base: "12px", md: "16px" }} key={transaction.id}>
                 <Flex>
                   <Text fontWeight="bold" color="black">
-                    Care beneficiary:
+                    Amount:
                   </Text>
                   <Text ml={{ base: "10px", md: "5px" }} color="black">
-                    {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
+                    {formatAmount(transaction.amount)}.00
                   </Text>
                 </Flex>
                 <Flex>
                   <Text fontWeight="bold" color="black">
-                    Booked on:
+                    Date:
                   </Text>
                   <Text ml={{ base: "10px", md: "5px" }} color="black">
-                    {formatDateTime(appointment.createdAt)}
-                  </Text>
-                  <Flex  ml={{ md: "130px"}} display={{ base: "none", md: "flex" }}>
-                    <Text
-                      fontSize={{ base: "12px", md: "16px" }}
-                      onClick={() => handleViewMore(appointment.id)}
-                      style={{
-                        marginLeft: "60px",
-                        color: "#A210C6",
-                        fontStyle: "italic",
-                        cursor: "pointer",
-                      }}
-                      _hover={{ color: "#A210C6" }}
-                    >
-                      Details
-                    </Text>
-                    <Text
-                      fontSize="16px"
-                      marginLeft="60px"
-                      color={
-                        appointment.appointmentCompleted
-                          ? "green.500"
-                          : appointment.appointmentActive
-                          ? "blue.500"
-                          : appointment.appointmentMatched
-                          ? "yellow.500"
-                          : appointment.appointmentPending
-                          ? "yellow.500"
-                          : "black"
-                      }
-                      fontStyle="italic"
-                    >
-                      {appointment.appointmentCompleted
-                        ? "Completed"
-                        : appointment.appointmentActive
-                        ? "Active"
-                        : appointment.appointmentMatched
-                        ? "Paired"
-                        : appointment.appointmentPending
-                        ? "Pending"
-                        : "Unknown"}
-                    </Text>
-                  </Flex>
-                </Flex>
-                <Flex
-                  fontSize={{ base: "12px", md: "16px" }}
-                  display={{ base: "flex", md: "none" }}
-                  ml={{base: "225px", md: "0"}}
-
-                >
-                  <Text
-                    onClick={() => handleViewMore(appointment.id)}
-                    style={{
-                      color: "#A210C6",
-                      fontStyle: "italic",
-                      cursor: "pointer",
-                    }}
-                    _hover={{ color: "#A210C6" }}
-                  >
-                    Details
-                  </Text>
-                  <Text
-                    ml={{ base: "30px" }}
-                    color={
-                      appointment.appointmentCompleted
-                        ? "green.500"
-                        : appointment.appointmentActive
-                        ? "blue.500"
-                        : appointment.appointmentMatched
-                        ? "yellow.500"
-                        : appointment.appointmentPending
-                        ? "yellow.500"
-                        : "black"
-                    }
-                    fontStyle="italic"
-                  >
-                    {appointment.appointmentCompleted
-                      ? "Completed"
-                      : appointment.appointmentActive
-                      ? "Active"
-                      : appointment.appointmentMatched
-                      ? "Paired"
-                      : appointment.appointmentPending
-                      ? "Pending"
-                      : "Unknown"}
+                    {formatDateTime(transaction.transactionDate)}
                   </Text>
                 </Flex>
+              
+                <Flex>
+                  <Text fontWeight="bold" color="black">
+                    Method:
+                  </Text>
+                  <Text
+                    ml={{ base: "10px", md: "5px" }}
+                  >
+                    {transaction.method === "WALLET" ? "Wallet payment" : "Card payment"}
+                  </Text>
+                </Flex>
+                <Flex>
+                  <Text fontWeight="bold" color="black">
+                    Type:
+                  </Text>
+                  <Text
+                    ml={{ base: "10px", md: "5px" }}
+                    color={transaction.type === "CREDIT" ? "green.500" : "red.500"}
+                  
+                  >
+                    {transaction.type === "CREDIT" ? "Credit transaction" : "Debit transaction"}
+                  </Text>
+                </Flex>
+                <Flex>
+                  <Text fontWeight="bold" color="black">
+                    Reference:
+                  </Text>
+                  <Text ml={{ base: "10px", md: "5px" }} color="black">
+                    {`${transaction.id}`}
+                  </Text>
+                </Flex>
+               
                 <Divider my={4} borderColor="gray.500" />
               </Box>
             ))}
           </VStack>
         )}
       </VStack>
-      {detailsModalOpen && selectedAppointment && (
-        <Drawer
-          isOpen={detailsModalOpen}
-          onClose={() => setDetailsModalOpen(false)}
-          placement="right"
-          size="md"
-        >
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerHeader
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              borderBottomWidth="1px"
-              fontSize="lg"
-              fontWeight="bold"
-              color="#A210C6"
-            >
-              Appointment Details
-              <Button
-                variant="ghost"
-                onClick={() => setDetailsModalOpen(false)}
-                leftIcon={<CloseIcon />}
-              />
-            </DrawerHeader>
-            <DrawerBody overflowY="auto">
-              <Flex
-                flexDirection="column"
-                alignItems="start"
-                justifyContent="flex-start"
-                marginLeft="20px"
-              >
-                <Flex>
-                  <Text fontWeight="bold">Status:</Text>
-                  <Text
-                    fontSize="16px"
-                    marginLeft="20px"
-                    color={
-                      selectedAppointment.appointmentCompleted
-                        ? "green.500"
-                        : selectedAppointment.appointmentActive
-                        ? "blue.500"
-                        : selectedAppointment.appointmentMatched
-                        ? "yellow.500"
-                        : selectedAppointment.appointmentPending
-                        ? "yellow.500"
-                        : "black"
-                    }
-                  >
-                    {selectedAppointment.appointmentCompleted
-                      ? "Completed"
-                      : selectedAppointment.appointmentActive
-                      ? "Active"
-                      : selectedAppointment.appointmentMatched
-                      ? "Paired"
-                      : selectedAppointment.appointmentPending
-                      ? "Pending"
-                      : "Unknown"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Beneficiary name:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientFirstname &&
-                    selectedAppointment.recipientLastname
-                      ? `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`
-                      : "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Phone Number:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientPhoneNumber ||
-                      "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Gender:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientGender || "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Date of Birth:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment.recipientDOB) ||
-                      "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Current Location:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.currentLocation || "Not availabe"}
-                  </Text>
-                </Flex>
-
-                <Divider my={4} borderColor="gray.500" />
-
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Relationship:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.relationship || "Nil"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px" marginBottom="10px">
-                  <Text fontWeight="bold" color="black">
-                    Booked on:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {formatDateTime(selectedAppointment.createdAt)}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Shift:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.shift || "Not availabe"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Service Plan
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.servicePlan || "Not availabe"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Type of caregiver
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.medicSpecialization || "Not availabe"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Cost of service
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {formattedCost(selectedAppointment.costOfService) ||
-                      "Not availabe"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Start Date:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment.startDate) ||
-                      "Not availabe"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    End Date:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment.endDate) || "Not availabe"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Medical Report:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.medicalReport || "Not availabe"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Paid:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.paid ? "Yes" : "No"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-              </Flex>
-              <Box>
-                <Flex marginTop="5px">
-                  <Text marginLeft="20px" fontWeight="bold" color="black">
-                    Health History:
-                  </Text>
-                  <Text
-                    marginLeft="10px"
-                    color="black"
-                    maxW="600px"
-                    maxH="1000px"
-                  >
-                    {selectedAppointment.recipientHealthHistory ||
-                      "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-              </Box>
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-      )}
-      <BookAppointmentModal
-        isOpen={showAppointmentModal}
-        onClose={handleCloseAppointmentModal}
-      />
     </Box>
   );
 }

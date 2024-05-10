@@ -53,7 +53,7 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          `https://backend-c1pz.onrender.com/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
+          `http://localhost:8080/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
             selectedDate
           )}`,
           // "https://backend-c1pz.onrender.comhttps://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",

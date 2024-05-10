@@ -6,8 +6,9 @@ import LeftSideBar from "../authLayouts/LeftSideBar";
 import { useSelector } from "react-redux";
 import { SearchIcon, CopyIcon, CheckIcon } from "@chakra-ui/icons";
 import AllTransactionTabs from "../../components/authLayouts/AllTransactionTabs";
-import DebitTransactionTabs from "../../components/authLayouts/AllTransactionTabs";
-import CreditTransactionTabs from "../../components/authLayouts/AllTransactionTabs";
+import DebitTransactionTabs from "../../components/authLayouts/DebitTransaction";
+import CreditTransactionTabs from "../../components/authLayouts/CreditTransaction";
+import SearchTransactionModal from "../sections/SearchTransationByDate";
 import {
   ChakraProvider,
   VStack,
@@ -361,13 +362,24 @@ const WalletPage = () => {
     animation: "slideInUp 0.9s ease-in-out",
   };
 
+  const [showSearchTransactionsModal, setShowSearchTransactionsModal] =
+    useState(false);
+
+  const handleOpenSearchTransactionsModal = () => {
+    setShowSearchTransactionsModal(true);
+  };
+  
+  const handleCloseSearchTransactionsModal = () => {
+    setShowSearchTransactionsModal(false);
+  };
+
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
       setLoading(false);
     }, 3000);
     return () => clearTimeout(timer);
-  }, [user]); 
+  }, [user]);
 
   const handleOpenFundWalletModal = () => {
     setShowFundWalletModal(true);
@@ -441,7 +453,7 @@ const WalletPage = () => {
                     cursor: "pointer",
                   }}
                   _hover={{ color: "#A210C6" }}
-                  // onClick={handleOpenSearchAppointmentsModal}
+                  onClick={handleOpenSearchTransactionsModal}
                 >
                   Search transaction by date
                 </Text>
@@ -644,6 +656,11 @@ const WalletPage = () => {
       <OnlinePaymentModal
         isOpen={showOnlinePaymentModal}
         onClose={handleCloseOnlinePaymentModal}
+      />
+
+      <SearchTransactionModal
+        isOpen={showSearchTransactionsModal}
+        onClose={handleCloseSearchTransactionsModal}
       />
     </ChakraProvider>
   );
