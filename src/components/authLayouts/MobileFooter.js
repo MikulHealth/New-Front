@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import HomeIcon from "../../assets/HomeBlack.svg";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import WalletIcon from "../../assets/Wallet.svg";
-import HelpIcon from "../../assets/HelpIcon.svg";
+import SettingsIcon from "../../assets/SettingsIcon.svg"; 
 import LogoutModal from "../sections/LogoutModal";
 
 
@@ -69,9 +69,9 @@ const MobileFooter = () => {
         <NavLink to="/help" style={listItemStyle}>
           <VStack>
             <Image 
-            src={HelpIcon}
-             alt="Help" style={iconStyle} />
-            <Text>Help</Text>
+            src={SettingsIcon}
+             alt="Settings" style={iconStyle} />
+            <Text>Settings</Text>
           </VStack>
         </NavLink>
       </Flex>

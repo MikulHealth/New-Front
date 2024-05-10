@@ -61,11 +61,11 @@ const rollOut = keyframes`
   to { transform: translateY(-100%); opacity: 0; }
 `;
 
-const phrases = ["Easy!", "Fast!", "Reliable!", "Secure!"];
+const phrases = ["Easy!", "Reliable!", "Secure!", "Convenient!"];
 
 const LandingPage = () => {
   useEffect(() => {
-    AOS.init();
+    AOS.init()
   }, []);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentIndex, setCurrentIndex] = useState(0);

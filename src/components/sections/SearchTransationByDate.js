@@ -13,13 +13,14 @@ import {
   Box,
   Flex,
   Progress,
-  useToast,
   Divider,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const SearchTransactionModal = ({ isOpen, onClose }) => {
@@ -29,11 +30,9 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
 //   const [searchTrigger, setSearchTrigger] = useState(false);
   const { user } = useSelector((state) => state.userReducer);
   const id = user?.userId;
-  
-  const toast = useToast();
 
   const formatDateToISO = (date) => {
-    return date ? date.toISOString().split('T')[0] : '';  // Format date to YYYY-MM-DD
+    return date ? date.toISOString().split('T')[0] : '';  
   };
 
   useEffect(() => {
@@ -56,38 +55,22 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
         const response = await axios.get(url, config);
 
         if (response.data && response.data.success) {
-          setTransactions(response.data.data);
-          toast({
-            title: "Transactions loaded successfully",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-          });
+          setTransactions(response.data);
+          console.log("Transactions "+ response.data)
+          toast.success("Transactions loaded successfully");
         } else {
-          toast({
-            title: "Failed to fetch transactions",
-            description: response.data.message || "No detailed error message",
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
+            toast.error("Failed to fetch transactions");
         }
       } catch (error) {
         console.error("Error fetching transactions:", error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch transactions due to an error",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
+        toast.error("Failed to fetch transactions due to an error");
       } finally {
         setLoading(false);
       }
     };
 
     fetchTransactions();
-  }, [selectedDate, id, isOpen, toast]);
+  }, [selectedDate, id, isOpen]);
 
 
   const handleDateChange = (date) => {
@@ -139,6 +122,17 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
         size="xl"
         borderRadius="0px"
       >
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <ModalOverlay />
         <ModalContent h="70vh" maxH="80vh" overflowY="auto">
           <ModalHeader color="#A210C6">Search transaction(s)</ModalHeader>

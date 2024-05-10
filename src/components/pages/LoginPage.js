@@ -23,8 +23,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "../../styles/pages/LandingPage.css";
 
-import { ToastContainer, toast } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css'; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const customTheme = extendTheme({
   components: {
@@ -54,9 +54,9 @@ const LandingPage = () => {
 
   const handleLogin = async () => {
     setLoading(true);
-    const apiUrl = "https://backend-c1pz.onrender.com/login";
-    // const apiUrl = "http://localhost:8080/login";
-    
+    // const apiUrl = "https://backend-c1pz.onrender.com/login";
+    const apiUrl = "http://localhost:8080/login";
+
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -66,7 +66,7 @@ const LandingPage = () => {
           password: passwordInput,
         }),
       });
-    
+
       if (response.ok) {
         toast.success("Login successfull");
         const responseData = await response.json();
@@ -101,9 +101,19 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-           <Box overflow="hidden" height="100vh">
-           <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-   
+      <Box overflow="hidden" height="100vh">
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+
         <Box
           display={{ base: "block", md: "flex" }}
           paddingX={{ base: "1rem", md: "2rem" }}
