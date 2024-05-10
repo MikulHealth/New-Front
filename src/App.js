@@ -55,7 +55,7 @@ function App() {
           <Route path="/signup" element={<CustomerReg />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
-          <Route path="/reset-password" element={<ResetPassword />}></Route>
+          <Route path="/resetpassword" element={<ResetPassword />}></Route>
           <Route path="/dashboard" element={<ClientDash />}></Route>
           <Route path="/details" element={<UserDetailsModal />}></Route>
           <Route path="/verifyPhone" element={<VerifyOtpDash />}></Route>

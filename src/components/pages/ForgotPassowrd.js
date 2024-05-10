@@ -37,7 +37,7 @@ const customTheme = extendTheme({
 
 const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [emailAddress, setEmailOrPhone] = useState("");
 
   useEffect(() => {
     AOS.init();
@@ -54,7 +54,7 @@ const ForgotPassword = () => {
       const response = await axios.post(
         // "http://localhost:8080/v1/angel/forgotPassword",
         "https://backend-c1pz.onrender.com/v1/angel/forgotPassword",
-        JSON.stringify({ emailOrPhone }),
+        JSON.stringify({ emailAddress }),
         { headers: { "Content-Type": "application/json" } }
       );
 
@@ -139,7 +139,7 @@ const ForgotPassword = () => {
             <FormLabel>Enter email address or phone number</FormLabel>
             <Input
               placeholder="Enter email address or phone number"
-              value={emailOrPhone}
+              value={emailAddress}
               onChange={handleInputChange}
             />
             <Button
