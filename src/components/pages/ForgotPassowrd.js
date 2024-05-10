@@ -1,6 +1,6 @@
-import React from "react";
-import { useEffect } from "react";
-import NavigationBar from "../unAuthLayouts/NavigationBar";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import logo from "../../assets/Logo.svg";
 import {
   Box,
   Button,
@@ -8,6 +8,7 @@ import {
   extendTheme,
   ChakraProvider,
   Text,
+  Image,
   FormControl,
   FormLabel,
   Input,
@@ -15,6 +16,8 @@ import {
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../../styles/pages/LandingPage.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const customTheme = extendTheme({
   components: {
@@ -33,14 +36,71 @@ const customTheme = extendTheme({
 });
 
 const ForgotPassword = () => {
+  const [loading, setLoading] = useState(false);
+  const [emailOrPhone, setEmailOrPhone] = useState("");
+
   useEffect(() => {
     AOS.init();
   }, []);
 
+  const handleInputChange = (event) => {
+    setEmailOrPhone(event.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/v1/angel/forgotPassword",
+        // "https://backend-c1pz.onrender.com/v1/angel/forgotPassword",
+        JSON.stringify({ emailOrPhone }),
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      if (response.data.success) {
+        toast.success(
+          "Kindly check your email to find the password reset link"
+        );
+      } else {
+        console.error("Forgot password failed:", response.data.message);
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Network error", error);
+      toast.error("Network error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ChakraProvider theme={customTheme}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Box overflowY="scroll" height="100vh">
-        <NavigationBar />
+        <Box >
+          <a href="/">
+            <Image
+              justifySelf="center"
+              src={logo}
+              alt="Logo"
+              ml={{ base: "30px", md: "30px" }}
+              h={{ base: "80px", md: "100px" }}
+              mt="30px"
+              w={{ base: "300px", md: "350px" }}
+            />
+          </a>
+        </Box>
         <Box
           display="flex"
           flexDirection="column"
@@ -73,22 +133,28 @@ const ForgotPassword = () => {
             isRequired
             width={{ base: "90%", sm: "600px" }}
             marginTop="30px"
+            as="form"
+            onSubmit={handleSubmit}
           >
             <FormLabel>Enter email address or phone number</FormLabel>
-            <Input placeholder="Enter email address or phone number" />
-          </FormControl>
-
-          <ChakraLink href="/verify-otp">
+            <Input
+              placeholder="Enter email address or phone number"
+              value={emailOrPhone}
+              onChange={handleInputChange}
+            />
             <Button
+              type="submit"
               width={{ base: "90%", sm: "250px" }}
               height="50px"
               bg="#A210C6"
               marginTop="20px"
               color="white"
+              isLoading={loading}
+              loadingText="Loading..."
             >
               Submit
             </Button>
-          </ChakraLink>
+          </FormControl>
           <Text
             fontSize={{ base: "16px", md: "20px" }}
             fontFamily="Montserrat"
@@ -97,7 +163,7 @@ const ForgotPassword = () => {
           >
             Remember your password?{" "}
             <ChakraLink fontStyle="italic" href="/login" color="#A210C6">
-              go back
+              Go back
             </ChakraLink>
           </Text>
         </Box>

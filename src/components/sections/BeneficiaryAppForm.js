@@ -426,7 +426,7 @@ const BookBeneficiaryAppointmentModal = ({
                     Start Date
                   </FormLabel>
                   <Flex
-                    h="6vh"
+                    h="5vh"
                     padding="5px"
                     paddingLeft="15px"
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}

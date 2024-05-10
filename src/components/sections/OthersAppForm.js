@@ -358,7 +358,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
             </Link>
           </Text>
           <DrawerBody>
-            <FormControl ml={{ base: "25px", md: "0" }} w={{base: "100%", md: ""}}>
+            <FormControl ml={{ base: "25px", md: "0" }} w={{base: "80%", md: "100%"}}>
               {/* <Box> */}
               <FormLabel fontWeight="bold">Enter Beneficiary details</FormLabel>
               <Flex display={{ base: "block", md: "flex" }}>
@@ -409,7 +409,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     Date of Birth
                   </FormLabel>
                   <Flex
-                    h="6vh"
+                    h="5vh"
                     padding="5px"
                     paddingLeft="15px"
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}

@@ -559,7 +559,7 @@ const WalletPage = () => {
                     <Text textAlign="left" fontSize="10px">
                       Total spent
                     </Text>
-                    <Text textAlign="left" color="white" fontSize="12px">
+                    <Text textAlign="left" color="white" fontSize="10px">
                       ₦ {formatAmount(walletTotalDebit)}.00
                     </Text>
                   </Box>

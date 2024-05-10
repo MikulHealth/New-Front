@@ -54,8 +54,8 @@ const LandingPage = () => {
 
   const handleLogin = async () => {
     setLoading(true);
-    const apiUrl = "https://backend-c1pz.onrender.com/login";
-    // const apiUrl = "http://localhost:8080/login";
+    // const apiUrl = "https://backend-c1pz.onrender.com/login";
+    const apiUrl = "http://localhost:8080/login";
     
     try {
       const response = await fetch(apiUrl, {

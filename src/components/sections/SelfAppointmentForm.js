@@ -294,9 +294,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           </Text>
 
           <DrawerBody>
-            <FormControl ml={{ base: "25px", md: "0" }}>
-            <Flex flexWrap="wrap" marginTop="20px">
-                <Box w={{ base: "300px", md: "270px" }} ml={{ md: "40px" }}>
+            <FormControl >
+            <Flex ml={{ base:"20px", md: "40px" }} flexWrap="wrap" marginTop="20px">
+                <Box w={{ base: "300px", md: "270px" }} >
                   <FormLabel fontWeight="bold">Service Plan </FormLabel>
                   <Select
                     isRequired
@@ -349,13 +349,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
             
 
-              <Flex flexWrap="wrap" ml={{ md: "45px" }}>
+              <Flex flexWrap="wrap" ml={{ base:"20px", md: "40px" }}>
                 <Box  w={{ base: "300px", md: "270px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
                   <Flex
-                    h="6vh"
+                    h="5vh"
                     paddingTop="5px"
                     paddingLeft="15px"
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}
@@ -407,7 +407,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
              
             
-              <Box ml={{ md: "40px" }} marginTop="20px">
+              <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
                 <FormLabel fontWeight="bold">
                   Upload necessary document (test results, medical report,
                   scans, etc)
@@ -424,7 +424,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   />
                 </InputGroup>
               </Box>
-              <Box ml={{ md: "40px" }} marginTop="20px">
+              <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
                 <FormLabel fontWeight="bold">Health History </FormLabel>
                 <Textarea
                   name="recipientHealthHistory"
