@@ -79,7 +79,7 @@ const LandingPage = () => {
 
     try {
       const enteredOtp = inputs.join("");
-      console.log("Collected OTP:", enteredOtp); // Debugging log
+      console.log("Collected OTP:", enteredOtp); 
       const number = localStorage.getItem("phoneNumber");
       const response = await axios.post(
         // "http://localhost:8080/api/v1/sms/verify-otp",
