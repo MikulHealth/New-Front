@@ -146,7 +146,7 @@ export default function ServicesSection() {
             >
               the future of Healthcare delivery with Mikul Health
             </Text>
-            <ChakraLink href="/join" color="#A210C6">
+            <ChakraLink href="/#" color="#A210C6">
               <Button mt="4" bg="white" borderRadius="100px" px="6">
                 Join us
               </Button>
