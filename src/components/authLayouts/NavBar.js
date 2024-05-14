@@ -67,6 +67,7 @@ export default function NavBar() {
     localStorage.removeItem("token");
     localStorage.removeItem("phoneNumber");
     navigate("/login");
+     window.location.reload();
   };
 
   const listItemStyle = {

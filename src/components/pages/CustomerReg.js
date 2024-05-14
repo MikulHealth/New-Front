@@ -179,7 +179,7 @@ const LandingPage = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Registration Failed");
+      toast.error("Registration failed, kindly login if you have registered before.");
     } finally {
       setLoading(false);
     }
