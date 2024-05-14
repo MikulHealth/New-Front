@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import PaymentModal from "./PaymentMethod";
 import {
-  InputGroup,
+  // InputGroup,
   Drawer,
   DrawerOverlay,
   DrawerContent,
@@ -481,7 +481,7 @@ const BookBeneficiaryAppointmentModal = ({
 
              
 
-              <Box ml={{ md: "40px" }}>
+              {/* <Box ml={{ md: "40px" }}>
                 <FormLabel fontWeight="bold" marginTop="20px">
                   Upload necessary document (test results, medical report,
                   scans, etc)
@@ -495,12 +495,9 @@ const BookBeneficiaryAppointmentModal = ({
                     w={{ base: "300px", md: "550px" }}
                     placeholder="Upload necessary document"
                   />
-                  {/* <InputRightElement
-                    pointerEvents="none"
-                    children={<FaFile color="gray.300" />}
-                  /> */}
+                  
                 </InputGroup>
-              </Box>
+              </Box> */}
               <Box ml={{ md: "40px" }}>
                 <FormLabel fontWeight="bold" marginTop="20px">
                   Health History{" "}

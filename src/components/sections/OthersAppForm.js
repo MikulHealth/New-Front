@@ -618,7 +618,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
 
 
              
-              <Box ml={{ md: "5px" }}>
+              {/* <Box ml={{ md: "5px" }}>
                 <FormLabel fontWeight="bold" marginTop="20px">
                   Upload necessary document (test results, medical report,
                   scans, etc)
@@ -633,7 +633,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     placeholder="Upload necessary document"
                   />
                 </InputGroup>
-              </Box>
+              </Box> */}
               <Box ml={{ md: "5px" }}>
                 <FormLabel fontWeight="bold" marginTop="20px">
                   Health History{" "}

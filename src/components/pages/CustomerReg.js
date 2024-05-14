@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import LoadingSpinner from "../../utils/Spiner";
+// import LoadingSpinner from "../../utils/Spiner";
 import logo from "../../assets/Logo.svg";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -44,7 +44,7 @@ const customTheme = extendTheme({
     },
   },
   fonts: {
-    body: "Gill Sans MT, sans-serif",
+    body: "Montserrat, sans-serif",
     heading: "Gill Sans MT, sans-serif",
   },
 });
@@ -60,7 +60,7 @@ const LandingPage = () => {
     gender: "",
     dob: new Date(),
     address: "",
-    image: "",
+    // image: "",
     kinName: "",
     kinNumber: "",
     language: "English",
@@ -68,7 +68,7 @@ const LandingPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const [imageLoading, setImageLoading] = useState(false);
+  // const [imageLoading, setImageLoading] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const navigate = useNavigate();
@@ -185,45 +185,45 @@ const LandingPage = () => {
     }
   };
 
-  const postImage = async (image) => {
-    setImageLoading(true);
-    if (image === undefined) {
-      toast.warning("Please select an image");
-      return;
-    }
+  // const postImage = async (image) => {
+  //   setImageLoading(true);
+  //   if (image === undefined) {
+  //     toast.warning("Please select an image");
+  //     return;
+  //   }
    
-    if (image.type === "image/jpeg" || image.type === "image/png") {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "profileImage");
-      data.append("cloud_name", "dmfewrwla");
+  //   if (image.type === "image/jpeg" || image.type === "image/png") {
+  //     const data = new FormData();
+  //     data.append("file", image);
+  //     data.append("upload_preset", "profileImage");
+  //     data.append("cloud_name", "dmfewrwla");
 
-      try {
-        const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
-          {
-            method: "post",
-            body: data,
-          }
-        );
+  //     try {
+  //       const response = await fetch(
+  //         "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
+  //         {
+  //           method: "post",
+  //           body: data,
+  //         }
+  //       );
 
-        const imageData = await response.json();
+  //       const imageData = await response.json();
 
-        setFormData({
-          ...formData,
-          image: imageData.url.toString(),
-        });
-        setImageLoading(false);
-        console.log(imageData.url.toString());
-      } catch (err) {
-        console.error(err);
-        setImageLoading(false);
-      }
-    } else {
-      toast.warning("Please select a calid image file");
-      return;
-    }
-  };
+  //       setFormData({
+  //         ...formData,
+  //         image: imageData.url.toString(),
+  //       });
+  //       setImageLoading(false);
+  //       console.log(imageData.url.toString());
+  //     } catch (err) {
+  //       console.error(err);
+  //       setImageLoading(false);
+  //     }
+  //   } else {
+  //     toast.warning("Please select a calid image file");
+  //     return;
+  //   }
+  // };
 
   useEffect(() => {
     AOS.init();
@@ -261,25 +261,25 @@ const LandingPage = () => {
               w={{ base: "300px", md: "350px" }}
             />
           </a>
-          <Text fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
+          <Text fontFamily="header" fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
             Create your account
           </Text>
-          <form onSubmit={handleSubmit}>
+          <form  onSubmit={handleSubmit}>
             {/* Form fields */}
-            <FormControl isRequired>
-              <FormLabel>First Name</FormLabel>
+            <FormControl fontSize={{base: "16px", md: "20px"}} fontFamily="body" isRequired>
+              <FormLabel>First name</FormLabel>
               <Input
                 name="firstName"
                 placeholder="First name"
                 onChange={handleInputChange}
               />
-              <FormLabel mt="4">Last Name</FormLabel>
+              <FormLabel mt="4">Last name</FormLabel>
               <Input
                 name="lastName"
                 placeholder="Last name"
                 onChange={handleInputChange}
               />
-              <FormLabel mt="4">Email Address</FormLabel>
+              <FormLabel mt="4">Email address</FormLabel>
               <Input
                 name="email"
                 type="email"
@@ -292,7 +292,7 @@ const LandingPage = () => {
                 placeholder="Home address"
                 onChange={handleInputChange}
               /> */}
-              <FormLabel mt="4">Phone Number</FormLabel>
+              <FormLabel mt="4">Phone number</FormLabel>
               <InputGroup>
                 <InputLeftAddon children="+234" />
                 <Input
@@ -311,8 +311,8 @@ const LandingPage = () => {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </Select>
-              <Box marginLeft="1px" w="320px">
-                <FormLabel marginTop="20px">Date of Birth</FormLabel>
+              <Box marginLeft="1px" w={{base: "320px", md: "450px"}}>
+                <FormLabel marginTop="20px">Date of birth</FormLabel>
                 <Flex
                   alignItems="flex-start"
                   border="1px solid"
@@ -335,13 +335,13 @@ const LandingPage = () => {
                   />
                 </Flex>
               </Box>
-              <FormLabel mt="4">Upload Image</FormLabel>
+              {/* <FormLabel mt="4">Upload Image</FormLabel>
               <Input
                 type="file"
                 accept="image/*"
                 onChange={(e) => postImage(e.target.files[0])}
               />
-              {imageLoading && <LoadingSpinner />}
+              {imageLoading && <LoadingSpinner />} */}
               <FormLabel mt="4">Password</FormLabel>
               <InputGroup size="md">
                 <Input
@@ -357,7 +357,7 @@ const LandingPage = () => {
                   </Button>
                 </InputRightElement>
               </InputGroup>
-              <FormLabel mt="4">Confirm Password</FormLabel>
+              <FormLabel mt="4">Confirm password</FormLabel>
               <InputGroup size="md">
                 <Input
                   name="confirmPassword"
@@ -374,6 +374,7 @@ const LandingPage = () => {
               </InputGroup>
             </FormControl>
             <Checkbox
+            fontFamily="body"
               isChecked={agreeToTerms}
               onChange={handleTermsChange}
               mt="4"
@@ -391,12 +392,13 @@ const LandingPage = () => {
               bg="#A210C6"
               color="white"
               isLoading={loading}
+              fontFamily="body"
               loadingText="Registering..."
             >
               Submit
             </Button>
           </form>
-          <Text fontSize="16px" fontFamily="Montserrat" mt="15px">
+          <Text  fontSize="16px" fontFamily="body" mt="15px">
             Already have an account?{" "}
             <Link
               to="/login"

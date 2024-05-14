@@ -35,7 +35,7 @@ const customTheme = extendTheme({
     },
   },
   fonts: {
-    body: "Gill Sans MT, sans-serif",
+    body: "Montserrat, sans-serif",
     heading: "Gill Sans MT, sans-serif",
   },
 });
@@ -139,13 +139,13 @@ const LandingPage = () => {
             </a>
             <Text
               mt={{ base: "5px", md: "5px" }}
-              fontSize="26px"
-              fontFamily="body"
+              fontSize="20px"
+              fontFamily="header"
               color="#A210C6"
             >
               Login to your account
             </Text>
-            <FormControl isRequired mt="20px">
+            <FormControl fontFamily="body" isRequired mt="20px">
               <Input
                 placeholder="Phone number"
                 value={phoneInput}
@@ -166,6 +166,7 @@ const LandingPage = () => {
               </InputGroup>
               <ChakraLink
                 fontStyle="italic"
+                fontFamily="body"
                 href="/forgot-password"
                 color="#A210C6"
                 display="block"
@@ -199,7 +200,7 @@ const LandingPage = () => {
                 <Image src={Google} alt="GoogleIcon" w="20px" h="20px" />
                 <Text ml="5px">Continue with Google</Text>
               </Box> */}
-              <Text fontSize="16px" fontFamily="Montserrat" mt="30px">
+              <Text fontSize="16px" fontFamily="body" mt="30px">
                 Don't have an account?{" "}
                 <ChakraLink
                   onClick={handleOpenModal}

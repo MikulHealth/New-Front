@@ -25,7 +25,7 @@ import {
   Box,
   Select,
   Text,
-  InputGroup,
+  // InputGroup,
   Textarea,
 } from "@chakra-ui/react";
 
@@ -407,7 +407,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
              
             
-              <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
+              {/* <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
                 <FormLabel fontWeight="bold">
                   Upload necessary document (test results, medical report,
                   scans, etc)
@@ -423,7 +423,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     placeholder="Upload necessary document"
                   />
                 </InputGroup>
-              </Box>
+              </Box> */}
               <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
                 <FormLabel fontWeight="bold">Health History </FormLabel>
                 <Textarea
