@@ -66,7 +66,7 @@ const MobileFooter = () => {
           </VStack>
         </NavLink>
 
-        <NavLink to="/help" style={listItemStyle}>
+        <NavLink to="/settings" style={listItemStyle}>
           <VStack>
             <Image 
             src={SettingsIcon}
