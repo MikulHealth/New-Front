@@ -464,7 +464,7 @@ const HelpPage = () => {
                 mb={{ base: "150px" }}
                 mt={{ base: "-50px", md: "50px" }}
               >
-                <a href="https://wa.me/2347032579006">
+                <a href="https://wa.me/message/7NHXMWT4I54JC1">
                   <Image
                     // onClick={help}
                     src={WhatsAppIcon}

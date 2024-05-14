@@ -77,13 +77,13 @@ const Footer = ({ onFaqsClick }) => {
             Socials
           </Text>
           <Flex justify="center" mt={{ base: "2", md: "4" }}>
-            <ChakraLink href="https://web.facebook.com/mikulhealthcare/?_rdc=1&_rdr://example.com">
+            <ChakraLink href="https://web.facebook.com/mikulhealthcare/?_rdc=1&_rdr:/">
               <Image src={FBIcon} alt="Facebook" w="32px" h="32px" mr="4" />
             </ChakraLink>
             <ChakraLink href="https://www.instagram.com/mikulhealth/">
               <Image src={IGIcon} alt="Instagram" w="32px" h="32px" mr="4" />
             </ChakraLink>
-            <ChakraLink href="https://wa.me/message/3VO5QNBR2AB4L1://example.com">
+            <ChakraLink href="https://wa.me/message/7NHXMWT4I54JC1/">
               <Image src={WHIcon} alt="WhatsApp" w="32px" h="32px" />
             </ChakraLink>
           </Flex>

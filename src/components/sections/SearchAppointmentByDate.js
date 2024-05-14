@@ -52,10 +52,13 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          `http://localhost:8080/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
+          // `http://localhost:8080/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
+          //   selectedDate
+          // )}`,
+
+           `https://backend-c1pz.onrender.com/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
             selectedDate
           )}`,
-          // "https://backend-c1pz.onrender.comhttps://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
           config
         );
 
@@ -155,7 +158,8 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
           setSelectedDate(null);
           setAppointments([]);
         }}
-        size="xl"
+        size={{base:"lg", md: "xl"}}
+        // w={{base: "70%", md: ""}}
         isCentered
       >
         <ToastContainer
@@ -170,10 +174,10 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
           pauseOnHover
         />
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent >
           <ModalHeader color="#A210C6">Search appointments</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody >
             {loading ? (
               <Progress size="xs" isIndeterminate />
             ) : (
@@ -190,13 +194,7 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
                   dateFormat="dd-MM-yyyy"
                   placeholderText="Select a date"
                   className="form-control"
-                  // style={{
-                  //   border: "1px solid #ced4da",
-                  //   borderRadius: "4px",
-                  //   marginLeft: "10px",
-                  //   cursor: "pointer",
-                  //   // marginBottom: "40px",
-                  // }}
+                  
                 />
 
                 <Flex mt="20px">
@@ -215,37 +213,36 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
                           shadow="md"
                           borderWidth="1px"
                         >
-                          <Flex flexDirection={{base: "column", md: "row"}}>
+                          <Flex flexDirection={{ base: "column", md: "row" }}>
                             <Text fontWeight="bold" color="black">
                               Care beneficiary:
                             </Text>
-                            <Text ml={{md: "5px"}} color="black">
+                            <Text ml={{ md: "5px" }} color="black">
                               {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                             </Text>
                           </Flex>
-                            <Flex flexDirection={{base: "column", md: "row"}}>
-                              <Text fontWeight="bold" color="black">
-                                Booked on:
-                              </Text>
-                              <Text ml={{md: "5px"}} color="black">
-                                {formatDateTime(appointment.createdAt)}
-                              </Text>
-                              <Text
-                                fontSize="16px"
-                                ml={{md: "60px"}}
-                                mt={{base: "10px", md: "0"}}
-                                onClick={() => handleViewMore(appointment.id)}
-                                style={{
-                                  
-                                  color: "#A210C6",
-                                  fontStyle: "italic",
-                                  cursor: "pointer",
-                                }}
-                                _hover={{ color: "#A210C6" }}
-                              >
-                                Details
-                              </Text>
-                            </Flex>
+                          <Flex flexDirection={{ base: "column", md: "row" }}>
+                            <Text fontWeight="bold" color="black">
+                              Booked on:
+                            </Text>
+                            <Text ml={{ md: "5px" }} color="black">
+                              {formatDateTime(appointment.createdAt)}
+                            </Text>
+                            <Text
+                              fontSize="16px"
+                              ml={{ md: "60px" }}
+                              mt={{ base: "10px", md: "0" }}
+                              onClick={() => handleViewMore(appointment.id)}
+                              style={{
+                                color: "#A210C6",
+                                fontStyle: "italic",
+                                cursor: "pointer",
+                              }}
+                              _hover={{ color: "#A210C6" }}
+                            >
+                              Details
+                            </Text>
+                          </Flex>
                         </Box>
                       ))}
                     </VStack>

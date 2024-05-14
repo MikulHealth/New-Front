@@ -295,7 +295,7 @@ export default function Faqs() {
                       />
                     </Box>
                     <Box marginLeft={{ base: "0", md: "500px" }}>
-                      <a href="https://wa.me/2347032579006">
+                      <a href="https://wa.me/message/7NHXMWT4I54JC1">
                         <Image
                           src={WhatsAppIcon}
                           alt="Logo"

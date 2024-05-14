@@ -311,7 +311,7 @@ const LandingPage = () => {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </Select>
-              <Box marginLeft="1px" w="450px">
+              <Box marginLeft="1px" w="320px">
                 <FormLabel marginTop="20px">Date of Birth</FormLabel>
                 <Flex
                   alignItems="flex-start"
