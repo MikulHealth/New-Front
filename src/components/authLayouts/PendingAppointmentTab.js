@@ -36,10 +36,9 @@ import PaymentModal from "../sections/PaymentMethod";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 export default function PendingApp() {
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); 
-  const [paymentData, setPaymentData] = useState({}); 
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentData, setPaymentData] = useState({});
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [pendingAppointments, setPendingAppointments] = useState([]);
@@ -111,7 +110,6 @@ export default function PendingApp() {
   useEffect(() => {
     fetchData();
   }, []);
-  
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -137,6 +135,7 @@ export default function PendingApp() {
 
       if (response && response.data && response.data.success) {
         setSelectedAppointment(response.data.data.data);
+        console.log("apps " + response.data.data.data);
         setDetailsModalOpen(true);
       } else {
         console.error("Error fetching appointment details");
@@ -171,13 +170,13 @@ export default function PendingApp() {
       const response = await axios.post(apiUrl, {}, { headers });
 
       if (response.data.success) {
-         toast.success(response.data.message);
-       
+        toast.success(response.data.message);
+
         localStorage.removeItem("appointmentId");
         fetchData();
       } else {
         toast.error("error canceling appointment");
-       
+
         console.error("Error canceling appointment");
       }
     } catch (error) {
@@ -211,11 +210,11 @@ export default function PendingApp() {
   return (
     <Box
       className="pending-appointment"
-      // overflow="scroll"
-      w={{ base: "100%", md: "50vw" }}
+      overflow="scroll"
+      w={{ base: "100%", md: "100%" }}
       h={{ base: "60vh", md: "30vh" }}
     >
-       <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -226,121 +225,183 @@ export default function PendingApp() {
         draggable
         pauseOnHover
       />
-       <VStack align="start" spacing={4}>
-
-     
-      {loading ? (
-        <LoadingSpinner />
-      ) : pendingAppointments.length === 0 ? (
-        <Text
-          fontSize={{ base: "10px", md: "16px" }}
-          ml={{ base: "10px", md: "35px" }}
-        >
-          No pending appointments yet. Click{" "}
-          <button
-            style={{
-              color: "#A210C6",
-              fontStyle: "italic",
-              textDecoration: "none",
-              cursor: "pointer",
-              border: "none",
-              background: "none",
-              padding: "0",
-              font: "inherit",
-            }}
-            onClick={handleOpenAppointmentModal}
+      <VStack align="start" spacing={4}>
+        {loading ? (
+          <LoadingSpinner />
+        ) : pendingAppointments.length === 0 ? (
+          <Text
+            fontSize={{ base: "10px", md: "16px" }}
+            ml={{ base: "10px", md: "35px" }}
           >
-            book appointment
-          </button>{" "}
-          to begin.
-        </Text>
-      ) : (
-        <VStack  align="start" spacing={4}>
-          {pendingAppointments.map((appointment) => (
-            <Box
-              fontSize={{ base: "12px", md: "16px" }}
-              key={appointment.id}
+            No pending appointments yet. Click{" "}
+            <button
+              style={{
+                color: "#A210C6",
+                fontStyle: "italic",
+                textDecoration: "none",
+                cursor: "pointer",
+                border: "none",
+                background: "none",
+                padding: "0",
+                font: "inherit",
+              }}
+              onClick={handleOpenAppointmentModal}
             >
-              <Flex>
-                <Text fontStyle="body" fontWeight="bold" color="black">
-                  Care beneficiary:
-                </Text>
-                <Text ml={{ base: "10px", md: "5px" }} color="black">
-                  {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
-                </Text>
-              </Flex>
-              <Flex >
-                <Text fontStyle="body" fontWeight="bold" color="black">
-                  Booked on:
-                </Text>
-                <Text ml={{ base: "10px", md: "5px" }} color="black">
-                  {formatDateTime(appointment.createdAt)}
-                </Text>
-                <Flex display={{ base: "none", md: "flex" }} ml={{ md: "130px"}} >
-                  <Text
-                    ml={{ md: "60px" }}
-                    fontSize={{ base: "12px", md: "16px" }}
-                    onClick={() => handleViewMore(appointment.id)}
-                    style={{
-                      color: "#A210C6",
-                      fontStyle: "italic",
-                      cursor: "pointer",
-                    }}
-                    _hover={{ color: "#A210C6" }}
-                  >
-                    Details
-                  </Text>
-                  <Text
-                    ml={{ md: "60px" }}
-                    fontSize={{ base: "12px", md: "16px" }}
-                    onClick={() => handleCancelAppointment(appointment.id)}
-                    style={{
-                      color: "red",
-                      fontStyle: "italic",
-                      cursor: "pointer",
-                    }}
-                    _hover={{ color: "#A210C6" }}
-                  >
-                    Cancel
-                  </Text>
-                </Flex>
-              </Flex>
-              <Flex
-                fontSize={{ base: "12px", md: "16px" }}
-                display={{ base: "flex", md: "none" }}
+              book appointment
+            </button>{" "}
+            to begin.
+          </Text>
+        ) : (
+          <Box w={{ base: "90vw", md: "60vw" }}>
+            <Flex
+              mb="50px"
+              w={{ base: "90vw", md: "60vw" }}
+              position="fixed"
+              ml={{ md: "-20px" }}
+              bg="#D087E2"
+              p={4}
+              borderRadius="md"
+              justifyContent="space-between"
+              color="white"
+              fontSize={{ base: "10px", md: "16px" }}
+            >
+              <Text fontWeight="bold">Name</Text>
+              <Text fontWeight="bold">Type</Text>
+              <Text fontWeight="bold">Plan</Text>
+              <Text fontWeight="bold">Status</Text>
+              <Text fontWeight="bold">Payment</Text>
+            </Flex>
+            <VStack
+              mb={{ base: "150", md: "250" }}
+              justifyContent="space-between"
+              align="start"
+              spacing={4}
+              mt={16}
+            >
+              {pendingAppointments.map((appointment) => (
+                // <Box
+                //   fontSize={{ base: "12px", md: "16px" }}
+                //   key={appointment.id}
+                // >
+                //   <Flex>
+                //     <Text fontStyle="body" fontWeight="bold" color="black">
+                //       Care beneficiary:
+                //     </Text>
+                //     <Text ml={{ base: "10px", md: "5px" }} color="black">
+                //       {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
+                //     </Text>
+                //   </Flex>
+                //   <Flex >
+                //     <Text fontStyle="body" fontWeight="bold" color="black">
+                //       Booked on:
+                //     </Text>
+                //     <Text ml={{ base: "10px", md: "5px" }} color="black">
+                //       {formatDateTime(appointment.createdAt)}
+                //     </Text>
+                //     <Flex display={{ base: "none", md: "flex" }} ml={{ md: "130px"}} >
+                //       <Text
+                //         ml={{ md: "60px" }}
+                //         fontSize={{ base: "12px", md: "16px" }}
+                //         onClick={() => handleViewMore(appointment.id)}
+                //         style={{
+                //           color: "#A210C6",
+                //           fontStyle: "italic",
+                //           cursor: "pointer",
+                //         }}
+                //         _hover={{ color: "#A210C6" }}
+                //       >
+                //         Details
+                //       </Text>
+                //       <Text
+                //         ml={{ md: "60px" }}
+                //         fontSize={{ base: "12px", md: "16px" }}
+                //         onClick={() => handleCancelAppointment(appointment.id)}
+                //         style={{
+                //           color: "red",
+                //           fontStyle: "italic",
+                //           cursor: "pointer",
+                //         }}
+                //         _hover={{ color: "#A210C6" }}
+                //       >
+                //         Cancel
+                //       </Text>
+                //     </Flex>
+                //   </Flex>
+                //   <Flex
+                //     fontSize={{ base: "12px", md: "16px" }}
+                //     display={{ base: "flex", md: "none" }}
 
-                ml={{base: "230px", md: "0"}}
-              >
-                <Text
+                //     ml={{base: "230px", md: "0"}}
+                //   >
+                //     <Text
+                //       onClick={() => handleViewMore(appointment.id)}
+                //       style={{
+                //         color: "#A210C6",
+                //         fontStyle: "italic",
+                //         cursor: "pointer",
+                //       }}
+                //       _hover={{ color: "#A210C6" }}
+                //     >
+                //       Details
+                //     </Text>
+                //     <Text
+                //       ml={{ base: "30px" }}
+                //       onClick={() => handleCancelAppointment(appointment.id)}
+                //       style={{
+                //         color: "red",
+                //         fontStyle: "italic",
+                //         cursor: "pointer",
+                //       }}
+                //       _hover={{ color: "#A210C6" }}
+                //     >
+                //       Cancel
+                //     </Text>
+                //   </Flex>
+                //   <Divider my={4} borderColor="gray.500" />
+                // </Box>
+
+                <Box
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  key={appointment.id}
                   onClick={() => handleViewMore(appointment.id)}
-                  style={{
-                    color: "#A210C6",
-                    fontStyle: "italic",
-                    cursor: "pointer",
-                  }}
-                  _hover={{ color: "#A210C6" }}
+                  w={{ base: "85vw", md: "57vw" }}
+                  p={4}
+                  borderBottom="1px solid #e2e8f0"
                 >
-                  Details
-                </Text>
-                <Text
-                  ml={{ base: "30px" }}
-                  onClick={() => handleCancelAppointment(appointment.id)}
-                  style={{
-                    color: "red",
-                    fontStyle: "italic",
-                    cursor: "pointer",
-                  }}
-                  _hover={{ color: "#A210C6" }}
-                >
-                  Cancel
-                </Text>
-              </Flex>
-              <Divider my={4} borderColor="gray.500" />
-            </Box>
-          ))}
-        </VStack>
-      )}
-        </VStack>
+                  <Flex
+                    fontSize={{ base: "10px", md: "16px" }}
+                    textAlign="left"
+                    ml={{ base: "-15px", md: "-16px" }}
+                    justifyContent="space-between"
+                  >
+                    <Text>
+                      {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
+                    </Text>
+                    <Text>{`${appointment.appointment.shift} `}</Text>
+                    <Text>{`${appointment.appointment.servicePlan} `}</Text>
+                    <Text
+                      color={
+                        appointment.appointment.appointmentPending
+                          ? "yellow.500"
+                          : "black"
+                      }
+                    >
+                      {appointment.appointment.appointmentPending
+                        ? "Pending"
+                        : "Unknown"}
+                    </Text>
+                    <Text ml={{ md: "60px" }} color="black">
+                      {appointment.appointment?.paid ? "Paid" : "Not paid"}
+                    </Text>
+                  </Flex>
+                </Box>
+              ))}
+            </VStack>
+          </Box>
+        )}
+      </VStack>
       {detailsModalOpen && selectedAppointment && (
         <Drawer
           isOpen={detailsModalOpen}
@@ -523,8 +584,7 @@ export default function PendingApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                    ₦{selectedAppointment.costOfService||
-                        "Not availabe"}.00
+                      ₦{selectedAppointment.costOfService || "Not availabe"}.00
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -583,6 +643,16 @@ export default function PendingApp() {
                 onClick={handleEditAppointment}
               >
                 Edit appointment
+              </Button>
+              <Button
+                bg="white"
+                borderColor="red.500"
+                color="red.500"
+                _hover={{ color: "" }}
+                // leftIcon={<EditIcon />}
+                onClick={() => handleCancelAppointment(selectedAppointment.id)}
+              >
+                Cancel appointment
               </Button>
 
               {!selectedAppointment.paid && (

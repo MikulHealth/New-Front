@@ -462,8 +462,7 @@ const ClientDash = () => {
                           fontFamily="body"
                           fontSize={{ base: "10px", md: "14px" }}
                         >
-                          Add your loved ones as beneficiaries and share the
-                          gift of well-being
+                          Your firends and family as Beneficiaries
                         </Text>
                       </Box>
                     </Box>
@@ -474,7 +473,7 @@ const ClientDash = () => {
                       fontWeight="bold"
                       fontFamily="body"
                       style={{
-                        marginTop: "15px",
+                        marginTop: "10px",
                         fontStyle: "italic",
                         cursor: "pointer",
                       }}
@@ -541,7 +540,7 @@ const ClientDash = () => {
                         fontFamily="body"
                         textAlign="center"
                         style={{
-                          marginTop: "15px",
+                          marginTop: "10px",
                           fontStyle: "italic",
                           cursor: "pointer",
                         }}
@@ -598,7 +597,7 @@ const ClientDash = () => {
                           // mt={{ base: "-15px", md: "0px" }}
                           fontFamily="body"
                         >
-                          Choose the kind of service you want, how and when you
+                          Choose a service you want, how and when you
                           want it
                         </Text>
                       </Box>
@@ -610,7 +609,7 @@ const ClientDash = () => {
                         fontFamily="body"
                         textAlign="center"
                         style={{
-                          marginTop: "15px",
+                          marginTop: "10px",
                           fontStyle: "italic",
                           cursor: "pointer",
                         }}
@@ -667,7 +666,7 @@ const ClientDash = () => {
                         fontFamily="body"
                         fontSize={{ base: "10px", md: "14px" }}
                       >
-                        Click to view your personalized <br></br> medical report
+                        All your medical reports
                       </Text>
                     </Box>
                   </Box>

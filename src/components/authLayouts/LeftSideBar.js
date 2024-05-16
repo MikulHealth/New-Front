@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { VStack, Box, Flex, Image, Text } from "@chakra-ui/react";
-// import LogoutModal from "../sections/LogoutModal";
 import logo from "../../assets/LogoColoured.svg";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import HomeIcon from "../../assets/HomeWhite.svg";
@@ -13,17 +12,15 @@ import LogoutIcon from "../../assets/Logout.svg";
 const LeftSideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleConfirmLogout = () => {
-    // setShowLogoutModal(false);
     localStorage.removeItem("token");
     localStorage.removeItem("phoneNumber");
     navigate("/");
   };
 
-  const NavLinkWithBackground = ({ icon, text, to }) => {
-    const isActive = location.pathname === to;
+  const NavLinkWithBackground = ({ icon, text, to, isActiveCondition }) => {
+    const isActive = isActiveCondition || location.pathname === to;
     return (
       <NavLink to={to}>
         <Flex
@@ -41,6 +38,14 @@ const LeftSideBar = () => {
       </NavLink>
     );
   };
+
+  const settingsPaths = [
+    "/settings",
+    "/settings/edit-profile",
+    "/settings/change-password",
+    "/settings/notification-settings",
+    "/settings/help",
+  ];
 
   return (
     <>
@@ -70,6 +75,7 @@ const LeftSideBar = () => {
             icon={SettingsIcon}
             text="Settings"
             to="/settings"
+            isActiveCondition={settingsPaths.includes(location.pathname)}
           />
 
           <Box ml="10px" marginTop="70px" onClick={handleConfirmLogout}>

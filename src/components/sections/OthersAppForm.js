@@ -356,7 +356,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           <Text p="40px" pt="5px">
             <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
             <br /> Please note, all the services listed under <strong>
-              "Service Plan"
+              Service Plan
             </strong>{" "}
             are for monthly subscription with 24hrs shift or 8hrs (day) shift,
             and they expire after one month of start of care. With the exception of short home visit and any custom

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useSwipeable } from "react-swipeable";
 import "react-datepicker/dist/react-datepicker.css";
 import BookAppointmentModal from "../sections/BookAppointment";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -18,6 +19,7 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  useTabs,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import familyIcon from "../../assets/Family.svg";
@@ -48,6 +50,7 @@ const AppointmentPage = () => {
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [showSearchAppointmentsModal, setShowSearchAppointmentsModal] =
     useState(false);
+
   const handleOpenAppointmentModal = () => {
     setShowAppointmentModal(true);
   };
@@ -67,6 +70,15 @@ const AppointmentPage = () => {
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
   };
+
+  const { index, setIndex } = useTabs({ index: 0 });
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => setIndex((prevIndex) => (prevIndex + 1) % 5),
+    onSwipedRight: () => setIndex((prevIndex) => (prevIndex === 0 ? 4 : prevIndex - 1)),
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  });
 
   return (
     <ChakraProvider theme={customTheme}>
@@ -105,7 +117,6 @@ const AppointmentPage = () => {
           </Flex>
         </Box>
         <Flex
-         
           bg="#A210C6"
           w={{ base: "90vw", md: "910px" }}
           h={{ base: "19vh", md: "230px" }}
@@ -113,12 +124,12 @@ const AppointmentPage = () => {
           borderRadius="20px"
           justifyContent="space-between"
         >
-          <Box pt={{base: "5px", md: "15px"}} justify="left" color="white">
+          <Box pt={{ base: "5px", md: "15px" }} justify="left" color="white">
             <Text
               fontSize={{ base: "12px", md: "20px" }}
               fontFamily="heading"
               marginTop="15px"
-              ml={{base: "30px",md: "60px"}}
+              ml={{ base: "30px", md: "60px" }}
               textAlign="left"
             >
               Hello {user?.firstName},
@@ -126,34 +137,32 @@ const AppointmentPage = () => {
             <Text
               fontFamily="body"
               fontSize={{ base: "10px", md: "15px" }}
-              ml={{base: "30px",md: "60px"}}
+              ml={{ base: "30px", md: "60px" }}
               mt={{ md: "5px" }}
               textAlign="left"
             >
-              Would you like to book an appointment <br></br> for yourself or a loved one?
+              Would you like to book an appointment <br></br> for yourself or a
+              loved one?
             </Text>
-            
 
             <Button
               onClick={handleOpenAppointmentModal}
               bg="white"
               color="#A210C6"
               fontFamily="body"
-              mt={{base: "10px", md: "30px" }}
+              mt={{ base: "10px", md: "30px" }}
               _hover={{ color: "" }}
               padding={{ base: "5px", md: "0" }}
-              // ml={{ base: "", md: "-40px" }}
               w={{ base: "140px", md: "190px" }}
               h={{ base: "25px", md: "40px" }}
-              fontSize={{ base: "12px", md: "16px"}}
-              // mb={{base: "20px", md: "0px"}}
+              fontSize={{ base: "12px", md: "16px" }}
               borderRadius="15px"
               leftIcon={<CheckIcon />}
             >
               Book appointment
             </Button>
           </Box>
-          <Box mr={{md: "20px"}} >
+          <Box mr={{ md: "20px" }}>
             <Image
               src={familyIcon}
               alt="family icon"
@@ -167,16 +176,15 @@ const AppointmentPage = () => {
         </Flex>
 
         <Flex
-          w={{ base: "", md: "50vw" }}
-          ml={{ base: "-90px", md: "-250px" }}
-          justifyContent="space-between"
+          w={{ base: "90vw", md: "90vw" }}
+          ml={{ base: "0", md: "-80px" }}
+          justifyContent="center"
           className="appointment-tabs"
-          overflow={{base: "scroll", md: ""}}
-          
+          overflow={{ base: "scroll", md: "hidden" }}
         >
-          <VStack  ml={{ base: "110px", md: "0" }}>
-            <Tabs  mb="20px" colorScheme="purple.100" mt={{ base: "", md: "40px" }}>
-              <TabList justifyContent="space-evenly">
+          <VStack ml={{ base: "0", md: "30px" }} w="90%" {...swipeHandlers}>
+            <Tabs index={index} onChange={setIndex} mb="20px" colorScheme="purple.100" mt={{ base: "", md: "5px" }}>
+              <TabList justifyContent="space-between">
                 <Tab
                   fontSize={{ base: "12px", md: "16px" }}
                   color="#A210C6"
@@ -189,7 +197,6 @@ const AppointmentPage = () => {
                   fontSize={{ base: "12px", md: "16px" }}
                   color="yellow.500"
                   fontWeight="bold"
-                 
                 >
                   Pending
                 </Tab>
@@ -198,7 +205,6 @@ const AppointmentPage = () => {
                   fontSize={{ base: "12px", md: "16px" }}
                   color="green.500"
                   fontWeight="bold"
-                 
                 >
                   Active
                 </Tab>
@@ -207,7 +213,6 @@ const AppointmentPage = () => {
                   fontSize={{ base: "12px", md: "16px" }}
                   color="blue.500"
                   fontWeight="bold"
-                
                 >
                   Completed
                 </Tab>
@@ -216,11 +221,10 @@ const AppointmentPage = () => {
                   color="red.500"
                   fontWeight="bold"
                 >
-                Cancelled
+                  Cancelled
                 </Tab>
-
               </TabList>
-              <TabPanels ml={{ base: "-20px", md: "0px" }} overflow={{base: "scroll"}}>
+              <TabPanels ml={{ base: "0px", md: "0px" }}>
                 <TabPanel>
                   <AppointmentTab />
                 </TabPanel>
@@ -240,7 +244,6 @@ const AppointmentPage = () => {
             </Tabs>
             <MobileFooter />
           </VStack>
-          {/* <Help /> */}
         </Flex>
         <BookAppointmentModal
           isOpen={showAppointmentModal}
