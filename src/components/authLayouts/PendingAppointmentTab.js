@@ -421,10 +421,10 @@ export default function PendingApp() {
                         fontSize={{ base: "10px", md: "14px" }}
                         textAlign="center"
                         color={
-                          appointment.appointment?.paid ? "#057B1F" : "red.300"
+                          appointment.appointment?.paid ? "#057B1F" : "black.500"
                         }
                       >
-                        {appointment?.appointment.paid ? "Paid" : "Not paid"}
+                        {appointment?.appointment.paid ? "Paid" : "Unpaid"}
                       </Text>
                     </Box>
                   </Flex>

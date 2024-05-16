@@ -193,6 +193,7 @@ export default function AppointmentTab() {
                     cursor: "pointer",
                   }}
                   w={{ base: "85vw", md: "57vw" }}
+                  mt="-10px"
                   p={4}
                   borderBottom="1px solid #e2e8f0"
                 >
@@ -263,9 +264,9 @@ export default function AppointmentTab() {
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
                         textAlign="center"
-                        color={appointment?.paid ? "#057B1F" : "red.300"}
+                        color={appointment?.paid ? "#057B1F" : "black.500"}
                       >
-                        {appointment?.paid ? "Paid" : "Not paid"}
+                        {appointment?.paid ? "Paid" : "Unpaid"}
                       </Text>
                     </Box>
 
