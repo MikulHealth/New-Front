@@ -3,9 +3,14 @@ import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import { VStack, Box, Flex, Image, Text } from "@chakra-ui/react";
 import logo from "../../assets/LogoColoured.svg";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
-import HomeIcon from "../../assets/HomeWhite.svg";
+import AppointmentsIconWh from "../../assets/AppWhite.svg";
+import HomeIconWhite from "../../assets/HomeWhite.svg";
+import HomeIconBlack from "../../assets/HomeBlack.svg";
 import Wallet from "../../assets/Wallet.svg";
+import WalletWh from "../../assets/WalletWhite.svg";
 import serviceIcon from "../../assets/ServiceIcon.svg";
+import serviceIconWh from "../../assets/ServiceWhite.svg";
+import SettingsIconWh from "../../assets/SettingsWhite.svg";
 import SettingsIcon from "../../assets/SettingsIcon.svg";
 import LogoutIcon from "../../assets/Logout.svg";
 
@@ -19,8 +24,8 @@ const LeftSideBar = () => {
     navigate("/");
   };
 
-  const NavLinkWithBackground = ({ icon, text, to, isActiveCondition }) => {
-    const isActive = isActiveCondition || location.pathname === to;
+  const NavLinkWithBackground = ({ icon, activeIcon, text, to }) => {
+    const isActive = location.pathname === to;
     return (
       <NavLink to={to}>
         <Flex
@@ -32,20 +37,17 @@ const LeftSideBar = () => {
           color={isActive ? "white" : "inherit"}
           paddingLeft="10px"
         >
-          <Image src={icon} alt={text} boxSize="24px" marginRight="10px" />
+          <Image
+            src={isActive ? activeIcon : icon}
+            alt={text}
+            boxSize="24px"
+            marginRight="10px"
+          />
           <Text fontSize="16px">{text}</Text>
         </Flex>
       </NavLink>
     );
   };
-
-  const settingsPaths = [
-    "/settings",
-    "/settings/edit-profile",
-    "/settings/change-password",
-    "/settings/notification-settings",
-    "/settings/help",
-  ];
 
   return (
     <>
@@ -59,23 +61,37 @@ const LeftSideBar = () => {
       >
         <Image src={logo} alt="Logo" w="160px" h="60px" ml="20px" mt="10px" />
         <VStack mt="45px" align="left" spacing={5}>
-          <NavLinkWithBackground icon={HomeIcon} text="Home" to="/dashboard" />
+          <NavLinkWithBackground
+            icon={HomeIconBlack}
+            activeIcon={HomeIconWhite}
+            text="Home"
+            to="/dashboard"
+          />
           <NavLinkWithBackground
             icon={AppointmentsIcon}
+            activeIcon={AppointmentsIconWh}
             text="Appointments"
             to="/appointment"
           />
-          <NavLinkWithBackground icon={Wallet} text="Wallet" to="/wallet" />
+
+          <NavLinkWithBackground
+            icon={Wallet}
+            activeIcon={WalletWh}
+            text="Wallet"
+            to="/wallet"
+          />
+
           <NavLinkWithBackground
             icon={serviceIcon}
+            activeIcon={serviceIconWh}
             text="Services"
             to="/services"
           />
           <NavLinkWithBackground
             icon={SettingsIcon}
+            activeIcon={SettingsIconWh}
             text="Settings"
             to="/settings"
-            isActiveCondition={settingsPaths.includes(location.pathname)}
           />
 
           <Box ml="10px" marginTop="70px" onClick={handleConfirmLogout}>

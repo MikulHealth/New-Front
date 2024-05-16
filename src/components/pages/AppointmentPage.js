@@ -119,7 +119,7 @@ const AppointmentPage = () => {
         <Flex
           bg="#A210C6"
           w={{ base: "90vw", md: "910px" }}
-          h={{ base: "19vh", md: "200px" }}
+          h={{ base: "17vh", md: "200px" }}
           mt={{ base: "5px", md: "15px" }}
           borderRadius="20px"
           justifyContent="space-between"
@@ -177,16 +177,17 @@ const AppointmentPage = () => {
 
         <Flex
           w={{ base: "90vw", md: "65vw" }}
-          ml={{ base: "0", md: "-80px" }}
+          p="4px"
+          // ml={{ base: "0", md: "-80px" }}
           justifyContent="center"
           className="appointment-tabs"
           overflow={{ base: "hidden", md: "hidden" }}
         >
-          <VStack ml={{ base: "0", md: "30px" }} w="50%" {...swipeHandlers}>
+          <VStack ml={{ base: "0", md: "30px" }} w="90vw" {...swipeHandlers}>
             <Tabs index={index} onChange={setIndex} mb="20px" colorScheme="purple.100" mt={{ base: "", md: "5px" }}>
               <TabList justifyContent="space-between">
                 <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
+                  fontSize={{ base: "11px", md: "16px" }}
                   color="#A210C6"
                   fontWeight="bold"
                 >
@@ -194,7 +195,7 @@ const AppointmentPage = () => {
                 </Tab>
 
                 <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
+                  fontSize={{ base: "11px", md: "16px" }}
                   color="yellow.500"
                   fontWeight="bold"
                 >
@@ -202,7 +203,7 @@ const AppointmentPage = () => {
                 </Tab>
 
                 <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
+                  fontSize={{ base: "11px", md: "16px" }}
                   color="green.500"
                   fontWeight="bold"
                 >
@@ -210,14 +211,14 @@ const AppointmentPage = () => {
                 </Tab>
 
                 <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
+                  fontSize={{ base: "11px", md: "16px" }}
                   color="blue.500"
                   fontWeight="bold"
                 >
                   Completed
                 </Tab>
                 <Tab
-                  fontSize={{ base: "12px", md: "16px" }}
+                  fontSize={{ base: "11px", md: "16px" }}
                   color="red.500"
                   fontWeight="bold"
                 >

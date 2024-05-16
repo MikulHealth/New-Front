@@ -513,47 +513,40 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     Service Plan{" "}
                   </FormLabel>
                   <Select
+                    isRequired
                     name="servicePlan"
                     placeholder="preferred service plan"
                     w={{ base: "300px", md: "270px" }}
                     value={formFields.servicePlan}
                     onChange={handleInputChange}
                   >
-                    <option
-                      value="Elderly care by a Licensed Nurse"
-                      style={{ marginTop: "5px" }}
-                    >
-                      Elderly care by a Licensed Nurse
-                    </option>
-                    <option
-                      value="Elderly care by a Nurse Assistant"
-                      style={{ marginTop: "5px" }}
-                    >
-                      Elderly care by a Nurse Assistant
-                    </option>
-                    <option
-                      value="Postpartum care"
-                      style={{ marginTop: "5px" }}
-                    >
-                      Postpartum care by a Licensed Nurse/Midwife
-                    </option>
-                    <option value="Nanny care" style={{ marginTop: "5px" }}>
-                      Nanny service by a Professional Nanny
-                    </option>
-                    <option value="Recovery care" style={{ marginTop: "5px" }}>
-                      Recovery care by a Licensed Nurse
-                    </option>
-                    <option
-                      value="Short home visit"
-                      style={{ marginTop: "5px" }}
-                    >
-                      Short home visit by a Licensed Nurse
-                    </option>
-                    {customizedPlans.map((plan) => (
-                      <option key={plan.id} value={plan.name}>
-                        {plan.name}
+                    <optgroup label="Standard Plans">
+                      <option value="Elderly care by a Licensed Nurse">
+                        Elderly care by a Licensed Nurse
                       </option>
-                    ))}
+                      <option value="Elderly care by a Nurse Assistant">
+                        Elderly care by a Nurse Assistant
+                      </option>
+                      <option value="Postpartum care">
+                        Postpartum care by a Licensed Nurse/Midwife
+                      </option>
+                      <option value="Nanny care">
+                        Nanny service by a Professional Nanny
+                      </option>
+                      <option value="Recovery care">
+                        Recovery care by a Licensed Nurse
+                      </option>
+                      <option value="Short home visit">
+                        Short home visit by a Licensed Nurse
+                      </option>
+                    </optgroup>
+                    <optgroup label="Custom Plans">
+                      {customizedPlans.map((plan) => (
+                        <option key={plan.id} value={plan.name}>
+                          {plan.name}
+                        </option>
+                      ))}
+                    </optgroup>
                   </Select>
                 </Box>
 

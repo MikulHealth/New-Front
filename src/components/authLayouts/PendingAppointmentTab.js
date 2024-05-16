@@ -215,7 +215,7 @@ export default function PendingApp() {
       className="pending-appointment"
       overflow="scroll"
       w={{ base: "100%", md: "100%" }}
-      h={{ base: "60vh", md: "30vh" }}
+      h={{ base: "60vh", md: "60vh" }}
     >
       <ToastContainer
         position="top-right"
@@ -233,8 +233,9 @@ export default function PendingApp() {
           <LoadingSpinner />
         ) : pendingAppointments.length === 0 ? (
           <Text
-            fontSize={{ base: "10px", md: "16px" }}
-            ml={{ base: "10px", md: "35px" }}
+          w={{ base: "90vw", md: "60vw" }}
+          ml={{ base: "-8px", md: "-20px" }}
+          fontSize={{ base: "10px", md: "16px" }}
           >
             No pending appointments yet. Click{" "}
             <button
@@ -255,13 +256,13 @@ export default function PendingApp() {
             to begin.
           </Text>
         ) : (
-          <Box w={{ base: "90vw", md: "60vw" }}>
+          <Box >
             <Flex
               mt="-10px"
-              mb={{ base: "30px", md: "50px" }}
+              mb="50px"
               w={{ base: "90vw", md: "60vw" }}
               position="fixed"
-              ml={{ md: "-20px" }}
+              ml={{base: "-8px", md: "-20px" }}
               bg="#D087E2"
               p={4}
               borderRadius="md"
@@ -276,94 +277,15 @@ export default function PendingApp() {
               <Text fontWeight="bold">Payment</Text>
             </Flex>
             <VStack
-              mb={{ base: "150px", md: "10px" }}
+              mb={{ base: "150", md: "250" }}
+              overflow="scroll"
               justifyContent="space-between"
+              mt={{ base: 10, md: 16 }}
               align="start"
               spacing={4}
-              mt={{ base: 10, md: 14 }}
             >
               {pendingAppointments.map((appointment) => (
-                // <Box
-                //   fontSize={{ base: "12px", md: "16px" }}
-                //   key={appointment.id}
-                // >
-                //   <Flex>
-                //     <Text fontStyle="body" fontWeight="bold" color="black">
-                //       Care beneficiary:
-                //     </Text>
-                //     <Text ml={{ base: "10px", md: "5px" }} color="black">
-                //       {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
-                //     </Text>
-                //   </Flex>
-                //   <Flex >
-                //     <Text fontStyle="body" fontWeight="bold" color="black">
-                //       Booked on:
-                //     </Text>
-                //     <Text ml={{ base: "10px", md: "5px" }} color="black">
-                //       {formatDateTime(appointment.createdAt)}
-                //     </Text>
-                //     <Flex display={{ base: "none", md: "flex" }} ml={{ md: "130px"}} >
-                //       <Text
-                //         ml={{ md: "60px" }}
-                //         fontSize={{ base: "12px", md: "16px" }}
-                //         onClick={() => handleViewMore(appointment.id)}
-                //         style={{
-                //           color: "#A210C6",
-                //           fontStyle: "italic",
-                //           cursor: "pointer",
-                //         }}
-                //         _hover={{ color: "#A210C6" }}
-                //       >
-                //         Details
-                //       </Text>
-                //       <Text
-                //         ml={{ md: "60px" }}
-                //         fontSize={{ base: "12px", md: "16px" }}
-                //         onClick={() => handleCancelAppointment(appointment.id)}
-                //         style={{
-                //           color: "red",
-                //           fontStyle: "italic",
-                //           cursor: "pointer",
-                //         }}
-                //         _hover={{ color: "#A210C6" }}
-                //       >
-                //         Cancel
-                //       </Text>
-                //     </Flex>
-                //   </Flex>
-                //   <Flex
-                //     fontSize={{ base: "12px", md: "16px" }}
-                //     display={{ base: "flex", md: "none" }}
-
-                //     ml={{base: "230px", md: "0"}}
-                //   >
-                //     <Text
-                //       onClick={() => handleViewMore(appointment.id)}
-                //       style={{
-                //         color: "#A210C6",
-                //         fontStyle: "italic",
-                //         cursor: "pointer",
-                //       }}
-                //       _hover={{ color: "#A210C6" }}
-                //     >
-                //       Details
-                //     </Text>
-                //     <Text
-                //       ml={{ base: "30px" }}
-                //       onClick={() => handleCancelAppointment(appointment.id)}
-                //       style={{
-                //         color: "red",
-                //         fontStyle: "italic",
-                //         cursor: "pointer",
-                //       }}
-                //       _hover={{ color: "#A210C6" }}
-                //     >
-                //       Cancel
-                //     </Text>
-                //   </Flex>
-                //   <Divider my={4} borderColor="gray.500" />
-                // </Box>
-
+               
                 <Box
                   style={{
                     cursor: "pointer",
@@ -371,12 +293,13 @@ export default function PendingApp() {
                   key={appointment.id}
                   onClick={() => handleViewMore(appointment.id)}
                   w={{ base: "85vw", md: "57vw" }}
-                  overflow="scroll"
+                
                   p={4}
                   borderBottom="1px solid #e2e8f0"
                   ml={{ base: "10px" }}
                 >
                   <Flex
+                 
                     fontSize={{ base: "10px", md: "16px" }}
                     textAlign="left"
                     ml={{ base: "-15px", md: "-16px" }}

@@ -134,8 +134,9 @@ export default function AppointmentTab() {
           <LoadingSpinner />
         ) : appointments.length === 0 ? (
           <Text
+            w={{ base: "90vw", md: "60vw" }}
+            ml={{ base: "-8px", md: "-20px" }}
             fontSize={{ base: "10px", md: "16px" }}
-            ml={{ base: "10px", md: "35px" }}
           >
             No appointments yet. Click{" "}
             <button
@@ -156,13 +157,13 @@ export default function AppointmentTab() {
             to begin.
           </Text>
         ) : (
-          <Box w={{ base: "90vw", md: "60vw" }}>
+          <Box>
             <Flex
               mt="-10px"
               mb="50px"
               w={{ base: "90vw", md: "60vw" }}
               position="fixed"
-              ml={{ md: "-20px" }}
+              ml={{ base: "-8px", md: "-20px" }}
               bg="#D087E2"
               p={4}
               borderRadius="md"
@@ -189,11 +190,11 @@ export default function AppointmentTab() {
                   ml={{ base: "10px" }}
                   onClick={() => handleViewMore(appointment.id)}
                   key={appointment.id}
+                  // overflow="scroll"
                   style={{
                     cursor: "pointer",
                   }}
                   w={{ base: "85vw", md: "57vw" }}
-                  mt="-10px"
                   p={4}
                   borderBottom="1px solid #e2e8f0"
                 >
