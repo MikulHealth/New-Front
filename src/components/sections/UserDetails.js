@@ -66,7 +66,7 @@ const UserDetailsDrawer = ({ isOpen, onClose }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const handleEditClick = () => {
-    navigate("/edit-profile");
+    navigate("/settings/edit-profile");
     onClose();
   };
 
