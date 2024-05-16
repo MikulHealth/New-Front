@@ -377,7 +377,7 @@ export default function PendingApp() {
               Details
               {!selectedAppointment.paid && (
                 <Button
-                  fontSize={{ base: "10px", md: "14px" }}
+                  fontSize={{ base: "12px", md: "14px" }}
                   ml={{ base: "5px" }}
                   bg="green.400"
                   color="white"
@@ -608,13 +608,13 @@ export default function PendingApp() {
                 color="white"
                 _hover={{ color: "" }}
                 leftIcon={<EditIcon />}
-                fontSize={{ base: "10px", md: "14px" }}
+                fontSize={{ base: "12px", md: "14px" }}
                 onClick={handleEditAppointment}
               >
                 Edit appointment
               </Button>
               <Button
-                fontSize={{ base: "10px", md: "14px" }}
+                fontSize={{ base: "13px", md: "14px" }}
                 bg="white"
                 color="red.500"
                 border="2px solid red"

@@ -323,6 +323,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     name="servicePlan"
                     placeholder="preferred service plan"
                     w={{ base: "300px", md: "270px" }}
+                    fontSize={{ base: "14px", md: "16px" }}
                     value={formFields.servicePlan}
                     onChange={handleInputChange}
                   >

@@ -389,9 +389,10 @@ const BookBeneficiaryAppointmentModal = ({
                     isRequired
                     name="servicePlan"
                     placeholder="preferred service plan"
-                    w={{ base: "300px", md: "270px" }}
+                    w={{ base: "200px", md: "270px" }}
                     value={formPages.servicePlan}
                     onChange={handleInputChange}
+                    fontSize={{ base: "14px", md: "16px" }}
                   >
                     <optgroup label="Standard Plans">
                       <option value="Elderly care by a Licensed Nurse">
