@@ -15,6 +15,7 @@ import {
   Progress,
   Spinner,
   // useToast,
+  extendTheme,
   Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -23,6 +24,23 @@ import BookBeneficiaryAppointmentModal from "./BeneficiaryAppForm";
 import { AddIcon } from "@chakra-ui/icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const BeneficiariesModal = ({ isOpen, onClose }) => {
   const [beneficiaries, setBeneficiaries] = useState([]);
@@ -153,6 +171,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         onClose={onClose}
         placement="right"
         size={{ base: "md", md: "lg" }}
+        theme={customTheme}
       >
         <ToastContainer
           position="top-right"
@@ -167,7 +186,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         />
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader fontSize="lg" fontWeight="bold" color="#A210C6">
+          <DrawerHeader fontFamily="heading" fontSize="lg" fontWeight="bold" color="#A210C6">
             Beneficiaries
           </DrawerHeader>
           <DrawerCloseButton />
@@ -180,13 +199,13 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
             ) : (
               <VStack align="start" spacing={4}>
                 {beneficiaries.length === 0 ? (
-                  <Text fontWeight="bold">You have no beneficiaries yet.</Text>
+                  <Text fontWeight="bold" fontFamily="body">You have no beneficiaries yet.</Text>
                 ) : (
                   beneficiaries.map((beneficiary) => (
                     <Box key={beneficiary.id}>
                       <Box>
                         <Flex>
-                          <Text fontWeight="bold" color="black">
+                          <Text fontFamily="body" fontWeight="bold" color="black">
                             Beneficiary Name:{" "}
                           </Text>
                           <Text color="black" marginLeft="15px">
@@ -198,7 +217,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                           </Text>
                         </Flex>
                         <Flex>
-                          <Text fontWeight="bold" color="black">
+                          <Text fontFamily="body" fontWeight="bold" color="black">
                             Phone Number:{" "}
                           </Text>
                           <Text color="black" marginLeft="15px">
@@ -207,7 +226,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                           </Text>
                         </Flex>
                         <Flex>
-                          <Text fontWeight="bold" color="black">
+                          <Text fontFamily="body" fontWeight="bold" color="black">
                             Gender:{" "}
                           </Text>
                           <Text marginLeft="15px" color="black">
@@ -215,7 +234,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                           </Text>
                         </Flex>
                         <Flex>
-                          <Text fontWeight="bold" color="black">
+                          <Text fontFamily="body"  fontWeight="bold" color="black">
                             Date of Birth:{" "}
                           </Text>
                           <Text marginLeft="15px" color="black">
@@ -224,7 +243,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                           </Text>
                         </Flex>
 
-                        <Flex marginTop="5px">
+                        <Flex fontFamily="body" marginTop="5px">
                           <Text fontWeight="bold" color="black">
                             Relationship:
                           </Text>
@@ -232,7 +251,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                             {beneficiary.relationship || "Not availabe"}
                           </Text>
                         </Flex>
-                        <Flex marginTop="5px">
+                        <Flex fontFamily="body" marginTop="5px">
                           <Text fontWeight="bold" color="black">
                             Added on:
                           </Text>
@@ -251,6 +270,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                         <Box>
                           <Text
                             fontSize={{ base: "16px", md: "17px" }}
+                            fontFamily="body"
                             style={{
                               color: "#A210C6",
                               fontStyle: "italic",
@@ -267,6 +287,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                         <Box>
                           <Text
                             marginLeft="40px"
+                            fontFamily="body"
                             fontSize={{ base: "16px", md: "17px" }}
                             onClick={() =>
                               handleRemoveBeneficiary(beneficiary.id)
@@ -297,6 +318,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
               color="white"
               bg="#A210C6"
               leftIcon={<AddIcon />}
+              fontFamily="body"
             >
               Add Beneficiary
             </Button>
@@ -325,18 +347,20 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         >
           <DrawerOverlay />
           <DrawerContent maxH="30vh" overflowY="auto">
-            <DrawerHeader color="#510863">Confirmation</DrawerHeader>
+            <DrawerHeader fontFamily="heading" color="#510863">Confirmation</DrawerHeader>
             <DrawerBody>
-              <Text>Are you sure you want to remove this beneficiary?</Text>
+              <Text fontFamily="body">Are you sure you want to remove this beneficiary?</Text>
             </DrawerBody>
             <DrawerFooter alignContent="space-between">
               <Button
                 colorScheme="red"
+                fontFamily="body"
                 onClick={handleConfirmRemoveBeneficiary}
               >
                 Confirm
               </Button>
               <Button
+              fontFamily="body"
                 marginLeft="5px"
                 bg="#510863"
                 color="white"

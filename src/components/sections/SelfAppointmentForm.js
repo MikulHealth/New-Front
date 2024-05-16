@@ -26,11 +26,29 @@ import {
   Select,
   Text,
   // InputGroup,
+  extendTheme,
   Textarea,
 } from "@chakra-ui/react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const SelfAppointmentModal = ({ isOpen, onClose }) => {
   // const toast = useToast();
@@ -255,6 +273,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         onClose={onClose}
         size={{ base: "md", md: "lg" }}
         placement="right"
+        theme={customTheme}
       >
         <ToastContainer
           position="top-right"
@@ -270,10 +289,10 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
-          <DrawerHeader color="#A210C6">Book Appointment</DrawerHeader>
+          <DrawerHeader color="#A210C6" fontFamily="heading">Book Appointment</DrawerHeader>
 
           <Text p="40px" pt="5px">
-            <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+            <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
             <br /> Please note, all the services listed under <strong>
               "Service Plan"
             </strong>{" "}
@@ -288,6 +307,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                 fontWeight: "bold",
                 fontStyle: "italic",
               }}
+              fontFamily="body"
             >
               create plan
             </Link>
@@ -297,7 +317,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
             <FormControl >
             <Flex ml={{ base:"20px", md: "40px" }} flexWrap="wrap" marginTop="20px">
                 <Box w={{ base: "300px", md: "270px" }} >
-                  <FormLabel fontWeight="bold">Service Plan </FormLabel>
+                  <FormLabel fontFamily="body" fontWeight="bold">Service Plan </FormLabel>
                   <Select
                     isRequired
                     name="servicePlan"
@@ -331,7 +351,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     ))}
                   </Select>
                 </Box>
-                <Box ml={{ md: "5px" }}>
+                <Box fontFamily="body" ml={{ md: "5px" }}>
                   <FormLabel fontWeight="bold">Shift </FormLabel>
                   <Select
                     isRequired
@@ -351,7 +371,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
               <Flex flexWrap="wrap" ml={{ base:"20px", md: "40px" }}>
                 <Box  w={{ base: "300px", md: "270px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
                   <Flex
@@ -383,7 +403,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   </Flex>
                 </Box>
                 <Box ml={{ md: "5px" }} marginTop="20px">
-                <FormLabel fontWeight="bold">Current Location </FormLabel>
+                <FormLabel fontWeight="bold" fontFamily="body">Current Location </FormLabel>
                 <Flex>
                   <Input
                     isRequired
@@ -425,7 +445,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                 </InputGroup>
               </Box> */}
               <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
-                <FormLabel fontWeight="bold">Health History </FormLabel>
+                <FormLabel fontWeight="bold" fontFamily="body">Health History </FormLabel>
                 <Textarea
                   name="recipientHealthHistory"
                   type="text"

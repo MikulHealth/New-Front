@@ -3,12 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import LoadingSpinner from "../../utils/Spiner";
 import logo from "../../assets/Logo.svg";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import {
   Box,
   Button,
@@ -60,7 +58,6 @@ const LandingPage = () => {
     gender: "",
     dob: new Date(),
     address: "",
-    // image: "",
     kinName: "",
     kinNumber: "",
     language: "English",
@@ -68,7 +65,6 @@ const LandingPage = () => {
   });
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
-  // const [imageLoading, setImageLoading] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const navigate = useNavigate();
@@ -91,35 +87,23 @@ const LandingPage = () => {
 
   const closeTermsModal = () => setIsTermsOpen(false);
 
-  // const sendOtp = async () => {
-  //   try {
-  //     const number = localStorage.getItem("phoneNumber");
-  //     const response = await axios.post(
-  //       "http://localhost:8080/api/v1/sms/verify-number",
-  //        // "https://backend-c1pz.onrender.com/api/v1/sms/verify-number"
-  //       { phoneNumber: number },
-  //       { headers: { "Content-Type": "application/json" } }
-  //     );
-  //     console.log(response);
-  //     if (response.data.success) {
-  //       setLoading(false);
-  //       toast.success(response.data.message);
-  //       return true;  // Return true to indicate success
-  //     } else {
-  //       setLoading(false);
-  //       console.error("Error registering");
-  //       toast.error(response.data.message);
-  //       return false;  // Return false to indicate failure
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     const message = error.response && error.response.data && error.response.data.message
-  //       ? error.response.data.message
-  //       : "Unable to send OTP.";
-  //     toast.error(message);
-  //     return false;
-  //   }
-  // };
+  const getValidNigerianPhoneNumber = (phoneNumber) => {
+    const pattern = /^(\d{10})$/;
+    if (pattern.test(phoneNumber)) {
+      return "0" + phoneNumber;
+    }
+    return null;
+  };
+
+  const validatePassword = (password) => {
+    const pattern = /^(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+    return pattern.test(password);
+  };
+
+  const validateName = (name) => {
+    const pattern = /^[A-Z][a-zA-Z]{1,}$/;
+    return pattern.test(name);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -128,102 +112,85 @@ const LandingPage = () => {
       return;
     }
 
-    function getValidNigerianPhoneNumber(phoneNumber) {
-      // Regular expression for validating a Nigerian phone number
-      // Matches +234 followed by 10 digits or starts with 0 followed by 10 digits starting with 7, 8, or 9
-      const pattern = /^(?:\+234|0)[789]\d{9}$/;
-
-      if (pattern.test(phoneNumber)) {
-        // Transform +234 to 0 format if needed
-        if (phoneNumber.startsWith("+234")) {
-          return "0" + phoneNumber.slice(4); // Remove '+234' and prepend '0'
-        }
-        return phoneNumber;
-      }
-      return null;
-    }
-
     const validPhoneNumber = getValidNigerianPhoneNumber(formData.phoneNumber);
+    console.log("number " + validPhoneNumber);
+
     if (!validPhoneNumber) {
       toast.warning("Please enter a valid Nigerian phone number");
       return;
     }
 
+    if (!validateName(formData.firstName)) {
+      toast.warning(
+        "First name must start with a capital letter and be at least two letters long"
+      );
+      return;
+    }
+
+    if (!validateName(formData.lastName)) {
+      toast.warning(
+        "Last name must start with a capital letter and be at least two letters long"
+      );
+      return;
+    }
+
+    if (!validatePassword(formData.password)) {
+      toast.warning(
+        "Password must be at least 6 characters long and include, letters, special characters and numbers"
+      );
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.warning("Passwords do not match");
+      return;
+    }
+
     setLoading(true);
     try {
-      // Include the valid and adjusted phone number in formData
       const updatedFormData = { ...formData, phoneNumber: validPhoneNumber };
       const response = await axios.post(
-        // "http://localhost:8080/v1/angel/join",
         "https://backend-c1pz.onrender.com/v1/angel/join",
+        // "http://localhost:8080/v1/angel/join",
         updatedFormData,
         { headers: { "Content-Type": "application/json" } }
       );
 
       if (response.data.success) {
-        // toast.success(response.data.message);
-        toast.success("Registration successfull, kindly login");
+        toast.success("Registration successful, kindly login");
         setTimeout(() => {
           navigate("/login");
         }, 5000);
-
-        // localStorage.setItem("phoneNumber", formData.phoneNumber);
-        // const otpSent = await sendOtp();
-        // if (otpSent) {
-        //   toast.success(response.data.message);
-        //   navigate("/verify-number");
-        // }
       } else {
         setLoading(false);
         console.error("Error registering");
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Registration failed, kindly login if you have registered before.");
+      setLoading(false);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Account already exists, kindly login!") {
+          toast.error(errorMessage);
+          setTimeout(() => {
+            navigate("/login");
+          }, 5000);
+        } else {
+          toast.error(errorMessage);
+        }
+      } else {
+        toast.error(
+          "Registration failed, kindly login if you have registered before."
+        );
+      }
     } finally {
       setLoading(false);
     }
   };
-
-  // const postImage = async (image) => {
-  //   setImageLoading(true);
-  //   if (image === undefined) {
-  //     toast.warning("Please select an image");
-  //     return;
-  //   }
-   
-  //   if (image.type === "image/jpeg" || image.type === "image/png") {
-  //     const data = new FormData();
-  //     data.append("file", image);
-  //     data.append("upload_preset", "profileImage");
-  //     data.append("cloud_name", "dmfewrwla");
-
-  //     try {
-  //       const response = await fetch(
-  //         "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
-  //         {
-  //           method: "post",
-  //           body: data,
-  //         }
-  //       );
-
-  //       const imageData = await response.json();
-
-  //       setFormData({
-  //         ...formData,
-  //         image: imageData.url.toString(),
-  //       });
-  //       setImageLoading(false);
-  //       console.log(imageData.url.toString());
-  //     } catch (err) {
-  //       console.error(err);
-  //       setImageLoading(false);
-  //     }
-  //   } else {
-  //     toast.warning("Please select a calid image file");
-  //     return;
-  //   }
-  // };
 
   useEffect(() => {
     AOS.init();
@@ -235,7 +202,7 @@ const LandingPage = () => {
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
-        newestOnTop={false} 
+        newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
@@ -261,12 +228,21 @@ const LandingPage = () => {
               w={{ base: "300px", md: "350px" }}
             />
           </a>
-          <Text fontFamily="header" fontSize="2xl" color="#A210C6" mb="4" textAlign="center">
+          <Text
+            fontFamily="header"
+            fontSize="2xl"
+            color="#A210C6"
+            mb="4"
+            textAlign="center"
+          >
             Create your account
           </Text>
-          <form  onSubmit={handleSubmit}>
-            {/* Form fields */}
-            <FormControl fontSize={{base: "16px", md: "20px"}} fontFamily="body" isRequired>
+          <form onSubmit={handleSubmit}>
+            <FormControl
+              fontSize={{ base: "16px", md: "20px" }}
+              fontFamily="body"
+              isRequired
+            >
               <FormLabel>First name</FormLabel>
               <Input
                 name="firstName"
@@ -286,12 +262,6 @@ const LandingPage = () => {
                 placeholder="Email"
                 onChange={handleInputChange}
               />
-              {/* <FormLabel mt="4">Home Address</FormLabel> */}
-              {/* <Input
-                name="address"
-                placeholder="Home address"
-                onChange={handleInputChange}
-              /> */}
               <FormLabel mt="4">Phone number</FormLabel>
               <InputGroup>
                 <InputLeftAddon children="+234" />
@@ -311,7 +281,7 @@ const LandingPage = () => {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </Select>
-              <Box marginLeft="1px" w={{base: "320px", md: "450px"}}>
+              <Box marginLeft="1px" w={{ base: "320px", md: "450px" }}>
                 <FormLabel marginTop="20px">Date of birth</FormLabel>
                 <Flex
                   alignItems="flex-start"
@@ -335,13 +305,6 @@ const LandingPage = () => {
                   />
                 </Flex>
               </Box>
-              {/* <FormLabel mt="4">Upload Image</FormLabel>
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={(e) => postImage(e.target.files[0])}
-              />
-              {imageLoading && <LoadingSpinner />} */}
               <FormLabel mt="4">Password</FormLabel>
               <InputGroup size="md">
                 <Input
@@ -374,10 +337,15 @@ const LandingPage = () => {
               </InputGroup>
             </FormControl>
             <Checkbox
-            fontFamily="body"
+              fontFamily="body"
               isChecked={agreeToTerms}
               onChange={handleTermsChange}
               mt="4"
+              style={{
+                fontSize: "6px",
+                fontStyle: "italic",
+                cursor: "pointer",
+              }}
             >
               Click to view and accept{" "}
               <Text as="span" color="#A210C6">
@@ -398,7 +366,7 @@ const LandingPage = () => {
               Submit
             </Button>
           </form>
-          <Text  fontSize="16px" fontFamily="body" mt="15px">
+          <Text fontSize="16px" fontFamily="body" mt="15px">
             Already have an account?{" "}
             <Link
               to="/login"
@@ -415,14 +383,21 @@ const LandingPage = () => {
       </Flex>
 
       {/* Terms Modal */}
-      <Modal isOpen={isTermsOpen} onClose={closeTermsModal} size="full" theme={customTheme}>
+      <Modal
+        isOpen={isTermsOpen}
+        onClose={closeTermsModal}
+        size="full"
+        theme={customTheme}
+      >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader fontFamily="heading">TERMS AND CONDITION & PRIVACY POLICY</ModalHeader>
+          <ModalHeader fontFamily="heading">
+            TERMS AND CONDITION & PRIVACY POLICY
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text fontSize="18px" mb="4" fontFamily="body">
-              <strong >BACKGROUND:</strong>
+              <strong>BACKGROUND:</strong>
               <br />
               (A) These Terms of Service together with any and all other
               documents connected with these Terms of Service set out the terms
@@ -506,7 +481,7 @@ const LandingPage = () => {
               held liable for any dispute or mishap suffered by you in the event
               of interaction with any Third Party. You acknowledge that all your
               interaction with any Third Party will be treated as absolutely
-              independent of us. 
+              independent of us.
               <br />
               OWNERSHIP STATEMENT <br /> This website and mobile application and
               any affiliated documentation not declared otherwise is the sole
@@ -641,11 +616,11 @@ const LandingPage = () => {
               <br />
               RESTRICTION, CLOSURE & TERMINATION OF ACCOUNTS <br />
               We may at Our sole discretion restrict or close Your User Account
-              if: You use Your Account for unauthorised purposes or where
-              MHTL detects any abuse/misuse, breach of content, fraud or
-              attempted fraud relating to Your use of the Service. We are
-              required or requested to comply with an order or instruction of or
-              a recommendation from the government, court, regulator or other
+              if: You use Your Account for unauthorised purposes or where MHTL
+              detects any abuse/misuse, breach of content, fraud or attempted
+              fraud relating to Your use of the Service. We are required or
+              requested to comply with an order or instruction of or a
+              recommendation from the government, court, regulator or other
               competent authority. We reasonably suspect or believe that You are
               in breach of this Terms of Use. The closure or restriction is
               necessary as a consequence of technical problems or for reasons of
@@ -683,7 +658,7 @@ const LandingPage = () => {
             </Text>
           </ModalBody>
           <ModalFooter>
-            <Button  bg="#A210C6" color="white" mr="3" onClick={closeTermsModal}>
+            <Button bg="#A210C6" color="white" mr="3" onClick={closeTermsModal}>
               Close
             </Button>
           </ModalFooter>

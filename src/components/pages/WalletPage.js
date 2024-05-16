@@ -368,7 +368,7 @@ const WalletPage = () => {
   const handleOpenSearchTransactionsModal = () => {
     setShowSearchTransactionsModal(true);
   };
-  
+
   const handleCloseSearchTransactionsModal = () => {
     setShowSearchTransactionsModal(false);
   };
@@ -437,17 +437,17 @@ const WalletPage = () => {
               border="1px solid gray"
               borderRadius="md"
               padding="3px"
-              w={{ base: "89vw", md: "70vw" }}
+              w={{ base: "88vw", md: "908px" }}
               h={{ base: "7vw", md: "5vh" }}
-              ml={{ base: "20px", md: "0" }}
+              ml={{ base: "22px", md: "15px" }}
               mb={{ base: "5px", md: "10px" }}
             >
               <Flex ml={{ md: "10px" }}>
                 <SearchIcon boxSize={4} marginRight="10px" marginTop="5px" />
                 <Text
-                  fontSize="16px"
+                  fontSize={{ base: "10px", md: "14px" }}
                   fontFamily="body"
-                  mt={{ md: "2px" }}
+                  mt={{ md: "3px" }}
                   style={{
                     fontStyle: "italic",
                     cursor: "pointer",
@@ -462,23 +462,26 @@ const WalletPage = () => {
             <Box
               textAlign="center"
               ml={{ base: "15px", md: "0" }}
-              w={{ base: "375px", md: "70vw" }}
-              h={{ base: "180px", md: "35%" }}
-              mt={{ base: "4px", md: "0" }}
+              w={{ base: "375px", md: "910px" }}
+              h={{ base: "180px", md: "230px" }}
+              mt={{ base: "10px", md: "0" }}
               mb={{ base: "5px", md: "30" }}
               paddingBottom={{ base: "20px", md: "" }}
               bg="#A210C6"
               borderRadius="20px"
             >
               <Flex w={{ base: "90vw", md: "80vw" }}>
-                <Box ml={{ base: "20px", md: "40px" }} paddingTop="5px">
+                <Box
+                  ml={{ base: "20px", md: "40px" }}
+                  pt={{ base: "5px", md: "15px" }}
+                >
                   <Text
                     fontSize="16px"
                     fontFamily="body"
                     color="white"
                     marginTop="20px"
                   >
-                    Mikul Health Savings Account
+                    Mikul Health Wallet
                   </Text>
                   <Flex>
                     <Text
@@ -489,20 +492,12 @@ const WalletPage = () => {
                     >
                       ₦ {formatAmount(balance)}.00
                     </Text>
-                    <Text
-                      ml="5px"
-                      mt={{ base: "8px", md: "12px" }}
-                      fontSize="12px"
-                      color="white"
-                    >
-                      balance
-                    </Text>
                   </Flex>
                 </Box>
-                <VStack>
+                <VStack pt={{ base: "5px", md: "15px" }}>
                   <Button
                     padding={{ base: "5px", md: "0" }}
-                    ml={{ base: "30px", md: "520px" }}
+                    ml={{ base: "75px", md: "500px" }}
                     w={{ base: "100px", md: "35%" }}
                     h={{ base: "30px", md: "50%" }}
                     fontSize={{ base: "12px", md: "16px" }}
@@ -558,7 +553,7 @@ const WalletPage = () => {
                     />
                   </Flex>
                 </Box>
-                <Flex marginLeft={{ base: "15px", md: "500px" }}>
+                <Flex marginLeft={{ base: "15px", md: "400px" }}>
                   <Box color="white">
                     <Text textAlign="left" fontSize="10px">
                       Total funded

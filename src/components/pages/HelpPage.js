@@ -74,6 +74,7 @@ const HelpPage = () => {
                     textAlign="left"
                     fontSize={{ base: "18px" }}
                     color="#A210C6"
+                    fontFamily="heading"
                   >
                     Frequently Asked Questions
                   </Text>
@@ -113,6 +114,7 @@ const HelpPage = () => {
                           flex="1"
                           textAlign="left"
                           fontSize="14px"
+                          fontFamily="body"
                         >
                           How do I add my loved ones as beneficiaries?
                         </Box>
@@ -122,6 +124,7 @@ const HelpPage = () => {
                     <AccordionPanel
                       textAlign="justify"
                       fontSize="14px"
+                      fontFamily="body"
                       className="custom-accordion-panel"
                     >
                       Upon a successful registeration, you can request and get
@@ -143,6 +146,7 @@ const HelpPage = () => {
                           flex="1"
                           textAlign="left"
                           fontSize="14px"
+                          fontFamily="body"
                         >
                           I entered the wrong details while booking my
                           appointment. How do I change it?
@@ -153,6 +157,7 @@ const HelpPage = () => {
                     <AccordionPanel
                       textAlign="justify"
                       fontSize="14px"
+                      fontFamily="body"
                       className="custom-accordion-panel"
                     >
                       To ensure you are safe while you receive care from any
@@ -176,6 +181,7 @@ const HelpPage = () => {
                           flex="1"
                           textAlign="left"
                           fontSize="14px"
+                          fontFamily="body"
                         >
                           I would like to book multiple services at the same
                           time. How do I do that?
@@ -186,6 +192,7 @@ const HelpPage = () => {
                     <AccordionPanel
                       textAlign="justify"
                       fontSize="14px"
+                      fontFamily="body"
                       className="custom-accordion-panel"
                     >
                       Yes you can have a replacement when asigned a caregiver
@@ -207,6 +214,7 @@ const HelpPage = () => {
                           flex="1"
                           textAlign="left"
                           fontSize="14px"
+                          fontFamily="body"
                         >
                           I am no longer interested in using this service. How
                           can I cancel?
@@ -217,6 +225,7 @@ const HelpPage = () => {
                     <AccordionPanel
                       textAlign="justify"
                       fontSize="14px"
+                      fontFamily="body"
                       className="custom-accordion-panel"
                     >
                       Yes, aside our standadized service plans. We also have
@@ -230,15 +239,15 @@ const HelpPage = () => {
             </VStack>
             <VStack overflow="scroll" marginLeft="20px">
               <Box textAlign="left">
-                <Text color="#A210C6" fontSize="20px">
+                <Text fontFamily="body" color="#A210C6" fontSize="20px">
                   Contact us
                 </Text>
                 <VStack textAlign="left" fontSize="14px">
-                  <Text>
+                  <Text fontFamily="body">
                     If you have any issues, our Mikul Customer Care agents are
                     always happy to help. You can reach us via:
                   </Text>
-                  <Text>
+                  <Text fontFamily="body">
                     Email:{" "}
                     <a
                       href="mailto:support@mikulhealth.com"
@@ -287,15 +296,15 @@ const HelpPage = () => {
           </Box>
         </Box>
 
-        <Box display={{ base: "none", md: "block" }} marginTop="20px">
+        <Box ml="40px" display={{ base: "none", md: "block" }} marginTop="20px">
           <SettingsSideBar />
           <Flex>
             <VStack marginLeft="150px">
               <Box marginTop="-370px">
-                <Text fontFamily="body" color="#A210C6" fontSize="24px">
+                <Text fontFamily="heading" color="#A210C6" fontSize="24px">
                   Frequently Asked Questions
                 </Text>
-                <Text fontStyle="italic" fontSize="16px">
+                <Text fontFamily="body" fontStyle="italic" fontSize="16px">
                   Click on a question to see more details
                 </Text>
               </Box>
@@ -319,6 +328,7 @@ const HelpPage = () => {
                           flex="1"
                           textAlign="left"
                           fontSize="14px"
+                          fontFamily="body"
                         >
                           How do I add my loved ones as beneficiaries?
                         </Box>
@@ -328,6 +338,7 @@ const HelpPage = () => {
                     <AccordionPanel
                       textAlign="justify"
                       fontSize="14px"
+                      fontFamily="body"
                       className="custom-accordion-panel"
                     >
                       Upon a successful registeration, you can request and get
@@ -349,6 +360,7 @@ const HelpPage = () => {
                           flex="1"
                           textAlign="left"
                           fontSize="14px"
+                          fontFamily="body"
                         >
                           I entered the wrong details while booking my
                           appointment. How do I change it?
@@ -359,6 +371,7 @@ const HelpPage = () => {
                     <AccordionPanel
                       textAlign="justify"
                       fontSize="14px"
+                      fontFamily="body"
                       className="custom-accordion-panel"
                     >
                       To ensure you are safe while you receive care from any
@@ -381,6 +394,7 @@ const HelpPage = () => {
                           as="span"
                           flex="1"
                           textAlign="left"
+                          fontFamily="body"
                           fontSize="14px"
                         >
                           I would like to book multiple services at the same
@@ -391,6 +405,7 @@ const HelpPage = () => {
                     </h2>
                     <AccordionPanel
                       textAlign="justify"
+                      fontFamily="body"
                       fontSize="14px"
                       className="custom-accordion-panel"
                     >
@@ -413,6 +428,7 @@ const HelpPage = () => {
                           flex="1"
                           textAlign="left"
                           fontSize="14px"
+                          fontFamily="body"
                         >
                           I am no longer interested in using this service. How
                           can I cancel?
@@ -423,6 +439,7 @@ const HelpPage = () => {
                     <AccordionPanel
                       textAlign="justify"
                       fontSize="14px"
+                      fontFamily="body"
                       className="custom-accordion-panel"
                     >
                       Yes, aside our standadized service plans. We also have
@@ -436,17 +453,19 @@ const HelpPage = () => {
             </VStack>
             <VStack marginLeft="50px" marginTop="-285px">
               <Box textAlign="left">
-                <Text color="#A210C6" fontSize="20px">
+                <Text fontFamily="body" color="#A210C6" fontSize="20px">
                   Contact us
                 </Text>
                 <VStack fontSize="14px">
-                  <Text>If you have any issues, our Mikul Customer</Text>
-                  <Text>
+                  <Text fontFamily="body">
+                    If you have any issues, our Mikul Customer
+                  </Text>
+                  <Text fontFamily="body">
                     Care agents are always happy to help. You can reach us via:
                   </Text>
 
-                  <Text>
-                    Email:{" "}
+                  <Text  fontFamily="body">
+                    Email:
                     <a
                       href="mailto:support@mikulhealth.com"
                       target="_blank"

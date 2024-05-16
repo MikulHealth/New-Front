@@ -95,10 +95,10 @@ export default function NavBar() {
     "/settings": "Settings",
     "/logout": "Logout",
     "/customize-service": "Customize Service",
-    "/edit-profile": "Settings",
-    "/change-password": "Settings",
-    "/notification-settings": "Settings",
-    "/help": "Help",
+    "/settings/edit-profile": "Settings",
+    "/settings/change-password": "Settings",
+    "/settings/notification-settings": "Settings",
+    "/settings/help": "Help",
   };
 
   const pageTitle = pageTitles[location.pathname] || "Unknown Page";
@@ -115,6 +115,7 @@ export default function NavBar() {
               <VStack spacing={3} align="left" mt={5}>
                 <NavLink to="/dashboard" style={listItemStyle}>
                   <Flex
+                   fontFamily="heading"
                     color={location.pathname === "/dashboard" ? "#A210C6" : ""}
                     fontWeight={
                       location.pathname === "/dashboard" ? "bold" : ""
@@ -131,6 +132,7 @@ export default function NavBar() {
 
                 <NavLink to="/appointment" style={listItemStyle}>
                   <Flex
+                   fontFamily="heading"
                     color={
                       location.pathname === "/appointment" ? "#A210C6" : ""
                     }
@@ -153,6 +155,7 @@ export default function NavBar() {
 
                 <NavLink to="/wallet" style={listItemStyle}>
                   <Flex
+                   fontFamily="heading"
                     color={location.pathname === "/wallet" ? "#A210C6" : ""}
                     fontWeight={location.pathname === "/wallet" ? "bold" : ""}
                     textDecoration={
@@ -167,6 +170,7 @@ export default function NavBar() {
 
                 <NavLink to="/services" style={listItemStyle}>
                   <Flex
+                   fontFamily="heading"
                     color={
                       location.pathname === "/services" ||
                       location.pathname === "/customize-service"
@@ -194,6 +198,7 @@ export default function NavBar() {
 
                 <NavLink to="/settings" style={listItemStyle}>
                   <Flex
+                   fontFamily="heading"
                     style={listTextStyle}
                     marginLeft="5px"
                     textDecoration={
@@ -235,6 +240,7 @@ export default function NavBar() {
                 </NavLink>
                 <NavLink onClick={handleConfirmLogout} style={listItemStyle}>
                   <Flex
+                   fontFamily="heading"
                     style={{
                       cursor: "pointer",
                     }}
@@ -281,13 +287,15 @@ export default function NavBar() {
                 fontSize={{ base: "16", md: "24px" }}
                 color="#A210C6"
                 fontWeight="bold"
+                fontFamily="heading"
               >
                 Hello {user?.firstName},
               </Heading>
               <Text
                 fontStyle="italic"
+                fontFamily="body"
                 marginLeft={{ base: "10px", md: "5px" }}
-                fontFamily="Montserrat, sans-serif"
+               
                 fontSize={{ base: "10px", md: "16px" }}
                 marginTop={{ base: "5px", md: "5px" }}
               >

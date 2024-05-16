@@ -27,12 +27,28 @@ import {
   Switch,
   Text,
   Textarea,
+  extendTheme,
 } from "@chakra-ui/react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
@@ -321,7 +337,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+      <Drawer theme={customTheme}  isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -336,9 +352,9 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
-          <DrawerHeader color="#A210C6">Book Appointment</DrawerHeader>
+          <DrawerHeader color="#A210C6" fontFamily="heading">Book Appointment</DrawerHeader>
           <Text p="40px" pt="5px">
-            <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+            <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
             <br /> Please note, all the services listed under <strong>
               "Service Plan"
             </strong>{" "}
@@ -353,6 +369,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                 fontWeight: "bold",
                 fontStyle: "italic",
               }}
+              fontFamily="body"
             >
               create plan
             </Link>
@@ -360,7 +377,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           <DrawerBody>
             <FormControl ml={{ base: "25px", md: "0" }} w={{base: "80%", md: "100%"}}>
               {/* <Box> */}
-              <FormLabel fontWeight="bold">Enter Beneficiary details</FormLabel>
+              <FormLabel fontWeight="bold" fontFamily="heading">Enter Beneficiary details</FormLabel>
               <Flex display={{ base: "block", md: "flex" }}>
                 <InputGroup>
                   <Input
@@ -390,7 +407,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
               <Flex flexWrap="wrap">
                 <Box>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Gender{" "}
                   </FormLabel>
                   <Select
@@ -404,7 +421,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     <option value="Female">Female</option>
                   </Select>
                 </Box>
-                <Box ml={{ md: "5px" }} w={{ base: "300px", md: "270px" }}>
+                <Box fontFamily="body" ml={{ md: "5px" }} w={{ base: "300px", md: "270px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Date of Birth
                   </FormLabel>
@@ -440,7 +457,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
               <Flex flexWrap="wrap" marginTop="1px">
                 <Box>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Contact Number{" "}
                   </FormLabel>
                   <InputGroup>
@@ -458,7 +475,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   </InputGroup>
                 </Box>
                 <Box ml={{ md: "5px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Relationship with beneficiary{" "}
                   </FormLabel>
                   <Select
@@ -492,7 +509,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
               <Flex flexWrap="wrap">
                 <Box ml={{ md: "5px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Service Plan{" "}
                   </FormLabel>
                   <Select
@@ -541,7 +558,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                 </Box>
 
                 <Box ml={{ md: "5px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Shift{" "}
                   </FormLabel>
                   <Select
@@ -558,7 +575,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                 </Box>
               </Flex>
               <Flex flexWrap="wrap" ml={{ md: "5px" }}>
-                <Box  w={{ base: "300px", md: "270px" }}>
+                <Box fontFamily="body"  w={{ base: "300px", md: "270px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
@@ -591,7 +608,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   </Flex>
                 </Box>
                 <Box ml={{ md: "5px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
+                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                   Current Location{" "}
                 </FormLabel>
                 <Flex>
@@ -635,7 +652,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                 </InputGroup>
               </Box> */}
               <Box ml={{ md: "5px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
+                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                   Health History{" "}
                 </FormLabel>
                 <Textarea
@@ -650,7 +667,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
               {/* </Box> */}
             </FormControl>
             <Flex justify="right" marginTop="10px">
-              <Text color="#A210C6" fontStyle="italic">
+              <Text fontFamily="body" color="#A210C6" fontStyle="italic">
                 Add to beneficiary list?
               </Text>
               <Switch

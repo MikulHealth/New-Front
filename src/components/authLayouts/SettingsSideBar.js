@@ -61,22 +61,23 @@ export default function SettingsSideBar() {
             ml={{ base: "-290px", md: "-290px" }}
             textAlign="left"
             fontFamily="heading"
-            fontSize={{ base: "18px", md: "24px" }}
+            fontSize={{ base: "20px", md: "24px" }}
           >
             Account
           </Text>
           <Flex ml={{ base: "-150px" }} flexDirection="column">
-            <NavLink to="/edit-profile">
+            <NavLink to="/settings/edit-profile">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/edit-profile") && { color: "#A210C6" })}
+                {...(isActive("/settings/edit-profile") && { color: "#A210C6" })}
               >
                 <SettingsIcon boxSize={{ base: "24px", md: "32px" }} />
                 <Text
                   // onClick={handleOpenProleMobile}
+                  fontFamily="heading"
                   marginBottom="5px"
                   fontSize={{ base: "18px", md: "20px" }}
                   marginLeft="10px"
@@ -89,16 +90,17 @@ export default function SettingsSideBar() {
             </NavLink>
             <Divider my={1} borderColor="black.500" />
 
-            <NavLink to="/change-password">
+            <NavLink to="/settings/change-password">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/change-password") && { color: "#A210C6" })}
+                {...(isActive("/settings/change-password") && { color: "#A210C6" })}
               >
                 <LockIcon boxSize={{ base: "24px", md: "32px" }} />
                 <Text
+                 fontFamily="heading"
                   marginBottom="5px"
                   fontSize={{ base: "18px", md: "20px" }}
                   marginLeft="10px"
@@ -111,19 +113,20 @@ export default function SettingsSideBar() {
             </NavLink>
             <Divider my={1} borderColor="black.500" />
 
-            <NavLink to="/notification-settings">
+            <NavLink to="/settings/notification-settings">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/notification-settings") && {
+                {...(isActive("/settings/notification-settings") && {
                   color: "#A210C6",
                 })}
               >
                 <BellIcon boxSize={{ base: "28px", md: "32px" }} />
                 <Text
                   marginBottom="5px"
+                  fontFamily="heading"
                   fontSize={{ base: "18px", md: "20px" }}
                   marginLeft="10px"
                   marginTop="10px"
@@ -135,17 +138,18 @@ export default function SettingsSideBar() {
             </NavLink>
             <Divider my={1} borderColor="black.500" />
 
-            <NavLink to="/help">
+            <NavLink to="/settings/help">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/help") && { color: "#A210C6" })}
+                {...(isActive("/settings/help") && { color: "#A210C6" })}
               >
                 <QuestionIcon boxSize={{ base: "24px", md: "32px" }} />
                 <Text
                   marginBottom="5px"
+                  fontFamily="heading"
                   fontSize={{ base: "18px", md: "20px" }}
                   marginLeft="10px"
                   marginTop="10px"

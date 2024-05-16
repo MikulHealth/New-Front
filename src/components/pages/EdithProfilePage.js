@@ -303,11 +303,11 @@ const EdithProfilePage = () => {
           <SettingsSideBar />
 
           <VStack mb="40px" ml="10px" spacing={-10}>
-            <Text fontWeight="bold" fontSize="20px">
+            <Text fontFamily="heading" fontWeight="bold" fontSize="20px">
               Edit profile
             </Text>
             <FormControl>
-              <FormLabel fontSize="16px">First Name</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">First Name</FormLabel>
               <Input
                 type="text"
                 name="firstName"
@@ -318,7 +318,7 @@ const EdithProfilePage = () => {
               />
             </FormControl>
             <FormControl marginTop="15px">
-              <FormLabel fontSize="16px">Last Name</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">Last Name</FormLabel>
               <Input
                 type="text"
                 name="lastName"
@@ -329,7 +329,7 @@ const EdithProfilePage = () => {
               />
             </FormControl>
             <FormControl marginTop="15px">
-              <FormLabel fontSize="16px">Date of Birth</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">Date of Birth</FormLabel>
               <Flex
                 border="1px solid black"
                 borderRadius="6px"
@@ -366,7 +366,7 @@ const EdithProfilePage = () => {
               </Flex>
             </FormControl>
             <FormControl marginTop="15px">
-              <FormLabel fontSize="16px">Email Address</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">Email Address</FormLabel>
               <Input
                 type="email"
                 name="email"
@@ -402,6 +402,7 @@ const EdithProfilePage = () => {
             <Button
               marginTop="10px"
               color="white"
+              fontFamily="body"
               bg="#A210C6"
               onClick={handleOpenConfirmationModal}
               _hover={{ color: "white" }}
@@ -411,7 +412,7 @@ const EdithProfilePage = () => {
           </VStack>
 
           <Box marginLeft="30px" width="20%">
-            <Text textAlign="left">
+            <Text fontFamily="body" textAlign="left">
               Click on the image to select a new picture before the change
               picture button
             </Text>
@@ -454,6 +455,7 @@ const EdithProfilePage = () => {
                   borderColor="#A210C6"
                   borderWidth="2px"
                   bg="white"
+                  fontFamily="body"
                   _hover={{
                     bg: "gray.100",
                     borderColor: "purple.800",
@@ -469,6 +471,7 @@ const EdithProfilePage = () => {
                 bg="white"
                 mt="10px"
                 ml="-25px"
+                fontFamily="body"
                 style={{}}
                 _hover={{
                   bg: "gray.100",
@@ -497,10 +500,11 @@ const EdithProfilePage = () => {
                 fontSize={{ base: "18px" }}
                 marginTop="3px"
                 marginBottom="20px"
+                fontFamily="heading"
               >
                 Edit Profile
               </Text>
-              <Text textAlign="left">
+              <Text fontFamily="body" textAlign="left">
                 Click on the image to select a new picture before the change
                 picture button
               </Text>
@@ -509,8 +513,9 @@ const EdithProfilePage = () => {
               onClick={handleback}
               borderColor="#A210C6"
               borderWidth="1px"
-              color="#A210C6"
               fontFamily="body"
+              color="#A210C6"
+             
               _hover={{ color: "" }}
               fontSize={{ base: "12px" }}
               h="3vh"
@@ -557,6 +562,7 @@ const EdithProfilePage = () => {
                 borderColor="#A210C6"
                 borderWidth="2px"
                 bg="white"
+                fontFamily="body"
                 _hover={{
                   bg: "gray.100",
                   borderColor: "purple.800",
@@ -580,6 +586,7 @@ const EdithProfilePage = () => {
               borderColor="#A210C6"
               borderWidth="2px"
               bg="white"
+              fontFamily="body"
               mt="10px"
               style={{}}
               _hover={{
@@ -592,7 +599,7 @@ const EdithProfilePage = () => {
             </Button>
             <Box marginTop="15px" w="100%">
               <FormControl w="350px">
-                <FormLabel fontSize="16px">First Name</FormLabel>
+                <FormLabel fontFamily="body" fontSize="16px">First Name</FormLabel>
                 <Input
                   type="text"
                   name="firstName"
@@ -602,7 +609,7 @@ const EdithProfilePage = () => {
                   _hover={{ color: "" }}
                 />
 
-                <FormLabel marginTop="15px" fontSize="16px">
+                <FormLabel fontFamily="body" marginTop="15px" fontSize="16px">
                   Last Name
                 </FormLabel>
                 <Input
@@ -614,7 +621,7 @@ const EdithProfilePage = () => {
                   _hover={{ color: "" }}
                 />
 
-                <FormLabel marginTop="15px" fontSize="16px">
+                <FormLabel fontFamily="body" marginTop="15px" fontSize="16px">
                   Date of Birth
                 </FormLabel>
                 <Flex
@@ -653,7 +660,7 @@ const EdithProfilePage = () => {
                   />
                 </Flex>
 
-                <FormLabel marginTop="15px" fontSize="16px">
+                <FormLabel fontFamily="body" marginTop="15px" fontSize="16px">
                   Email Address
                 </FormLabel>
                 <Input
@@ -705,6 +712,7 @@ const EdithProfilePage = () => {
                 marginTop="10px"
                 marginBottom="150px"
                 color="white"
+                fontFamily="body"
                 bg="#A210C6"
                 onClick={handleOpenConfirmationModal}
                 _hover={{ color: "white" }}
@@ -724,21 +732,23 @@ const EdithProfilePage = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Confirm Changes</ModalHeader>
+          <ModalHeader fontFamily="heading">Confirm Changes</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Are you sure you want to save the changes?</ModalBody>
+          <ModalBody fontFamily="body">Are you sure you want to save the changes?</ModalBody>
           <Box display="flex" justifyContent="flex-end" p="2">
             <Button
               mr={3}
               onClick={handleCloseConfirmationModal}
               colorScheme="gray"
               color="#A210C6"
+              fontFamily="body"
             >
               Cancel
             </Button>
             <Button
               onClick={handleSubmit}
               color="white"
+              fontFamily="body"
               bg="#A210C6"
               isLoading={loading}
             >

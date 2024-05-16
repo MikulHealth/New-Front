@@ -1,15 +1,14 @@
 import React from "react";
 import { Flex, Image, Text, VStack, useDisclosure } from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
 import HomeIcon from "../../assets/HomeBlack.svg";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import WalletIcon from "../../assets/Wallet.svg";
 import SettingsIcon from "../../assets/SettingsIcon.svg"; 
 import LogoutModal from "../sections/LogoutModal";
-
-
+import {NavLink, useLocation } from "react-router-dom";
 const MobileFooter = () => {
   const { isOpen, onClose } = useDisclosure();
+  const location = useLocation();
   const listItemStyle = {
     fontStyle: "body",
     fontSize: "14px",
@@ -22,9 +21,13 @@ const MobileFooter = () => {
     width: "24px",
   };
 
+  const activeStyle = {
+    textDecoration: "underline",
+    color: "#A210C6",
+  };
+
   return (
     <>
-      {/* <HelpMobile /> */}
       <Flex
         display={{ base: "flex", lg: "none" }}
         justifyContent="space-around"
@@ -37,41 +40,55 @@ const MobileFooter = () => {
         paddingY={3}
         paddingX={4}
       >
-        <NavLink to="/dashboard" style={listItemStyle}>
+        <NavLink to="/dashboard" style={listItemStyle} >
           <VStack>
-            <Image 
-            src={HomeIcon} 
-            alt="home" style={iconStyle} />
-            <Text>Home</Text>
+            <Image src={HomeIcon} alt="home" style={iconStyle} />
+            <Text color={location.pathname === "/dashboard" ? "#A210C6" : ""}
+                    fontWeight={
+                      location.pathname === "/dashboard" ? "bold" : ""
+                    }
+                    textDecoration={
+                      location.pathname === "/dashboard" ? "underline" : ""
+                    }>Home</Text>
           </VStack>
         </NavLink>
 
-        <NavLink to="/appointment" style={listItemStyle}>
+        <NavLink to="/appointment" style={listItemStyle} activeStyle={activeStyle}>
           <VStack>
-            <Image
-              src={AppointmentsIcon}
-              alt="appointments"
-              style={iconStyle}
-            />
-            <Text>Appointments</Text>
+            <Image src={AppointmentsIcon} alt="appointments" style={iconStyle} />
+            <Text  color={location.pathname === "/appointment" ? "#A210C6" : ""}
+                    fontWeight={
+                      location.pathname === "/appointment" ? "bold" : ""
+                    }
+                    textDecoration={
+                      location.pathname === "/appointment" ? "underline" : ""
+                    }>Appointments</Text>
           </VStack>
         </NavLink>
 
-        <NavLink to="/wallet" style={listItemStyle}>
+        <NavLink to="/wallet" style={listItemStyle} activeStyle={activeStyle}>
           <VStack>
-            <Image
-             src={WalletIcon} 
-             alt="wallet" style={iconStyle} />
-            <Text>Wallet</Text>
+            <Image src={WalletIcon} alt="wallet" style={iconStyle} />
+            <Text  color={location.pathname === "/wallet" ? "#A210C6" : ""}
+                    fontWeight={
+                      location.pathname === "/wallet" ? "bold" : ""
+                    }
+                    textDecoration={
+                      location.pathname === "/wallet" ? "underline" : ""
+                    }>Wallet</Text>
           </VStack>
         </NavLink>
 
-        <NavLink to="/settings" style={listItemStyle}>
+        <NavLink to="/settings" style={listItemStyle} activeStyle={activeStyle}>
           <VStack>
-            <Image 
-            src={SettingsIcon}
-             alt="Settings" style={iconStyle} />
-            <Text>Settings</Text>
+            <Image src={SettingsIcon} alt="Settings" style={iconStyle} />
+            <Text  color={location.pathname === "/settings" ? "#A210C6" : ""}
+                    fontWeight={
+                      location.pathname === "/settings" ? "bold" : ""
+                    }
+                    textDecoration={
+                      location.pathname === "/settings" ? "underline" : ""
+                    }>Settings</Text>
           </VStack>
         </NavLink>
       </Flex>

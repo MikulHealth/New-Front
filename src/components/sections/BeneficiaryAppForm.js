@@ -19,6 +19,7 @@ import {
   Text,
   Box,
   Flex,
+  extendTheme,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -28,6 +29,22 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const BookBeneficiaryAppointmentModal = ({
   isOpen,
@@ -316,7 +333,7 @@ const BookBeneficiaryAppointmentModal = ({
 
   return (
     <>
-     <Drawer isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+     <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
      <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -330,7 +347,7 @@ const BookBeneficiaryAppointmentModal = ({
       />
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader textAlign="center" color="#A210C6">
+        <DrawerHeader fontFamily="heading" textAlign="center" color="#A210C6">
           {" "}
           Book Appointment for{" "}
           {`${selectedBeneficiary.recipientFirstName || ""} ${
@@ -339,7 +356,7 @@ const BookBeneficiaryAppointmentModal = ({
           
         </DrawerHeader>
         <Text p="40px" pt="5px">
-            <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
+            <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
             <br /> Please note, all the services listed under <strong>
               "Service Plan"
             </strong>{" "}
@@ -354,6 +371,7 @@ const BookBeneficiaryAppointmentModal = ({
                 fontWeight: "bold",
                 fontStyle: "italic",
               }}
+              fontFamily="body"
             >
               create plan
             </Link>
@@ -364,7 +382,7 @@ const BookBeneficiaryAppointmentModal = ({
             <Box>
               <Flex flexWrap="wrap">
                 <Box ml={{ md: "40px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Service Plan{" "}
                   </FormLabel>
                   <Select
@@ -403,7 +421,7 @@ const BookBeneficiaryAppointmentModal = ({
                 </Box>
 
                 <Box marginLeft="5px">
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Shift{" "}
                   </FormLabel>
                   <Select
@@ -422,7 +440,7 @@ const BookBeneficiaryAppointmentModal = ({
               </Flex>
               <Flex flexWrap="wrap" ml={{ md: "40px" }}>
                 <Box  w={{ base: "300px", md: "270px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
                   <Flex
@@ -453,7 +471,7 @@ const BookBeneficiaryAppointmentModal = ({
                   </Flex>
                 </Box>
                 <Box ml={{ md: "5px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
+                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                   Current Location{" "}
                 </FormLabel>
 
@@ -499,7 +517,7 @@ const BookBeneficiaryAppointmentModal = ({
                 </InputGroup>
               </Box> */}
               <Box ml={{ md: "40px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
+                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                   Health History{" "}
                 </FormLabel>
                 <Textarea

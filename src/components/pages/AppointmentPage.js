@@ -84,15 +84,15 @@ const AppointmentPage = () => {
           border="1px solid gray"
           borderRadius="md"
           padding="3px"
-          w={{ base: "90vw", md: "70vw" }}
+          w={{ base: "88vw", md: "908px" }}
           h={{ base: "7vw", md: "5vh" }}
         >
           <Flex>
             <SearchIcon boxSize={4} marginRight="10px" marginTop="5px" />
             <Text
-              fontSize={{ base: "12px", md: "16px" }}
+              fontSize={{ base: "10px", md: "14px" }}
+              mt={{ base: "3px", md: "" }}
               fontFamily="body"
-              // mt={{ md: "15px" }}
               style={{
                 fontStyle: "italic",
                 cursor: "pointer",
@@ -105,19 +105,20 @@ const AppointmentPage = () => {
           </Flex>
         </Box>
         <Flex
-          marginTop="10px"
+         
           bg="#A210C6"
-          w={{ base: "90vw", md: "70vw" }}
-          h={{ base: "19vh", md: "30vh" }}
+          w={{ base: "90vw", md: "910px" }}
+          h={{ base: "19vh", md: "230px" }}
+          mt={{ base: "5px", md: "15px" }}
           borderRadius="20px"
           justifyContent="space-between"
         >
-          <VStack paddingLeft="10px" justify="left" color="white">
+          <Box pt={{base: "5px", md: "15px"}} justify="left" color="white">
             <Text
               fontSize={{ base: "12px", md: "20px" }}
               fontFamily="heading"
               marginTop="15px"
-              ml={{ base: "", md: "-98px" }}
+              ml={{base: "30px",md: "60px"}}
               textAlign="left"
             >
               Hello {user?.firstName},
@@ -125,47 +126,40 @@ const AppointmentPage = () => {
             <Text
               fontFamily="body"
               fontSize={{ base: "10px", md: "15px" }}
-              ml={{ base: "", md: "43px" }}
+              ml={{base: "30px",md: "60px"}}
               mt={{ md: "5px" }}
               textAlign="left"
             >
-              Would you like to book an appointment
+              Would you like to book an appointment <br></br> for yourself or a loved one?
             </Text>
-            <Text
-              fontFamily="body"
-              fontSize={{ base: "10px", md: "15px" }}
-              mt={{ md: "2px" }}
-              ml={{ base: "", md: "-36px" }}
-            >
-              for yourself or a loved one?
-            </Text>
+            
 
             <Button
               onClick={handleOpenAppointmentModal}
               bg="white"
               color="#A210C6"
               fontFamily="body"
-              mt={{ md: "10px" }}
+              mt={{base: "10px", md: "30px" }}
               _hover={{ color: "" }}
               padding={{ base: "5px", md: "0" }}
-              ml={{ base: "", md: "-40px" }}
+              // ml={{ base: "", md: "-40px" }}
               w={{ base: "140px", md: "190px" }}
-              h={{ base: "30px", md: "40px" }}
-              fontSize={{ base: "12px", md: "16px" }}
-              mb={{base: "20px", md: "0px"}}
+              h={{ base: "25px", md: "40px" }}
+              fontSize={{ base: "12px", md: "16px"}}
+              // mb={{base: "20px", md: "0px"}}
               borderRadius="15px"
               leftIcon={<CheckIcon />}
             >
               Book appointment
             </Button>
-          </VStack>
-          <Box>
+          </Box>
+          <Box mr={{md: "20px"}} >
             <Image
               src={familyIcon}
               alt="family icon"
               w={{ base: "80px", md: "150px" }}
               h={{ base: "80x", md: "150px" }}
-              mt={{ base: "40px", md: "20px" }}
+              mt={{ base: "25px", md: "30px" }}
               mb={{ base: "0", md: "50px" }}
               mr={{ base: "30px", md: "30px" }}
             />

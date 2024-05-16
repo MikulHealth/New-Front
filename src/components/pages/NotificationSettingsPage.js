@@ -101,7 +101,7 @@ const NotificationSettingsPage = () => {
             p={3}
           >
             {" "}
-            <Text fontSize="20px">Notification settings</Text>{" "}
+            <Text fontFamily="heading" fontSize="20px">Notification settings</Text>{" "}
             <VStack spacing={4}>
               {/* <Flex marginTop="30px" alignItems="center">
                 <Image
@@ -144,7 +144,7 @@ const NotificationSettingsPage = () => {
                   w="30px"
                   borderRadius="100%"
                 />
-                <Text marginLeft="10px" fontSize="16px">
+                <Text fontFamily="body" marginLeft="10px" fontSize="16px">
                   Email notifications
                 </Text>
                 <Switch
@@ -153,7 +153,7 @@ const NotificationSettingsPage = () => {
                   onChange={handleEmailNotificationChange}
                 />
               </Flex>
-              <Text textAlign="left" marginTop="-15px" fontSize="14px">
+              <Text fontFamily="body" textAlign="left" marginTop="-15px" fontSize="14px">
                 Receive push notifications on appointments and updates via email
               </Text>
 
@@ -167,7 +167,7 @@ const NotificationSettingsPage = () => {
                   w="30px"
                   borderRadius="100%"
                 />
-                <Text marginLeft="10px" fontSize="16px">
+                <Text fontFamily="body" marginLeft="10px" fontSize="16px">
                   Text message notifications
                 </Text>
                 <Switch
@@ -176,7 +176,7 @@ const NotificationSettingsPage = () => {
                   onChange={handleTextppNotificationChange}
                 />
               </Flex>
-              <Text textAlign="left" marginTop="-15px" fontSize="14px">
+              <Text fontFamily="body" textAlign="left" marginTop="-15px" fontSize="14px">
                 Receive push notifications on appointments and updates via text
               </Text>
             </VStack>
@@ -195,6 +195,7 @@ const NotificationSettingsPage = () => {
                 fontSize={{ base: "18px" }}
                 marginTop="3px"
                 marginBottom="10px"
+                fontFamily="heading"
               >
                 Notification Settings
               </Text>
@@ -209,6 +210,7 @@ const NotificationSettingsPage = () => {
               fontSize={{ base: "12px" }}
               h="3vh"
               borderRadius="100px"
+             
             >
               Back
             </Button>
@@ -253,7 +255,7 @@ const NotificationSettingsPage = () => {
               <Flex marginTop="5px">
                 <Image
                   justify="left"
-                  // src={EmailIcon}
+                  src={EmailIcon}
                   alt="Email Icon"
                   boxSize="50px"
                   marginBottom="2%"
@@ -262,7 +264,7 @@ const NotificationSettingsPage = () => {
                   borderRadius="100%"
                   marginRight="10px"
                 />
-                <Text marginRight="10px" textAlign="left" fontSize="16px">
+                <Text  fontFamily="body" marginRight="10px" textAlign="left" fontSize="16px">
                   Email push notifications
                 </Text>
                 <Switch
@@ -270,13 +272,13 @@ const NotificationSettingsPage = () => {
                   onChange={handleEmailNotificationChange}
                 />
               </Flex>
-              <Text textAlign="left" marginTop="-15px" fontSize="14px">
+              <Text  fontFamily="body" textAlign="left" marginTop="-15px" fontSize="14px">
                 Receive push notifications on appointments and updates via email
               </Text>
 
               <Flex marginTop="5px" alignItems="center">
                 <Image
-                  // src={TextIcon}
+                  src={TextIcon}
                   alt="Text Icon"
                   boxSize="50px"
                   marginBottom="2%"
@@ -285,7 +287,7 @@ const NotificationSettingsPage = () => {
                   borderRadius="100%"
                   marginRight="10px"
                 />
-                <Text marginRight="10px" textAlign="left" fontSize="16px">
+                <Text  fontFamily="body" marginRight="10px" textAlign="left" fontSize="16px">
                   Text message notifications
                 </Text>
                 <Switch
@@ -293,7 +295,7 @@ const NotificationSettingsPage = () => {
                   onChange={handleTextppNotificationChange}
                 />
               </Flex>
-              <Text textAlign="left" marginTop="-15px" fontSize="14px">
+              <Text  fontFamily="body" textAlign="left" marginTop="-15px" fontSize="14px">
                 Receive push notifications on appointments and updates via text
               </Text>
             </VStack>

@@ -3,6 +3,7 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  extendTheme,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -12,6 +13,22 @@ import {
 import SelfAppointmentModal from "./SelfAppointmentForm";
 import BeneficiaryAppointmentModal from "./OthersAppForm";
 import BeneficiariesModal from "./Beneficiaries";
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const BookAppointmentModal = ({ isOpen, onClose }) => {
   const [isSelfAppointmentModalOpen, setSelfAppointmentModalOpen] =
@@ -42,10 +59,10 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xs">
+    <Modal theme={customTheme} isOpen={isOpen} onClose={onClose} size="xs">
       <ModalOverlay />
       <ModalContent  borderRadius="25px 25px 25px 0px">
-        <ModalHeader textAlign="center" color="#A210C6" fontWeight="bold">
+        <ModalHeader fontFamily="heading" textAlign="center" color="#A210C6" fontWeight="bold">
           Book appointment
         </ModalHeader>
         <ModalCloseButton color="#510863" />
@@ -60,6 +77,7 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
               cursor="pointer"
               p="2"
               textAlign="center"
+              fontFamily="body"
               // w="100%"
               // _hover={{ bg: "gray" }}
             >
@@ -74,6 +92,7 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
               cursor="pointer"
               p="2"
               textAlign="center"
+              fontFamily="body"
               // w="100%"
               // _hover={{ bg: "gray" }}
             >
@@ -88,6 +107,7 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
               cursor="pointer"
               p="2"
               textAlign="center"
+              fontFamily="body"
               // w="100%"
               // _hover={{ bg: "gray.500" }}
               marginBottom="20px"

@@ -209,7 +209,7 @@ const ChangePasswordPage = () => {
             {" "}
             <VStack w="30vw" marginLeft="10px">
               <WarningIcon mb="5px" w={10} h={10} color="yellow.400" />
-              <Text textAlign="left">
+              <Text  fontFamily="body" textAlign="left">
                 Please note, you will have to log in again after reseting your
                 password.
               </Text>
@@ -219,12 +219,13 @@ const ChangePasswordPage = () => {
                 fontSize={{ base: "12px", md: "20px" }}
                 marginTop="3px"
                 marginBottom="20px"
+                fontFamily="heading"
               >
                 Change Password
               </Text>
 
               <FormControl>
-                <FormLabel>Old Password</FormLabel>
+                <FormLabel  fontFamily="body">Old Password</FormLabel>
                 <InputGroup>
                   <Input
                     type={showOldPassword ? "text" : "password"}
@@ -255,7 +256,7 @@ const ChangePasswordPage = () => {
               </FormControl>
 
               <FormControl>
-                <FormLabel>New Password</FormLabel>
+                <FormLabel  fontFamily="body">New Password</FormLabel>
                 <InputGroup>
                   <Input
                     type={showNewPassword ? "text" : "password"}
@@ -276,7 +277,7 @@ const ChangePasswordPage = () => {
               </FormControl>
 
               <FormControl>
-                <FormLabel>Confirm New Password</FormLabel>
+                <FormLabel  fontFamily="body">Confirm New Password</FormLabel>
                 <InputGroup>
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
@@ -296,7 +297,7 @@ const ChangePasswordPage = () => {
                 </InputGroup>
               </FormControl>
 
-              <Button color="white" bg="#A210C6" onClick={handleSaveChanges}>
+              <Button  fontFamily="body" color="white" bg="#A210C6" onClick={handleSaveChanges}>
                 Save Changes
               </Button>
             </VStack>
@@ -315,6 +316,7 @@ const ChangePasswordPage = () => {
                 textAlign="left"
                 fontSize={{ base: "18px" }}
                 marginTop="3px"
+                fontFamily="heading"
               >
                 Change Password
               </Text>
@@ -329,6 +331,7 @@ const ChangePasswordPage = () => {
               fontSize={{ base: "12px" }}
               h="3vh"
               borderRadius="100px"
+              
             >
               Back
             </Button>
@@ -336,7 +339,7 @@ const ChangePasswordPage = () => {
           
           <Box className="change-password" p={3}>
           <WarningIcon ml="10px" mb="5px" w={10} h={10} color="yellow.400" />
-              <Text ml="12px" mb="5px" textAlign="left">
+              <Text  fontFamily="body" ml="12px" mb="5px" textAlign="left">
                 Please note, you will have to log in again after reseting your
                 password.
               </Text>
@@ -344,7 +347,7 @@ const ChangePasswordPage = () => {
             <VStack ml="15px" w="100%">
               <FormControl w="280px">
 
-                <FormLabel>Old Password</FormLabel>
+                <FormLabel  fontFamily="body">Old Password</FormLabel>
                 <InputGroup>
                   <Input
                     type={showOldPassword ? "text" : "password"}
@@ -375,7 +378,7 @@ const ChangePasswordPage = () => {
               </FormControl>
 
               <FormControl w="280px">
-                <FormLabel>New Password</FormLabel>
+                <FormLabel  fontFamily="body">New Password</FormLabel>
                 <InputGroup>
                   <Input
                     type={showNewPassword ? "text" : "password"}
@@ -396,7 +399,7 @@ const ChangePasswordPage = () => {
               </FormControl>
 
               <FormControl w="280px">
-                <FormLabel>Confirm New Password</FormLabel>
+                <FormLabel  fontFamily="body">Confirm New Password</FormLabel>
                 <InputGroup>
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
@@ -420,6 +423,7 @@ const ChangePasswordPage = () => {
                 marginTop="20px"
                 color="white"
                 bg="#A210C6"
+                fontFamily="body"
                 onClick={handleSaveChanges}
               >
                 Save Changes
