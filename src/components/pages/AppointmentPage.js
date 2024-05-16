@@ -119,12 +119,12 @@ const AppointmentPage = () => {
         <Flex
           bg="#A210C6"
           w={{ base: "90vw", md: "910px" }}
-          h={{ base: "19vh", md: "230px" }}
+          h={{ base: "19vh", md: "200px" }}
           mt={{ base: "5px", md: "15px" }}
           borderRadius="20px"
           justifyContent="space-between"
         >
-          <Box pt={{ base: "5px", md: "15px" }} justify="left" color="white">
+          <Box pt={{ base: "5px", md: "10px" }} justify="left" color="white">
             <Text
               fontSize={{ base: "12px", md: "20px" }}
               fontFamily="heading"
@@ -176,13 +176,13 @@ const AppointmentPage = () => {
         </Flex>
 
         <Flex
-          w={{ base: "90vw", md: "90vw" }}
+          w={{ base: "90vw", md: "65vw" }}
           ml={{ base: "0", md: "-80px" }}
           justifyContent="center"
           className="appointment-tabs"
-          overflow={{ base: "scroll", md: "hidden" }}
+          overflow={{ base: "hidden", md: "hidden" }}
         >
-          <VStack ml={{ base: "0", md: "30px" }} w="90%" {...swipeHandlers}>
+          <VStack ml={{ base: "0", md: "30px" }} w="50%" {...swipeHandlers}>
             <Tabs index={index} onChange={setIndex} mb="20px" colorScheme="purple.100" mt={{ base: "", md: "5px" }}>
               <TabList justifyContent="space-between">
                 <Tab

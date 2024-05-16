@@ -96,7 +96,10 @@ export default function PendingApp() {
       );
 
       if (response.data.success) {
-        setPendingAppointments(response.data.data);
+        const sortedAppointments = response.data.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setPendingAppointments(sortedAppointments);
       } else {
         console.error("Failed to fetch appointments");
       }
@@ -254,7 +257,8 @@ export default function PendingApp() {
         ) : (
           <Box w={{ base: "90vw", md: "60vw" }}>
             <Flex
-              mb="50px"
+              mt="-10px"
+              mb={{ base: "30px", md: "50px" }}
               w={{ base: "90vw", md: "60vw" }}
               position="fixed"
               ml={{ md: "-20px" }}
@@ -272,11 +276,11 @@ export default function PendingApp() {
               <Text fontWeight="bold">Payment</Text>
             </Flex>
             <VStack
-              mb={{ base: "150", md: "250" }}
+              mb={{ base: "150px", md: "10px" }}
               justifyContent="space-between"
               align="start"
               spacing={4}
-              mt={16}
+              mt={{ base: 10, md: 14 }}
             >
               {pendingAppointments.map((appointment) => (
                 // <Box
@@ -367,8 +371,10 @@ export default function PendingApp() {
                   key={appointment.id}
                   onClick={() => handleViewMore(appointment.id)}
                   w={{ base: "85vw", md: "57vw" }}
+                  overflow="scroll"
                   p={4}
                   borderBottom="1px solid #e2e8f0"
+                  ml={{ base: "10px" }}
                 >
                   <Flex
                     fontSize={{ base: "10px", md: "16px" }}
@@ -381,20 +387,46 @@ export default function PendingApp() {
                     </Text>
                     <Text>{`${appointment.appointment.shift} `}</Text>
                     <Text>{`${appointment.appointment.servicePlan} `}</Text>
-                    <Text
-                      color={
+                    <Box
+                      w={{ base: "50px", md: "97px" }}
+                      textAlign="center"
+                      borderRadius="10px"
+                      p="5px"
+                      bg={
                         appointment.appointment.appointmentPending
-                          ? "yellow.500"
+                          ? "#F4DDA2"
                           : "black"
                       }
                     >
-                      {appointment.appointment.appointmentPending
-                        ? "Pending"
-                        : "Unknown"}
-                    </Text>
-                    <Text ml={{ md: "60px" }} color="black">
-                      {appointment.appointment?.paid ? "Paid" : "Not paid"}
-                    </Text>
+                      <Text
+                        fontSize={{ base: "10px", md: "14px" }}
+                        color={
+                          appointment.appointment?.appointmentPending
+                            ? "#B48B25"
+                            : "black"
+                        }
+                      >
+                        {appointment.appointment?.appointmentPending
+                          ? "Pending"
+                          : "Unknown"}
+                      </Text>
+                    </Box>
+                    <Box
+                      w={{ base: "50px", md: "97px" }}
+                      borderRadius="10px"
+                      p="5px"
+                      bg={appointment.appointment?.paid ? "#ACE1C1" : "red.200"}
+                    >
+                      <Text
+                        fontSize={{ base: "10px", md: "14px" }}
+                        textAlign="center"
+                        color={
+                          appointment.appointment?.paid ? "#057B1F" : "red.300"
+                        }
+                      >
+                        {appointment?.appointment.paid ? "Paid" : "Not paid"}
+                      </Text>
+                    </Box>
                   </Flex>
                 </Box>
               ))}
@@ -419,7 +451,20 @@ export default function PendingApp() {
               fontWeight="bold"
               color="#A210C6"
             >
-              Appointment Details
+              Details
+              {!selectedAppointment.paid && (
+                <Button
+                  fontSize={{ base: "10px", md: "14px" }}
+                  ml={{ base: "5px" }}
+                  bg="green.400"
+                  color="white"
+                  _hover={{ color: "" }}
+                  onClick={() => handlePayment(selectedAppointment)}
+                  leftIcon={<CheckIcon />}
+                >
+                  Pay for appointment
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 onClick={closeDetailsDrawer}
@@ -640,33 +685,21 @@ export default function PendingApp() {
                 color="white"
                 _hover={{ color: "" }}
                 leftIcon={<EditIcon />}
+                fontSize={{ base: "10px", md: "14px" }}
                 onClick={handleEditAppointment}
               >
                 Edit appointment
               </Button>
               <Button
+                fontSize={{ base: "10px", md: "14px" }}
                 bg="white"
-                borderColor="red.500"
                 color="red.500"
+                border="2px solid red"
                 _hover={{ color: "" }}
-                // leftIcon={<EditIcon />}
                 onClick={() => handleCancelAppointment(selectedAppointment.id)}
               >
                 Cancel appointment
               </Button>
-
-              {!selectedAppointment.paid && (
-                <Button
-                  ml={{ base: "5px" }}
-                  bg="green.400"
-                  color="white"
-                  _hover={{ color: "" }}
-                  onClick={() => handlePayment(selectedAppointment)}
-                  leftIcon={<CheckIcon />}
-                >
-                  Pay for appointment
-                </Button>
-              )}
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

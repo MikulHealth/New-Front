@@ -41,7 +41,10 @@ export default function AppointmentTab() {
         );
 
         if (response.data.success) {
-          setAppointments(response.data.data);
+          const sortedAppointments = response.data.data.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setAppointments(sortedAppointments);
         } else {
           console.error("Failed to fetch appointments");
         }
@@ -155,6 +158,7 @@ export default function AppointmentTab() {
         ) : (
           <Box w={{ base: "90vw", md: "60vw" }}>
             <Flex
+              mt="-10px"
               mb="50px"
               w={{ base: "90vw", md: "60vw" }}
               position="fixed"
@@ -174,26 +178,25 @@ export default function AppointmentTab() {
             </Flex>
             <VStack
               mb={{ base: "150", md: "250" }}
+              overflow="scroll"
               justifyContent="space-between"
+              mt={{ base: 10, md: 16 }}
               align="start"
               spacing={4}
-              mt={16}
             >
               {appointments.map((appointment) => (
                 <Box
-                onClick={() => handleViewMore(appointment.id)}
+                  ml={{ base: "10px" }}
+                  onClick={() => handleViewMore(appointment.id)}
                   key={appointment.id}
                   style={{
                     cursor: "pointer",
-                   
                   }}
                   w={{ base: "85vw", md: "57vw" }}
                   p={4}
                   borderBottom="1px solid #e2e8f0"
-                
                 >
                   <Flex
-                    
                     _hover={
                       {
                         // transform: "translateY(-10px)",
@@ -209,8 +212,12 @@ export default function AppointmentTab() {
                     </Text>
                     <Text>{`${appointment.shift} `}</Text>
                     <Text>{`${appointment.servicePlan} `}</Text>
-                    <Text
-                      color={
+                    <Box
+                      w={{ base: "50px", md: "97px" }}
+                      textAlign="center"
+                      borderRadius="10px"
+                      p="5px"
+                      bg={
                         appointment.appointmentCompleted
                           ? "green.500"
                           : appointment.appointmentActive
@@ -218,23 +225,53 @@ export default function AppointmentTab() {
                           : appointment.appointmentMatched
                           ? "yellow.500"
                           : appointment.appointmentPending
-                          ? "yellow.500"
+                          ? "#F4DDA2"
                           : "black"
                       }
                     >
-                      {appointment.appointmentCompleted
-                        ? "Completed"
-                        : appointment.appointmentActive
-                        ? "Active"
-                        : appointment.appointmentMatched
-                        ? "Paired"
-                        : appointment.appointmentPending
-                        ? "Pending"
-                        : "Unknown"}
-                    </Text>
-                    <Text ml={{ md: "60px" }} color="black">
+                      <Text
+                        fontSize={{ base: "10px", md: "14px" }}
+                        color={
+                          appointment.appointmentCompleted
+                            ? "green.500"
+                            : appointment.appointmentActive
+                            ? "blue.500"
+                            : appointment.appointmentMatched
+                            ? "yellow.500"
+                            : appointment.appointmentPending
+                            ? "#B48B25"
+                            : "black"
+                        }
+                      >
+                        {appointment.appointmentCompleted
+                          ? "Completed"
+                          : appointment.appointmentActive
+                          ? "Active"
+                          : appointment.appointmentMatched
+                          ? "Paired"
+                          : appointment.appointmentPending
+                          ? "Pending"
+                          : "Unknown"}
+                      </Text>
+                    </Box>
+                    <Box
+                      w={{ base: "50px", md: "97px" }}
+                      borderRadius="10px"
+                      p="5px"
+                      bg={appointment?.paid ? "#ACE1C1" : "red.200"}
+                    >
+                      <Text
+                        fontSize={{ base: "10px", md: "14px" }}
+                        textAlign="center"
+                        color={appointment?.paid ? "#057B1F" : "red.300"}
+                      >
+                        {appointment?.paid ? "Paid" : "Not paid"}
+                      </Text>
+                    </Box>
+
+                    {/* <Text ml={{ md: "60px" }} color="black">
                       {appointment?.paid ? "Paid" : "Not paid"}
-                    </Text>
+                    </Text> */}
                   </Flex>
                 </Box>
               ))}
