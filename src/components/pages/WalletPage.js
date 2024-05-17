@@ -415,14 +415,15 @@ const WalletPage = () => {
       <VStack
         style={settingsContainerStyle}
         position="fixed"
-        ml={{ md: "270px" }}
-        w={{ base: "", md: "70%" }}
+        ml={{ md: "230px" }}
+        w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}
       >
         <NavBar />
         {loading ? (
           <Skeleton
-            ml={{ base: "20px", md: "0" }}
+            // ml={{ base: "10px", md: "0" }}
+            justifyContent="center"
             w={{ base: "375px", md: "70vw" }}
             h={{ base: "189px", md: "40vh" }}
             startColor="#E552FF"
@@ -431,7 +432,7 @@ const WalletPage = () => {
             borderRadius="20px"
           />
         ) : (
-          <Box>
+          <Box >
             <Flex
               marginTop="10px"
               border="1px solid gray"
@@ -439,7 +440,7 @@ const WalletPage = () => {
               padding="3px"
               w={{ base: "88vw", md: "908px" }}
               h={{ base: "7vw", md: "5vh" }}
-              ml={{ base: "22px", md: "15px" }}
+              ml={{ base: "8px", md: "15px" }}
               mb={{ base: "5px", md: "10px" }}
             >
               <Flex ml={{ md: "10px" }}>
@@ -461,11 +462,11 @@ const WalletPage = () => {
             </Flex>
             <Box
               textAlign="center"
-              ml={{ base: "15px", md: "0" }}
+              // ml={{ base: "10px", md: "0" }}
               w={{ base: "375px", md: "910px" }}
-              h={{ base: "180px", md: "230px" }}
+              h={{ base: "150px", md: "200px" }}
               mt={{ base: "10px", md: "0" }}
-              mb={{ base: "5px", md: "30" }}
+              mb={{ base: "10px", md: "30" }}
               paddingBottom={{ base: "20px", md: "" }}
               bg="#A210C6"
               borderRadius="20px"
@@ -473,7 +474,7 @@ const WalletPage = () => {
               <Flex w={{ base: "90vw", md: "80vw" }}>
                 <Box
                   ml={{ base: "20px", md: "40px" }}
-                  pt={{ base: "5px", md: "15px" }}
+                  pt={{ base: "px", md: "8px" }}
                 >
                   <Text
                     fontSize="16px"
@@ -575,18 +576,21 @@ const WalletPage = () => {
             </Box>
 
             <Flex
-              w={{ base: "100%", md: "50vw" }}
-              ml={{ base: "-50", md: "5px" }}
-              justifyContent="space-between"
+              w={{ base: "90vw", md: "90%" }}
+              ml={{ base: "0", md: "-100px" }}
+              mt={{ base: "-10px", md: "-30px" }}
+              justifyContent="center"
+              // overflow="hidden"
               className="transaction-tabs"
             >
-              <VStack ml={{ base: "100px", md: "0" }}>
-                <Tabs colorScheme="purple.100" mt={{ base: "", md: "-15px" }}>
-                  <TabList ml="10px">
+              <VStack ml={{ base: "0", md: "0px" }} w="90%">
+                <Tabs colorScheme="purple.100" mt={{ base: ""}}>
+                  <TabList justifyContent="space-between">
                     <Tab
                       fontSize={{ base: "12px", md: "16px" }}
                       color="#A210C6"
                       fontWeight="bold"
+                      ml={{ base: "15px", md: "0" }}
                     >
                       All
                     </Tab>
@@ -595,7 +599,7 @@ const WalletPage = () => {
                       fontSize={{ base: "12px", md: "16px" }}
                       color="green.500"
                       fontWeight="bold"
-                      ml="50px"
+                      // ml="50px"
                     >
                       Credit
                     </Tab>
@@ -604,13 +608,13 @@ const WalletPage = () => {
                       fontSize={{ base: "12px", md: "16px" }}
                       color="red.500"
                       fontWeight="bold"
-                      ml="50px"
+                      mr={{ base: "10px", md: "0" }}
                     >
                       Debit
                     </Tab>
                   </TabList>
                   <TabPanels
-                    ml={{ base: "-20px", md: "0px" }}
+                    ml={{ base: "-25px", md: "0px" }}
                     overflow={{ base: "scroll" }}
                   >
                     <TabPanel>

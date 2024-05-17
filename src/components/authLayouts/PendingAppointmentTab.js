@@ -300,18 +300,21 @@ export default function PendingApp() {
                 >
                   <Flex
                  
-                    fontSize={{ base: "10px", md: "16px" }}
+                    fontSize={{ base: "10px", md: "14px" }}
                     textAlign="left"
                     ml={{ base: "-15px", md: "-16px" }}
                     justifyContent="space-between"
                   >
-                    <Text>
+                    <Text   maxW={{ base: "80px", md: "100px" }}
+                      wordWrap="break-word">
                       {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
                     </Text>
-                    <Text>{`${appointment.appointment.shift} `}</Text>
-                    <Text>{`${appointment.appointment.servicePlan} `}</Text>
+                    <Text maxW={{ base: "50px", md: "120px" }}>{`${appointment.appointment.shift} `}</Text>
+                    <Text  maxW={{ base: "60px", md: "120px" }}
+                      wordWrap="break-word">{`${appointment.appointment.servicePlan} `}</Text>
                     <Box
                       w={{ base: "50px", md: "97px" }}
+                      h={{ base: "25px", md: "33px" }}
                       textAlign="center"
                       borderRadius="10px"
                       p="5px"
@@ -336,6 +339,7 @@ export default function PendingApp() {
                     </Box>
                     <Box
                       w={{ base: "50px", md: "97px" }}
+                      h={{ base: "25px", md: "33px" }}
                       borderRadius="10px"
                       p="5px"
                       bg={appointment.appointment?.paid ? "#ACE1C1" : "red.200"}
