@@ -29,7 +29,10 @@ export default function TransactionTab() {
         );
 
         if (response.data && response.data.success) {
-          setTransactions(response.data.data);
+          const sortedTrans = response.data.data.sort(
+            (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
+          );
+          setTransactions(sortedTrans);
         } else {
           console.error("Failed to fetch transactions");
         }

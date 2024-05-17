@@ -25,7 +25,10 @@ export default function TransactionTab() {
         );
 
         if (response.data) {
-          setTransactions(response.data.data);
+          const sortedTrans = response.data.data.sort(
+            (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
+          );
+          setTransactions(sortedTrans);
         } else {
           console.error("Failed to fetch transactions");
         }
@@ -95,7 +98,6 @@ export default function TransactionTab() {
               w={{ base: "90vw", md: "635px" }}
               position="fixed"
               ml={{ base: "15px", md: "-20px" }}
-
               justifyContent="space-between"
               bg="#D087E2"
               p={4}
@@ -115,7 +117,6 @@ export default function TransactionTab() {
               overflow="scroll"
               justifyContent="space-between"
               mt={{ base: 10, md: 12 }}
-             
               align="start"
               spacing={4}
             >
