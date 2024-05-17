@@ -211,13 +211,15 @@ export default function AppointmentTab() {
                   >
                     <Text
                       // ml={{ md: "-5px" }}
+                      textAlign="left"
                       maxW={{ base: "80px", md: "100px" }}
                       wordWrap="break-word"
                     >
                       {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                     </Text>
-                    <Text  maxW={{ base: "50px", md: "120px" }}>{`${appointment.shift} `}</Text>
+                    <Text textAlign="left"  maxW={{ base: "50px", md: "120px" }}>{`${appointment.shift} `}</Text>
                     <Text
+                    textAlign="left"
                       maxW={{ base: "60px", md: "120px" }}
                       wordWrap="break-word"
                     >{`${appointment.servicePlan} `}</Text>
@@ -240,6 +242,7 @@ export default function AppointmentTab() {
                       }
                     >
                       <Text
+                      textAlign="center"
                         fontSize={{ base: "10px", md: "14px" }}
                         color={
                           appointment.appointmentCompleted

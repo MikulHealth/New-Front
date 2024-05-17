@@ -590,7 +590,7 @@ const WalletPage = () => {
                       fontSize={{ base: "12px", md: "16px" }}
                       color="#A210C6"
                       fontWeight="bold"
-                      ml={{ base: "15px", md: "0" }}
+                      ml={{ base: "35px", md: "0" }}
                     >
                       All
                     </Tab>
@@ -608,7 +608,7 @@ const WalletPage = () => {
                       fontSize={{ base: "12px", md: "16px" }}
                       color="red.500"
                       fontWeight="bold"
-                      mr={{ base: "10px", md: "0" }}
+                      mr={{ base: "30px", md: "0" }}
                     >
                       Debit
                     </Tab>

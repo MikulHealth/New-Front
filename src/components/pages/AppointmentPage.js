@@ -75,7 +75,8 @@ const AppointmentPage = () => {
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => setIndex((prevIndex) => (prevIndex + 1) % 5),
-    onSwipedRight: () => setIndex((prevIndex) => (prevIndex === 0 ? 4 : prevIndex - 1)),
+    onSwipedRight: () =>
+      setIndex((prevIndex) => (prevIndex === 0 ? 4 : prevIndex - 1)),
     preventDefaultTouchmoveEvent: true,
     trackMouse: true,
   });
@@ -183,8 +184,14 @@ const AppointmentPage = () => {
           className="appointment-tabs"
           overflow={{ base: "hidden", md: "hidden" }}
         >
-          <VStack  w="90vw" {...swipeHandlers}>
-            <Tabs index={index} onChange={setIndex} mb="20px" colorScheme="purple.100" mt={{ base: "", md: "5px" }}>
+          <VStack w="90vw" {...swipeHandlers}>
+            <Tabs
+              index={index}
+              onChange={setIndex}
+              mb="20px"
+              colorScheme="purple.100"
+              mt={{ base: "", md: "5px" }}
+            >
               <TabList justifyContent="space-between">
                 <Tab
                   fontSize={{ base: "11px", md: "16px" }}

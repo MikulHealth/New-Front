@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LoadingSpinner from "../../utils/Spiner";
-import { VStack, useToast, Box, Text, Flex, Divider } from "@chakra-ui/react";
-
+import { VStack, useToast, Box, Text, Flex, Image } from "@chakra-ui/react";
+import CreditIcon from "../../assets/CreditIcon.svg";
+import DebitIcon from "../../assets/DebitIcon.svg";
 import { useSelector } from "react-redux";
+
 export default function TransactionTab() {
   const toast = useToast();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
   const id = user?.userId;
-  
 
-
- useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const customerId = id; 
+        const customerId = id;
         const config = {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -24,12 +24,12 @@ export default function TransactionTab() {
         };
 
         const response = await axios.get(
-            `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/debits`, 
-            // `http://localhost:8080/v1/api/wallets/${customerId}/debits`, 
+          `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/debits`,
+          //             // `http://localhost:8080/v1/api/wallets/${customerId}/credits`,
           config
         );
 
-        if (response.data && response.data.success) {
+        if (response.data) {
           const sortedTrans = response.data.data.sort(
             (a, b) => new Date(b.transactionDate) - new Date(a.transactionDate)
           );
@@ -45,28 +45,35 @@ export default function TransactionTab() {
     };
 
     fetchData();
-  }, [toast, id]); 
+  }, [toast, id]);
 
   const formatAmount = (amount) => {
     const num = Number(amount);
-    return num.toLocaleString('en-US');
-  
+    return num.toLocaleString("en-US");
   };
-  
-  const formatDateTime = (dateTimeString) => {
-    const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    };
-    const formattedDateTime = new Date(dateTimeString).toLocaleDateString(
-      undefined,
-      options
-    );
-    return formattedDateTime;
+
+  const formatTimeDifference = (date) => {
+    const now = new Date();
+    const transactionDate = new Date(date);
+
+    // Adjust for timezone differences if needed
+    const timezoneOffset = now.getTimezoneOffset() * 60000; // in milliseconds
+    const diff = now - (transactionDate - timezoneOffset); // Difference in milliseconds
+
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (seconds < 60) {
+      return `${seconds} seconds ago`;
+    } else if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      return `${hours} hours ago`;
+    } else {
+      return `${days} days ago`;
+    }
   };
 
   return (
@@ -75,12 +82,12 @@ export default function TransactionTab() {
       sx={{
         w: { base: "100%", md: "40vw" },
         h: { base: "60vh", md: "30vh" },
-        overflowY: "auto", 
-        '&::-webkit-scrollbar': {
-        //   display: "none"  
+        overflowY: "auto",
+        "&::-webkit-scrollbar": {
+          display: "none",
         },
-        msOverflowStyle: "none",  // IE and Edge
-        scrollbarWidth: "none"  // Firefox
+        msOverflowStyle: "none", // IE and Edge
+        scrollbarWidth: "none", // Firefox
       }}
     >
       <VStack align="start" spacing={4}>
@@ -91,64 +98,125 @@ export default function TransactionTab() {
             fontSize={{ base: "10px", md: "16px" }}
             ml={{ base: "10px", md: "35px" }}
           >
-            No transaction yet. click on fund wallet to begin
+            No transaction yet. Click on fund wallet to begin
           </Text>
         ) : (
-          <VStack  mb={{base: "200px", md: "0"}} ml={{ base: "20px", md: "" }} align="start" spacing={4}>
-            {transactions.map((transaction) => (
-              <Box  fontSize={{ base: "12px", md: "16px" }} key={transaction.id}>
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Amount:
-                  </Text>
-                  <Text ml={{ base: "10px", md: "5px" }} color="black">
-                    {formatAmount(transaction.amount)}.00
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Date:
-                  </Text>
-                  <Text ml={{ base: "10px", md: "5px" }} color="black">
-                    {formatDateTime(transaction.transactionDate)}
-                  </Text>
-                </Flex>
-              
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Method:
-                  </Text>
-                  <Text
-                    ml={{ base: "10px", md: "5px" }}
+          <Box>
+            <Flex
+              mt="-10px"
+              mb="50px"
+              w={{ base: "90vw", md: "600px" }}
+              position="fixed"
+              ml={{ base: "40px", md: "-20px" }}
+              justifyContent="space-between"
+              bg="#D087E2"
+              p={4}
+              borderRadius="md"
+              color="white"
+              fontSize={{ base: "10px", md: "14px" }}
+            >
+              <Text ml={{ md: "40px" }} fontWeight="bold">
+                Name
+              </Text>
+              <Text fontWeight="bold">Amount</Text>
+              <Text fontWeight="bold">Time</Text>
+              <Text mr={{ md: "40px" }} fontWeight="bold">
+                Status
+              </Text>
+            </Flex>
+            <Box
+              mb={{ base: "50", md: "50px" }}
+              w={{ base: "100vw", md: "600px" }}
+              ml={{ base: "20px", md: "-16px" }}
+              // overflow="scroll"
+              justifyContent="space-between"
+              mt={{ base: 10, md: 12 }}
+              align="start"
+              spacing={4}
+            >
+              {transactions.map((transaction) => (
+                <Box
+                  w={{ base: "90vw", md: "550px" }}
+                  p={4}
+                  borderBottom="1px solid #e2e8f0"
+                  // ml={{ base: "10px" }}
+                  key={transaction.id}
+                >
+                  <Flex
+                    fontSize={{ base: "10px", md: "14px" }}
+                    textAlign="left"
+                    // ml={{ base: "-25px", md: "-20px" }}
+                    justifyContent="space-between"
+                    wrap="wrap"
                   >
-                    {transaction.method === "WALLET" ? "Wallet payment" : "Card payment"}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Type:
-                  </Text>
-                  <Text
-                    ml={{ base: "10px", md: "5px" }}
-                    color={transaction.type === "CREDIT" ? "green.500" : "red.500"}
-                  
-                  >
-                    {transaction.type === "CREDIT" ? "Credit transaction" : "Debit transaction"}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Reference:
-                  </Text>
-                  <Text ml={{ base: "10px", md: "5px" }} color="black">
-                    {`${transaction.id}`}
-                  </Text>
-                </Flex>
-               
-                <Divider my={4} borderColor="gray.500" />
-              </Box>
-            ))}
-          </VStack>
+                    <Flex ml={{ base: "5px", md: "0px" }}>
+                      <Image
+                        src={
+                          transaction.type === "CREDIT" ? CreditIcon : DebitIcon
+                        }
+                        // mt={{ base: "0px", md: "0px" }}
+                        // ml={{ base: "0px", md: "0px" }}
+                        w={{ base: "30px", md: "25px" }}
+                        h={{ base: "15px", md: "25px" }}
+                        borderRadius="100px"
+                      />
+                      <Text
+                        ml={{ base: "-5px", md: "5px" }}
+                        color={
+                          transaction.type === "CREDIT"
+                            ? "green.500"
+                            : "red.500"
+                        }
+                        maxW={{ base: "80px", md: "100px" }}
+                        wordWrap="break-word"
+                      >
+                        {transaction.type === "CREDIT"
+                          ? "MH incoming payment"
+                          : "MH outgoing payment"}
+                      </Text>
+                    </Flex>
+
+                    <Text
+                      ml={{ base: "-20px", md: "-20px" }}
+                      color="black"
+                      maxW={{ base: "80px", md: "100px" }}
+                      wordWrap="break-word"
+                    >
+                      {formatAmount(transaction.amount)}
+                    </Text>
+                    <Text
+                      ml={{ base: "8px", md: "50px" }}
+                      color="black"
+                      maxW={{ base: "80px", md: "100px" }}
+                      wordWrap="break-word"
+                    >
+                      {formatTimeDifference(transaction.transactionDate)}
+                    </Text>
+                    <Box
+                      mr={{ base: "-30px", md: "-25px" }}
+                      ml={{ md: "0px" }}
+                      w={{ base: "60px", md: "80px" }}
+                      h={{ base: "28px", md: "25px" }}
+                      textAlign="center"
+                      borderRadius="10px"
+                      p="5px"
+                      bg="#ACE1C1"
+                    >
+                      <Text
+                        fontSize={{ base: "10px", md: "12px" }}
+                        color="#057B1F"
+                        textAlign="center"
+                        maxW={{ base: "50px", md: "100px" }}
+                        wordWrap="break-word"
+                      >
+                        Completed
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Box>
+              ))}
+            </Box>
+          </Box>
         )}
       </VStack>
     </Box>

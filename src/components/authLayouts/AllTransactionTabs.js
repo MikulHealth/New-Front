@@ -49,12 +49,17 @@ export default function TransactionTab() {
 
   const formatTimeDifference = (date) => {
     const now = new Date();
-    const diff = now - new Date(date);
+    const transactionDate = new Date(date);
+  
+    // Adjust for timezone differences if needed
+    const timezoneOffset = now.getTimezoneOffset() * 60000; // in milliseconds
+    const diff = now - (transactionDate - timezoneOffset); // Difference in milliseconds
+    
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-
+  
     if (seconds < 60) {
       return `${seconds} seconds ago`;
     } else if (minutes < 60) {
@@ -65,6 +70,7 @@ export default function TransactionTab() {
       return `${days} days ago`;
     }
   };
+  
 
   return (
     <Box
@@ -95,9 +101,9 @@ export default function TransactionTab() {
             <Flex
               mt="-10px"
               mb="50px"
-              w={{ base: "90vw", md: "635px" }}
+              w={{ base: "90vw", md: "600px" }}
               position="fixed"
-              ml={{ base: "15px", md: "-20px" }}
+              ml={{ base: "40px", md: "-20px" }}
               justifyContent="space-between"
               bg="#D087E2"
               p={4}
@@ -105,15 +111,15 @@ export default function TransactionTab() {
               color="white"
               fontSize={{ base: "10px", md: "14px" }}
             >
-              <Text fontWeight="bold">Name</Text>
+              <Text  ml={{ md: "40px" }} fontWeight="bold">Name</Text>
               <Text fontWeight="bold">Amount</Text>
               <Text fontWeight="bold">Time</Text>
-              <Text fontWeight="bold">Status</Text>
+              <Text  mr={{ md: "40px" }} fontWeight="bold">Status</Text>
             </Flex>
             <Box
               mb={{ base: "50", md: "50px" }}
-              w={{ base: "95vw", md: "660px" }}
-              ml={{ base: "2px", md: "-16px" }}
+              w={{ base: "100vw", md: "600px" }}
+              ml={{ base: "20px", md: "-16px" }}
               overflow="scroll"
               justifyContent="space-between"
               mt={{ base: 10, md: 12 }}
@@ -122,7 +128,7 @@ export default function TransactionTab() {
             >
               {transactions.map((transaction) => (
                 <Box
-                  w={{ base: "85vw", md: "57vw" }}
+                  w={{ base: "90vw", md: "550px" }}
                   p={4}
                   borderBottom="1px solid #e2e8f0"
                   // ml={{ base: "10px" }}
@@ -163,7 +169,7 @@ export default function TransactionTab() {
                     </Flex>
 
                     <Text
-                      ml={{ base: "-20px", md: "-150px" }}
+                      ml={{ base: "-20px", md: "-20px" }}
                       color="black"
                       maxW={{ base: "80px", md: "100px" }}
                       wordWrap="break-word"
@@ -171,7 +177,7 @@ export default function TransactionTab() {
                       {formatAmount(transaction.amount)}
                     </Text>
                     <Text
-                      ml={{ base: "8px", md: "-80px" }}
+                      ml={{ base: "8px", md: "50px" }}
                       color="black"
                       maxW={{ base: "80px", md: "100px" }}
                       wordWrap="break-word"
@@ -179,17 +185,17 @@ export default function TransactionTab() {
                       {formatTimeDifference(transaction.transactionDate)}
                     </Text>
                     <Box
-                      mr={{ base: "-30px", md: "0px" }}
-                      // ml={{ md: "-150px" }}
-                      w={{ base: "60px", md: "114px" }}
-                      h={{ base: "30px", md: "33px" }}
+                      mr={{ base: "-30px", md: "-25px" }}
+                      ml={{ md: "0px" }}
+                      w={{ base: "60px", md: "80px" }}
+                      h={{ base: "28px", md: "25px" }}
                       textAlign="center"
                       borderRadius="10px"
                       p="5px"
                       bg="#ACE1C1"
                     >
                       <Text
-                        fontSize={{ base: "10px", md: "14px" }}
+                        fontSize={{ base: "10px", md: "12px" }}
                         color="#057B1F"
                         textAlign="center"
                         maxW={{ base: "50px", md: "100px" }}
