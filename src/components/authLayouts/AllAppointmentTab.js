@@ -110,6 +110,14 @@ export default function AppointmentTab() {
   };
 
   const handleViewMore = async (id) => {
+    toast({
+      title: "Please wait",
+      description: "Fetching appointment details...",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    });
+
     await fetchAndDisplayAppointmentDetails(id);
     console.log(`View more details for appointment with ID: ${id}`);
   };
@@ -121,6 +129,15 @@ export default function AppointmentTab() {
   const handleCloseAppointmentModal = () => {
     setShowAppointmentModal(false);
   };
+
+
+  const closeDetailsDrawer = () => {
+    
+    setDetailsModalOpen(false);
+    // navigate("/appointment");
+    window.location.reload()
+  };
+
 
   return (
     <Box
@@ -217,10 +234,10 @@ export default function AppointmentTab() {
                     >
                       {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                     </Text>
-                    <Text textAlign="left"  maxW={{ base: "50px", md: "120px" }}>{`${appointment.shift} `}</Text>
+                    <Text textAlign="left"  maxW={{ base: "50px", md: "100px" }}>{`${appointment.shift} `}</Text>
                     <Text
                     textAlign="left"
-                      maxW={{ base: "60px", md: "120px" }}
+                      maxW={{ base: "60px", md: "100px" }}
                       wordWrap="break-word"
                     >{`${appointment.servicePlan} `}</Text>
                     <Box
@@ -314,7 +331,7 @@ export default function AppointmentTab() {
               Appointment Details
               <Button
                 variant="ghost"
-                onClick={() => setDetailsModalOpen(false)}
+                onClick={closeDetailsDrawer}
                 leftIcon={<CloseIcon />}
               />
             </DrawerHeader>

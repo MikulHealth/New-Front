@@ -4,15 +4,19 @@ import LoadingSpinner from "../../utils/Spiner";
 import { VStack, useToast, Box, Text, Flex, Image } from "@chakra-ui/react";
 import CreditIcon from "../../assets/CreditIcon.svg";
 import DebitIcon from "../../assets/DebitIcon.svg";
+// import { useSelector } from "react-redux";
 
 export default function TransactionTab() {
   const toast = useToast();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  // const { user } = useSelector((state) => state.userReducer);
+  // const id = user?.userId;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // const customerId = id;
         const config = {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -21,6 +25,7 @@ export default function TransactionTab() {
 
         const response = await axios.get(
           "https://backend-c1pz.onrender.com/v1/api/wallets/transactions",
+          //             // "http://localhost:8080/v1/api/wallets/transactions",
           config
         );
 
@@ -50,16 +55,16 @@ export default function TransactionTab() {
   const formatTimeDifference = (date) => {
     const now = new Date();
     const transactionDate = new Date(date);
-  
+
     // Adjust for timezone differences if needed
     const timezoneOffset = now.getTimezoneOffset() * 60000; // in milliseconds
     const diff = now - (transactionDate - timezoneOffset); // Difference in milliseconds
-    
+
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-  
+
     if (seconds < 60) {
       return `${seconds} seconds ago`;
     } else if (minutes < 60) {
@@ -70,7 +75,6 @@ export default function TransactionTab() {
       return `${days} days ago`;
     }
   };
-  
 
   return (
     <Box
@@ -79,6 +83,7 @@ export default function TransactionTab() {
         w: { base: "100%", md: "40vw" },
         h: { base: "60vh", md: "30vh" },
         overflowY: "auto",
+        overflowX: "hidden",
         "&::-webkit-scrollbar": {
           display: "none",
         },
@@ -111,16 +116,20 @@ export default function TransactionTab() {
               color="white"
               fontSize={{ base: "10px", md: "14px" }}
             >
-              <Text  ml={{ md: "40px" }} fontWeight="bold">Name</Text>
+              <Text ml={{ md: "40px" }} fontWeight="bold">
+                Name
+              </Text>
               <Text fontWeight="bold">Amount</Text>
               <Text fontWeight="bold">Time</Text>
-              <Text  mr={{ md: "40px" }} fontWeight="bold">Status</Text>
+              <Text mr={{ md: "40px" }} fontWeight="bold">
+                Status
+              </Text>
             </Flex>
             <Box
               mb={{ base: "50", md: "50px" }}
-              w={{ base: "100vw", md: "600px" }}
+              w={{ base: "100vw", md: "560px" }}
               ml={{ base: "20px", md: "-16px" }}
-              overflow="scroll"
+              // overflow="scroll"
               justifyContent="space-between"
               mt={{ base: 10, md: 12 }}
               align="start"

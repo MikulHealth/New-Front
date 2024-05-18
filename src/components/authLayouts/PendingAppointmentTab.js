@@ -24,7 +24,7 @@ import {
   ModalFooter,
   useMediaQuery,
   Button,
-  // useToast,
+  useToast,
   Box,
   Text,
   Flex,
@@ -32,11 +32,12 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import PaymentModal from "../sections/PaymentMethod";
-
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function PendingApp() {
+  const toast = useToast();
+  // const navigate = useNavigate();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
@@ -74,7 +75,10 @@ export default function PendingApp() {
   };
 
   const closeDetailsDrawer = () => {
+    
     setDetailsModalOpen(false);
+    // navigate("/appointment");
+    window.location.reload()
   };
 
   const handleCloseEditModal = () => {
@@ -157,6 +161,7 @@ export default function PendingApp() {
 
   const handleCloseAppointmentModal = () => {
     setShowAppointmentModal(false);
+   
   };
 
   const handleConfirmation = async () => {
@@ -190,6 +195,14 @@ export default function PendingApp() {
   };
 
   const handleViewMore = async (id) => {
+    toast({
+      title: "Please wait",
+      description: "Fetching appointment details...",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    });
+
     await fetchAndDisplayAppointmentDetails(id);
     console.log(`View more details for appointment with ID: ${id}`);
   };

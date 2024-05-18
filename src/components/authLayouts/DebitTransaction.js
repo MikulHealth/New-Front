@@ -83,6 +83,7 @@ export default function TransactionTab() {
         w: { base: "100%", md: "40vw" },
         h: { base: "60vh", md: "30vh" },
         overflowY: "auto",
+        overflowX: "hidden",
         "&::-webkit-scrollbar": {
           display: "none",
         },
@@ -126,7 +127,7 @@ export default function TransactionTab() {
             </Flex>
             <Box
               mb={{ base: "50", md: "50px" }}
-              w={{ base: "100vw", md: "600px" }}
+              w={{ base: "100vw", md: "560px" }}
               ml={{ base: "20px", md: "-16px" }}
               // overflow="scroll"
               justifyContent="space-between"
