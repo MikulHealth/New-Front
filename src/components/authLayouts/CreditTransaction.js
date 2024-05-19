@@ -51,30 +51,31 @@ export default function TransactionTab() {
     const num = Number(amount);
     return num.toLocaleString("en-US");
   };
-
   const formatTimeDifference = (date) => {
     const now = new Date();
     const transactionDate = new Date(date);
-
+  
     // Adjust for timezone differences if needed
     const timezoneOffset = now.getTimezoneOffset() * 60000; // in milliseconds
     const diff = now - (transactionDate - timezoneOffset); // Difference in milliseconds
-
+  
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
-
+  
     if (seconds < 60) {
       return `${seconds} seconds ago`;
     } else if (minutes < 60) {
-      return `${minutes} minutes ago`;
+      return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
     } else if (hours < 24) {
-      return `${hours} hours ago`;
+      const remainingMinutes = minutes % 60;
+      return `${hours} hour${hours !== 1 ? "s" : ""} ${remainingMinutes} minute${remainingMinutes !== 1 ? "s" : ""} ago`;
     } else {
-      return `${days} days ago`;
+      return `${days} day${days !== 1 ? "s" : ""} ago`;
     }
   };
+  
 
   return (
     <Box

@@ -5,7 +5,7 @@ import BookAppointmentModal from "../sections/BookAppointment";
 import { EditIcon, CheckIcon, CloseIcon, WarningIcon } from "@chakra-ui/icons";
 import PaymentModal from "../sections/PaymentMethod";
 import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import {
   VStack,
   Drawer,
@@ -26,11 +26,13 @@ import {
   Flex,
   Divider,
   useMediaQuery,
+  useToast,
   DrawerFooter,
 } from "@chakra-ui/react";
 
 export default function AppointmentTab() {
   const [appointments, setAppointments] = useState([]);
+  const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -91,7 +93,13 @@ export default function AppointmentTab() {
       const response = await axios.post(apiUrl, {}, { headers });
 
       if (response.data.success) {
-        toast.success(response.data.message);
+        toast({
+          // title: "Success",
+          description: response.data.message,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
         fetchData();
         setDetailsModalOpen(false);
       } else {
@@ -163,7 +171,14 @@ export default function AppointmentTab() {
   };
 
   const handleViewMore = async (id) => {
-    toast.info("Please wait...");
+    toast({
+      // title: "Info",
+      description: "Please wait.",
+      status: "info",
+      duration: 2000,
+      isClosable: true,
+      position: "top-right",
+    });
     await fetchAndDisplayAppointmentDetails(id);
   };
 
@@ -178,7 +193,8 @@ export default function AppointmentTab() {
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
     // navigate("/appointment");
-    window.location.reload()
+    // window.location.reload()
+    setSelectedAppointment(null);
   };
 
   const formattedCost = (amount) => {
@@ -682,8 +698,8 @@ export default function AppointmentTab() {
                 No
               </Button>
               <Button
-                bg="gray.500"
-                color="white"
+                bg="#E1ACAE"
+                color="red.500"
                 marginLeft="5px"
                 onClick={handleConfirmation}
               >

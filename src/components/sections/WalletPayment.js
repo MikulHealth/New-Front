@@ -164,8 +164,8 @@ const handleWalletPayment = async () => {
                 </Button>
                 <Button
                   marginLeft="5px"
-                  bg="red.400"
-                  color="white"
+                  bg="#E1ACAE"
+                  color="red.500"
                   onClick={handleCancel}
                   _hover={{ bg: "red.500" }}
                 >

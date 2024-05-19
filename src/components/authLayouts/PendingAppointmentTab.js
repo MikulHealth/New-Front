@@ -24,7 +24,7 @@ import {
   ModalFooter,
   useMediaQuery,
   Button,
-  // useToast,
+  useToast,
   Box,
   Text,
   Flex,
@@ -32,11 +32,11 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import PaymentModal from "../sections/PaymentMethod";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function PendingApp() {
-  // const toast = useToast();
+  const toast = useToast();
   // const navigate = useNavigate();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
@@ -77,8 +77,9 @@ export default function PendingApp() {
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
     // navigate("/appointment");
-    window.location.reload()
-  };
+    // window.location.reload()
+    setSelectedAppointment(null); 
+   };
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
@@ -182,7 +183,13 @@ export default function PendingApp() {
       const response = await axios.post(apiUrl, {}, { headers });
 
       if (response.data.success) {
-        toast.success(response.data.message);
+        toast({
+          // title: "Info",
+          description: response.data.message,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
         fetchData();
         setDetailsModalOpen(false);
       } else {
@@ -197,7 +204,14 @@ export default function PendingApp() {
   };
 
   const handleViewMore = async (id) => {
-    toast.info("Please wait...");
+    toast({
+      // title: "Success",
+      description: "Please wait.",
+      status: "info",
+      duration: 2000,
+      isClosable: true,
+      position: "top-right",
+    });
     await fetchAndDisplayAppointmentDetails(id);
   };
 
@@ -676,8 +690,8 @@ export default function PendingApp() {
                 No
               </Button>
               <Button
-                bg="gray.500"
-                color="white"
+                 bg="#E1ACAE"
+                 color="red.500"
                 marginLeft="5px"
                 onClick={handleConfirmation}
               >

@@ -39,7 +39,7 @@ import {
 } from "@chakra-ui/react";
 import Transfer from "../../assets/TransferPayment.svg";
 import Online from "../../assets/WhiteOnlineIcon.svg";
-import RightArrow from "../../assets/WhiteArrow.svg";
+// import RightArrow from "../../assets/WhiteArrow.svg";
 import NavBar from "../authLayouts/NavBar";
 import MobileFooter from "../authLayouts/MobileFooter";
 import { ToastContainer, toast } from "react-toastify";
@@ -94,8 +94,8 @@ const FundWalletModal = ({
             bg="#A210C6"
             // mx="8px"
             border="1px solid black"
-            h={{ base: "10vh", md: "12vh" }}
-            w={{ base: "80vw", md: "37vw" }}
+            h={{ base: "10vh", md: "10vh" }}
+            w={{ base: "80vw", md: "25vw" }}
             borderRadius="15px"
             pb="5px"
             onClick={onBankTransfer}
@@ -108,27 +108,27 @@ const FundWalletModal = ({
               <Image
                 ml="15px"
                 mt="15px"
-                w={{ base: "30px", md: "50px" }}
-                h={{ base: "30px", md: "50px" }}
+                w={{ base: "30px", md: "30px" }}
+                h={{ base: "30px", md: "30px" }}
                 src={Transfer}
                 alt="Bank Transfer"
               />
               <Box ml="10px" p="10px">
-                <Text fontSize={["lg", "xl"]} fontFamily="heading">
+                <Text  fontSize={{ base: "16px", md: "18px" }} fontFamily="heading">
                   Via Bank Transfer
                 </Text>
-                <Text fontSize={{ base: "12px", md: "18px" }} fontFamily="body">
+                <Text fontSize={{ base: "10px", md: "12px" }} fontFamily="body">
                   Bank transfer to your wallet account
                 </Text>
               </Box>
-              <Image
+              {/* <Image
                 ml="15px"
                 mt="25px"
                 w="30px"
                 h="30px"
                 src={RightArrow}
                 alt="Proceed"
-              />
+              /> */}
             </Flex>
           </Box>
           <Box
@@ -137,8 +137,8 @@ const FundWalletModal = ({
             mt="15px"
             // mx="8px"
             border="1px solid black"
-            h={{ base: "10vh", md: "12vh" }}
-            w={{ base: "80vw", md: "37vw" }}
+            h={{ base: "10vh", md: "10vh" }}
+            w={{ base: "80vw", md: "25vw" }}
             mb="15px"
             borderRadius="15px"
             onClick={onOnlinePayment}
@@ -151,21 +151,21 @@ const FundWalletModal = ({
               <Image
                 ml="15px"
                 mt="15px"
-                w={{ base: "30px", md: "50px" }}
-                h={{ base: "30px", md: "50px" }}
+                w={{ base: "30px", md: "30px" }}
+                h={{ base: "30px", md: "30px" }}
                 src={Online}
                 alt="Online Payment"
               />
               <Box ml="10px" p="10px">
-                <Text fontSize={["lg", "xl"]} fontFamily="heading">
+                <Text fontSize={{ base: "16px", md: "18px" }} fontFamily="heading">
                   Online Payment
                 </Text>
-                <Text fontSize={{ base: "12px", md: "18px" }} fontFamily="body">
+                <Text fontSize={{ base: "10px", md: "12px" }} fontFamily="body">
                   Fund your wallet with a debit card
                 </Text>
               </Box>
-              <Image
-                ml={{ base: "auto", md: "70px" }}
+              {/* <Image
+                ml={{ base: "auto", md: "15px" }}
                 mt="25px"
                 w="30px"
                 h="30px"
@@ -173,9 +173,9 @@ const FundWalletModal = ({
                 alt="Proceed"
                 style={{
                   cursor: "pointer",
-                }}
-                // _hover={{ color: "#A210C6" }}
-              />
+                }} */}
+                {/* // _hover={{ color: "#A210C6" }} */}
+              {/* /> */}
             </Flex>
           </Box>
         </ModalBody>
