@@ -79,12 +79,9 @@ const CustomizeServicePage = () => {
     setConfirmationModalOpen(false);
   };
 
-  const formattedCost = (cost) => {
-    // Format the costOfService as naira with the last two zeros separated by a dot
-    const formattedCost =
-      "₦ " + cost.toLocaleString("en-NG", { maximumFractionDigits: 2 });
-
-    return formattedCost;
+  const formattedCost = (amount) => {
+    const num = Number(amount);
+    return "₦ " + num.toLocaleString();
   };
 
   const handleConfirmation = async () => {
@@ -243,12 +240,14 @@ const CustomizeServicePage = () => {
               <Flex alignItems="center">
                 <Text
                   fontSize={{ base: "12px" }}
+                  fontFamily="body"
                   ml={{ base: "20px", md: "60px" }}
                   marginTop="30px"
                 >
                   You have no customized plan yet. Click{" "}
                 </Text>
                 <Text
+                 fontFamily="body"
                   style={{
                     color: "#A210C6",
                     fontStyle: "italic",
@@ -294,6 +293,7 @@ const CustomizeServicePage = () => {
                       <Box>
                         <Box>
                           <Text
+                           fontFamily="heading"
                             fontSize={{ base: "18px", md: "28px" }}
                             fontWeight="bold"
                             color="#A210C6"
@@ -301,7 +301,7 @@ const CustomizeServicePage = () => {
                             {`${service.name}`}
                           </Text>
 
-                          <Flex>
+                          <Flex  fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Frequency:
                             </Text>
@@ -310,7 +310,7 @@ const CustomizeServicePage = () => {
                             </Text>
                           </Flex>
 
-                          <Flex>
+                          <Flex  fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Preferred Caregiver:
                             </Text>
@@ -319,7 +319,7 @@ const CustomizeServicePage = () => {
                             </Text>
                           </Flex>
 
-                          <Flex>
+                          <Flex  fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Duration:
                             </Text>
@@ -328,7 +328,7 @@ const CustomizeServicePage = () => {
                               color="black"
                             >{`${service.duration}`}</Text>
                           </Flex>
-                          <Flex>
+                          <Flex  fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Shift:
                             </Text>
@@ -338,17 +338,17 @@ const CustomizeServicePage = () => {
                             >{`${service.shift}`}</Text>
                           </Flex>
 
-                          <Flex>
+                          <Flex  fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Cost of service:
                             </Text>
                             <Text ml={{ base: "5px", md: "5px" }} color="black">
-                              {`${formattedCost(service.costOfService)}.00`}
+                              {`${formattedCost(service.costOfService)}`}
                             </Text>
                           </Flex>
                         </Box>
                       </Box>
-                      <Box marginTop="3px">
+                      <Box  fontFamily="body"  marginTop="3px">
                         <Flex direction="column">
                           <Text
                             fontWeight="bold"
@@ -366,7 +366,7 @@ const CustomizeServicePage = () => {
                         </Flex>
                       </Box>
 
-                      <Flex marginTop="10px">
+                      <Flex  fontFamily="body" marginTop="10px">
                         <Text
                           fontSize={{ base: "14", md: "16px" }}
                           fontWeight="bold"
@@ -383,32 +383,21 @@ const CustomizeServicePage = () => {
                         </Text>
                       </Flex>
                       <Flex
-                        margin="20px"
+                        // margin="20px"
                         justifyContent="space-between"
                         marginTop="20px"
                       >
-                        <Button
-                          fontSize="16px"
-                          leftIcon={<CheckIcon />}
-                          color="#A210C6"
-                          onClick={handleOpenAppointmentModal}
-                          style={{
-                            fontStyle: "italic",
-                            cursor: "pointer",
-                          }}
-                          _hover={{ color: "#A210C6" }}
-                          bg="none"
-                        >
-                          Book plan
-                        </Button>
-                        <Button
-                          marginLeft="120px"
+                         <Button
+                        w={{ base: "50px", md: "120px" }}
+                         fontFamily="body"
+                         
+                          border="2px solid red"
                           fontSize="16px"
                           leftIcon={<DeleteIcon />}
                           color="red"
                           onClick={() => handleDeleteService(service.id)}
                           style={{
-                            fontStyle: "italic",
+                            // fontStyle: "italic",
                             cursor: "pointer",
                           }}
                           _hover={{ color: "" }}
@@ -416,6 +405,23 @@ const CustomizeServicePage = () => {
                         >
                           Delete plan
                         </Button>
+                        <Button
+                         fontFamily="body"
+                         w={{ base: "50px", md: "120px" }}
+                          fontSize="16px"
+                          leftIcon={<CheckIcon />}
+                          color="white"
+                          onClick={handleOpenAppointmentModal}
+                          style={{
+                            // fontStyle: "italic",
+                            cursor: "pointer",
+                          }}
+                          _hover={{ color: "#A210C6" }}
+                          bg="#A210C6"
+                        >
+                          Book plan
+                        </Button>
+                       
                       </Flex>
                     </Box>
                   </Box>

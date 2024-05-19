@@ -120,12 +120,19 @@ export default function PendingApp() {
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      undefined,
-      options
-    );
+    
+    // Create a new Date object from the dateString
+    const date = new Date(dateString);
+    
+    // Add one hour to the date
+    date.setHours(date.getHours() + 1);
+    
+    // Format the date
+    const formattedDate = date.toLocaleDateString(undefined, options);
+    
     return formattedDate;
   };
+  
 
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
@@ -178,13 +185,16 @@ export default function PendingApp() {
       const response = await axios.post(apiUrl, {}, { headers });
 
       if (response.data.success) {
-        toast.success(response.data.message);
-
-        localStorage.removeItem("appointmentId");
+        toast({
+          title: response.data.message,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
         fetchData();
+        setDetailsModalOpen(false);
       } else {
         toast.error("error canceling appointment");
-
         console.error("Error canceling appointment");
       }
     } catch (error) {
@@ -196,8 +206,8 @@ export default function PendingApp() {
 
   const handleViewMore = async (id) => {
     toast({
-      title: "Please wait",
-      description: "Fetching appointment details...",
+      title: "Please wait...",
+      // description: "Fetching appointment details...",
       status: "info",
       duration: 3000,
       isClosable: true,
@@ -221,6 +231,11 @@ export default function PendingApp() {
       options
     );
     return formattedDateTime;
+  };
+
+  const formattedCost = (amount) => {
+    const num = Number(amount);
+    return "₦ " + num.toLocaleString();
   };
 
   return (
@@ -569,7 +584,7 @@ export default function PendingApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      ₦{selectedAppointment.costOfService || "Not availabe"}.00
+                      {formattedCost(selectedAppointment.costOfService) || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -625,10 +640,10 @@ export default function PendingApp() {
                 color="white"
                 _hover={{ color: "" }}
                 leftIcon={<EditIcon />}
-                fontSize={{ base: "12px", md: "14px" }}
+                fontSize={{ base: "12px", md: "16px" }}
                 onClick={handleEditAppointment}
               >
-                Edit appointment
+                Edit 
               </Button>
               <Button
                 fontSize={{ base: "13px", md: "14px" }}
@@ -638,7 +653,7 @@ export default function PendingApp() {
                 _hover={{ color: "" }}
                 onClick={() => handleCancelAppointment(selectedAppointment.id)}
               >
-                Cancel appointment
+                Cancel 
               </Button>
             </DrawerFooter>
           </DrawerContent>

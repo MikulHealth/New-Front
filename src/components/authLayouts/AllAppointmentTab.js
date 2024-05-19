@@ -60,12 +60,19 @@ export default function AppointmentTab() {
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      undefined,
-      options
-    );
+    
+    // Create a new Date object from the dateString
+    const date = new Date(dateString);
+    
+    // Add one hour to the date
+    date.setHours(date.getHours() + 1);
+    
+    // Format the date
+    const formattedDate = date.toLocaleDateString(undefined, options);
+    
     return formattedDate;
   };
+  
 
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
@@ -111,8 +118,8 @@ export default function AppointmentTab() {
 
   const handleViewMore = async (id) => {
     toast({
-      title: "Please wait",
-      description: "Fetching appointment details...",
+      title: "Please wait...",
+      // description: "Fetching appointment details...",
       status: "info",
       duration: 3000,
       isClosable: true,
@@ -136,6 +143,11 @@ export default function AppointmentTab() {
     setDetailsModalOpen(false);
     // navigate("/appointment");
     window.location.reload()
+  };
+
+  const formattedCost = (amount) => {
+    const num = Number(amount);
+    return "₦ " + num.toLocaleString();
   };
 
 
@@ -313,7 +325,7 @@ export default function AppointmentTab() {
       {detailsModalOpen && selectedAppointment && (
         <Drawer
           isOpen={detailsModalOpen}
-          onClose={() => setDetailsModalOpen(false)}
+          onClose={closeDetailsDrawer}
           placement="right"
           size="md"
         >
@@ -475,7 +487,7 @@ export default function AppointmentTab() {
                     Cost of service
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    ₦{selectedAppointment.costOfService || "Not available"}.00
+                    {formattedCost(selectedAppointment.costOfService) || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
