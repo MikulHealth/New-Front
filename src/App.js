@@ -64,13 +64,13 @@ function App() {
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/settings/edit-profile" element={<EdithProfilePage />} />
-          <Route path="/settings/change-password" element={<ChangePasswordPage />} />
+          <Route path="/edit-profile" element={<EdithProfilePage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route
-            path="/settings/notification-settings"
+            path="/notification-settings"
             element={<NotificationSettingsPage />}
           />
-          <Route path="/settings/help" element={<HelpPage />} />
+          <Route path="/help" element={<HelpPage />} />
           <Route path="/services" element={<ServicePage />} />
           <Route path="/credit" element={<LeftSideBar />} />
           <Route path="/debit" element={<DebitPage />} />

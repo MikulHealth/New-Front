@@ -100,28 +100,28 @@ const MobileFooter = () => {
               fontFamily="heading"
               textDecoration={
                 location.pathname === "/settings" ||
-                location.pathname === "/settings/edit-profile" ||
-                location.pathname === "/settings/change-password" ||
-                location.pathname === "/settings/notification-settings" ||
-                location.pathname === "/settings/help"
+                location.pathname === "/edit-profile" ||
+                location.pathname === "/change-password" ||
+                location.pathname === "/notification-settings" ||
+                location.pathname === "/help"
                   ? "underline"
                   : ""
               }
               fontWeight={
                 location.pathname === "/settings" ||
-                location.pathname === "/settings/edit-profile" ||
-                location.pathname === "/settings/change-password" ||
-                location.pathname === "/settings/notification-settings" ||
-                location.pathname === "/settings/help"
+                location.pathname === "/edit-profile" ||
+                location.pathname === "/change-password" ||
+                location.pathname === "/notification-settings" ||
+                location.pathname === "/help"
                   ? "bold"
                   : ""
               }
               color={
                 location.pathname === "/settings" ||
-                location.pathname === "/settings/edit-profile" ||
-                location.pathname === "/settings/change-password" ||
-                location.pathname === "/settings/notification-settings" ||
-                location.pathname === "/settings/help"
+                location.pathname === "/edit-profile" ||
+                location.pathname === "/change-password" ||
+                location.pathname === "/notification-settings" ||
+                location.pathname === "/help"
                   ? "#A210C6"
                   : ""
               }

@@ -11,6 +11,8 @@ import {
   Text,
   Flex,
   Image,
+  useMediaQuery,
+  extendTheme,
 } from "@chakra-ui/react";
 import CardPayment from "../../assets/OnlinePayment.svg";
 import Wallet from "../../assets/WalletIcon.svg";
@@ -19,10 +21,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetCurrentUser } from "../../apiCalls/UserApis";
 import InsufficientFundsModal from "./InsufficientFundsModal";
 
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Gill Sans MT, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
+
 function PaymentModal({ isOpen, onClose, paymentData }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+  const modalWidth = isLargerThan768 ? "400px" : "90vw";
   const balance = user?.walletBalance;
   const [amountNeeded, setAmountNeeded] = useState(0);
   const [showInsufficientModal, setShowInsufficientModal] = useState(false);
@@ -82,12 +102,22 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <Modal theme={customTheme} isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
-        <ModalContent bg="#A210C6">
+        <ModalContent
+          width={modalWidth}
+          borderRadius="25px 25px 25px 0px"
+          bg="#A210C6"
+        >
           <ModalCloseButton color="white" />
-          <ModalHeader mt="20px" color="white" textAlign="center">
-            The Cost for the service is ₦
+          <ModalHeader
+            fontFamily="heading"
+            fontSize={{ base: "18px", md: "20px" }}
+            mt="20px"
+            color="white"
+            textAlign="center"
+          >
+            The cost for the service is ₦
             {formatAmount(paymentData.costOfService)} <br></br>
             How do you want to pay?
           </ModalHeader>
@@ -114,11 +144,15 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                   alt="Settings"
                 />
                 <Box marginLeft="10px" padding="10px" paddingBottom="10px">
-                  <Text fontSize={["lg", "xl"]} fontWeight="bold">
+                  <Text
+                    fontFamily="heading"
+                    fontSize={["lg", "xl"]}
+                    fontWeight="bold"
+                  >
                     Via Wallet
                   </Text>
-                  <Text fontSize={["sm", "md"]}>
-                    Make payment directly from your Mikul Health wallet
+                  <Text fontFamily="body" fontSize={["sm", "md"]}>
+                    Pay with your Mikul Health wallet
                   </Text>
                 </Box>
                 {/* <Image
@@ -136,6 +170,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
             <Box
               bg="white"
               marginTop="15px"
+              fontFamily="body"
               marginLeft="8px"
               borderRadius="15px"
               onClick={handleCardPayment}
@@ -155,11 +190,15 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                   alt="Settings"
                 />
                 <Box marginLeft="10px" padding="10px" paddingBottom="10px">
-                  <Text fontSize={["lg", "xl"]} fontWeight="bold">
+                  <Text
+                    fontFamily="heading"
+                    fontSize={["lg", "xl"]}
+                    fontWeight="bold"
+                  >
                     Card Payment
                   </Text>
-                  <Text fontSize={["sm", "md"]}>
-                    Make payment for booking with card
+                  <Text fontFamily="body" fontSize={["sm", "md"]}>
+                    Pay with your card
                   </Text>
                 </Box>
                 {/* <Image

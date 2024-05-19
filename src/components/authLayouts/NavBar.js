@@ -95,10 +95,10 @@ export default function NavBar() {
     "/settings": "Settings",
     "/logout": "Logout",
     "/customize-service": "Customize Service",
-    "/settings/edit-profile": "Settings",
-    "/settings/change-password": "Settings",
-    "/settings/notification-settings": "Settings",
-    "/settings/help": "Help",
+    "/edit-profile": "Settings",
+    "/change-password": "Settings",
+    "/notification-settings": "Settings",
+    "/help": "Help",
   };
 
   const pageTitle = pageTitles[location.pathname] || "Unknown Page";
@@ -116,6 +116,7 @@ export default function NavBar() {
                 <NavLink to="/dashboard" style={listItemStyle}>
                   <Flex
                    fontFamily="heading"
+                   fontSize={{base: "18", md: "28px"}}
                     color={location.pathname === "/dashboard" ? "#A210C6" : ""}
                     fontWeight={
                       location.pathname === "/dashboard" ? "bold" : ""
@@ -133,6 +134,7 @@ export default function NavBar() {
                 <NavLink to="/appointment" style={listItemStyle}>
                   <Flex
                    fontFamily="heading"
+                   fontSize={{base: "18", md: "28px"}}
                     color={
                       location.pathname === "/appointment" ? "#A210C6" : ""
                     }
@@ -155,6 +157,7 @@ export default function NavBar() {
 
                 <NavLink to="/wallet" style={listItemStyle}>
                   <Flex
+                   fontSize={{base: "18", md: "28px"}}
                    fontFamily="heading"
                     color={location.pathname === "/wallet" ? "#A210C6" : ""}
                     fontWeight={location.pathname === "/wallet" ? "bold" : ""}
@@ -170,6 +173,7 @@ export default function NavBar() {
 
                 <NavLink to="/services" style={listItemStyle}>
                   <Flex
+                   fontSize={{base: "18", md: "28px"}}
                    fontFamily="heading"
                     color={
                       location.pathname === "/services" ||
@@ -198,6 +202,7 @@ export default function NavBar() {
 
                 <NavLink to="/settings" style={listItemStyle}>
                   <Flex
+                   fontSize={{base: "18", md: "28px"}}
                    fontFamily="heading"
                     style={listTextStyle}
                     marginLeft="5px"
@@ -240,6 +245,7 @@ export default function NavBar() {
                 </NavLink>
                 <NavLink onClick={handleConfirmLogout} style={listItemStyle}>
                   <Flex
+                   fontSize={{base: "18", md: "28px"}}
                    fontFamily="heading"
                     style={{
                       cursor: "pointer",
@@ -284,7 +290,7 @@ export default function NavBar() {
               flexDirection={{ base: "column", md: "row" }}
             >
               <Heading
-                fontSize={{ base: "16", md: "24px" }}
+                fontSize={{ base: "18", md: "28px" }}
                 color="#A210C6"
                 fontWeight="bold"
                 fontFamily="heading"
@@ -304,8 +310,9 @@ export default function NavBar() {
             </Flex>
           ) : (
             <Heading
+            
               justifyContent="flex-start"
-              fontSize={{ base: "16", md: "24px" }}
+              fontSize={{ base: "18", md: "28px" }}
               color="#A210C6"
               fontWeight="bold"
               

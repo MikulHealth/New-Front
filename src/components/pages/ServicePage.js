@@ -132,7 +132,7 @@ const ServicePage = () => {
                 >
                   <Flex>
                     <Box margin="25px">
-                      <Text fontSize={{ base: "16px", md: "20px" }}>
+                      <Text fontFamily="heading" fontSize={{ base: "16px", md: "20px" }}>
                         {service.title}
                       </Text>
                     </Box>
@@ -165,7 +165,7 @@ const ServicePage = () => {
                 >
                   <Flex mb={{ base: "30px", md: "0" }}>
                     <Box margin="25px">
-                      <Text fontSize={{ base: "16px", md: "20px" }}>
+                      <Text fontFamily="heading" fontSize={{ base: "16px", md: "20px" }}>
                         Customize service
                       </Text>
                     </Box>

@@ -88,27 +88,29 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
     "Dressing changes",
   ];
 
-
   const calculateCost = useCallback(() => {
     let costPerDay = 0;
     if (!medicSpecialization || !shift || !duration) {
-      // toast.error("Kindly fill in the right input");
-       return "N/A"; 
+      return "N/A"; 
     }
   
-    if (medicSpecialization === "Nurse Assistant") {
-      costPerDay = 6000;
-    } else {
-      costPerDay = 12000;
-    }
-  
-    if (shift === "Day Shift") {
-      costPerDay *= 1;
-    } else if (shift === "Live-in") {
+    if (shift === "Night Shift (12hrs)") {
+      if (medicSpecialization === "Nurse Assistant") {
+        costPerDay = 12000;
+      } else if (medicSpecialization === "Registered Nurse" || medicSpecialization === "Registered Nurse/Midwife") {
+        costPerDay = 15000;
+      }
+    } else if (shift === "Day Shift (8hrs)") {
+      if (medicSpecialization === "Nurse Assistant") {
+        costPerDay = 6000;
+      } else {
+        costPerDay = 12000;
+      }
+    } else if (shift === "Live-in (24hrs)") {
       if (medicSpecialization === "Nurse Assistant") {
         costPerDay = 10000;
       } else {
-        costPerDay = 16000;
+        costPerDay = 20000;
       }
     }
   
@@ -122,10 +124,12 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
     return totalCost;
   }, [medicSpecialization, shift, duration]);
   
-    useEffect(() => {
-      const calculatedCost = calculateCost();
-      setCostOfService(calculatedCost);
-    }, [calculateCost]);  
+  useEffect(() => {
+    const calculatedCost = calculateCost();
+    setCostOfService(calculatedCost);
+  }, [calculateCost]);
+
+  
   const formattedCost = (cost) => {
     const formattedCost =
       "₦ " + cost.toLocaleString("en-NG");
@@ -259,15 +263,16 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
                   onChange={(e) => setShift(e.target.value)}
                 >
                   <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
+                  <option value="Night shift (12hrs)">Night Shift (12hrs)</option>
                   <option value="Live-in (24hrs)">Live-in (24hrs)</option>
                 </Select>
               </FormControl>
               <FormControl mb={4}>
                 <FormLabel fontWeight="bold">
-                  Duration in number(s): (daily)
+                  Duration in number(s): 
                 </FormLabel>
                 <Input
-                  placeholder="How many..."
+                  placeholder="How many days?"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
                 />

@@ -34,8 +34,7 @@ import {
   TabList,
   TabPanels,
   TabPanel,
-
-  // Divider,
+  useMediaQuery,
   ModalCloseButton,
 } from "@chakra-ui/react";
 import Transfer from "../../assets/TransferPayment.svg";
@@ -68,27 +67,35 @@ const FundWalletModal = ({
   onBankTransfer,
   onOnlinePayment,
 }) => {
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+  const modalWidth = isLargerThan768 ? "400px" : "90vw";
+
   return (
     <Modal
+      theme={customTheme}
       isOpen={isOpen}
       onClose={onClose}
       size={{ base: "", md: "xl" }}
       borderRadius="15px"
     >
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader mx={{ base: "10px", md: "200px" }}>
+      <ModalContent
+        width={modalWidth}
+        borderRadius="25px 25px 25px 0px"
+        justifyContent="center"
+      >
+        <ModalHeader fontFamily="heading" >
           Fund Wallet
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody >
           <Box
             color="white"
             bg="#A210C6"
-            mx="8px"
+            // mx="8px"
             border="1px solid black"
-            h={{ base: "15vh", md: "12vh" }}
-            w={{ base: "90vw", md: "37vw" }}
+            h={{ base: "10vh", md: "12vh" }}
+            w={{ base: "80vw", md: "37vw" }}
             borderRadius="15px"
             pb="5px"
             onClick={onBankTransfer}
@@ -101,14 +108,18 @@ const FundWalletModal = ({
               <Image
                 ml="15px"
                 mt="15px"
-                w="50px"
-                h="50px"
+                w={{ base: "30px", md: "50px" }}
+                h={{ base: "30px", md: "50px" }}
                 src={Transfer}
                 alt="Bank Transfer"
               />
               <Box ml="10px" p="10px">
-                <Text>Via Bank Transfer</Text>
-                <Text>Direct bank transfer to your Mikul wallet account</Text>
+                <Text fontSize={["lg", "xl"]} fontFamily="heading">
+                  Via Bank Transfer
+                </Text>
+                <Text fontSize={{ base: "12px", md: "18px" }} fontFamily="body">
+                  Bank transfer to your wallet account
+                </Text>
               </Box>
               <Image
                 ml="15px"
@@ -124,10 +135,10 @@ const FundWalletModal = ({
             color="white"
             bg="#A210C6"
             mt="15px"
-            mx="8px"
+            // mx="8px"
             border="1px solid black"
-            h={{ base: "15vh", md: "12vh" }}
-            w={{ base: "90vw", md: "37vw" }}
+            h={{ base: "10vh", md: "12vh" }}
+            w={{ base: "80vw", md: "37vw" }}
             mb="15px"
             borderRadius="15px"
             onClick={onOnlinePayment}
@@ -140,14 +151,18 @@ const FundWalletModal = ({
               <Image
                 ml="15px"
                 mt="15px"
-                w="50px"
-                h="50px"
+                w={{ base: "30px", md: "50px" }}
+                h={{ base: "30px", md: "50px" }}
                 src={Online}
                 alt="Online Payment"
               />
               <Box ml="10px" p="10px">
-                <Text>Online Payment</Text>
-                <Text>Fund your Mikul wallet with a debit card</Text>
+                <Text fontSize={["lg", "xl"]} fontFamily="heading">
+                  Online Payment
+                </Text>
+                <Text fontSize={{ base: "12px", md: "18px" }} fontFamily="body">
+                  Fund your wallet with a debit card
+                </Text>
               </Box>
               <Image
                 ml={{ base: "auto", md: "70px" }}
@@ -173,15 +188,15 @@ const BankTransferModal = ({ isOpen, onClose, bankDetails }) => {
   const { hasCopied, onCopy } = useClipboard(bankDetails.accountNumber);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal theme={customTheme}  isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader mx={{ base: "10px", md: "130px" }}>
+        <ModalHeader  fontFamily="heading">
           Bank Transfer
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <Text mt="-10px">
+        <ModalBody fontFamily="body">
+          <Text  mt="-10px">
             This is your Mikul Health account number. Please refresh this page
             after making a transfer to this account number either via your bank
             app or bank USSD code
@@ -315,10 +330,10 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
 
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Online Payment</ModalHeader>
+        <ModalHeader fontFamily="heading">Online Payment</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl>
+          <FormControl fontFamily="body">
             <FormLabel>Input amount:</FormLabel>
             <Input
               type="number"
@@ -432,7 +447,7 @@ const WalletPage = () => {
             borderRadius="20px"
           />
         ) : (
-          <Box >
+          <Box>
             <Flex
               marginTop="10px"
               border="1px solid gray"
@@ -584,7 +599,7 @@ const WalletPage = () => {
               className="transaction-tabs"
             >
               <VStack ml={{ base: "0", md: "0px" }} w="90%">
-                <Tabs colorScheme="purple.100" mt={{ base: ""}}>
+                <Tabs colorScheme="purple.100" mt={{ base: "" }}>
                   <TabList justifyContent="space-between">
                     <Tab
                       fontSize={{ base: "12px", md: "16px" }}

@@ -12,8 +12,27 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
+  extendTheme,
 } from "@chakra-ui/react";
 import BookAppointmentModal from "../sections/BookAppointment";
+
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
+
 const ElderlyCareModal = ({ isOpen, onClose }) => {
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
 
@@ -25,24 +44,26 @@ const ElderlyCareModal = ({ isOpen, onClose }) => {
     setShowAppointmentModal(true);
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="full">
+    <Modal theme={customTheme} isOpen={isOpen} onClose={onClose} size="full">
       <ModalOverlay />
       <ModalContent marginTop="30px">
-        <ModalHeader textAlign="center">ELDERLY CARE</ModalHeader>
+        <ModalHeader fontFamily="heading" textAlign="center">ELDERLY CARE</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text fontWeight="bold" textAlign="center" color="#A210C6">
+          <Text fontFamily="heading" fontWeight="bold" textAlign="center" color="#A210C6">
             STANDARD ALL-INCLUSIVE CARE FOR AGED PEOPLE OVER 60 YEARS OLD.
           </Text>
 
           <Flex
             flexWrap={{ base: "wrap" }}
+            fontFamily="body"
             marginBottom="30px"
             mt={{ base: "20px", md: "50px" }}
             ml={{ md: "90px" }}
             alignItems="center"
           >
             <Box
+           
               borderColor="#A210C6"
               borderRadius="10px"
               style={{
@@ -217,6 +238,7 @@ const ElderlyCareModal = ({ isOpen, onClose }) => {
             </Box>
           </Flex>
           <Flex
+           fontFamily="body"
             flexWrap={{ base: "wrap" }}
             marginBottom="30px"
             mt={{ base: "30px", md: "50px" }}

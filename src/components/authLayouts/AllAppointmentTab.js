@@ -2,77 +2,123 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LoadingSpinner from "../../utils/Spiner";
 import BookAppointmentModal from "../sections/BookAppointment";
-import { CloseIcon } from "@chakra-ui/icons";
+import { EditIcon, CheckIcon, CloseIcon, WarningIcon } from "@chakra-ui/icons";
+import PaymentModal from "../sections/PaymentMethod";
+import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
+import { ToastContainer, toast } from "react-toastify";
 import {
   VStack,
   Drawer,
   DrawerOverlay,
   DrawerContent,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
   DrawerHeader,
   DrawerBody,
   Button,
-  useToast,
   Box,
   Text,
   Flex,
   Divider,
+  useMediaQuery,
+  DrawerFooter,
 } from "@chakra-ui/react";
 
 export default function AppointmentTab() {
-  const toast = useToast();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [paymentData, setPaymentData] = useState({});
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [cancellingAppointmentId, setCancellingAppointmentId] = useState(null);
+
+  const handleCancelModalClose = () => {
+    setConfirmationModalOpen(false);
+  };
+
+  const fetchData = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      };
+
+      const response = await axios.get(
+        "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
+        config
+      );
+
+      if (response.data.success) {
+        const sortedAppointments = response.data.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setAppointments(sortedAppointments);
+      } else {
+        console.error("Failed to fetch appointments");
+      }
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        };
-
-        const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
-          config
-        );
-
-        if (response.data.success) {
-          const sortedAppointments = response.data.data.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-          );
-          setAppointments(sortedAppointments);
-        } else {
-          console.error("Failed to fetch appointments");
-        }
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [toast]);
+  }, []);
+
+  const handleConfirmation = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      // const apiUrl = `http://localhost:8080/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
+      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.post(apiUrl, {}, { headers });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        fetchData();
+        setDetailsModalOpen(false);
+      } else {
+        toast.error("error canceling appointment");
+        console.error("Error canceling appointment");
+      }
+    } catch (error) {
+      console.error("An error occurred while canceling appointment:", error);
+    } finally {
+      setConfirmationModalOpen(false);
+    }
+  };
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-    
+
     // Create a new Date object from the dateString
     const date = new Date(dateString);
-    
+
     // Add one hour to the date
     date.setHours(date.getHours() + 1);
-    
+
     // Format the date
     const formattedDate = date.toLocaleDateString(undefined, options);
-    
+
     return formattedDate;
   };
-  
 
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
@@ -117,16 +163,8 @@ export default function AppointmentTab() {
   };
 
   const handleViewMore = async (id) => {
-    toast({
-      title: "Please wait...",
-      // description: "Fetching appointment details...",
-      status: "info",
-      duration: 3000,
-      isClosable: true,
-    });
-
+    toast.info("Please wait...");
     await fetchAndDisplayAppointmentDetails(id);
-    console.log(`View more details for appointment with ID: ${id}`);
   };
 
   const handleOpenAppointmentModal = () => {
@@ -137,12 +175,10 @@ export default function AppointmentTab() {
     setShowAppointmentModal(false);
   };
 
-
   const closeDetailsDrawer = () => {
-    
     setDetailsModalOpen(false);
     // navigate("/appointment");
-    window.location.reload()
+    // window.location.reload()
   };
 
   const formattedCost = (amount) => {
@@ -150,6 +186,32 @@ export default function AppointmentTab() {
     return "₦ " + num.toLocaleString();
   };
 
+  const handlePayment = (selectedAppointment) => {
+    setPaymentData({
+      costOfService: selectedAppointment.costOfService,
+      appointmentId: selectedAppointment.id,
+      beneficiary: `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`,
+    });
+    setTimeout(() => {
+      setIsPaymentModalOpen(true);
+    }, 1000);
+  };
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+  const modalWidth = isLargerThan768 ? "400px" : "90vw";
+
+  const handleEditAppointment = (id) => {
+    setEditModalOpen(true);
+    setDetailsModalOpen(false);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+  };
+
+  const handleCancelAppointment = (appointmentId) => {
+    setCancellingAppointmentId(appointmentId);
+    setConfirmationModalOpen(true);
+  };
 
   return (
     <Box
@@ -158,6 +220,17 @@ export default function AppointmentTab() {
       h={{ base: "60vh", md: "60vh" }}
       overflowY="scroll"
     >
+       <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <VStack align="start" spacing={4}>
         {loading ? (
           <LoadingSpinner />
@@ -246,9 +319,12 @@ export default function AppointmentTab() {
                     >
                       {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                     </Text>
-                    <Text textAlign="left"  maxW={{ base: "50px", md: "100px" }}>{`${appointment.shift} `}</Text>
                     <Text
-                    textAlign="left"
+                      textAlign="left"
+                      maxW={{ base: "50px", md: "100px" }}
+                    >{`${appointment.shift} `}</Text>
+                    <Text
+                      textAlign="left"
                       maxW={{ base: "60px", md: "100px" }}
                       wordWrap="break-word"
                     >{`${appointment.servicePlan} `}</Text>
@@ -271,7 +347,7 @@ export default function AppointmentTab() {
                       }
                     >
                       <Text
-                      textAlign="center"
+                        textAlign="center"
                         fontSize={{ base: "10px", md: "14px" }}
                         color={
                           appointment.appointmentCompleted
@@ -347,6 +423,18 @@ export default function AppointmentTab() {
                 leftIcon={<CloseIcon />}
               />
             </DrawerHeader>
+            {!selectedAppointment.paid && (
+              <Button
+                ml={{ base: "5px" }}
+                bg="green.400"
+                color="white"
+                _hover={{ color: "" }}
+                onClick={() => handlePayment(selectedAppointment)}
+                leftIcon={<CheckIcon />}
+              >
+                Pay for appointment
+              </Button>
+            )}
             <DrawerBody overflowY="auto">
               <Flex
                 flexDirection="column"
@@ -487,7 +575,8 @@ export default function AppointmentTab() {
                     Cost of service
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formattedCost(selectedAppointment.costOfService) || "Not available"}
+                    {formattedCost(selectedAppointment.costOfService) ||
+                      "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -538,12 +627,85 @@ export default function AppointmentTab() {
                 <Divider my={4} borderColor="gray.500" />
               </Box>
             </DrawerBody>
+            <DrawerFooter justifyContent="space-between">
+              {selectedAppointment.appointmentPending && (
+                <Button
+                  bg="#A210C6"
+                  color="white"
+                  _hover={{ color: "" }}
+                  leftIcon={<EditIcon />}
+                  onClick={handleEditAppointment}
+                >
+                  Edit
+                </Button>
+              )}
+              {selectedAppointment.appointmentPending && (
+                <Button
+                  bg="white"
+                  color="red.500"
+                  border="2px solid red"
+                  _hover={{ color: "" }}
+                  onClick={() =>
+                    handleCancelAppointment(selectedAppointment.id)
+                  }
+                >
+                  Cancel
+                </Button>
+              )}
+            </DrawerFooter>
           </DrawerContent>
         </Drawer>
+      )}
+      {confirmationModalOpen && (
+        <Modal
+          isOpen={confirmationModalOpen}
+          onClose={handleCancelModalClose}
+          size="md"
+        >
+          <ModalOverlay />
+          <ModalContent width={modalWidth} borderRadius="25px 25px 25px 0px">
+            <ModalHeader>
+              {" "}
+              <WarningIcon w={10} h={10} color="yellow.400" />
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              Are you sure you want to cancel this appointment? <br></br>
+              This action is irreversible.
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                bg="#A210C6"
+                color="white"
+                onClick={handleCancelModalClose}
+              >
+                No
+              </Button>
+              <Button
+                bg="gray.500"
+                color="white"
+                marginLeft="5px"
+                onClick={handleConfirmation}
+              >
+                Yes
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       )}
       <BookAppointmentModal
         isOpen={showAppointmentModal}
         onClose={handleCloseAppointmentModal}
+      />
+      <EditPendingAppointmentModal
+        isOpen={editModalOpen}
+        onClose={handleCloseEditModal}
+        appointmentDetails={selectedAppointment}
+      />
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        paymentData={paymentData}
       />
     </Box>
   );

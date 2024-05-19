@@ -24,7 +24,7 @@ import {
   ModalFooter,
   useMediaQuery,
   Button,
-  useToast,
+  // useToast,
   Box,
   Text,
   Flex,
@@ -32,11 +32,11 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import PaymentModal from "../sections/PaymentMethod";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function PendingApp() {
-  const toast = useToast();
+  // const toast = useToast();
   // const navigate = useNavigate();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
@@ -75,10 +75,9 @@ export default function PendingApp() {
   };
 
   const closeDetailsDrawer = () => {
-    
     setDetailsModalOpen(false);
     // navigate("/appointment");
-    window.location.reload()
+    // window.location.reload()
   };
 
   const handleCloseEditModal = () => {
@@ -120,19 +119,18 @@ export default function PendingApp() {
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-    
+
     // Create a new Date object from the dateString
     const date = new Date(dateString);
-    
+
     // Add one hour to the date
     date.setHours(date.getHours() + 1);
-    
+
     // Format the date
     const formattedDate = date.toLocaleDateString(undefined, options);
-    
+
     return formattedDate;
   };
-  
 
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
@@ -168,7 +166,6 @@ export default function PendingApp() {
 
   const handleCloseAppointmentModal = () => {
     setShowAppointmentModal(false);
-   
   };
 
   const handleConfirmation = async () => {
@@ -185,12 +182,7 @@ export default function PendingApp() {
       const response = await axios.post(apiUrl, {}, { headers });
 
       if (response.data.success) {
-        toast({
-          title: response.data.message,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
+        toast.success(response.data.message);
         fetchData();
         setDetailsModalOpen(false);
       } else {
@@ -205,16 +197,8 @@ export default function PendingApp() {
   };
 
   const handleViewMore = async (id) => {
-    toast({
-      title: "Please wait...",
-      // description: "Fetching appointment details...",
-      status: "info",
-      duration: 3000,
-      isClosable: true,
-    });
-
+    toast.info("Please wait...");
     await fetchAndDisplayAppointmentDetails(id);
-    console.log(`View more details for appointment with ID: ${id}`);
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -247,7 +231,7 @@ export default function PendingApp() {
     >
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -261,9 +245,9 @@ export default function PendingApp() {
           <LoadingSpinner />
         ) : pendingAppointments.length === 0 ? (
           <Text
-          w={{ base: "90vw", md: "60vw" }}
-          ml={{ base: "-8px", md: "-20px" }}
-          fontSize={{ base: "10px", md: "16px" }}
+            w={{ base: "90vw", md: "60vw" }}
+            ml={{ base: "-8px", md: "-20px" }}
+            fontSize={{ base: "12px", md: "16px" }}
           >
             No pending appointments yet. Click{" "}
             <button
@@ -284,13 +268,13 @@ export default function PendingApp() {
             to begin.
           </Text>
         ) : (
-          <Box >
+          <Box>
             <Flex
               mt="-10px"
               mb="50px"
               w={{ base: "90vw", md: "60vw" }}
               position="fixed"
-              ml={{base: "-8px", md: "-20px" }}
+              ml={{ base: "-8px", md: "-20px" }}
               bg="#D087E2"
               p={4}
               borderRadius="md"
@@ -313,7 +297,6 @@ export default function PendingApp() {
               spacing={4}
             >
               {pendingAppointments.map((appointment) => (
-               
                 <Box
                   style={{
                     cursor: "pointer",
@@ -321,25 +304,29 @@ export default function PendingApp() {
                   key={appointment.id}
                   onClick={() => handleViewMore(appointment.id)}
                   w={{ base: "85vw", md: "57vw" }}
-                
                   p={4}
                   borderBottom="1px solid #e2e8f0"
                   ml={{ base: "10px" }}
                 >
                   <Flex
-                 
                     fontSize={{ base: "10px", md: "14px" }}
                     textAlign="left"
                     ml={{ base: "-15px", md: "-16px" }}
                     justifyContent="space-between"
                   >
-                    <Text   maxW={{ base: "80px", md: "100px" }}
-                      wordWrap="break-word">
+                    <Text
+                      maxW={{ base: "80px", md: "100px" }}
+                      wordWrap="break-word"
+                    >
                       {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
                     </Text>
-                    <Text maxW={{ base: "50px", md: "120px" }}>{`${appointment.appointment.shift} `}</Text>
-                    <Text  maxW={{ base: "60px", md: "120px" }}
-                      wordWrap="break-word">{`${appointment.appointment.servicePlan} `}</Text>
+                    <Text
+                      maxW={{ base: "50px", md: "120px" }}
+                    >{`${appointment.appointment.shift} `}</Text>
+                    <Text
+                      maxW={{ base: "60px", md: "120px" }}
+                      wordWrap="break-word"
+                    >{`${appointment.appointment.servicePlan} `}</Text>
                     <Box
                       w={{ base: "50px", md: "97px" }}
                       h={{ base: "25px", md: "33px" }}
@@ -376,7 +363,9 @@ export default function PendingApp() {
                         fontSize={{ base: "10px", md: "14px" }}
                         textAlign="center"
                         color={
-                          appointment.appointment?.paid ? "#057B1F" : "black.500"
+                          appointment.appointment?.paid
+                            ? "#057B1F"
+                            : "black.500"
                         }
                       >
                         {appointment?.appointment.paid ? "Paid" : "Unpaid"}
@@ -406,26 +395,26 @@ export default function PendingApp() {
               fontWeight="bold"
               color="#A210C6"
             >
-              Details
-              {!selectedAppointment.paid && (
-                <Button
-                  fontSize={{ base: "12px", md: "14px" }}
-                  ml={{ base: "5px" }}
-                  bg="green.400"
-                  color="white"
-                  _hover={{ color: "" }}
-                  onClick={() => handlePayment(selectedAppointment)}
-                  leftIcon={<CheckIcon />}
-                >
-                  Pay for appointment
-                </Button>
-              )}
+              Appointment Details
               <Button
-                variant="ghost"
-                onClick={closeDetailsDrawer}
-                leftIcon={<CloseIcon />}
-              />
+              variant="ghost"
+              onClick={closeDetailsDrawer}
+              leftIcon={<CloseIcon />}
+            />
             </DrawerHeader>
+            {!selectedAppointment.paid && (
+              <Button
+                ml={{ base: "5px" }}
+                bg="green.400"
+                color="white"
+                _hover={{ color: "" }}
+                onClick={() => handlePayment(selectedAppointment)}
+                leftIcon={<CheckIcon />}
+              >
+                Pay for appointment
+              </Button>
+            )}
+          
             <DrawerBody>
               <Flex flexDirection="column">
                 <Flex justifyContent="space-between" alignItems="center">
@@ -584,7 +573,8 @@ export default function PendingApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formattedCost(selectedAppointment.costOfService) || "Not availabe"}
+                      {formattedCost(selectedAppointment.costOfService) ||
+                        "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -640,20 +630,20 @@ export default function PendingApp() {
                 color="white"
                 _hover={{ color: "" }}
                 leftIcon={<EditIcon />}
-                fontSize={{ base: "12px", md: "16px" }}
+                // fontSize={{ base: "12px", md: "16px" }}
                 onClick={handleEditAppointment}
               >
-                Edit 
+                Edit
               </Button>
               <Button
-                fontSize={{ base: "13px", md: "14px" }}
+                // fontSize={{ base: "13px", md: "14px" }}
                 bg="white"
                 color="red.500"
                 border="2px solid red"
                 _hover={{ color: "" }}
                 onClick={() => handleCancelAppointment(selectedAppointment.id)}
               >
-                Cancel 
+                Cancel
               </Button>
             </DrawerFooter>
           </DrawerContent>
@@ -686,7 +676,7 @@ export default function PendingApp() {
                 No
               </Button>
               <Button
-                bg="red.500"
+                bg="gray.500"
                 color="white"
                 marginLeft="5px"
                 onClick={handleConfirmation}

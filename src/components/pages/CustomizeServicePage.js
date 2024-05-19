@@ -218,7 +218,7 @@ const CustomizeServicePage = () => {
           marginTop="10px"
           ml={{ base: "-280px", md: "-830px" }}
           fontSize={{ base: "12px" }}
-          h={{ base: "3vh", md: "5vh" }}
+          // h={{ base: "3vh", md: "5vh" }}
           borderRadius="100px"
         >
           Back
@@ -294,7 +294,7 @@ const CustomizeServicePage = () => {
                         <Box>
                           <Text
                            fontFamily="heading"
-                            fontSize={{ base: "18px", md: "28px" }}
+                            fontSize={{ base: "22px", md: "28px" }}
                             fontWeight="bold"
                             color="#A210C6"
                           >
@@ -388,7 +388,7 @@ const CustomizeServicePage = () => {
                         marginTop="20px"
                       >
                          <Button
-                        w={{ base: "50px", md: "120px" }}
+                        // w={{ base: "50px", md: "120px" }}
                          fontFamily="body"
                          
                           border="2px solid red"
@@ -407,7 +407,7 @@ const CustomizeServicePage = () => {
                         </Button>
                         <Button
                          fontFamily="body"
-                         w={{ base: "50px", md: "120px" }}
+                        //  w={{ base: "50px", md: "120px" }}
                           fontSize="16px"
                           leftIcon={<CheckIcon />}
                           color="white"

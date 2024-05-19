@@ -12,6 +12,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  extendTheme,
   Flex,
   Button,
   Image,
@@ -23,21 +24,21 @@ import logo from "../../assets/Whitelogo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// const customTheme = extendTheme({
-//   components: {
-//     Link: {
-//       baseStyle: {
-//         _focus: {
-//           boxShadow: "none",
-//         },
-//       },
-//     },
-//   },
-//   fonts: {
-//     body: "Gill Sans MT, sans-serif",
-//     heading: "Gill Sans MT, sans-serif",
-//   },
-// });
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Gill Sans MT, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const PaymentConfirmationPage = () => {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ const PaymentConfirmationPage = () => {
   };
 
   const verifyPayment = async () => {
-    toast.warning("Please wait, while we verify your payment");
+    toast.info("Please wait, while we verify your payment");
     try {
       const token = localStorage.getItem("token");
       console.log("ID is " + appointmentId);
@@ -136,7 +137,7 @@ const PaymentConfirmationPage = () => {
   const paymentFormWidth = isLargerThan768 ? "50%" : "90%";
 
   return (
-    <Box height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
+    <Box theme={customTheme} height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -148,18 +149,19 @@ const PaymentConfirmationPage = () => {
         draggable
         pauseOnHover
       />
-      <Box mb={4}>
+      <Box margin={{base: "10px", md: "10px"}}>
         <Image src={logo} alt="Logo" w="100px" h="30px" />
       </Box>
       <Box color="white" mx="auto" w={paymentFormWidth}>
-        <Text fontSize="24px" fontWeight="bold" mb={4}>
+        <Text fontFamily="heading" fontSize={{base: "20px", md: "24px"}} fontWeight="bold" mb={4}>
           Confirm Payment
         </Text>
         <form onSubmit={handlePayment}>
-          <Box color="black" p={4} bg="white" borderRadius="xl">
-            <Text fontSize="20px" mb={4}>
+          <Box fontSize={{base: "12px", md: "18px"}} color="black" p={4} bg="white" borderRadius="xl">
+            <Text fontFamily="body"  mb={4}>
               Hi {user?.firstName}, kindly pay the sum of{" "}
               <Text
+              fontFamily="body"
                 as="span"
                 textDecoration="underline"
                 fontWeight="bold"
@@ -169,6 +171,7 @@ const PaymentConfirmationPage = () => {
               </Text>{" "}
               to proceed with your booking for{" "}
               <Text
+               fontFamily="body"
                 as="span"
                 textDecoration="underline"
                 fontWeight="bold"
@@ -179,7 +182,7 @@ const PaymentConfirmationPage = () => {
               care. You would be matched with a caregiver within 48hrs upon a
               successful payment.
             </Text>
-            <FormControl alignItems="center" isRequired>
+            <FormControl  fontFamily="body" alignItems="center" isRequired>
               <FormLabel>Full Name</FormLabel>
               <Input
                 type="text"
