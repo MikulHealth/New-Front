@@ -77,7 +77,7 @@ export default function PendingApp() {
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
     // navigate("/appointment");
-    // window.location.reload()
+    window.location.reload()
   };
 
   const handleCloseEditModal = () => {
@@ -397,10 +397,10 @@ export default function PendingApp() {
             >
               Appointment Details
               <Button
-              variant="ghost"
-              onClick={closeDetailsDrawer}
-              leftIcon={<CloseIcon />}
-            />
+                variant="ghost"
+                onClick={closeDetailsDrawer}
+                leftIcon={<CloseIcon />}
+              />
             </DrawerHeader>
             {!selectedAppointment.paid && (
               <Button
@@ -414,7 +414,7 @@ export default function PendingApp() {
                 Pay for appointment
               </Button>
             )}
-          
+
             <DrawerBody>
               <Flex flexDirection="column">
                 <Flex justifyContent="space-between" alignItems="center">
@@ -637,9 +637,9 @@ export default function PendingApp() {
               </Button>
               <Button
                 // fontSize={{ base: "13px", md: "14px" }}
-                bg="white"
+                bg="#E1ACAE"
                 color="red.500"
-                border="2px solid red"
+                // border="2px solid red"
                 _hover={{ color: "" }}
                 onClick={() => handleCancelAppointment(selectedAppointment.id)}
               >

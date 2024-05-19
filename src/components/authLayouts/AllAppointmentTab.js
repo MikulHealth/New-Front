@@ -178,7 +178,7 @@ export default function AppointmentTab() {
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
     // navigate("/appointment");
-    // window.location.reload()
+    window.location.reload()
   };
 
   const formattedCost = (amount) => {
@@ -641,9 +641,9 @@ export default function AppointmentTab() {
               )}
               {selectedAppointment.appointmentPending && (
                 <Button
-                  bg="white"
+                  bg="#E1ACAE"
                   color="red.500"
-                  border="2px solid red"
+                  // border="2px solid red"
                   _hover={{ color: "" }}
                   onClick={() =>
                     handleCancelAppointment(selectedAppointment.id)

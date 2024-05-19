@@ -21,7 +21,7 @@ import {
 import axios from "axios";
 
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
+import "react-toastify/dist/ReactToastify.css";
 
 const EditPendingAppointment = ({
   isOpen,
@@ -81,7 +81,7 @@ const EditPendingAppointment = ({
       const formDataWithDates = {
         ...formData,
         startDate: formatDateWithDayAdjustment(formData.startDate),
-       };
+      };
 
       const requestBody = formDataWithDates;
 
@@ -98,13 +98,15 @@ const EditPendingAppointment = ({
 
       if (response.data.success) {
         toast.success("Appointment updated");
-        setTimeout(() => { onClose();}, 4000);
+        setTimeout(() => {
+          onClose();
+        }, 4000);
       } else {
         console.error("Error updating appointment details");
         const errorMessage = response.data
           ? response.data.message
           : "Unknown error";
-          toast.error(errorMessage);
+        toast.error(errorMessage);
       }
     } catch (error) {
       console.error("Error updating appointment details:", error);
@@ -122,17 +124,17 @@ const EditPendingAppointment = ({
   return (
     <>
       <Drawer isOpen={isOpen} onClose={onClose} size="md">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader color="#A210C6">Edit appointment</DrawerHeader>
@@ -229,7 +231,12 @@ const EditPendingAppointment = ({
             >
               Save
             </Button>
-            <Button color="red.500" variant="ghost" onClick={onClose}>
+            <Button
+              bg="#E1ACAE"
+              color="red.500"
+              variant="ghost"
+              onClick={onClose}
+            >
               Cancel
             </Button>
           </DrawerFooter>
@@ -244,7 +251,13 @@ const EditPendingAppointment = ({
           </DrawerHeader>
           <DrawerBody>Are you sure you want to save the changes?</DrawerBody>
           <DrawerFooter>
-            <Button onClick={handleConfirmationCancel}>Cancel</Button>
+            <Button
+              bg="#E1ACAE"
+              color="red.500"
+              onClick={handleConfirmationCancel}
+            >
+              Cancel
+            </Button>
             <Button
               bg="#A210C6"
               color="white"

@@ -18,6 +18,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  useMediaQuery,
   // useToast,
   Image,
   Box,
@@ -28,7 +29,6 @@ import {
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 import LoadingSpinner from "../../utils/Spiner";
 // import HelppIcon from "../../assets/HelppIcon.svg";
@@ -55,6 +55,8 @@ const customTheme = extendTheme({
 
 const CustomizeServicePage = () => {
   const navigate = useNavigate();
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+  const modalWidth = isLargerThan768 ? "400px" : "90vw";
   // const toast = useToast();
   const [customizedServices, setCustomizedServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -189,7 +191,7 @@ const CustomizeServicePage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-       <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -203,7 +205,7 @@ const CustomizeServicePage = () => {
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}
-        overflow={{base: "hidden", md: "scroll"}}
+        overflow={{ base: "hidden", md: "scroll" }}
         ml={{ md: "250px" }}
         w={{ base: "100%", md: "70%" }}
         h={{ base: "100%", md: "100%" }}
@@ -247,7 +249,7 @@ const CustomizeServicePage = () => {
                   You have no customized plan yet. Click{" "}
                 </Text>
                 <Text
-                 fontFamily="body"
+                  fontFamily="body"
                   style={{
                     color: "#A210C6",
                     fontStyle: "italic",
@@ -279,7 +281,11 @@ const CustomizeServicePage = () => {
                 spacing={4}
               >
                 {customizedServices.map((service) => (
-                  <Box  w={{ base: "120%", md: "" }} marginTop="20px" key={service.id}>
+                  <Box
+                    w={{ base: "120%", md: "" }}
+                    marginTop="20px"
+                    key={service.id}
+                  >
                     <Box
                       padding="20px"
                       borderColor="#A210C6"
@@ -293,7 +299,7 @@ const CustomizeServicePage = () => {
                       <Box>
                         <Box>
                           <Text
-                           fontFamily="heading"
+                            fontFamily="heading"
                             fontSize={{ base: "22px", md: "28px" }}
                             fontWeight="bold"
                             color="#A210C6"
@@ -301,7 +307,7 @@ const CustomizeServicePage = () => {
                             {`${service.name}`}
                           </Text>
 
-                          <Flex  fontFamily="body">
+                          <Flex fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Frequency:
                             </Text>
@@ -310,7 +316,7 @@ const CustomizeServicePage = () => {
                             </Text>
                           </Flex>
 
-                          <Flex  fontFamily="body">
+                          <Flex fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Preferred Caregiver:
                             </Text>
@@ -319,7 +325,7 @@ const CustomizeServicePage = () => {
                             </Text>
                           </Flex>
 
-                          <Flex  fontFamily="body">
+                          <Flex fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Duration:
                             </Text>
@@ -328,7 +334,7 @@ const CustomizeServicePage = () => {
                               color="black"
                             >{`${service.duration}`}</Text>
                           </Flex>
-                          <Flex  fontFamily="body">
+                          <Flex fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Shift:
                             </Text>
@@ -338,7 +344,7 @@ const CustomizeServicePage = () => {
                             >{`${service.shift}`}</Text>
                           </Flex>
 
-                          <Flex  fontFamily="body">
+                          <Flex fontFamily="body">
                             <Text fontWeight="bold" color="black">
                               Cost of service:
                             </Text>
@@ -348,7 +354,7 @@ const CustomizeServicePage = () => {
                           </Flex>
                         </Box>
                       </Box>
-                      <Box  fontFamily="body"  marginTop="3px">
+                      <Box fontFamily="body" marginTop="3px">
                         <Flex direction="column">
                           <Text
                             fontWeight="bold"
@@ -366,7 +372,7 @@ const CustomizeServicePage = () => {
                         </Flex>
                       </Box>
 
-                      <Flex  fontFamily="body" marginTop="10px">
+                      <Flex fontFamily="body" marginTop="10px">
                         <Text
                           fontSize={{ base: "14", md: "16px" }}
                           fontWeight="bold"
@@ -387,10 +393,9 @@ const CustomizeServicePage = () => {
                         justifyContent="space-between"
                         marginTop="20px"
                       >
-                         <Button
-                        // w={{ base: "50px", md: "120px" }}
-                         fontFamily="body"
-                         
+                        <Button
+                          // w={{ base: "50px", md: "120px" }}
+                          fontFamily="body"
                           border="2px solid red"
                           fontSize="16px"
                           leftIcon={<DeleteIcon />}
@@ -406,8 +411,8 @@ const CustomizeServicePage = () => {
                           Delete plan
                         </Button>
                         <Button
-                         fontFamily="body"
-                        //  w={{ base: "50px", md: "120px" }}
+                          fontFamily="body"
+                          //  w={{ base: "50px", md: "120px" }}
                           fontSize="16px"
                           leftIcon={<CheckIcon />}
                           color="white"
@@ -421,7 +426,6 @@ const CustomizeServicePage = () => {
                         >
                           Book plan
                         </Button>
-                       
                       </Flex>
                     </Box>
                   </Box>
@@ -440,7 +444,11 @@ const CustomizeServicePage = () => {
             )}
           </Box>
 
-          <Box display={{base: "none", md: "none"}} marginLeft="910px" marginTop="-150px">
+          <Box
+            display={{ base: "none", md: "none" }}
+            marginLeft="910px"
+            marginTop="-150px"
+          >
             <Image
               onClick={help}
               // src={HelppIcon}
@@ -473,23 +481,34 @@ const CustomizeServicePage = () => {
 
       {confirmationModalOpen && (
         <Modal
+        theme={customTheme}
           isOpen={confirmationModalOpen}
           onClose={handleCancelModalClose}
           size="md"
         >
           <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Confirmation</ModalHeader>
+          <ModalContent width={modalWidth}
+          borderRadius="25px 25px 25px 0px">
+            <ModalHeader fontFamily="heading" color="#A210C6">Confirmation</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               Are you sure you want to delete this service? <br></br> This
               action is irreversible.
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="red" onClick={handleCancelModalClose}>
+              <Button
+                bg="#E1ACAE"
+                color="red.500"
+                onClick={handleCancelModalClose}
+              >
                 No
               </Button>
-              <Button marginLeft="5px" onClick={handleConfirmation}>
+              <Button
+                 bg="#A210C6"
+                 color="white"
+                marginLeft="5px"
+                onClick={handleConfirmation}
+              >
                 Yes
               </Button>
             </ModalFooter>

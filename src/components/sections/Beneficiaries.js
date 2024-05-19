@@ -347,13 +347,14 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         >
           <DrawerOverlay />
           <DrawerContent maxH="30vh" overflowY="auto">
-            <DrawerHeader fontFamily="heading" color="#510863">Confirmation</DrawerHeader>
+            <DrawerHeader fontFamily="heading" color="#A210C6">Confirmation</DrawerHeader>
             <DrawerBody>
               <Text fontFamily="body">Are you sure you want to remove this beneficiary?</Text>
             </DrawerBody>
             <DrawerFooter alignContent="space-between">
               <Button
-                colorScheme="red"
+                bg="#A210C6"
+                color="white"
                 fontFamily="body"
                 onClick={handleConfirmRemoveBeneficiary}
               >
@@ -362,8 +363,8 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
               <Button
               fontFamily="body"
                 marginLeft="5px"
-                bg="#510863"
-                color="white"
+                bg="#E1ACAE"
+                color="red.500"
                 onClick={() => setConfirmationModalOpen(false)}
               >
                 Cancel

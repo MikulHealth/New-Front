@@ -58,7 +58,11 @@ function InsufficientFundsModal({ isOpen, onClose, amountNeeded }) {
         <ModalHeader>
           {/* <Box display="flex" alignItems="center" justifyContent="center"> */}
           <WarningIcon w={10} h={10} color="yellow.400" />
-          <Text fontFamily="heading" color="#A210C6" fontSize={{base: "18px", md: "24px"}}>
+          <Text
+            fontFamily="heading"
+            color="#A210C6"
+            fontSize={{ base: "18px", md: "24px" }}
+          >
             Insufficient Funds
           </Text>
           {/* </Box> */}
@@ -87,8 +91,8 @@ function InsufficientFundsModal({ isOpen, onClose, amountNeeded }) {
           </Button>
           <Button
             fontFamily="body"
-            color="white"
-            bg="gray.500"
+            bg="#E1ACAE"
+            color="red.500"
             onClick={onClose}
           >
             Cancel

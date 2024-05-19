@@ -206,7 +206,7 @@ const AppointmentPage = () => {
             <Flex
               w={{ base: "90vw", md: "65vw" }}
               p="4px"
-              mt={{ base: "-10px", md: "-10px" }}
+              mt={{ base: "-5px", md: "-5px" }}
               justifyContent="center"
               className="appointment-tabs"
               overflow={{ base: "hidden", md: "hidden" }}

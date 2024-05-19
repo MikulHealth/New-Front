@@ -157,7 +157,7 @@ const PaymentConfirmationPage = () => {
           Confirm Payment
         </Text>
         <form onSubmit={handlePayment}>
-          <Box fontSize={{base: "12px", md: "18px"}} color="black" p={4} bg="white" borderRadius="xl">
+          <Box fontSize={{base: "16px", md: "18px"}} color="black" p={4} bg="white" borderRadius="xl">
             <Text fontFamily="body"  mb={4}>
               Hi {user?.firstName}, kindly pay the sum of{" "}
               <Text
@@ -210,7 +210,7 @@ const PaymentConfirmationPage = () => {
                 onChange={handleInputChange}
                 mb={4}
               />
-              <Flex display={{ base: "flex", md: "block" }}>
+              <Flex justifyContent="center" display={{ base: "flex", md: "block" }}>
                 <Button
                   _hover={{ color: "" }}
                   bg="green.400"
@@ -233,10 +233,11 @@ const PaymentConfirmationPage = () => {
                 </Button>
                 <Button
                   marginLeft="5px"
-                  bg="red.400"
-                  color="white"
+                  fontFamily="body"
+                  bg="#E1ACAE"
+                  color="red.500"
                   onClick={handleCancel}
-                  _hover={{ bg: "red.500" }}
+                  // _hover={{ bg: "" }}
                 >
                   Cancel Payment
                 </Button>
