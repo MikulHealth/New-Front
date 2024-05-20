@@ -100,10 +100,10 @@ const LandingPage = () => {
     return pattern.test(password);
   };
 
-  const validateName = (name) => {
-    const pattern = /^[A-Z][a-zA-Z]{1,}$/;
-    return pattern.test(name);
-  };
+  // const validateName = (name) => {
+  //   const pattern = /^[A-Z][a-zA-Z]{1,}$/;
+  //   return pattern.test(name);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -120,19 +120,19 @@ const LandingPage = () => {
       return;
     }
 
-    if (!validateName(formData.firstName)) {
-      toast.warning(
-        "First name must start with a capital letter and be at least two letters long"
-      );
-      return;
-    }
+    // if (!validateName(formData.firstName)) {
+    //   toast.warning(
+    //     "First name must start with a capital letter and be at least two letters long"
+    //   );
+    //   return;
+    // }
 
-    if (!validateName(formData.lastName)) {
-      toast.warning(
-        "Last name must start with a capital letter and be at least two letters long"
-      );
-      return;
-    }
+    // if (!validateName(formData.lastName)) {
+    //   toast.warning(
+    //     "Last name must start with a capital letter and be at least two letters long"
+    //   );
+    //   return;
+    // }
 
     if (!validatePassword(formData.password)) {
       toast.warning(
