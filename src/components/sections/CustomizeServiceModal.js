@@ -96,7 +96,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   
     if (shift === "Night Shift (12hrs)") {
       if (medicSpecialization === "Nurse Assistant") {
-        costPerDay = 12000;
+        costPerDay = 8000;
       } else if (medicSpecialization === "Registered Nurse" || medicSpecialization === "Registered Nurse/Midwife") {
         costPerDay = 15000;
       }
@@ -110,7 +110,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
       if (medicSpecialization === "Nurse Assistant") {
         costPerDay = 10000;
       } else {
-        costPerDay = 20000;
+        costPerDay = 18000;
       }
     }
   

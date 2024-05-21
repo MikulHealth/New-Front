@@ -88,9 +88,9 @@ const LandingPage = () => {
   const closeTermsModal = () => setIsTermsOpen(false);
 
   const getValidNigerianPhoneNumber = (phoneNumber) => {
-    const pattern = /^(\d{11})$/;
+    const pattern = /^(\d{10})$/;
     if (pattern.test(phoneNumber)) {
-      return phoneNumber;
+      return "0" + phoneNumber;
     }
     return null;
   };
@@ -264,7 +264,7 @@ const LandingPage = () => {
               />
               <FormLabel mt="4">Phone number</FormLabel>
               <InputGroup>
-                <InputLeftAddon />
+                <InputLeftAddon children="+234" />
                 <Input
                   name="phoneNumber"
                   type="tel"

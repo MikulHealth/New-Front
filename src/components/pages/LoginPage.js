@@ -12,6 +12,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  InputLeftAddon,
   // useToast,
   Image,
   ChakraProvider,
@@ -54,6 +55,15 @@ const LandingPage = () => {
 
   const handleLogin = async () => {
     setLoading(true);
+
+    const validPhoneNumber = getValidNigerianPhoneNumber(phoneInput);
+    console.log("number " + validPhoneNumber);
+
+    if (!validPhoneNumber) {
+      toast.warning("Please enter a valid Nigerian phone number");
+      setLoading(false);
+      return;
+    }
     const apiUrl = "https://backend-c1pz.onrender.com/login";
     // const apiUrl = "http://localhost:8080/login";
 
@@ -62,7 +72,7 @@ const LandingPage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phoneNumber: phoneInput,
+          phoneNumber: validPhoneNumber,
           password: passwordInput,
         }),
       });
@@ -97,6 +107,14 @@ const LandingPage = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const getValidNigerianPhoneNumber = (phoneNumber) => {
+    const pattern = /^(\d{10})$/;
+    if (pattern.test(phoneNumber)) {
+      return "0" + phoneNumber;
+    }
+    return null;
   };
 
   return (
@@ -146,11 +164,14 @@ const LandingPage = () => {
               Login to your account
             </Text>
             <FormControl fontFamily="body" isRequired mt="20px">
-              <Input
-                placeholder="Phone number"
-                value={phoneInput}
-                onChange={handlePhoneInputChange}
-              />
+              <InputGroup>
+                <InputLeftAddon children="+234" />
+                <Input
+                  placeholder="Phone number"
+                  value={phoneInput}
+                  onChange={handlePhoneInputChange}
+                />
+              </InputGroup>
               <InputGroup size="md" mt="30px">
                 <Input
                   pr="4.5rem"
