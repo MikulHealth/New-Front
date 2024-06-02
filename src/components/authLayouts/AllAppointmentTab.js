@@ -393,10 +393,11 @@ export default function AppointmentTab() {
                       h={{ base: "25px", md: "33px" }}
                       borderRadius="10px"
                       p="5px"
-                      bg={appointment?.paid ? "#ACE1C1" : "red.200"}
+                      // bg={appointment?.paid ? "#ACE1C1" : "red.200"}
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
+                        fontWeight="bold"
                         textAlign="center"
                         color={appointment?.paid ? "#057B1F" : "black.500"}
                       >

@@ -9,17 +9,14 @@ import {
   Link as ChakraLink,
   Text,
   FormControl,
+  FormLabel,
   Input,
   InputGroup,
   InputRightElement,
-  InputLeftAddon,
-  // useToast,
   Image,
   ChakraProvider,
   extendTheme,
 } from "@chakra-ui/react";
-// import NavigationBar from "../unAuthLayouts/NavigationBar";
-// import Google from "../../assets/GoogleIcon.svg";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../../styles/pages/LandingPage.css";
@@ -42,43 +39,45 @@ const customTheme = extendTheme({
 });
 
 const LandingPage = () => {
-  // const toast = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [phoneInput, setPhoneInput] = useState("");
+  const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const handlePhoneInputChange = (e) => setPhoneInput(e.target.value);
+
+  const handleEmailInputChange = (e) => setEmailInput(e.target.value);
   const handlePasswordInputChange = (e) => setPasswordInput(e.target.value);
   const handleClick = () => setShow(!show);
+
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
 
   const handleLogin = async () => {
     setLoading(true);
 
-    const validPhoneNumber = getValidNigerianPhoneNumber(phoneInput);
-    console.log("number " + validPhoneNumber);
-
-    if (!validPhoneNumber) {
-      toast.warning("Please enter a valid Nigerian phone number");
+    if (!validateEmail(emailInput)) {
+      toast.warning("Please enter a valid email address");
       setLoading(false);
       return;
     }
+
     const apiUrl = "https://backend-c1pz.onrender.com/login";
     // const apiUrl = "http://localhost:8080/login";
-
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phoneNumber: validPhoneNumber,
+          email: emailInput,
           password: passwordInput,
         }),
       });
 
       if (response.ok) {
-        toast.success("Login successfull");
+        toast.success("Login successful");
         const responseData = await response.json();
         localStorage.setItem("token", responseData.access_token);
         setTimeout(() => {
@@ -87,11 +86,11 @@ const LandingPage = () => {
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData.message);
-        toast.error("Wrong passowd or phone number");
+        toast.error("Wrong password or email address");
       }
     } catch (error) {
       console.error("Login failed:", error.message);
-      toast.error("Wrong passowd or phone number");
+      toast.error("Wrong password or email address");
     } finally {
       setLoading(false);
     }
@@ -107,14 +106,6 @@ const LandingPage = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-  };
-
-  const getValidNigerianPhoneNumber = (phoneNumber) => {
-    const pattern = /^(\d{10})$/;
-    if (pattern.test(phoneNumber)) {
-      return "0" + phoneNumber;
-    }
-    return null;
   };
 
   return (
@@ -142,7 +133,6 @@ const LandingPage = () => {
             maxWidth={{ base: "90%", sm: "600px", md: "650px", lg: "700px" }}
             mx="auto"
             textAlign={{ base: "center", md: "center" }}
-            // justify="center"
             height="100vh"
             mt={{ base: "30px", md: "60px" }}
           >
@@ -164,15 +154,16 @@ const LandingPage = () => {
               Login to your account
             </Text>
             <FormControl fontFamily="body" isRequired mt="20px">
+              <FormLabel>Email address</FormLabel>
               <InputGroup>
-                <InputLeftAddon children="+234" />
                 <Input
-                  placeholder="Phone number"
-                  value={phoneInput}
-                  onChange={handlePhoneInputChange}
+                  placeholder="Email address"
+                  value={emailInput}
+                  onChange={handleEmailInputChange}
                 />
               </InputGroup>
-              <InputGroup size="md" mt="30px">
+              <FormLabel mt="30px">Password</FormLabel>
+              <InputGroup size="md">
                 <Input
                   pr="4.5rem"
                   type={show ? "text" : "password"}
@@ -206,21 +197,6 @@ const LandingPage = () => {
               >
                 {loading ? "Loading..." : "Login"}
               </Button>
-              {/* <Text textAlign="center" mt="30px">
-                or
-              </Text> */}
-              {/* <Box
-                border="1px solid #A210C6"
-                p="8px"
-                mt="20px"
-                display="flex"
-                borderRadius="10px"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Image src={Google} alt="GoogleIcon" w="20px" h="20px" />
-                <Text ml="5px">Continue with Google</Text>
-              </Box> */}
               <Text fontSize="16px" fontFamily="body" mt="30px">
                 Don't have an account?{" "}
                 <ChakraLink

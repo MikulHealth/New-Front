@@ -26,7 +26,7 @@ import Hafsie from "../../../assets/Hafsie.svg";
 import "../../../styles/pages/LandingPage.css";
 import NavigationBar from "../../unAuthLayouts/NavigationBar";
 import Footer from "../../unAuthLayouts/Footer";
-import Folder from "../../../assets/Folder.svg";
+import Folder from "../../../assets/image.png";
 const customTheme = extendTheme({
   components: {
     Link: {

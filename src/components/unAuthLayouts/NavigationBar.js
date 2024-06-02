@@ -78,6 +78,7 @@ export default function NavigationBar() {
             ml="auto" 
           />
           <HStack
+          fontSize={{ base: "lg", md: "xl" }}
             marginRight={{ base: "0px", md: "50px" }}
             spacing={6}
             display={{ base: "none", md: "flex" }}
@@ -102,6 +103,7 @@ export default function NavigationBar() {
           </HStack>
 
           <Button
+          fontSize={{ base: "lg", md: "xl" }}
             bg="white"
             color="#A210C6"
             onClick={handleOpenModal}
@@ -114,7 +116,7 @@ export default function NavigationBar() {
 
       {/* Responsive Collapse Menu */}
       <Collapse in={isOpen} animateOpacity>
-        <Box p={4} bg="#A210C6" color="white" textAlign="center">
+        <Box fontSize={{ base: "lg", md: "xl" }} p={4} bg="#A210C6" color="white" textAlign="center">
           <VStack spacing={4}>
             <NavLink to="/" pageTitle={pageTitle}>
               Home
@@ -131,7 +133,7 @@ export default function NavigationBar() {
             <NavLink to="/login" pageTitle={pageTitle}>
               Login
             </NavLink>
-            <Button bg="white" color="#A210C6" onClick={handleOpenModal}>
+            <Button fontSize={{ base: "lg", md: "xl" }} bg="white" color="#A210C6" onClick={handleOpenModal}>
               Get started
             </Button>
           </VStack>
