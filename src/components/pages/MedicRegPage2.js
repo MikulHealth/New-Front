@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
-  Link as ChakraLink,
   Image,
   extendTheme,
   ChakraProvider,
@@ -17,7 +16,6 @@ import {
   useToast,
   Select,
   Flex,
-  VStack,
   Stack,
 } from "@chakra-ui/react";
 import AOS from "aos";
@@ -43,30 +41,23 @@ const customTheme = extendTheme({
 
 const LandingPage = () => {
   const [formData, setFormData] = useState({
-    nin: "",
     license: "",
-    guarantorName: "",
-    guarantorPhone: "",
-    guarantorEmail: "",
     medicType: "",
     specialization: "",
     cvCopy: "",
     bankName: "",
     accountNumber: "",
     accountName: "",
-    homeAddress: "",
     phoneNumber: localStorage.getItem("phoneNumber"),
-    image: "",
+    yearsOfExp: "",
   });
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [image] = useState();
   const [cvCopy] = useState();
   const [license] = useState();
   const [cvLoading, setCvLoading] = useState(false);
   const [licenseLoading, setLicenseLoading] = useState(false);
-  const [imageLoading, setImageLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -78,13 +69,13 @@ const LandingPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await postImage(image, formData, setFormData);
+
     await postCv(cvCopy, formData, setFormData);
     await postLicense(license, formData, setFormData);
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/v1/angel/verify-medic",
+        "http://localhost:8080/v1/angel/registerMedic",
         formData,
         {
           headers: {
@@ -104,8 +95,8 @@ const LandingPage = () => {
       });
 
       setTimeout(() => {
-        navigate("/confirm-medic-reg");
-      }, 3000);
+        navigate("/verify-medic");
+      }, 5000);
       // Redirect or perform other actions based on the response
     } catch (error) {
       toast({
@@ -215,47 +206,6 @@ const LandingPage = () => {
     }
   };
 
-  const postImage = async (image, formData, setFormData) => {
-    setImageLoading(true);
-    if (image === undefined) {
-      // toast.error("Please select an image")
-      return;
-    }
-    console.log(image);
-    if (image.type === "image/jpeg" || image.type === "image/png") {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "profileImage");
-      data.append("cloud_name", "dmfewrwla");
-
-      try {
-        const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
-          {
-            method: "post",
-            body: data,
-          }
-        );
-
-        const imageData = await response.json();
-
-        setFormData({
-          ...formData,
-          image: imageData.url.toString(),
-        });
-        setImageLoading(false);
-        console.log(imageData.url.toString());
-      } catch (err) {
-        console.log(err);
-        setImageLoading(false);
-      }
-    } else {
-      // toast.error("Please select an image");
-
-      return;
-    }
-  };
-
   return (
     <ChakraProvider theme={customTheme}>
       <Flex overflow="scroll" align="center" justify="center" height="100vh">
@@ -267,11 +217,19 @@ const LandingPage = () => {
           p="6"
           bg="white"
         >
-          <Box  top={{ base: "-10px", md: "20px" }} left={{ base: "-10px", md: "20px" }}>
-          <a href="/">
-            <Image src={logo} alt="Logo" h={{ base: "40px", md: "58px" }} w={{ base: "150px", md: "200px" }} />
-          </a>
-        </Box>
+          <Box
+            top={{ base: "-10px", md: "20px" }}
+            left={{ base: "-10px", md: "20px" }}
+          >
+            <a href="/">
+              <Image
+                src={logo}
+                alt="Logo"
+                h={{ base: "40px", md: "58px" }}
+                w={{ base: "150px", md: "200px" }}
+              />
+            </a>
+          </Box>
           <Text
             fontFamily="header"
             fontSize="2xl"
@@ -281,90 +239,125 @@ const LandingPage = () => {
           >
             Get started as medic
           </Text>
-            <form onSubmit={handleSubmit} >
-              <FormControl isRequired>
-                <Stack direction={{ base: "column", md: "row" }} spacing={4} marginTop="20px">
-                  <Box flex="1">
-                    <FormLabel>Medic Type</FormLabel>
-                    <Select name="medicType" placeholder="Medic Type" onChange={handleInputChange}>
-                      <option value="Registered Nurse">Registered Nurse</option>
-                      <option value="Physiotherapist">Physiotherapist</option>
-                      <option value="Assistant Nurse">Assistant Nurse</option>
-                    </Select>
-                  </Box>
-                  <Box flex="1">
-                    <FormLabel>Specialization</FormLabel>
-                    <Select name="specialization" placeholder="Specialization" onChange={handleInputChange}>
-                      <option value="Midwife">Midwife</option>
-                      <option value="Accident and Emergency">Accident and Emergency</option>
-                      <option value="General Nurse">General Nurse</option>
-                      <option value="Other">Other</option>
-                    </Select>
-                  </Box>
-                </Stack>
-                <Stack direction={{ base: "column", md: "row" }} spacing={4} marginTop="20px">
-                  <Box flex="1">
-                    <FormLabel>Bank Name</FormLabel>
-                    <Select name="bankName" placeholder="Your Bank name" onChange={handleInputChange}>
-                      <option value="Access Bank">Access Bank</option>
-                      <option value="Bankly">Bankly</option>
-                      <option value="Zeneith Bank">Zeneith Bank</option>
-                    </Select>
-                  </Box>
-                  <Box flex="1">
-                    <FormLabel>Account Number</FormLabel>
-                    <Input name="accountNumber" placeholder="Account number" onChange={handleInputChange} />
-                  </Box>
-                </Stack>
-                <Stack direction={{ base: "column", md: "row" }} spacing={4} marginTop="20px">
-                  <Box flex="1">
-                    <FormLabel>Account Name</FormLabel>
-                    <Input name="accountName" placeholder="Account Name" onChange={handleInputChange} />
-                  </Box>
-                </Stack>
-                <FormLabel marginTop="20px">Upload CV (only PNG, JPG and PDF files are accepted)</FormLabel>
+          <form onSubmit={handleSubmit}>
+            <FormControl isRequired>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                spacing={4}
+                marginTop="20px"
+              >
+                <Box flex="1">
+                  <FormLabel>Medic Type</FormLabel>
+                  <Select
+                    name="medicType"
+                    placeholder="Medic Type"
+                    onChange={handleInputChange}
+                  >
+                    <option value="Registered Nurse">Registered Nurse</option>
+                    <option value="Physiotherapist">Physiotherapist</option>
+                    <option value="Assistant Nurse">Assistant Nurse</option>
+                  </Select>
+                </Box>
+                <Box flex="1">
+                  <FormLabel>Specialization</FormLabel>
+                  <Select
+                    name="specialization"
+                    placeholder="Specialization"
+                    onChange={handleInputChange}
+                  >
+                    <option value="Midwife">Midwife</option>
+                    <option value="Accident and Emergency">
+                      Accident and Emergency
+                    </option>
+                    <option value="General Nurse">General Nurse</option>
+                    <option value="Other">Other</option>
+                  </Select>
+                </Box>
+              </Stack>
+              <Box spacing={4} marginTop="20px" flex="1">
+                <FormLabel>Years of experience</FormLabel>
+
                 <Input
-                  name="cvCopy"
-                  type="file"
-                  onChange={(e) => {
-                    postCv(e.target.files[0], formData, setFormData);
-                  }}
+                  name="yearsOfExp"
+                  placeholder="How many years of experince do you have"
+                  onChange={handleInputChange}
                 />
-                {cvLoading && <LoadingSpinner size={20} />}
-                <FormLabel marginTop="20px">Upload valid licence (only PNG, JPG and PDF files are accepted)</FormLabel>
-                <Input
-                  name="license"
-                  type="file"
-                  onChange={(e) => {
-                    postLicense(e.target.files[0], formData, setFormData);
-                  }}
-                />
-                {licenseLoading && <LoadingSpinner size={20} />}
-                <FormLabel marginTop="20px">Upload headshot (only PNG and JPG files are accepted)</FormLabel>
-                <Input
-                  name="image"
-                  type="file"
-                  accept="image/*"
-                  placeholder="Image"
-                  onChange={(e) => {
-                    postImage(e.target.files[0], formData, setFormData);
-                  }}
-                />
-                {imageLoading && <LoadingSpinner size={20} />}
-               
-                <Button
-                  type="submit"
-                  w={{ base: "100%", md: "350px" }}
-                  bg="#A210C6"
-                  marginTop="20px"
-                  color="white"
-                  isLoading={loading}
-                  loadingText="Submiting..."
-                >
-                  {loading ? "Loading..." : "Submit"}
-                </Button>
-              </FormControl>
-            </form>
+              </Box>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                spacing={4}
+                marginTop="20px"
+              >
+                <Box flex="1">
+                  <FormLabel>Bank Name</FormLabel>
+                  <Select
+                    name="bankName"
+                    placeholder="Your Bank name"
+                    onChange={handleInputChange}
+                  >
+                    <option value="Access Bank">Access Bank</option>
+                    <option value="Bankly">Bankly</option>
+                    <option value="Zeneith Bank">Zeneith Bank</option>
+                  </Select>
+                </Box>
+                <Box flex="1">
+                  <FormLabel>Account Number</FormLabel>
+                  <Input
+                    name="accountNumber"
+                    placeholder="Account number"
+                    onChange={handleInputChange}
+                  />
+                </Box>
+              </Stack>
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                spacing={4}
+                marginTop="20px"
+              >
+                <Box flex="1">
+                  <FormLabel>Account Name</FormLabel>
+                  <Input
+                    name="accountName"
+                    placeholder="Account Name"
+                    onChange={handleInputChange}
+                  />
+                </Box>
+              </Stack>
+              <FormLabel marginTop="20px">
+                Upload CV (only PNG, JPG and PDF files are accepted)
+              </FormLabel>
+              <Input
+                name="cvCopy"
+                type="file"
+                onChange={(e) => {
+                  postCv(e.target.files[0], formData, setFormData);
+                }}
+              />
+              {cvLoading && <LoadingSpinner size={20} />}
+              <FormLabel marginTop="20px">
+                Upload valid licence (only PNG, JPG and PDF files are accepted)
+              </FormLabel>
+              <Input
+                name="license"
+                type="file"
+                onChange={(e) => {
+                  postLicense(e.target.files[0], formData, setFormData);
+                }}
+              />
+              {licenseLoading && <LoadingSpinner size={20} />}
+              <Button
+                type="submit"
+                w={{ base: "100%", md: "350px" }}
+                bg="#A210C6"
+                marginTop="20px"
+                color="white"
+                isLoading={loading}
+                loadingText="Submiting..."
+              >
+                {loading ? "Loading..." : "Submit"}
+              </Button>
+            </FormControl>
+          </form>
           {/* </VStack> */}
         </Box>
       </Flex>

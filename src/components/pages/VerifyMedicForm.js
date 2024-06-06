@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -38,14 +39,17 @@ const VerifyMedicForm = () => {
     guarantorEmail: "",
     guarantorPhone: "",
     guarantorHomeAddress: "",
-    medicGovId: "",
+    phoneNumber: localStorage.getItem("phoneNumber"),
+    ninNumber: "",
+    ninCopy: "",
     medicHomeAddress: "",
-    medicHeadshot: "",
   });
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
+  const [ninCopy] = useState();
+  const [NINLoading, setNINLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -56,44 +60,34 @@ const VerifyMedicForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+   
+    await postNINCopy(ninCopy, formData, setFormData);
     setLoading(true);
-    try {
-      const data = new FormData();
-      for (const key in formData) {
-        data.append(key, formData[key]);
-      }
 
-      const response = await fetch(
-        "http://localhost:8080/v1/angel/verify-medic",
-        {
-          method: "POST",
-          body: data,
-        }
-      );
+      try {
+        const response = await axios.post(
+            "http://localhost:8080/v1/angel/medicIdentity",
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      const result = await response.json();
-
-      if (response.ok) {
-        toast({
-          title: "Submit Successfully",
-          description: result.message,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
+      console.log(response);
+      toast({
+        title: "Successful",
+        description: response.data.message,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
 
         setTimeout(() => {
           navigate("/complete");
-        }, 3000);
-      } else {
-        toast({
-          title: "Submition Failed",
-          description: result.message,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
+        }, 5000);
+     
     } catch (error) {
       toast({
         title: "An error occurred",
@@ -107,22 +101,72 @@ const VerifyMedicForm = () => {
     }
   };
 
+
+  const postNINCopy = async (image, formData, setFormData) => {
+    setNINLoading(true);
+    if (image === undefined) {
+      // toast.error("Please select an image")
+      return;
+    }
+    console.log(image);
+    if (image.type === "image/jpeg" || image.type === "image/png") {
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "profileImage");
+      data.append("cloud_name", "dmfewrwla");
+
+      try {
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
+          {
+            method: "post",
+            body: data,
+          }
+        );
+
+        const imageData = await response.json();
+
+        setFormData({
+          ...formData,
+          image: imageData.url.toString(),
+        });
+        setNINLoading(false);
+        console.log(imageData.url.toString());
+      } catch (err) {
+        console.log(err);
+        setNINLoading(false);
+      }
+    } else {
+      // toast.error("Please select an image");
+
+      return;
+    }
+  };
+
   return (
     <ChakraProvider theme={customTheme}>
       <Box overflow="scroll" align="center" justify="center" height="100vh">
         <Box
-        //   mb="100px"
-        //   mt={{ base: "700px", md: "300px" }}
+          //   mb="100px"
+          //   mt={{ base: "700px", md: "300px" }}
           width={{ base: "90%", sm: "500px" }}
           h={{ base: "140%", md: "160%" }}
           p="6"
           bg="white"
         >
-           <Box top={{ base: "10px", md: "20px" }} left={{ base: "10px", md: "20px" }}>
-          <a href="/">
-            <Image src={logo} alt="Logo" h={{ base: "40px", md: "58px" }} w={{ base: "150px", md: "200px" }} />
-          </a>
-        </Box>
+          <Box
+            top={{ base: "10px", md: "20px" }}
+            left={{ base: "10px", md: "20px" }}
+          >
+            <a href="/">
+              <Image
+                src={logo}
+                alt="Logo"
+                h={{ base: "40px", md: "58px" }}
+                w={{ base: "150px", md: "200px" }}
+              />
+            </a>
+          </Box>
           <Text
             fontFamily="heading"
             fontSize="2xl"
@@ -130,7 +174,7 @@ const VerifyMedicForm = () => {
             mb="4"
             textAlign="center"
           >
-            Verify Medic's Identity
+            Verify Your Identity
           </Text>
           <form onSubmit={handleSubmit}>
             <FormControl isRequired marginTop="20px">
@@ -177,36 +221,29 @@ const VerifyMedicForm = () => {
                 onChange={handleInputChange}
                 marginBottom="20px"
               />
-              <FormLabel>Medic's Government Issued ID</FormLabel>
+              <FormLabel>National Identity nummber (NIN) </FormLabel>
               <Input
-                name="medicGovId"
-                placeholder="Government Issued ID"
+                name="ninNumber"
+                placeholder="NIN"
+                onChange={handleInputChange}
+                marginBottom="20px"
+              />
+              <FormLabel>
+                NIN Copy (only PNG, JPG and PDF files are accepted)
+              </FormLabel>
+              <Input
+                name="ninCopy"
+                placeholder="Nin copy"
                 type="file"
                 accept="image/*,application/pdf"
-                onChange={(e) => {
-                  setFormData({
-                    ...formData,
-                    medicGovId: e.target.files[0],
-                  });
-                }}
                 marginBottom="20px"
-              />
-              <FormLabel>Medic's Headshot (only PNG and JPG files are accepted)</FormLabel>
-              <Input
-                name="medicHeadshot"
-                placeholder="Headshot"
-                type="file"
-                accept="image/*"
                 onChange={(e) => {
-                  setFormData({
-                    ...formData,
-                    medicHeadshot: e.target.files[0],
-                  });
+                  postNINCopy(e.target.files[0], formData, setFormData);
                 }}
-                marginBottom="20px"
               />
-              {loading && <LoadingSpinner size={20} />}
-              <FormLabel>Medic's Home Address</FormLabel>
+              {NINLoading && <LoadingSpinner size={20} />}
+
+              <FormLabel>Your Home Address</FormLabel>
               <Input
                 name="medicHomeAddress"
                 placeholder="Home Address"

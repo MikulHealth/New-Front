@@ -7,11 +7,13 @@ import logo from "../../assets/Logo.svg";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingSpinner from "../../utils/Spiner";
 import {
   Box,
   Button,
   extendTheme,
   ChakraProvider,
+  Stack,
   Text,
   FormControl,
   Image,
@@ -57,17 +59,15 @@ const LandingPage = () => {
     confirmPassword: "",
     gender: "",
     dob: new Date(),
-    address: "",
-    kinName: "",
-    kinNumber: "",
-    language: "English",
-    relationship: "Self",
+    image: "",
   });
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const navigate = useNavigate();
+  const [image] = useState();
+  const [imageLoading, setImageLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -145,22 +145,20 @@ const LandingPage = () => {
       toast.warning("Passwords do not match");
       return;
     }
-
+    await postImage(image, formData, setFormData);
     setLoading(true);
     try {
       const updatedFormData = { ...formData, phoneNumber: validPhoneNumber };
       const response = await axios.post(
-        "https://backend-c1pz.onrender.com/v1/angel/join",
-        // "http://localhost:8080/v1/angel/join",
+        // "https://backend-c1pz.onrender.com/v1/angel/join",
+        "http://localhost:8080/v1/angel/registerMedicUser",
         updatedFormData,
         { headers: { "Content-Type": "application/json" } }
       );
 
       if (response.data.success) {
-        toast.success("Registration successful, kindly login");
-        // setTimeout(() => {
-        //   navigate("/login");
-        // }, 5000);
+        toast.success("Registration successful");
+        localStorage.setItem("phoneNumber", updatedFormData.phoneNumber);
         setTimeout(() => {
           navigate("/join-complete");
         }, 5000);
@@ -199,6 +197,47 @@ const LandingPage = () => {
     AOS.init();
   }, []);
 
+  const postImage = async (image, formData, setFormData) => {
+    setImageLoading(true);
+    if (image === undefined) {
+      // toast.error("Please select an image")
+      return;
+    }
+    console.log(image);
+    if (image.type === "image/jpeg" || image.type === "image/png") {
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "profileImage");
+      data.append("cloud_name", "dmfewrwla");
+
+      try {
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
+          {
+            method: "post",
+            body: data,
+          }
+        );
+
+        const imageData = await response.json();
+
+        setFormData({
+          ...formData,
+          image: imageData.url.toString(),
+        });
+        setImageLoading(false);
+        console.log(imageData.url.toString());
+      } catch (err) {
+        console.log(err);
+        setImageLoading(false);
+      }
+    } else {
+      // toast.error("Please select an image");
+
+      return;
+    }
+  };
+
   return (
     <ChakraProvider overflow="hidden" theme={customTheme}>
       <ToastContainer
@@ -221,11 +260,19 @@ const LandingPage = () => {
           p="6"
           bg="white"
         >
-          <Box  top={{ base: "0px", md: "20px" }} left={{ base: "0px", md: "20px" }}>
-          <a href="/">
-            <Image src={logo} alt="Logo" h={{ base: "40px", md: "58px" }} w={{ base: "150px", md: "200px" }} />
-          </a>
-        </Box>
+          <Box
+            top={{ base: "0px", md: "20px" }}
+            left={{ base: "0px", md: "20px" }}
+          >
+            <a href="/">
+              <Image
+                src={logo}
+                alt="Logo"
+                h={{ base: "40px", md: "58px" }}
+                w={{ base: "150px", md: "200px" }}
+              />
+            </a>
+          </Box>
           <Text
             fontFamily="header"
             fontSize="2xl"
@@ -241,51 +288,73 @@ const LandingPage = () => {
               fontFamily="body"
               isRequired
             >
-              <FormLabel>First name</FormLabel>
-              <Input
-                name="firstName"
-                placeholder="First name"
-                onChange={handleInputChange}
-              />
-              <FormLabel mt="4">Last name</FormLabel>
-              <Input
-                name="lastName"
-                placeholder="Last name"
-                onChange={handleInputChange}
-              />
-              <FormLabel mt="4">Email address</FormLabel>
-              <Input
-                name="email"
-                type="email"
-                placeholder="Email"
-                onChange={handleInputChange}
-              />
-              <FormLabel mt="4">Phone number</FormLabel>
-              <InputGroup>
-                <InputLeftAddon children="+234" />
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                spacing={4}
+                marginTop="20px"
+              >
+                <Box>
+                  <FormLabel>First name</FormLabel>
+                  <Input
+                    name="firstName"
+                    placeholder="First name"
+                    onChange={handleInputChange}
+                  />
+                </Box>
+                <Box>
+                  <FormLabel>Last name</FormLabel>
+                  <Input
+                    name="lastName"
+                    placeholder="Last name"
+                    onChange={handleInputChange}
+                  />
+                </Box>
+              </Stack>
+              <Box marginTop="20px">
+                <FormLabel>Email address</FormLabel>
                 <Input
-                  name="phoneNumber"
-                  type="tel"
-                  placeholder="Phone number"
+                  name="email"
+                  type="email"
+                  placeholder="Email"
                   onChange={handleInputChange}
                 />
-              </InputGroup>
-              <FormLabel mt="4">Gender</FormLabel>
-              <Select
-                name="gender"
-                placeholder="Select your gender"
-                onChange={handleInputChange}
+              </Box>
+              <Box marginTop="20px">
+                <FormLabel>Phone number</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon children="+234" />
+                  <Input
+                    name="phoneNumber"
+                    type="tel"
+                    placeholder="Phone number"
+                    onChange={handleInputChange}
+                  />
+                </InputGroup>
+              </Box>
+
+              <Box marginTop="20px">
+                <FormLabel>Gender</FormLabel>
+                <Select
+                  name="gender"
+                  placeholder="Select your gender"
+                  onChange={handleInputChange}
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </Select>
+              </Box>
+
+              <Box
+                marginTop="20px"
+                marginLeft="1px"
+                w={{ base: "320px", md: "450px" }}
               >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </Select>
-              <Box marginLeft="1px" w={{ base: "320px", md: "450px" }}>
-                <FormLabel marginTop="20px">Date of birth</FormLabel>
+                <FormLabel>Date of birth</FormLabel>
                 <Flex
                   alignItems="flex-start"
                   border="1px solid"
                   borderColor="gray.200"
-                  p={2}
+                  p={1}
                   borderRadius="8px"
                 >
                   <DatePicker
@@ -303,6 +372,21 @@ const LandingPage = () => {
                   />
                 </Flex>
               </Box>
+
+              <FormLabel marginTop="20px">
+                Upload headshot (only PNG and JPG files are accepted)
+              </FormLabel>
+              <Input
+                name="image"
+                placeholder="Headshot"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  postImage(e.target.files[0], formData, setFormData);
+                }}
+              />
+              {imageLoading && <LoadingSpinner size={20} />}
+
               <FormLabel mt="4">Password</FormLabel>
               <InputGroup size="md">
                 <Input
