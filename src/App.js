@@ -31,6 +31,8 @@ import BookButton from "./components/authLayouts/BookButton";
 import ServicesSection from "./components/unAuthLayouts/ServicesSection";
 import Faqs from "./components/unAuthLayouts/Faqs";
 import WalletPaymentPage from "./components/sections/WalletPayment";
+import VerifyMedicForm from "./components/pages/VerifyMedicForm";
+import CompletionPage from "./components/pages/ComplitionPage";
 
 function App() {
   return (
@@ -42,7 +44,10 @@ function App() {
           <Route path="/contact" element={<ConatactPage />}></Route>
           <Route path="/join" element={<MedicRegPage />}></Route>
           <Route path="/join-complete" element={<MedicRegPage2 />}></Route>
+          <Route path="/verify-medic" element={<VerifyMedicForm />}></Route>
           <Route path="/verify-number" element={<VerifyNumber />}></Route>
+          <Route path="/complete" element={<CompletionPage />}></Route>
+         
           <Route
             path="/verify-medic-number"
             element={<VerifyMedicNumber />}

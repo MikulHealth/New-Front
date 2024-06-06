@@ -1,14 +1,12 @@
 import React from "react";
 import axios from "axios";
+import logo from "../../assets/Logo.svg";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import {
   Box,
   Button,
   Link as ChakraLink,
-  HStack,
-  Spacer,
   Image,
   extendTheme,
   ChakraProvider,
@@ -18,12 +16,12 @@ import {
   Input,
   useToast,
   Select,
+  Flex,
+  VStack,
+  Stack,
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-// import Nurse from "../../assets/Nurse.svg";
-// import Shade from "../../assets/Shade.svg";
-// import logo from "../../assets/Whitelogo.png";
 import "../../styles/pages/LandingPage.css";
 import LoadingSpinner from "../../utils/Spiner";
 
@@ -63,8 +61,6 @@ const LandingPage = () => {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const [show, setShow] = useState(false);
-  // const [uploading, setUploading] = useState(false);
   const [image] = useState();
   const [cvCopy] = useState();
   const [license] = useState();
@@ -79,7 +75,6 @@ const LandingPage = () => {
     });
   };
   const toast = useToast();
-  // const handleClick = () => setShow(!show);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -263,209 +258,91 @@ const LandingPage = () => {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <Box overflowY="scroll" height="100vh">
+      <Flex overflow="scroll" align="center" justify="center" height="100vh">
         <Box
-          bg="#A210C6"
-          p={3}
-          color="white"
-          position="sticky"
-          top="0"
-          zIndex="1000"
-          borderBottom="1px solid white"
+          mb="300px"
+          mt={{ base: "700px", md: "800px" }}
+          width={{ base: "90%", sm: "500px" }}
+          h={{ base: "140%", md: "160%" }}
+          p="6"
+          bg="white"
         >
-          <HStack spacing={10}>
-            <Box w="5px" />
-            <a href="/">
-              <Image 
-              // src={logo}
-               alt="Logo" w="100px" h="30px" />
-            </a>
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <ChakraLink fontStyle="italic" href="/" color="#A210C6">
-              <Button bg="white">Home</Button>
-            </ChakraLink>
-          </HStack>
+          <Box  top={{ base: "-10px", md: "20px" }} left={{ base: "-10px", md: "20px" }}>
+          <a href="/">
+            <Image src={logo} alt="Logo" h={{ base: "40px", md: "58px" }} w={{ base: "150px", md: "200px" }} />
+          </a>
         </Box>
-        <Box display="flex" overflow="hidden">
-          <Box>
-            <Image 
-            // src={Nurse}
-             alt="Logo" w="715px" h="1024px" />
-            <Image
-              // src={Shade}
-              alt="Logo"
-              w="715px"
-              h="1024px"
-              marginTop="-900px"
-            />
-          </Box>
-          <Box>
-            <Text
-              fontSize="32px"
-              fontFamily="body"
-              color="#A210C6"
-              marginTop="80px"
-              marginLeft="10px"
-            >
-              Complete Registration
-            </Text>
-            <form onSubmit={handleSubmit}>
-              <FormControl isRequired marginTop="20px" marginLeft="125px">
-                <Box display="flex" marginTop="20px">
-                  <Box>
-                    <FormLabel>Your Home address</FormLabel>
-                    <Input
-                      name="homeAddress"
-                      placeholder="Home address"
-                      htmlSize={20}
-                      width="auto"
-                      onChange={handleInputChange}
-                    />
+          <Text
+            fontFamily="header"
+            fontSize="2xl"
+            color="#A210C6"
+            mb="4"
+            textAlign="center"
+          >
+            Get started as medic
+          </Text>
+            <form onSubmit={handleSubmit} >
+              <FormControl isRequired>
+                <Stack direction={{ base: "column", md: "row" }} spacing={4} marginTop="20px">
+                  <Box flex="1">
+                    <FormLabel>Medic Type</FormLabel>
+                    <Select name="medicType" placeholder="Medic Type" onChange={handleInputChange}>
+                      <option value="Registered Nurse">Registered Nurse</option>
+                      <option value="Physiotherapist">Physiotherapist</option>
+                      <option value="Assistant Nurse">Assistant Nurse</option>
+                    </Select>
                   </Box>
-                  <Box>
-                    <FormLabel>Guaranto's Name</FormLabel>
-                    <Input
-                      name="guarantorName"
-                      placeholder="Full name"
-                      htmlSize={20}
-                      width="auto"
-                      marginLeft="10px"
-                      onChange={handleInputChange}
-                    />
-                  </Box>
-                </Box>
-                <Box display="flex" marginTop="30px">
-                  <Box>
-                    <FormLabel>Guarantor's email address</FormLabel>
-                    <Input
-                      name="guarantorEmail"
-                      placeholder="email address"
-                      htmlSize={20}
-                      width="auto"
-                      onChange={handleInputChange}
-                    />
-                  </Box>
-                  <Box>
-                    <FormLabel>Guarantor's Phone number</FormLabel>
-                    <Input
-                      name="guarantorPhone"
-                      placeholder="Phone number"
-                      htmlSize={20}
-                      width="auto"
-                      marginLeft="10px"
-                      onChange={handleInputChange}
-                    />
-                  </Box>
-                </Box>
-                <Box name="medicType" display="flex" marginTop="30px">
-                  <Select
-                    name="medicType"
-                    placeholder="Medic Type"
-                    w="205px"
-                    onChange={handleInputChange}
-                  >
-                    <option value="Registered Nurse">Registered Nurse</option>
-                    <option value="Physiotherapist">Physiotherapist</option>
-                    <option value="Assistant Nurse">Assistant Nurse</option>
-                  </Select>
-                  <Box>
-                    <Select
-                      name="specialization"
-                      placeholder="Specialization"
-                      w="205px"
-                      marginLeft="10px"
-                      onChange={handleInputChange}
-                    >
+                  <Box flex="1">
+                    <FormLabel>Specialization</FormLabel>
+                    <Select name="specialization" placeholder="Specialization" onChange={handleInputChange}>
                       <option value="Midwife">Midwife</option>
-                      <option value="Accident and Emergency">
-                        Accident and Emergency
-                      </option>
+                      <option value="Accident and Emergency">Accident and Emergency</option>
                       <option value="General Nurse">General Nurse</option>
                       <option value="Other">Other</option>
                     </Select>
                   </Box>
-                </Box>
-
-                <Box display="flex" marginTop="30px">
-                  <Select
-                    name="bankName"
-                    placeholder="Your Bank name"
-                    w="205px"
-                    onChange={handleInputChange}
-                  >
-                    <option value="Access Bank">Access Bank</option>
-                    <option value="Bankly">Bankly</option>
-                    <option value="Zeneith Bank">Zeneith Bank</option>
-                  </Select>
-                  <Box>
-                    <Input
-                      name="accountNumber"
-                      placeholder="Account number"
-                      htmlSize={20}
-                      width="auto"
-                      marginLeft="10px"
-                      onChange={handleInputChange}
-                    />
+                </Stack>
+                <Stack direction={{ base: "column", md: "row" }} spacing={4} marginTop="20px">
+                  <Box flex="1">
+                    <FormLabel>Bank Name</FormLabel>
+                    <Select name="bankName" placeholder="Your Bank name" onChange={handleInputChange}>
+                      <option value="Access Bank">Access Bank</option>
+                      <option value="Bankly">Bankly</option>
+                      <option value="Zeneith Bank">Zeneith Bank</option>
+                    </Select>
                   </Box>
-                </Box>
-                <Box display="flex" marginTop="30px">
-                  <Box>
-                    <Input
-                      name="accountName"
-                      placeholder="Account Name"
-                      htmlSize={20}
-                      width="auto"
-                      onChange={handleInputChange}
-                    />
+                  <Box flex="1">
+                    <FormLabel>Account Number</FormLabel>
+                    <Input name="accountNumber" placeholder="Account number" onChange={handleInputChange} />
                   </Box>
-                  <Box>
-                    <Input
-                      name="nin"
-                      placeholder="NIN ID"
-                      htmlSize={20}
-                      width="auto"
-                      marginLeft="10px"
-                      onChange={handleInputChange}
-                    />
+                </Stack>
+                <Stack direction={{ base: "column", md: "row" }} spacing={4} marginTop="20px">
+                  <Box flex="1">
+                    <FormLabel>Account Name</FormLabel>
+                    <Input name="accountName" placeholder="Account Name" onChange={handleInputChange} />
                   </Box>
-                </Box>
-                <FormLabel marginLeft="10px" marginTop="30px">
-                  Upload CV (only PNG, JPG and PDF files are accepted)
-                </FormLabel>
+                </Stack>
+                <FormLabel marginTop="20px">Upload CV (only PNG, JPG and PDF files are accepted)</FormLabel>
                 <Input
                   name="cvCopy"
-                  marginLeft="-123px"
-                  w="422px"
                   type="file"
                   onChange={(e) => {
                     postCv(e.target.files[0], formData, setFormData);
                   }}
                 />
                 {cvLoading && <LoadingSpinner size={20} />}
-                <FormLabel marginLeft="10px" marginTop="30px">
-                  Upload valid licence (only PNG, JPG and PDF files are
-                  accepted)
-                </FormLabel>
+                <FormLabel marginTop="20px">Upload valid licence (only PNG, JPG and PDF files are accepted)</FormLabel>
                 <Input
                   name="license"
-                  marginLeft="-123px"
-                  w="422px"
                   type="file"
                   onChange={(e) => {
                     postLicense(e.target.files[0], formData, setFormData);
                   }}
                 />
                 {licenseLoading && <LoadingSpinner size={20} />}
-                <FormLabel marginLeft="10px" marginTop="30px">
-                  Upload headshort (only PNG and JPG files are accepted)
-                </FormLabel>
+                <FormLabel marginTop="20px">Upload headshot (only PNG and JPG files are accepted)</FormLabel>
                 <Input
                   name="image"
-                  marginLeft="-123px"
-                  w="422px"
                   type="file"
                   accept="image/*"
                   placeholder="Image"
@@ -474,49 +351,23 @@ const LandingPage = () => {
                   }}
                 />
                 {imageLoading && <LoadingSpinner size={20} />}
-
-                <Text
-                  marginLeft="-123px"
-                  fontSize="18px"
-                  fontFamily="Montserrat"
-                  marginTop="20px"
-                  // fontWeight="bold"
-                >
-                  By clicking the “create account” button, you agree to our{" "}
-                  <br></br>
-                  <ChakraLink fontStyle="italic" href="/login" color="#A210C6">
-                    terms and conditions
-                  </ChakraLink>
-                </Text>
+               
                 <Button
                   type="submit"
-                  w="350px"
+                  w={{ base: "100%", md: "350px" }}
                   bg="#A210C6"
                   marginTop="20px"
-                  marginLeft="-140px"
                   color="white"
                   isLoading={loading}
-                  loadingText="Creating..."
+                  loadingText="Submiting..."
                 >
-                  {loading ? "Loading..." : "Create Account"}
+                  {loading ? "Loading..." : "Submit"}
                 </Button>
-                <Text
-                  marginLeft="-123px"
-                  fontSize="16px"
-                  fontFamily="Montserrat"
-                  marginTop="10px"
-                  fontWeight="bold"
-                >
-                  Already have an account?{" "}
-                  <ChakraLink fontStyle="italic" href="/login" color="#A210C6">
-                    Login
-                  </ChakraLink>
-                </Text>
               </FormControl>
             </form>
-          </Box>
+          {/* </VStack> */}
         </Box>
-      </Box>
+      </Flex>
     </ChakraProvider>
   );
 };
