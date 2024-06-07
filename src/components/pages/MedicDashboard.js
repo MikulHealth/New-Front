@@ -1,0 +1,246 @@
+import React, { useState, useEffect } from "react";
+import { GetCurrentMedic } from "../../apiCalls/UserApis";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { SetUser } from "../../redux/userSlice";
+// import Help from "../authLayouts/Help";
+import Medics from "../../assets/Medics.svg";
+import {
+  Box,
+  Button,
+  Flex,
+  VStack,
+  Image,
+  extendTheme,
+  ChakraProvider,
+  Text,
+  Skeleton,
+} from "@chakra-ui/react";
+import AOS from "aos";
+import "../../styles/pages/LandingPage.css";
+import NavBar from "../authLayouts/MedicNavBar";
+import LeftSideBar from "../authLayouts/MedicSideBar";
+import MobileFooter from "../authLayouts/MedicFooter";
+import CalendarBox from "../../components/sections/CalenderBox";
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
+
+const MedicDashboard = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+//   const { user } = useSelector((state) => state.userReducer);
+//   const balance = user?.walletBalance;
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
+//   const formatAmount = (amount) => {
+//     const num = Number(amount);
+//     return num.toLocaleString();
+//   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      if (localStorage.getItem("token")) {
+        try {
+          const response = await GetCurrentMedic();
+
+          if (response.success) {
+            dispatch(SetUser(response.data));
+          } else {
+            console.error("API request failed:", response.error);
+          }
+        } catch (error) {
+          console.error("Error in GetCurrentMedic API:", error);
+          navigate("/login");
+          window.location.reload();
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        navigate("/login");
+        window.location.reload();
+      }
+    };
+
+    fetchData();
+  }, [navigate, dispatch]);
+
+  const settingsContainerStyle = {
+    animation: "slideInUp 0.9s ease-in-out",
+  };
+
+  return (
+    <ChakraProvider theme={customTheme} overflow="hidden">
+      <LeftSideBar />
+      <VStack
+        style={settingsContainerStyle}
+        ml={{ md: "230px" }}
+        w={{ base: "100%", md: "80%" }}
+        h={{ base: "100%", md: "100%" }}
+      >
+        <NavBar />
+        {loading ? (
+          <Skeleton
+            ml={{ base: "5px", md: "0" }}
+            w={{ base: "375px", md: "70vw" }}
+            h={{ base: "189px", md: "40vh" }}
+            startColor="#E552FF"
+            endColor="#870DA5"
+            fadeDuration={0.6}
+            borderRadius="20px"
+          />
+        ) : (
+          <Flex
+            // ml={{ md: "0px" }}
+            mt={{ base: "0", md: "30px" }}
+            mb={{ base: "150px", md: "0" }}
+            flexDirection={{ base: "column", md: "row" }}
+            alignItems={{ base: "center", md: "flex-start" }}
+            justifyContent={{ base: "center", md: "flex-start" }}
+          >
+            <Box>
+              <Box
+                textAlign="center"
+                w={{ base: "375px", md: "630px" }}
+                h={{ base: "140px", md: "276px" }}
+                mt={{ base: "4px", md: "0" }}
+                mb={{ base: "5px", md: "30" }}
+                bg="#A210C6"
+                borderRadius="10px"
+              >
+                <Flex>
+                  <Box justifyContent="left" p="20px">
+                    <Text
+                      fontSize={{ base: "12px", md: "16px" }}
+                      textAlign="left"
+                      fontFamily="body"
+                      color="white"
+                      mt={{ base: "5px", md: "40px" }}
+                    >
+                      Your time, your terms. <br></br>Request appointments
+                      seamlessly
+                    </Text>
+                    <Button
+                      ml={{ base: "-25px", md: "0" }}
+                      fontSize={{ base: "10px", md: "16px" }}
+                      textAlign="center"
+                      fontFamily="body"
+                      color="#A210C6"
+                      mt={{ base: "20px", md: "90px" }}
+                      bg="white"
+                      w={{ base: "150px", md: "240px" }}
+                      h={{ base: "30px", md: "52px" }}
+                      borderRadius="100px"
+                    >
+                      Request appointment
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Image
+                      src={Medics}
+                      mt={{ base: "40px", md: "40px" }}
+                      w={{ base: "160px", md: "340px" }}
+                      h={{ base: "100px", md: "240px" }}
+                    />
+                  </Box>
+                </Flex>
+              </Box>
+
+              <Box marginTop="-10px">
+                <Flex>
+                  <Box
+                    // style={{
+                    //   boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
+                    //   transition: "transform 0.3s ease-in-out",
+                    // }}
+                    bg="#CFF4D7"
+                    h={{ base: "125px", md: "186px" }}
+                    mt={{ base: "4", md: "0" }}
+                    w={{ base: "180px", md: "300px" }}
+                    borderRadius="5px"
+                    _hover={{
+                      transform: "translateY(-10px)",
+                    }}
+                  ></Box>
+
+                  <Box
+                    style={{
+                      boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
+                      transition: "transform 0.3s ease-in-out",
+                    }}
+                    _hover={{
+                      transform: "translateY(-10px)",
+                    }}
+                    bg="#FCF6E8"
+                    h={{ base: "125px", md: "186px" }}
+                    mt={{ base: "4", md: "0" }}
+                    w={{ base: "180px", md: "300px" }}
+                    ml={{base: "15px", md: "30px"}}
+                    borderRadius="5px"
+                  ></Box>
+                </Flex>
+                <Flex mt={{ base: "", md: "20px" }}>
+                  <Box
+                    style={{
+                      boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
+                      transition: "transform 0.3s ease-in-out",
+                    }}
+                    _hover={{
+                      transform: "translateY(-10px)",
+                    }}
+                    bg="#E9E7FC"
+                    h={{ base: "125px", md: "186px" }}
+                    mt={{ base: "3", md: "0" }}
+                    w={{ base: "180px", md: "300px" }}
+                    borderRadius="5px"
+                  >
+                    <Box
+                      display={{ base: "block", md: "flex" }}
+                      alignItems="center"
+                    >
+                      <Box
+                        pt={{ base: "10px", md: "0" }}
+                        mt={{ base: "-35px", md: "0" }}
+                        ml={{ base: "45px", md: "0" }}
+                      ></Box>
+                    </Box>
+                  </Box>
+                </Flex>
+              </Box>
+            </Box>
+            <Flex display={{ base: "none", md: "block" }}>
+              <Box className="calendar-box">
+                <CalendarBox />
+              </Box>
+              {/* <Box display={{ base: "none", md: "block" }} ml="-50px">
+                <Help />
+              </Box> */}
+            </Flex>
+          </Flex>
+        )}
+        <MobileFooter />
+      </VStack>
+    </ChakraProvider>
+  );
+};
+
+export default MedicDashboard;

@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import UserDetailsModal from "../sections/UserDetails";
+import MedicDetailsDrawer from "../sections/MedicDetails";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import LogoutIcon from "../../assets/Logout.svg";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -28,7 +28,7 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import HomeIcon from "../../assets/HomeBlack.svg";
 import Wallet from "../../assets/Wallet.svg";
-import serviceIcon from "../../assets/ServiceIcon.svg";
+import serviceIcon from "../../assets/PatientsIcon.svg";
 import SettingsIcon from "../../assets/SettingsIcon.svg";
 
 const customTheme = extendTheme({
@@ -47,7 +47,7 @@ const customTheme = extendTheme({
   },
 });
 
-export default function NavBar() {
+export default function MedicNavBar() {
   const { user } = useSelector((state) => state.userReducer);
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,7 +67,7 @@ export default function NavBar() {
     localStorage.removeItem("token");
     localStorage.removeItem("phoneNumber");
     navigate("/login");
-     window.location.reload();
+    window.location.reload();
   };
 
   const listItemStyle = {
@@ -88,21 +88,20 @@ export default function NavBar() {
   };
 
   const pageTitles = {
-    "/client-dashboard": "Dashboard",
-    "/appointment": "Appointments",
-    "/wallet": "Wallet",
-    "/services": "Services",
-    "/settings": "Settings",
+    "/medic-dashboard": "Dashboard",
+    "/medic-appointment": "Appointments",
+    "/medic-wallet": "Wallet",
+    "/medic-patients": "Patients",
+    "/medic-settings": "Settings",
     "/logout": "Logout",
-    "/customize-service": "Customize Service",
-    "/edit-profile": "Settings",
-    "/change-password": "Settings",
-    "/notification-settings": "Settings",
+    "/medic-edit-profile": "Settings",
+    "/medic-change-password": "Settings",
+    "/medic-notification-settings": "Settings",
     "/help": "Help",
   };
 
   const pageTitle = pageTitles[location.pathname] || "Unknown Page";
-  const isDashboard = location.pathname === "/client-dashboard";
+  const isDashboard = location.pathname === "/medic-dashboard";
 
   return (
     <ChakraProvider theme={customTheme}>
@@ -113,16 +112,20 @@ export default function NavBar() {
             <DrawerCloseButton />
             <DrawerBody>
               <VStack spacing={3} align="left" mt={5}>
-                <NavLink to="/client-dashboard" style={listItemStyle}>
+                <NavLink to="/medic-dashboard" style={listItemStyle}>
                   <Flex
-                   fontFamily="heading"
-                   fontSize={{base: "18", md: "28px"}}
-                    color={location.pathname === "/client-dashboard" ? "#A210C6" : ""}
+                    fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
+                    color={
+                      location.pathname === "/medic-dashboard" ? "#A210C6" : ""
+                    }
                     fontWeight={
-                      location.pathname === "/client-dashboard" ? "bold" : ""
+                      location.pathname === "/medic-dashboard" ? "bold" : ""
                     }
                     textDecoration={
-                      location.pathname === "/client-dashboard" ? "underline" : ""
+                      location.pathname === "/medic-dashboard"
+                        ? "underline"
+                        : ""
                     }
                     alignItems="center"
                   >
@@ -131,10 +134,26 @@ export default function NavBar() {
                   </Flex>
                 </NavLink>
 
+                <NavLink to="/patients" style={listItemStyle}>
+                  <Flex
+                    fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
+                    color={location.pathname === "/patients" ? "#A210C6" : ""}
+                    fontWeight={location.pathname === "/patients" ? "bold" : ""}
+                    textDecoration={
+                      location.pathname === "/patients" ? "underline" : ""
+                    }
+                    alignItems="center"
+                  >
+                    <Image src={serviceIcon} alt="Patients" style={iconStyle} />
+                    <Text style={listTextStyle}>Patients</Text>
+                  </Flex>
+                </NavLink>
+
                 <NavLink to="/appointment" style={listItemStyle}>
                   <Flex
-                   fontFamily="heading"
-                   fontSize={{base: "18", md: "28px"}}
+                    fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
                     color={
                       location.pathname === "/appointment" ? "#A210C6" : ""
                     }
@@ -157,12 +176,16 @@ export default function NavBar() {
 
                 <NavLink to="/wallet" style={listItemStyle}>
                   <Flex
-                   fontSize={{base: "18", md: "28px"}}
-                   fontFamily="heading"
-                    color={location.pathname === "/wallet" ? "#A210C6" : ""}
-                    fontWeight={location.pathname === "/wallet" ? "bold" : ""}
+                    fontSize={{ base: "18", md: "28px" }}
+                    fontFamily="heading"
+                    color={
+                      location.pathname === "/medic-wallet" ? "#A210C6" : ""
+                    }
+                    fontWeight={
+                      location.pathname === "/medic-wallet" ? "bold" : ""
+                    }
                     textDecoration={
-                      location.pathname === "/wallet" ? "underline" : ""
+                      location.pathname === "/medic-wallet" ? "underline" : ""
                     }
                     alignItems="center"
                   >
@@ -171,64 +194,35 @@ export default function NavBar() {
                   </Flex>
                 </NavLink>
 
-                <NavLink to="/services" style={listItemStyle}>
-                  <Flex
-                   fontSize={{base: "18", md: "28px"}}
-                   fontFamily="heading"
-                    color={
-                      location.pathname === "/services" ||
-                      location.pathname === "/customize-service"
-                        ? "#A210C6"
-                        : ""
-                    }
-                    fontWeight={
-                      location.pathname === "/services" ||
-                      location.pathname === "/customize-service"
-                        ? "bold"
-                        : ""
-                    }
-                    textDecoration={
-                      location.pathname === "/services" ||
-                      location.pathname === "/customize-service"
-                        ? "underline"
-                        : ""
-                    }
-                    alignItems="center"
-                  >
-                    <Image src={serviceIcon} alt="services" style={iconStyle} />
-                    <Text style={listTextStyle}>Services</Text>
-                  </Flex>
-                </NavLink>
-
                 <NavLink to="/settings" style={listItemStyle}>
                   <Flex
-                   fontSize={{base: "18", md: "28px"}}
-                   fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
+                    fontFamily="heading"
                     style={listTextStyle}
                     marginLeft="5px"
                     textDecoration={
-                      location.pathname === "/settings" ||
-                      location.pathname === "/edit-profile" ||
-                      location.pathname === "/change-password" ||
-                      location.pathname === "/notification-settings" ||
+                      location.pathname === "/medic-settings" ||
+                      location.pathname === "/medic-edit-profile" ||
+                      location.pathname === "/medic-change-password" ||
+                      location.pathname === "/medic-notification-settings" ||
                       location.pathname === "/help"
                         ? "underline"
                         : ""
                     }
                     fontWeight={
-                      location.pathname === "/settings" ||
-                      location.pathname === "/edit-profile" ||
-                      location.pathname === "/change-password" ||
-                      location.pathname === "/notification-settings" ||
+                      location.pathname === "/medic-settings" ||
+                      location.pathname === "/medic-edit-profile" ||
+                      location.pathname === "/medic-change-password" ||
+                      location.pathname === "/medic-notification-settings" ||
                       location.pathname === "/help"
                         ? "bold"
                         : ""
                     }
                     color={
-                      location.pathname === "/settings" ||
-                      location.pathname === "/edit-profile" ||
-                      location.pathname === "/change-password" ||
-                      location.pathname === "/notification-settings" ||
+                      location.pathname === "/medic-settings" ||
+                      location.pathname === "/medic-edit-profile" ||
+                      location.pathname === "/medic-change-password" ||
+                      location.pathname === "/medic-notification-settings" ||
                       location.pathname === "/help"
                         ? "#A210C6"
                         : ""
@@ -245,8 +239,8 @@ export default function NavBar() {
                 </NavLink>
                 <NavLink onClick={handleConfirmLogout} style={listItemStyle}>
                   <Flex
-                   fontSize={{base: "18", md: "28px"}}
-                   fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
+                    fontFamily="heading"
                     style={{
                       cursor: "pointer",
                     }}
@@ -290,6 +284,7 @@ export default function NavBar() {
               flexDirection={{ base: "column", md: "row" }}
             >
               <Heading
+                ml={{ md: "20px" }}
                 fontSize={{ base: "18", md: "28px" }}
                 color="#A210C6"
                 fontWeight="bold"
@@ -301,7 +296,6 @@ export default function NavBar() {
                 fontStyle="italic"
                 fontFamily="body"
                 marginLeft={{ base: "10px", md: "5px" }}
-               
                 fontSize={{ base: "10px", md: "16px" }}
                 marginTop={{ base: "5px", md: "5px" }}
               >
@@ -310,18 +304,16 @@ export default function NavBar() {
             </Flex>
           ) : (
             <Heading
-            
               justifyContent="flex-start"
               fontSize={{ base: "18", md: "28px" }}
               color="#A210C6"
               fontWeight="bold"
-              
             >
               {pageTitle}
             </Heading>
           )}
-         <Spacer/>
-         
+          <Spacer />
+
           <Box
             style={{ cursor: "pointer" }}
             onClick={handleOpenUserDetailsModal}
@@ -341,7 +333,7 @@ export default function NavBar() {
           </Box>
         </HStack>
       </header>
-      <UserDetailsModal
+      <MedicDetailsDrawer
         isOpen={showUserDetailsModal}
         onClose={handleCloseUserDetailsModal}
       />

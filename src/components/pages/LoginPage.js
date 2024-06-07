@@ -57,13 +57,13 @@ const LandingPage = () => {
 
   const handleLogin = async () => {
     setLoading(true);
-
+  
     if (!validateEmail(emailInput)) {
       toast.warning("Please enter a valid email address");
       setLoading(false);
       return;
     }
-
+  
     const apiUrl = "https://backend-c1pz.onrender.com/login";
     // const apiUrl = "http://localhost:8080/login";
     try {
@@ -75,14 +75,23 @@ const LandingPage = () => {
           password: passwordInput,
         }),
       });
-
+  
       if (response.ok) {
         toast.success("Login successful");
         const responseData = await response.json();
         localStorage.setItem("token", responseData.access_token);
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 3000);
+  
+        // Extract roles from the response data
+        const userRoles = responseData.roles || [];
+  
+        // Navigate based on user roles
+        if (userRoles.includes("NEW_USER") || userRoles.includes("VERIFIED_CUSTOMER")) {
+          navigate("/client-dashboard");
+        } else if (userRoles.includes("NEW_MEDIC") || userRoles.includes("VERIFIED_MEDIC")) {
+          navigate("/medic-dashboard");
+        } else {
+          toast.error("Unauthorized access");
+        }
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData.message);

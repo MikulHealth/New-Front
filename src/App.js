@@ -33,6 +33,7 @@ import Faqs from "./components/unAuthLayouts/Faqs";
 import WalletPaymentPage from "./components/sections/WalletPayment";
 import VerifyMedicForm from "./components/pages/VerifyMedicForm";
 import CompletionPage from "./components/pages/ComplitionPage";
+import MedicDashboard from "./components/pages/MedicDashboard";
 
 function App() {
   return (
@@ -61,7 +62,8 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
-          <Route path="/dashboard" element={<ClientDash />}></Route>
+          <Route path="/client-dashboard" element={<ClientDash />}></Route>
+          <Route path="/medic-dashboard" element={<MedicDashboard />}></Route>
           <Route path="/details" element={<UserDetailsModal />}></Route>
           <Route path="/verifyPhone" element={<VerifyOtpDash />}></Route>
           <Route path="/make-payment" element={<PaymentConfirmationPage />} />

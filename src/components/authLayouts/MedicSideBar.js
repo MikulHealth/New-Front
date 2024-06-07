@@ -8,13 +8,13 @@ import HomeIconWhite from "../../assets/HomeWhite.svg";
 import HomeIconBlack from "../../assets/HomeBlack.svg";
 import Wallet from "../../assets/Wallet.svg";
 import WalletWh from "../../assets/WalletWhite.svg";
-import serviceIcon from "../../assets/ServiceIcon.svg";
-import serviceIconWh from "../../assets/ServiceWhite.svg";
-import SettingsIconWh from "../../assets/SettingsWhite.svg";
+import serviceIcon from "../../assets/PatientsIcon.svg";
+import serviceIconWh from "../../assets/PatientsIcon.svg";
+import SettingsIconWh from "../../assets/PatientsIconColored.svg";
 import SettingsIcon from "../../assets/SettingsIcon.svg";
 import LogoutIcon from "../../assets/Logout.svg";
 
-const LeftSideBar = () => {
+const MedicSideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,33 +65,34 @@ const LeftSideBar = () => {
             icon={HomeIconBlack}
             activeIcon={HomeIconWhite}
             text="Home"
-            to="/client-dashboard"
+            to="/medic-dashboard"
+          />
+
+          <NavLinkWithBackground
+            icon={serviceIcon}
+            activeIcon={serviceIconWh}
+            text="Patients"
+            to="/patients"
           />
           <NavLinkWithBackground
             icon={AppointmentsIcon}
             activeIcon={AppointmentsIconWh}
             text="Appointments"
-            to="/appointment"
+            to="/medic-appointment"
           />
 
           <NavLinkWithBackground
             icon={Wallet}
             activeIcon={WalletWh}
             text="Wallet"
-            to="/wallet"
+            to="/medic-wallet"
           />
 
-          <NavLinkWithBackground
-            icon={serviceIcon}
-            activeIcon={serviceIconWh}
-            text="Services"
-            to="/services"
-          />
           <NavLinkWithBackground
             icon={SettingsIcon}
             activeIcon={SettingsIconWh}
             text="Settings"
-            to="/settings"
+            to="/medic-settings"
           />
 
           <Box ml="10px" marginTop="70px" onClick={handleConfirmLogout}>
@@ -125,4 +126,4 @@ const LeftSideBar = () => {
   );
 };
 
-export default LeftSideBar;
+export default MedicSideBar;
