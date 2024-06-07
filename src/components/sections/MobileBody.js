@@ -1,10 +1,13 @@
 import React from "react";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useDisclosure } from "@chakra-ui/react";
 import WalletIcon from "../../assets/MedicWallet.svg";
 import Patients from "../../assets/MedicPatients.svg";
 import Report from "../../assets/MedicReport.svg";
+import PatientReportDrawer from "./PatientReportDrawer";
 
 const SummaryCards = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box display={{ base: "block", md: "none" }} marginTop="10px">
       <Box>
@@ -110,6 +113,8 @@ const SummaryCards = () => {
             mt={{ base: "3", md: "0" }}
             w={{ base: "180px", md: "300px" }}
             borderRadius="5px"
+            onClick={onOpen}
+            cursor="pointer"
           >
             <Box>
               <Flex>
@@ -137,7 +142,6 @@ const SummaryCards = () => {
                 fontFamily="body"
                 color="#212427"
               >
-                {" "}
                 Update and upload patient report
               </Text>
               <Text
@@ -159,6 +163,7 @@ const SummaryCards = () => {
           </Box>
         </Flex>
       </Box>
+      <PatientReportDrawer isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

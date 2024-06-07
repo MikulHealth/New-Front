@@ -23,6 +23,7 @@ import MobileFooter from "../authLayouts/MedicFooter";
 import CalendarBox from "../../components/sections/CalenderBox";
 import SummaryCards from "../sections/MobileBody";
 import DesktopCards from "../sections/DesktopBody";
+import RequestAppointmentModal from "../sections/RequestAppModal";
 
 const customTheme = extendTheme({
   components: {
@@ -43,18 +44,15 @@ const customTheme = extendTheme({
 const MedicDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  //   const { user } = useSelector((state) => state.userReducer);
-  //   const balance = user?.walletBalance;
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   useEffect(() => {
     AOS.init();
   }, []);
-
-  //   const formatAmount = (amount) => {
-  //     const num = Number(amount);
-  //     return num.toLocaleString();
-  //   };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -149,6 +147,7 @@ const MedicDashboard = () => {
                     w={{ base: "150px", md: "240px" }}
                     h={{ base: "30px", md: "52px" }}
                     borderRadius="100px"
+                    onClick={openModal}
                   >
                     Request appointment
                   </Button>
@@ -170,12 +169,10 @@ const MedicDashboard = () => {
               <Box className="calendar-box">
                 <CalendarBox />
               </Box>
-              {/* <Box display={{ base: "none", md: "block" }} ml="-50px">
-                <Help />
-              </Box> */}
             </Flex>
           </Flex>
         )}
+        <RequestAppointmentModal isOpen={isModalOpen} onClose={closeModal} />
         <MobileFooter />
       </VStack>
     </ChakraProvider>
