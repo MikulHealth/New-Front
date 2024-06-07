@@ -75,7 +75,8 @@ const LandingPage = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/v1/angel/registerMedic",
+        // "http://localhost:8080/v1/angel/registerMedic",
+        "https://backend-c1pz.onrender.com/v1/angel/registerMedic",
         formData,
         {
           headers: {

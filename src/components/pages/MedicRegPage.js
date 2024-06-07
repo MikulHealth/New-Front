@@ -150,8 +150,8 @@ const LandingPage = () => {
     try {
       const updatedFormData = { ...formData, phoneNumber: validPhoneNumber };
       const response = await axios.post(
-        // "https://backend-c1pz.onrender.com/v1/angel/join",
-        "http://localhost:8080/v1/angel/registerMedicUser",
+        "https://backend-c1pz.onrender.com/v1/angel/registerMedicUser",
+        // "http://localhost:8080/v1/angel/registerMedicUser",
         updatedFormData,
         { headers: { "Content-Type": "application/json" } }
       );

@@ -66,7 +66,8 @@ const VerifyMedicForm = () => {
 
       try {
         const response = await axios.post(
-            "http://localhost:8080/v1/angel/medicIdentity",
+            // "http://localhost:8080/v1/angel/medicIdentity",
+            "https://backend-c1pz.onrender.com/v1/angel/medicIdentity",
           formData,
           {
             headers: {
