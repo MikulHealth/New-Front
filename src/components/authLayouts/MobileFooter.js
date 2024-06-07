@@ -40,14 +40,14 @@ const MobileFooter = () => {
         paddingY={3}
         paddingX={4}
       >
-        <NavLink to="/dashboard" style={listItemStyle}>
+        <NavLink to="/client-dashboard" style={listItemStyle}>
           <VStack>
             <Image src={HomeIcon} alt="home" style={iconStyle} />
             <Text
-              color={location.pathname === "/dashboard" ? "#A210C6" : ""}
-              fontWeight={location.pathname === "/dashboard" ? "bold" : ""}
+              color={location.pathname === "/client-dashboard" ? "#A210C6" : ""}
+              fontWeight={location.pathname === "/client-dashboard" ? "bold" : ""}
               textDecoration={
-                location.pathname === "/dashboard" ? "underline" : ""
+                location.pathname === "/client-dashboard" ? "underline" : ""
               }
             >
               Home
