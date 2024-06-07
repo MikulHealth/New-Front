@@ -4,23 +4,6 @@ import { Box, Text, Flex, Button } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { format, addMonths, subMonths, startOfWeek, endOfWeek, startOfMonth, endOfMonth, addDays, isSameMonth, isSameDay } from "date-fns";
 
-
-// const customTheme = extendTheme({
-//     components: {
-//       Link: {
-//         baseStyle: {
-//           _focus: {
-//             boxShadow: "none",
-//           },
-//         },
-//       },
-//     },
-//     fonts: {
-//       body: "Montserrat, sans-serif",
-//       heading: "Gill Sans MT, sans-serif",
-//     },
-//   });
-
 const CalendarBox = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -31,7 +14,7 @@ const CalendarBox = () => {
         <Button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
           <ChevronLeftIcon w={6} h={6} />
         </Button>
-        <Text fontFamily="sans-serif" fontSize="lg" >
+        <Text fontFamily="sans-serif" fontSize="lg">
           {format(currentMonth, "MMMM yyyy")}
         </Text>
         <Button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
@@ -44,11 +27,10 @@ const CalendarBox = () => {
   const renderDays = () => {
     const days = [];
     const dayNames = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-    // const startDate = startOfWeek(currentMonth, { weekStartsOn: 1 });
 
     for (let i = 0; i < 7; i++) {
       days.push(
-        <Box fontFamily="sans-serif" key={i} w="14%" fontSize="16px" textAlign="center">
+        <Box fontFamily="sans-serif" key={i} w="14%" fontSize={{ base: "14px", md: "16px" }} textAlign="center">
           {dayNames[i]}
         </Box>
       );
@@ -78,7 +60,7 @@ const CalendarBox = () => {
             key={day}
             w="14%"
             textAlign="center"
-            p="2"
+            p={{ base: "1", md: "2" }}
             borderRadius="50%"
             bg={
               !isSameMonth(day, monthStart)
@@ -114,14 +96,13 @@ const CalendarBox = () => {
 
   return (
     <Box
-      w={{ base: "90%", md: "300px" }}
+      w={{ base: "100%", md: "300px" }}
       h={{ base: "auto", md: "700px" }}
-      border="2px solid #A210C6"
+      border="1px solid #A210C6"
       borderRadius="20px"
       boxShadow="0 4px 8px rgba(162, 16, 198, 0.4)"
-      ml="30px"
+      ml={{ base: "0px", md: "30px" }}
       padding="20px"
-      
     >
       <Text fontSize="lg" fontFamily="sans-serif" fontWeight="bold" mb="4">
         My Calendar
