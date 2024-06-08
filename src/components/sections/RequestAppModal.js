@@ -73,8 +73,8 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      // const apiUrl = "http://localhost:8080/v1/appointment/request";
-      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/request";
+      const apiUrl = "http://localhost:8080/v1/appointment/request";
+      // const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/request";
 
       const headers = {
         "Content-Type": "application/json",
@@ -89,7 +89,7 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
         console.log("Appointment requested successfully:", response.data);
         onClose();
       } else {
-        toast.error("Appointment request failed");
+        toast.error(response.data.message);
         console.error("Appointment request failed:", response.data.message);
         setLoading(false);
       }

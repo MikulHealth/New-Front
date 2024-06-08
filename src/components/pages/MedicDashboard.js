@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { GetCurrentMedic } from "../../apiCalls/UserApis";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -14,6 +15,7 @@ import {
   Image,
   Text,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "../../styles/pages/LandingPage.css";
@@ -24,6 +26,7 @@ import CalendarBox from "../../components/sections/CalenderBox";
 import SummaryCards from "../sections/MobileBody";
 import DesktopCards from "../sections/DesktopBody";
 import RequestAppointmentModal from "../sections/RequestAppModal";
+import MatchedMedicAppointmentsModal from "../sections/MatchedMedicAppointmentsModal "; 
 
 const customTheme = extendTheme({
   components: {
@@ -44,11 +47,17 @@ const customTheme = extendTheme({
 const MedicDashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [matchedAppointments, setMatchedAppointments] = useState([]);
+  const [isMatchedAppointmentsModalOpen, setIsMatchedAppointmentsModalOpen] = useState(false); 
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const openMatchedAppointmentsModal = () => setIsMatchedAppointmentsModalOpen(true);
+  const closeMatchedAppointmentsModal = () => setIsMatchedAppointmentsModalOpen(false);
 
   useEffect(() => {
     AOS.init();
@@ -82,6 +91,50 @@ const MedicDashboard = () => {
 
     fetchData();
   }, [navigate, dispatch]);
+
+  useEffect(() => {
+    const fetchMatchedAppointments = async () => {
+      if (localStorage.getItem("token")) {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await axios.get(
+            // `http://localhost:8080/v1/appointment/find-patient`,
+            "https://backend-c1pz.onrender.com/v1/appointment/find-patient",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.data.success) {
+            setMatchedAppointments(response.data.data);
+            if (response.data.data && response.data.data.length > 0) {
+              openMatchedAppointmentsModal(); // Open the matched appointments modal if there are matched appointments
+            }
+          } else {
+            console.error("Failed to fetch matched appointments:", response.data.message);
+            // toast({
+            //   title: "Failed to fetch matched appointments",
+            //   description: response.data.message,
+            //   status: "error",
+            //   duration: 6000,
+            // });
+          }
+        } catch (error) {
+          console.error("Error fetching matched appointments:", error);
+          // toast({
+          //   title: "Error fetching matched appointments",
+          //   description: "An error occurred. Please try again.",
+          //   status: "error",
+          //   duration: 6000,
+          // });
+        }
+      }
+    };
+
+    fetchMatchedAppointments();
+  }, [toast]);
 
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
@@ -161,8 +214,8 @@ const MedicDashboard = () => {
                   />
                 </Box>
               </Flex>
-              <DesktopCards />
-              <SummaryCards />
+              <DesktopCards matchedAppointments={matchedAppointments} />
+              <SummaryCards matchedAppointments={matchedAppointments} />
             </Box>
 
             <Flex display={{ base: "none", md: "block" }}>
@@ -174,6 +227,11 @@ const MedicDashboard = () => {
         )}
         <RequestAppointmentModal isOpen={isModalOpen} onClose={closeModal} />
         <MobileFooter />
+        <MatchedMedicAppointmentsModal
+          isOpen={isMatchedAppointmentsModalOpen}
+          onClose={closeMatchedAppointmentsModal}
+          matchedAppointments={matchedAppointments}
+        />
       </VStack>
     </ChakraProvider>
   );

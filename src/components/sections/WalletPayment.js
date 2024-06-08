@@ -74,7 +74,7 @@ const handleWalletPayment = async () => {
         toast.success("Payment successful");
        
         setTimeout(() => {
-          navigate("/dashboard"); 
+          navigate("/client-dashboard"); 
         }, 3000);
 
       } else {

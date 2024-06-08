@@ -111,7 +111,7 @@ const PaymentConfirmationPage = () => {
         });
         toast.success("Payment verified");
         setTimeout(() => {
-          navigate("/dashboard")
+          navigate("/client-dashboard")
         }, 5000);
         // window.location.reload();
       } else {
