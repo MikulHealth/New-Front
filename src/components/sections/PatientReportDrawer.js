@@ -413,7 +413,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           {step === 3 && (
             <>
               <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Comments</FormLabel>
+                <FormLabel fontFamily="body">Obeservation/Comments</FormLabel>
                 <Textarea
                   name="comments"
                   placeholder="Comments"

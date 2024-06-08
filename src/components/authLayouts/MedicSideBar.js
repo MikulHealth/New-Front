@@ -8,11 +8,11 @@ import HomeIconWhite from "../../assets/HomeWhite.svg";
 import HomeIconBlack from "../../assets/HomeBlack.svg";
 import Wallet from "../../assets/Wallet.svg";
 import WalletWh from "../../assets/WalletWhite.svg";
-import serviceIcon from "../../assets/PatientsIcon.svg";
-import serviceIconWh from "../../assets/PatientsIcon.svg";
+import PatientIcon from "../../assets/PatientsIcon.svg";
 import SettingsIconWh from "../../assets/PatientsIconColored.svg";
 import SettingsIcon from "../../assets/SettingsIcon.svg";
 import LogoutIcon from "../../assets/Logout.svg";
+import PatientWH from "../../assets/PatienticonWH.svg"
 
 const MedicSideBar = () => {
   const navigate = useNavigate();
@@ -69,8 +69,8 @@ const MedicSideBar = () => {
           />
 
           <NavLinkWithBackground
-            icon={serviceIcon}
-            activeIcon={serviceIconWh}
+            icon={PatientIcon}
+            activeIcon={PatientWH}
             text="Patients"
             to="/patients"
           />

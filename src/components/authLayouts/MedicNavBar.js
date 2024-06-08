@@ -91,7 +91,7 @@ export default function MedicNavBar() {
     "/medic-dashboard": "Dashboard",
     "/medic-appointment": "Appointments",
     "/medic-wallet": "Wallet",
-    "/medic-patients": "Patients",
+    "/patients": "Patients",
     "/medic-settings": "Settings",
     "/logout": "Logout",
     "/medic-edit-profile": "Settings",

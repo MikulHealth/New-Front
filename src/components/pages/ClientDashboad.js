@@ -35,7 +35,6 @@ import CustomService from "../../assets/CustomizeService.svg";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import MobileFooter from "../authLayouts/MobileFooter";
 
-
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -68,7 +67,7 @@ const ClientDash = () => {
   const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [apiMessage] = useState("");
   const [showPayAppointmentModal, setShowPayAppointmentModal] = useState(false);
-  // const [matchedAppointments, setMatchedAppointments] = useState([]);
+  const [matchedAppointments, setMatchedAppointments] = useState([]);
   const [showMatchedAppointmentsModal, setShowMatchedAppointmentsModal] =
     useState(false);
 
@@ -86,8 +85,8 @@ const ClientDash = () => {
         };
 
         const response = await axios.get(
-          "http://localhost:8080/v1/appointment/pendingAppointments",
-          // "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
+          // "http://localhost:8080/v1/appointment/pendingAppointments",
+          "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
           config
         );
 
@@ -123,53 +122,49 @@ const ClientDash = () => {
     return num.toLocaleString();
   };
 
-  // useEffect(() => {
-  //   const fetchMatchedAppointments = async () => {
-  //     try {
-  //       const appointmentId = localStorage.getItem("appointmentId");
-  //       if (appointmentId) {
-  //         const token = localStorage.getItem("token");
-  //         const response = await fetch(
-  //           `http://localhost:8080/v1/appointment/match-appointment/${appointmentId}`,
-  //           {
-  //             method: "POST",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //               Authorization: `Bearer ${token}`,
-  //             },
-  //           }
-  //         );
-  //         const data = await response.json();
-  //         if (response.ok) {
-  //           console.log("Response from matched appointments:", data);
-  //           setMatchedAppointments(data.data);
-  //           console.log("Response from api message", data.message);
+useEffect(() => {
+  const fetchMatchedAppointments = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        // `http://localhost:8080/v1/appointment/match-appointment`,
+        "https://backend-c1pz.onrender.com/v1/appointment/match-appointment",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Response from matched appointments:", data);
+        setMatchedAppointments(data.data);
+        console.log("Response from api message", data.message);
 
-  //           // Check if data.data exists and is an array with length > 0
-  //           if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-  //             setShowMatchedAppointmentsModal(true);
-  //           } else {
-  //             console.log("No matched appointments found in data.");
-  //           }
-  //         } else {
-  //           console.error("Failed to fetch matched appointments:", data.error);
-  //         }
-  //       } else {
-  //         console.log("No appointment ID found in local storage.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching matched appointments:", error);
-  //     }
-  //   };
+        // Check if data.data exists and is an array with length > 0
+        if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+          setShowMatchedAppointmentsModal(true);
+        } else {
+          console.log("No matched appointments found in data.");
+        }
+      } else {
+        console.error("Failed to fetch matched appointments:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching matched appointments:", error);
+    }
+  };
 
-  //   // Fetch matched appointments initially
-  //   setTimeout(fetchMatchedAppointments, 5000);
+  // Fetch matched appointments initially
+  setTimeout(fetchMatchedAppointments, 5000);
 
-  //   const intervalId = setInterval(fetchMatchedAppointments, 15 * 60 * 1000);
+  const intervalId = setInterval(fetchMatchedAppointments, 15 * 60 * 1000);
 
-  //   // Clear interval on component unmount
-  //   return () => clearInterval(intervalId);
-  // }, []);
+  // Clear interval on component unmount
+  return () => clearInterval(intervalId);
+}, []);
 
   const handleOpenAppointmentModal = () => {
     setShowAppointmentModal(true);
@@ -364,7 +359,7 @@ const ClientDash = () => {
                     }}
                   >
                     <Box
-                     pt={{ base: "10px", md: "" }}
+                      pt={{ base: "10px", md: "" }}
                       display={{ base: "block", md: "flex" }}
                       alignItems="center"
                     >
@@ -376,7 +371,6 @@ const ClientDash = () => {
                         borderRadius="100px"
                       />
                       <Box
-                       
                         mt={{ base: "-35px", md: "0" }}
                         ml={{ base: "45px", md: "0" }}
                         justifyItems="center"
@@ -597,8 +591,7 @@ const ClientDash = () => {
                           // mt={{ base: "-15px", md: "0px" }}
                           fontFamily="body"
                         >
-                          Choose a service you want, how and when you
-                          want it
+                          Choose a service you want, how and when you want it
                         </Text>
                       </Box>
                     </Box>
@@ -778,7 +771,7 @@ const ClientDash = () => {
       <MatchedAppointmentsModal
         isOpen={showMatchedAppointmentsModal}
         onClose={() => setShowMatchedAppointmentsModal(false)}
-        // matchedAppointments={matchedAppointments}
+        matchedAppointments={matchedAppointments}
         apiResponseMessage={apiMessage}
       />
 

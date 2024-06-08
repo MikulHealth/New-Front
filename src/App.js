@@ -34,6 +34,7 @@ import WalletPaymentPage from "./components/sections/WalletPayment";
 import VerifyMedicForm from "./components/pages/VerifyMedicForm";
 import CompletionPage from "./components/pages/ComplitionPage";
 import MedicDashboard from "./components/pages/MedicDashboard";
+import PatientsPage from "./components/pages/PatientsPage";
 
 function App() {
   return (
@@ -48,7 +49,7 @@ function App() {
           <Route path="/verify-medic" element={<VerifyMedicForm />}></Route>
           <Route path="/verify-number" element={<VerifyNumber />}></Route>
           <Route path="/complete" element={<CompletionPage />}></Route>
-         
+          <Route path="/patients" element={<PatientsPage />}></Route>
           <Route
             path="/verify-medic-number"
             element={<VerifyMedicNumber />}
