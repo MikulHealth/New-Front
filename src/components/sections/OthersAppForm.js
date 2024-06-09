@@ -33,7 +33,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -60,7 +59,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
   const [shiftDisabled, setShiftDisabled] = useState(false);
-
+  const [urgency, setUrgency] = useState("");
 
   const [formFields, setFormFields] = useState({
     recipientFirstname: "",
@@ -75,14 +74,15 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     startDate: "",
     relationship: "",
     medicalReport: "",
+    recipientHealthHistory: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "servicePlan") {
       const selectedPlan = customizedPlans.find(plan => plan.name === value);
-  
+
       if (selectedPlan) {
         setFormFields({
           ...formFields,
@@ -100,7 +100,11 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
       setFormFields({ ...formFields, [name]: value });
     }
   };
-  
+
+  const handleUrgencyChange = (e) => {
+    setUrgency(e.target.value);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -111,7 +115,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          "http://localhost:8080/v1/appointment/all-customized-services",
+          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
           config
         );
 
@@ -143,13 +147,11 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
 
-    // Use isNaN to check if the selectedDate is a valid date object
     if (isNaN(new Date(selectedDate))) {
       console.error("Invalid date:", selectedDate);
       return "";
     }
 
-    // Add one day to the selected date
     const adjustedDate = new Date(selectedDate);
     adjustedDate.setDate(adjustedDate.getDate() + 1);
 
@@ -160,7 +162,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = "http://localhost:8080/v1/appointment/save";
       const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
       const headers = {
         "Content-Type": "application/json",
@@ -173,9 +174,10 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
       const formDataWithDates = {
         ...formFields,
         startDate: formatDateWithDayAdjustment(formFields.startDate),
-         recipientDOB: formatDateWithDayAdjustment(formFields.recipientDOB),
+        recipientDOB: formatDateWithDayAdjustment(formFields.recipientDOB),
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
+        urgency,
       };
       const requestBody = JSON.stringify(formDataWithDates);
       const response = await axios.post(apiUrl, requestBody, { headers });
@@ -195,6 +197,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           startDate: "",
           relationship: "",
           medicalReport: "",
+          recipientHealthHistory: "",
         });
         toast.success("Appointment saved");
         setPaymentData({
@@ -207,12 +210,9 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         }, 1000);
       } else {
         setLoading(false);
-
         console.error("Error booking appointment");
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown error";
-          toast.error(errorMessage.message);
+        const errorMessage = response.data ? response.data.message : "Unknown error";
+        toast.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
@@ -262,42 +262,11 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     calculateServiceCost();
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        };
-
-        const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/all-customized-services",
-          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
-          config
-        );
-
-        if (response.data.success) {
-          setCustomizedPlans(response.data.data);
-        } else {
-          console.error("Failed to fetch custom services");
-        }
-      } catch (error) {
-        console.error("Error fetching custom services:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handleSwitchChange = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = "http://localhost:8080/v1/appointment/addNewBeneficiary";
-      const apiUrl ="https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary";
+      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary";
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -323,10 +292,8 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
       } else {
         setLoading(false);
         console.error("Error adding beneficiary");
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown error";
-          toast.error(errorMessage);
+        const errorMessage = response.data ? response.data.message : "Unknown error";
+        toast.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
@@ -337,18 +304,18 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <Drawer theme={customTheme}  isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
@@ -376,7 +343,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           </Text>
           <DrawerBody>
             <FormControl ml={{ base: "25px", md: "0" }} w={{base: "80%", md: "100%"}}>
-              {/* <Box> */}
               <FormLabel fontWeight="bold" fontFamily="heading">Enter Beneficiary details</FormLabel>
               <Flex display={{ base: "block", md: "flex" }}>
                 <InputGroup>
@@ -387,9 +353,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     w={{ base: "300px", md: "270px" }}
                   />
-                  {/* <InputRightElement pointerEvents="none">
-                    <FaUser color="gray.300" />
-                  </InputRightElement> */}
                 </InputGroup>
                 <InputGroup mt={{ base: "20px", md: "0" }} ml={{ md: "40px" }}>
                   <Input
@@ -400,9 +363,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     w={{ base: "300px", md: "270px" }}
                   />
-                  {/* <InputRightElement pointerEvents="none">
-                    <FaUser color="gray.300" />
-                  </InputRightElement> */}
                 </InputGroup>
               </Flex>
               <Flex flexWrap="wrap">
@@ -431,7 +391,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                     paddingLeft="15px"
                     style={{ border: "1px solid #ccc", borderRadius: "5px" }}
                   >
-                    {" "}
                     <DatePicker
                       name="recipientDOB"
                       selected={selectedDob}
@@ -445,13 +404,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       placeholderText="select date of birth"
                       className="form-control"
                     />
-                    {/* <Image
-                      marginLeft="30px"
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
                   </Flex>
                 </Box>
               </Flex>
@@ -569,7 +521,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                 </Box>
               </Flex>
               <Flex flexWrap="wrap" ml={{ md: "5px" }}>
-                <Box fontFamily="body"  w={{ base: "300px", md: "270px" }}>
+                <Box fontFamily="body" w={{ base: "300px", md: "270px" }}>
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Start Date
                   </FormLabel>
@@ -592,59 +544,24 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                       className="form-control"
                       minDate={new Date()}
                     />
-                    {/* <Image
-                      marginLeft="30px"
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
                   </Flex>
                 </Box>
                 <Box ml={{ md: "5px" }}>
-                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                  Current Location{" "}
-                </FormLabel>
-                <Flex>
-                  <Input
-                    name="currentLocation"
-                    type="text"
-                    placeholder="current Location"
-                    value={formFields.currentLocation}
-                    onChange={handleInputChange}
-                    w={{ base: "300px", md: "270px" }}
-                  />
-                  {/* <Image
-                    marginTop="10px"
-                    marginLeft="-35px"
-                    w="24px"
-                    h="24px"
-                    src={LocationIcon}
-                    alt="LocationIcon"
-                  /> */}
-                </Flex>
-              </Box>
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                    Current Location{" "}
+                  </FormLabel>
+                  <Flex>
+                    <Input
+                      name="currentLocation"
+                      type="text"
+                      placeholder="current Location"
+                      value={formFields.currentLocation}
+                      onChange={handleInputChange}
+                      w={{ base: "300px", md: "270px" }}
+                    />
                   </Flex>
-                
-
-
-             
-              {/* <Box ml={{ md: "5px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
-                  Upload necessary document (test results, medical report,
-                  scans, etc)
-                </FormLabel>
-                <InputGroup>
-                  <Input
-                    padding="5px"
-                    name="medicalReport"
-                    type="file"
-                    onChange={handleInputChange}
-                    w={{ base: "300px", md: "550px" }}
-                    placeholder="Upload necessary document"
-                  />
-                </InputGroup>
-              </Box> */}
+                </Box>
+              </Flex>
               <Box ml={{ md: "5px" }}>
                 <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
                   Health History{" "}
@@ -658,7 +575,23 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   w={{ base: "300px", md: "550px" }}
                 />
               </Box>
-              {/* </Box> */}
+              <Box ml={{ md: "5px" }}>
+                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                  Urgency
+                </FormLabel>
+                <Select
+                  name="urgency"
+                  placeholder="select urgency level"
+                  value={urgency}
+                  onChange={handleUrgencyChange}
+                  w={{ base: "300px", md: "270px" }}
+                >
+                  <option value="High (Within 12hrs)">High (Within 12hrs)</option>
+                  <option value="Medium (Within 24hrs)">Medium (Within 24hrs)</option>
+                  <option value="Normal (48hrs)">Normal (48hrs)</option>
+                  <option value="Flexible">Flexible</option>
+                </Select>
+              </Box>
             </FormControl>
             <Flex justify="right" marginTop="10px">
               <Text fontFamily="body" color="#A210C6" fontStyle="italic">
@@ -679,7 +612,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
           </DrawerBody>
           <DrawerFooter>
             <Button
-            mb={{base: "20px", md: "0"}}
+              mb={{ base: "20px", md: "0" }}
               w="150px"
               borderRadius="100px"
               isLoading={loading}

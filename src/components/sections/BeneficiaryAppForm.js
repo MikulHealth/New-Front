@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import PaymentModal from "./PaymentMethod";
 import {
-  // InputGroup,
   Drawer,
   DrawerOverlay,
   DrawerContent,
@@ -28,7 +27,6 @@ import { WarningIcon } from "@chakra-ui/icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-
 
 const customTheme = extendTheme({
   components: {
@@ -58,6 +56,7 @@ const BookBeneficiaryAppointmentModal = ({
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({}); 
+  const [priority, setUrgency] = useState("");
 
   const [formPages, setFormPages] = useState({
     recipientFirstname: selectedBeneficiary.recipientFirstName,
@@ -78,30 +77,24 @@ const BookBeneficiaryAppointmentModal = ({
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
 
-    // Use isNaN to check if the selectedDate is a valid date object
     if (isNaN(new Date(selectedDate))) {
       console.error("Invalid date:", selectedDate);
       return "";
     }
 
-    // Add one day to the selected date
     const adjustedDate = new Date(selectedDate);
     adjustedDate.setDate(adjustedDate.getDate() + 1);
 
     return adjustedDate.toISOString().split("T")[0];
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === "servicePlan") {
-      // Find the selected plan object
       const selectedPlan = customizedPlans.find(plan => plan.name === value);
-      
-      console.log("Selected Plan:", selectedPlan);
-      console.log("Cost of Service:", selectedPlan ? selectedPlan.costOfService : "N/A");
-      
+
       if (selectedPlan) {
-        // Customized plan has been selected
         setFormPages(prev => ({
           ...prev,
           [name]: value,
@@ -109,16 +102,15 @@ const BookBeneficiaryAppointmentModal = ({
           costOfService: parseFloat(selectedPlan.costOfService.replace(/[,]/g, "")),
           medicSpecialization: selectedPlan.preferredCaregiver,
         }));
-        setIsShiftDisabled(true);  // Disable shift selection
+        setIsShiftDisabled(true);
       } else {
-        // No customized plan selected or switching to a non-customized plan
         setFormPages(prev => ({
           ...prev,
           [name]: value,
-          shift: '',  // Clear shift as no plan may define default value
-          costOfService: 0,  // Reset or set default cost
+          shift: '',
+          costOfService: 0,
         }));
-        setIsShiftDisabled(false);  // Enable shift selection
+        setIsShiftDisabled(false);
       }
     } else {
       setFormPages(prev => ({
@@ -127,23 +119,25 @@ const BookBeneficiaryAppointmentModal = ({
       }));
     }
   };
-  
+
+  const handleUrgencyChange = (e) => {
+    setUrgency(e.target.value);
+  };
 
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
     setFormPages({ ...formPages, startDate: date });
   };
 
-
   const handleFormSubmit = async () => {
     setLoading(true);
-
 
     const fieldNameMappings = {
       shift: "Shift",
       servicePlan: "Service Plan",
       startDate: "Start Date",
       currentLocation: "Current Location",
+      priority: "priority",
     };
 
     const requiredFields = [
@@ -151,10 +145,11 @@ const BookBeneficiaryAppointmentModal = ({
       "servicePlan",
       "startDate",
       "currentLocation",
+      "priority",
     ];
 
     for (const fieldName of requiredFields) {
-      if (!formPages[fieldName]) {
+      if (!formPages[fieldName] && fieldName !== "priority") {
         setLoading(false);
         toast({
           title: `${fieldNameMappings[fieldName]} is required`,
@@ -169,8 +164,9 @@ const BookBeneficiaryAppointmentModal = ({
 
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = "http://localhost:8080/v1/appointment/save";
-      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
+      const apiUrl = 
+      // "https://backend-c1pz.onrender.com/v1/appointment/save";
+      `http://localhost:8080/v1/appointment/save`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -183,6 +179,7 @@ const BookBeneficiaryAppointmentModal = ({
         ...formPages,
         startDate: formatDateWithDayAdjustment(formPages.startDate),
         customerPhoneNumber: user.phoneNumber,
+        priority,
       };
 
       const requestBody = JSON.stringify(formDataWithDates);
@@ -221,15 +218,6 @@ const BookBeneficiaryAppointmentModal = ({
     }
   };
 
- 
-  // const validateNigerianPhoneNumber = (phoneNumber) => {
-  //   // Regular expression to match Nigerian phone numbers
-  //   const nigerianPhoneNumberRegex = /^(?:\+234|234)([789]\d{9})$/;
-  //   return nigerianPhoneNumberRegex.test(phoneNumber);
-
-  
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -240,7 +228,6 @@ const BookBeneficiaryAppointmentModal = ({
         };
 
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/all-customized-services",
           "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
           config
         );
@@ -260,10 +247,7 @@ const BookBeneficiaryAppointmentModal = ({
     fetchData();
   }, []);
 
-
-
   useEffect(() => {
-    // Set initial form values based on the selected beneficiary
     if (selectedBeneficiary) {
       setFormPages({
         recipientFirstname: selectedBeneficiary.recipientFirstName || "",
@@ -279,8 +263,6 @@ const BookBeneficiaryAppointmentModal = ({
         medicalReport: null,
         medicSpecialization: "",
         startDate: null,
-        // endDate: null,
-
         relationship: selectedBeneficiary.relationship || "",
       });
     }
@@ -288,9 +270,9 @@ const BookBeneficiaryAppointmentModal = ({
 
   const calculateServiceCost = useCallback(() => {
     const { servicePlan, shift } = formPages;
-  
+
     let costOfService = 0;
-  
+
     switch (servicePlan) {
       case "Elderly care by a Licensed Nurse":
         costOfService = shift === "Day Shift (8hrs)" ? 180000 : 220000;
@@ -319,51 +301,40 @@ const BookBeneficiaryAppointmentModal = ({
         }
         break;
     }
-  
+
     setFormPages((prevPages) => ({ ...prevPages, costOfService }));
-  }, [
-    formPages,
-    customizedPlans,
-  ]);
-  
+  }, [formPages, customizedPlans]);
+
   useEffect(() => {
     calculateServiceCost();
   }, [calculateServiceCost]);
-  
 
   return (
     <>
-     <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
-     <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerHeader fontFamily="heading" textAlign="center" color="#A210C6">
-          {" "}
-          Book Appointment for{" "}
-          {`${selectedBeneficiary.recipientFirstName || ""} ${
-            selectedBeneficiary.recipientLastName || ""
-          }`}
-          
-        </DrawerHeader>
-        <Text p="40px" pt="5px">
+      <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader fontFamily="heading" textAlign="center" color="#A210C6">
+            Book Appointment for{" "}
+            {`${selectedBeneficiary.recipientFirstName || ""} ${selectedBeneficiary.recipientLastName || ""}`}
+          </DrawerHeader>
+          <Text p="40px" pt="5px">
             <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
-            <br /> Please note, all the services listed under <strong>
-              Service Plan
-            </strong>{" "}
+            <br /> Please note, all the services listed under <strong>Service Plan</strong>{" "}
             are for monthly subscription with 24hrs shift or 8hrs (day) shift,
             and they expire after one month of start of care. With the exception of short home visit and any custom
-            plan. You can create a
-            custom plan here{" "}
+            plan. You can create a custom plan here{" "}
             <Link
               to="/customize-service"
               style={{
@@ -376,189 +347,168 @@ const BookBeneficiaryAppointmentModal = ({
               create plan
             </Link>
           </Text>
-        <DrawerCloseButton />
-        <DrawerBody ml={{ base: "25px", md: "0" }}>
-          <FormControl isRequired>
-            <Box>
-              <Flex flexWrap="wrap">
+          <DrawerCloseButton />
+          <DrawerBody ml={{ base: "25px", md: "0" }}>
+            <FormControl isRequired>
+              <Box>
+                <Flex flexWrap="wrap">
+                  <Box ml={{ md: "40px" }}>
+                    <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      Service Plan{" "}
+                    </FormLabel>
+                    <Select
+                      isRequired
+                      name="servicePlan"
+                      placeholder="preferred service plan"
+                      w={{ base: "200px", md: "270px" }}
+                      value={formPages.servicePlan}
+                      onChange={handleInputChange}
+                      fontSize={{ base: "14px", md: "16px" }}
+                    >
+                      <optgroup label="Standard Plans">
+                        <option value="Elderly care by a Licensed Nurse">
+                          Elderly care by a Licensed Nurse
+                        </option>
+                        <option value="Elderly care by a Nurse Assistant">
+                          Elderly care by a Nurse Assistant
+                        </option>
+                        <option value="Postpartum care">
+                          Postpartum care by a Licensed Nurse/Midwife
+                        </option>
+                        <option value="Nanny care">
+                          Nanny service by a Professional Nanny
+                        </option>
+                        <option value="Recovery care">
+                          Recovery care by a Licensed Nurse
+                        </option>
+                        <option value="Short home visit">
+                          Short home visit by a Licensed Nurse
+                        </option>
+                      </optgroup>
+                      <optgroup label="Custom Plans">
+                        {customizedPlans.map((plan) => (
+                          <option key={plan.id} value={plan.name}>
+                            {plan.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </Select>
+                  </Box>
+
+                  <Box marginLeft="5px">
+                    <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      Shift{" "}
+                    </FormLabel>
+                    <Select
+                      name="shift"
+                      placeholder="select preferred shift"
+                      w={{ base: "300px", md: "270px" }}
+                      value={formPages.shift}
+                      onChange={handleInputChange}
+                      disabled={isShiftDisabled}
+                    >
+                      <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
+                      <option value="Live-in (24hrs)">Live-in (24hrs)</option>
+                    </Select>
+                  </Box>
+                </Flex>
+                <Flex flexWrap="wrap" ml={{ md: "40px" }}>
+                  <Box w={{ base: "300px", md: "270px" }}>
+                    <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      Start Date
+                    </FormLabel>
+                    <Flex
+                      h="5vh"
+                      padding="5px"
+                      paddingLeft="15px"
+                      style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                    >
+                      <DatePicker
+                        selected={selectedStartDate}
+                        onChange={handleStartDateChange}
+                        peekNextMonth
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        dateFormat="dd-MM-yyyy"
+                        placeholderText="preferred date to start"
+                        className="form-control"
+                        minDate={new Date()}
+                      />
+                    </Flex>
+                  </Box>
+                  <Box ml={{ md: "5px" }}>
+                    <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      Current Location{" "}
+                    </FormLabel>
+                    <Flex>
+                      <Input
+                        name="currentLocation"
+                        type="text"
+                        placeholder="current Location"
+                        value={formPages.currentLocation}
+                        onChange={handleInputChange}
+                        w={{ base: "300px", md: "270px" }}
+                      />
+                    </Flex>
+                  </Box>
+                </Flex>
+
                 <Box ml={{ md: "40px" }}>
                   <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                    Service Plan{" "}
+                    Health History{" "}
                   </FormLabel>
-                  <Select
-                    isRequired
-                    name="servicePlan"
-                    placeholder="preferred service plan"
-                    w={{ base: "200px", md: "270px" }}
-                    value={formPages.servicePlan}
-                    onChange={handleInputChange}
-                    fontSize={{ base: "14px", md: "16px" }}
-                  >
-                    <optgroup label="Standard Plans">
-                      <option value="Elderly care by a Licensed Nurse">
-                        Elderly care by a Licensed Nurse
-                      </option>
-                      <option value="Elderly care by a Nurse Assistant">
-                        Elderly care by a Nurse Assistant
-                      </option>
-                      <option value="Postpartum care">
-                        Postpartum care by a Licensed Nurse/Midwife
-                      </option>
-                      <option value="Nanny care">
-                        Nanny service by a Professional Nanny
-                      </option>
-                      <option value="Recovery care">
-                        Recovery care by a Licensed Nurse
-                      </option>
-                      <option value="Short home visit">
-                        Short home visit by a Licensed Nurse
-                      </option>
-                    </optgroup>
-                    <optgroup label="Custom Plans">
-                      {customizedPlans.map((plan) => (
-                        <option key={plan.id} value={plan.name}>
-                          {plan.name}
-                        </option>
-                      ))}
-                    </optgroup>
-                  </Select>
-                </Box>
-
-                <Box marginLeft="5px">
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                    Shift{" "}
-                  </FormLabel>
-                  <Select
-                    name="shift"
-                    placeholder="select preferred shift"
-                    w={{ base: "300px", md: "270px" }}
-                    value={formPages.shift}
-                    onChange={handleInputChange}
-                    disabled={isShiftDisabled}
-                  >
-                    <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
-
-                    <option value="Live-in (24hrs)">Live-in (24hrs)</option>
-                  </Select>
-                </Box>
-              </Flex>
-              <Flex flexWrap="wrap" ml={{ md: "40px" }}>
-                <Box  w={{ base: "300px", md: "270px" }}>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                    Start Date
-                  </FormLabel>
-                  <Flex
-                    h="5vh"
-                    padding="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
-                      selected={selectedStartDate}
-                      onChange={handleStartDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to start"
-                      className="form-control"
-                      minDate={new Date()}
-                    />
-                    {/* <Image
-                      ml={{ base: "50px", md: "30px" }}
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
-                  </Flex>
-                </Box>
-                <Box ml={{ md: "5px" }}>
-                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                  Current Location{" "}
-                </FormLabel>
-
-                <Flex>
-                  <Input
-                    name="currentLocation"
+                  <Textarea
+                    name="recipientHealthHistory"
                     type="text"
-                    placeholder="current Location"
-                    value={formPages.currentLocation}
-                    onChange={handleInputChange}
-                    w={{ base: "300px", md: "270px" }}
-                  />
-                  {/* <Image
-                    marginTop="10px"
-                    marginLeft="-35px"
-                    w="24px"
-                    h="24px"
-                    src={LocationIcon}
-                    alt="LocationIcon"
-                  /> */}
-                </Flex>
-              </Box>
-                  </Flex>
-               
-
-             
-
-              {/* <Box ml={{ md: "40px" }}>
-                <FormLabel fontWeight="bold" marginTop="20px">
-                  Upload necessary document (test results, medical report,
-                  scans, etc)
-                </FormLabel>
-                <InputGroup>
-                  <Input
-                    padding="5px"
-                    name="medicalReport"
-                    type="file"
+                    placeholder="share health history and any special need we should know"
+                    value={formPages.recipientHealthHistory}
                     onChange={handleInputChange}
                     w={{ base: "300px", md: "550px" }}
-                    placeholder="Upload necessary document"
                   />
-                  
-                </InputGroup>
-              </Box> */}
-              <Box ml={{ md: "40px" }}>
-                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                  Health History{" "}
-                </FormLabel>
-                <Textarea
-                  name="recipientHealthHistory"
-                  type="text"
-                  placeholder="share health history and any special need we should know"
-                  value={formPages.recipientHealthHistory}
-                  onChange={handleInputChange}
-                  w={{ base: "300px", md: "550px" }}
-                />
+                </Box>
+                <Box ml={{ md: "40px" }}>
+                    <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      Urgency{" "}
+                    </FormLabel>
+                    <Select
+                      name="priority"
+                      placeholder="select urgency level"
+                      w={{ base: "300px", md: "270px" }}
+                      value={priority}
+                      onChange={handleUrgencyChange}
+                    >
+                      <option value="High">High (Within 12hrs)</option>
+                      <option value="Medium">Medium (Within 24hrs)</option>
+                      <option value="Normal">Normal (48hrs)</option>
+                      <option value="Flexible">Flexible</option>
+                    </Select>
+                  </Box>
               </Box>
-            </Box>
-          </FormControl>
-        </DrawerBody>
-        <DrawerFooter>
-          <Button
-            w="150px"
-            isLoading={loading}
-            loadingText="Processing..."
-            bg="#A210C6"
-            color="white"
-            onClick={handleFormSubmit}
-            borderRadius="100px"
-            _hover={{ color: "" }}
-          >
-            {loading ? "Processing..." : "Submit"}
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-     <PaymentModal
+            </FormControl>
+          </DrawerBody>
+          <DrawerFooter>
+            <Button
+              w="150px"
+              isLoading={loading}
+              loadingText="Processing..."
+              bg="#A210C6"
+              color="white"
+              onClick={handleFormSubmit}
+              borderRadius="100px"
+              _hover={{ color: "" }}
+            >
+              {loading ? "Processing..." : "Submit"}
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <PaymentModal
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
         paymentData={paymentData}
       />
     </>
-   
   );
 };
 

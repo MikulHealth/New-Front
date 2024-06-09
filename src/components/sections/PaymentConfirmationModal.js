@@ -140,7 +140,7 @@ const PaymentConfirmationPage = () => {
     <Box theme={customTheme} height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

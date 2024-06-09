@@ -136,8 +136,8 @@ export default function PendingApp() {
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
+      const apiUrl = `http://localhost:8080/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
+      // const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -279,7 +279,7 @@ export default function PendingApp() {
             >
               book appointment
             </button>{" "}
-            to begin.
+            to book.
           </Text>
         ) : (
           <Box>

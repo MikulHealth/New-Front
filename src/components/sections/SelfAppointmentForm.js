@@ -1,13 +1,10 @@
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import LocationIcon from "../../assets/LocationIcon.svg";
 import { WarningIcon } from "@chakra-ui/icons";
-// import CalenderIcon from "../../assets/CalenderIcon.svg";
 import PaymentModal from "./PaymentMethod";
 import {
   Drawer,
@@ -25,14 +22,12 @@ import {
   Box,
   Select,
   Text,
-  // InputGroup,
   extendTheme,
   Textarea,
 } from "@chakra-ui/react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const customTheme = extendTheme({
   components: {
@@ -51,7 +46,6 @@ const customTheme = extendTheme({
 });
 
 const SelfAppointmentModal = ({ isOpen, onClose }) => {
-  // const toast = useToast();
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -60,6 +54,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [selectedDob] = useState(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
+  const [priority, setUrgency] = useState("");
 
   const [formFields, setFormFields] = useState({
     startDate: null,
@@ -74,7 +69,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
 
-    // Add one day to the selected date
     const adjustedDate = new Date(selectedDate);
     adjustedDate.setDate(adjustedDate.getDate() + 1);
 
@@ -88,15 +82,14 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "servicePlan") {
       const selectedPlan = customizedPlans.find((plan) => plan.name === value);
-  
-      console.log("Selected Plan:", selectedPlan);
+
       if (selectedPlan) {
-           if (selectedPlan.costOfService) {
+        if (selectedPlan.costOfService) {
           const cleanedCost = selectedPlan.costOfService;
-         
+
           setFormFields({
             ...formFields,
             [name]: value,
@@ -121,7 +114,10 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       setFormFields({ ...formFields, [name]: value });
     }
   };
-  
+
+  const handleUrgencyChange = (e) => {
+    setUrgency(e.target.value);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,7 +129,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/all-customized-services",
           "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
           config
         );
@@ -159,8 +154,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      // const apiUrl = "http://localhost:8080/v1/appointment/save";
-      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
+      const apiUrl = 
+      // "https://backend-c1pz.onrender.com/v1/appointment/save";
+      `http://localhost:8080/v1/appointment/save`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -182,10 +178,10 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       const formDataWithDates = {
         ...formFields,
         startDate: formatDateWithDayAdjustment(selectedStartDate),
-         recipientDOB: formatDateWithDayAdjustment(selectedDob),
+        recipientDOB: formatDateWithDayAdjustment(selectedDob),
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
-
+        priority,
         ...userFieldsForBookForSelf,
       };
 
@@ -196,7 +192,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         setLoading(false);
         setFormFields({
           startDate: null,
-           shift: "",
+          shift: "",
           servicePlan: "",
           currentLocation: "",
           medicalReport: "",
@@ -204,7 +200,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           costOfService: "",
         });
         toast.success("Appointment saved");
-          setPaymentData({
+        setPaymentData({
           costOfService: response.data.data.costOfService,
           appointmentId: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
@@ -213,7 +209,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         setTimeout(() => {
           setIsPaymentModalOpen(true);
         }, 4000);
-       } else {
+      } else {
         setLoading(false);
         console.error(response.data.message);
         toast.error(response.data.message);
@@ -221,7 +217,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast.error("Error bokking appointment");
+      toast.error("Error booking appointment");
     }
   };
 
@@ -258,13 +254,12 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         }
         break;
     }
-    setFormFields(prevFields => ({ ...prevFields, costOfService }));
+    setFormFields((prevFields) => ({ ...prevFields, costOfService }));
   };
 
   useEffect(() => {
     calculateServiceCost();
-  });  
-  
+  });
 
   return (
     <>
@@ -289,17 +284,23 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
-          <DrawerHeader color="#A210C6" fontFamily="heading">Book Appointment</DrawerHeader>
+          <DrawerHeader color="#A210C6" fontFamily="heading">
+            Book Appointment
+          </DrawerHeader>
 
           <Text p="40px" pt="5px">
-            <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
-            <br /> Please note, all the services listed under <strong>
-              Service Plan
-            </strong>{" "}
-            are for monthly subscription with 24hrs shift or 8hrs (day) shift,
-            and they expire after one month of start of care. With the exception of short home visit and any custom
-            plan. You can create a
-            custom plan here{" "}
+            <WarningIcon
+              fontFamily="body"
+              mb="5px"
+              w={10}
+              h={10}
+              color="yellow.400"
+            />
+            <br /> Please note, all the services listed under{" "}
+            <strong>Service Plan</strong> are for monthly subscription with
+            24hrs shift or 8hrs (day) shift, and they expire after one month of
+            start of care. With the exception of short home visit and any custom
+            plan. You can create a custom plan here{" "}
             <Link
               to="/customize-service"
               style={{
@@ -314,10 +315,16 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           </Text>
 
           <DrawerBody>
-            <FormControl >
-            <Flex ml={{ base:"20px", md: "40px" }} flexWrap="wrap" marginTop="20px">
-                <Box w={{ base: "300px", md: "270px" }} >
-                  <FormLabel fontFamily="body" fontWeight="bold">Service Plan </FormLabel>
+            <FormControl>
+              <Flex
+                ml={{ base: "20px", md: "40px" }}
+                flexWrap="wrap"
+                marginTop="20px"
+              >
+                <Box w={{ base: "300px", md: "270px" }}>
+                  <FormLabel fontFamily="body" fontWeight="bold">
+                    Service Plan{" "}
+                  </FormLabel>
                   <Select
                     isRequired
                     name="servicePlan"
@@ -372,11 +379,14 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   </Select>
                 </Box>
               </Flex>
-            
 
-              <Flex flexWrap="wrap" ml={{ base:"20px", md: "40px" }}>
-                <Box  w={{ base: "300px", md: "270px" }}>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+              <Flex flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
+                <Box w={{ base: "300px", md: "270px" }}>
+                  <FormLabel
+                    fontFamily="body"
+                    fontWeight="bold"
+                    marginTop="20px"
+                  >
                     Start Date
                   </FormLabel>
                   <Flex
@@ -398,59 +408,30 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       className="form-control"
                       minDate={new Date()}
                     />
-                    {/* <Image
-                      ml={{ base: "50px", md: "30px" }}
-                      w="24px"
-                      h="24px"
-                      src={CalenderIcon}
-                      alt="CalenderIcon"
-                    /> */}
                   </Flex>
                 </Box>
                 <Box ml={{ md: "5px" }} marginTop="20px">
-                <FormLabel fontWeight="bold" fontFamily="body">Current Location </FormLabel>
-                <Flex>
-                  <Input
-                    isRequired
-                    name="currentLocation"
-                    type="text"
-                    placeholder="current Location"
-                    value={formFields.currentLocation}
-                    onChange={handleInputChange}
-                    w={{ base: "300px", md: "270px" }}
-                  />
-                  {/* <Image
-                    marginTop="10px"
-                    marginLeft="-35px"
-                    w="24px"
-                    h="24px"
-                    src={LocationIcon}
-                    alt="LocationIcon"
-                  /> */}
-                </Flex>
-              </Box>
+                  <FormLabel fontWeight="bold" fontFamily="body">
+                    Current Location{" "}
+                  </FormLabel>
+                  <Flex>
+                    <Input
+                      isRequired
+                      name="currentLocation"
+                      type="text"
+                      placeholder="current Location"
+                      value={formFields.currentLocation}
+                      onChange={handleInputChange}
+                      w={{ base: "300px", md: "270px" }}
+                    />
+                  </Flex>
+                </Box>
               </Flex>
-             
-            
-              {/* <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
-                <FormLabel fontWeight="bold">
-                  Upload necessary document (test results, medical report,
-                  scans, etc)
+
+              <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                <FormLabel fontWeight="bold" fontFamily="body">
+                  Health History{" "}
                 </FormLabel>
-                <InputGroup>
-                  <Input
-                    isRequired
-                    padding="5px"
-                    name="medicalReport"
-                    type="file"
-                    onChange={handleInputChange}
-                    w={{ base: "300px", md: "550px" }}
-                    placeholder="Upload necessary document"
-                  />
-                </InputGroup>
-              </Box> */}
-              <Box ml={{ base:"20px", md: "40px" }} marginTop="20px">
-                <FormLabel fontWeight="bold" fontFamily="body">Health History </FormLabel>
                 <Textarea
                   name="recipientHealthHistory"
                   type="text"
@@ -459,6 +440,24 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   onChange={handleInputChange}
                   w={{ base: "300px", md: "550px" }}
                 />
+              </Box>
+
+              <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                <FormLabel fontWeight="bold" fontFamily="body">
+                  Urgency{" "}
+                </FormLabel>
+                <Select
+                  name="urgency"
+                  placeholder="select urgency level"
+                  w={{ base: "300px", md: "270px" }}
+                  value={priority}
+                  onChange={handleUrgencyChange}
+                >
+                  <option value="High">High (Within 12hrs)</option>
+                  <option value="Medium">Medium (Within 24hrs)</option>
+                  <option value="Normal">Normal (48hrs)</option>
+                  <option value="Flexible">Flexible</option>
+                </Select>
               </Box>
             </FormControl>
           </DrawerBody>

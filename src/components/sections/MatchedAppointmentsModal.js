@@ -18,8 +18,8 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
-import { PhoneIcon } from "@chakra-ui/icons";
-import { motion } from "framer-motion";
+// import { PhoneIcon } from "@chakra-ui/icons";
+// import { motion } from "framer-motion";
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -44,9 +44,9 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
   const handleAcceptAppointment = async (appointmentId, medicId) => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl =
-        "https://backend-c1pz.onrender.com/v1/appointment/accept";
-        // `http://localhost:8080/v1/appointment/accept`;
+      const apiUrl = 
+      // "https://backend-c1pz.onrender.com/v1/appointment/accept";
+      `http://localhost:8080/v1/appointment/accept`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -95,10 +95,11 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign="center">Matched Caregiver(s)</ModalHeader>
+          <ModalHeader textAlign="center">Matched Appointment(s)</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {matchedAppointments && matchedAppointments.length > 0 ? (
+            {matchedAppointments &&
+              matchedAppointments.length > 0 &&
               matchedAppointments.map((appointmentWrapper) => (
                 <Box
                   key={appointmentWrapper.appointment.id}
@@ -107,27 +108,6 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                   borderRadius="md"
                   mb="4"
                 >
-                  {/* <Text textAlign="center" fontSize="lg" fontWeight="bold" color="green.500">
-                    Congratulations! You've been matched with a caregiver.
-                  </Text>
-                  <Text textAlign="center" fontSize="md" color="gray.700" mt="2">
-                    Please call the customer to confirm the appointment.
-                  </Text>
-                  <Flex mt="2" alignItems="center">
-                    <FaPhone color="green" />
-                    <Text
-                    textAlign="center"
-                      // ml="2"
-                      fontSize="lg"
-                      fontWeight="bold"
-                      color="blue.500"
-                      as="a"
-                      href={`tel:${appointmentWrapper.appointment.appointment.recipientPhoneNumber}`}
-                    >
-                      {appointmentWrapper.appointment.appointment.recipientPhoneNumber}
-                    </Text>
-                  </Flex>
-                  <Divider my={4} borderColor="gray.500" /> */}
                   <Flex
                     direction={{ base: "column", md: "row" }}
                     justifyContent="space-between"
@@ -213,7 +193,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                               Caregiver Type:
                             </Text>
                             <Text marginLeft="5px" color="black">
-                              {medic.medicType}
+                              {medic.specialization}
                             </Text>
                           </Flex>
                           <Flex marginTop="5px">
@@ -276,10 +256,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                     </Box>
                   ))}
                 </Box>
-              ))
-            ) : (
-              <Text>No matched caregivers found.</Text>
-            )}
+              ))}
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -293,23 +270,34 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader textAlign="left">
-              Appointment and Caregiver Details
+            <ModalHeader
+              color="#A210C6"
+              fontFamily="heading"
+              textAlign="center"
+            >
+              Notice
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Text
-                textAlign="left"
+                textAlign="center"
                 fontSize="lg"
                 fontWeight="bold"
+                fontFamily="body"
                 color="green.500"
               >
                 Congratulations! You have accepted a Cargeiver.
               </Text>
-              <Text textAlign="left" fontSize="md" color="gray.700" mt="2">
-                Please call the customer to confirm the appointment.
+              <Text
+                fontFamily="body"
+                textAlign="center"
+                fontSize="md"
+                color="gray.700"
+                mt="2"
+              >
+                Please wait while the caregiver confirms the appointment.
               </Text>
-              <Flex mt="2" alignItems="center">
+              {/* <Flex mt="2" alignItems="center">
                 <motion.div
                   animate={{ rotate: [0, 20, -20, 0] }}
                   transition={{ repeat: Infinity, duration: 0.6 }}
@@ -326,9 +314,10 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                 >
                   {appointmentDetails.appointment.recipientPhoneNumber}
                 </Text>
-              </Flex>
+              </Flex> */}
               <Divider my={4} borderColor="gray.500" />
-              <Flex
+
+              {/* <Flex
                 direction={{ base: "column", md: "row" }}
                 justifyContent="space-between"
               >
@@ -336,7 +325,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                   <Text fontWeight="bold" color="black" marginTop="5px">
                     Beneficiary Details:
                   </Text>
-                  {/* <Divider my={4} borderColor="gray.500" /> */}
+              
                   <Flex marginTop="5px">
                     <Text fontWeight="bold" color="black">
                       Beneficiary:
@@ -380,11 +369,14 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                     </Text>
                   </Flex>
                 </Box>
-              </Flex>
-              <Divider my={4} borderColor="gray.500" />
+              </Flex> */}
+
+              {/* <Divider my={4} borderColor="gray.500" />
               <Text fontWeight="bold" color="black" marginTop="5px">
                 Caregiver Details:
-              </Text>
+              </Text> */}
+              {/* 
+
               <Box p="4" borderWidth="1px" borderRadius="md" mt="5px">
                 <Flex
                   direction={{ base: "column", md: "row" }}
@@ -452,7 +444,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                     />
                   </Box>
                 </Flex>
-              </Box>
+              </Box> */}
             </ModalBody>
           </ModalContent>
         </Modal>
