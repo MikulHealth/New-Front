@@ -4,9 +4,16 @@ import WalletIcon from "../../assets/WalletIcon.svg";
 import Patients from "../../assets/MedicPatients.svg";
 import Report from "../../assets/MedicReport.svg";
 import PatientReportDrawer from "./PatientReportDrawer";
+import { useNavigate } from "react-router-dom";
 
 const DesktopCards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
+
+const opendPatientsPage = () => {
+  navigate("/patients");
+}
 
   return (
     <Box>
@@ -61,6 +68,7 @@ const DesktopCards = () => {
           <Box
             style={{
               transition: "transform 0.3s ease-in-out",
+              cursor: "pointer",
             }}
             _hover={{
               transform: "translateY(-10px)",
@@ -71,6 +79,7 @@ const DesktopCards = () => {
             w={{ base: "180px", md: "300px" }}
             ml={{ base: "20px", md: "30px" }}
             borderRadius="5px"
+            onClick={opendPatientsPage}
           >
             <Box>
               <Flex>

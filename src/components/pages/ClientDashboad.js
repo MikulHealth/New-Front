@@ -9,6 +9,7 @@ import MatchedAppointmentsModal from "../sections/MatchedAppointmentsModal";
 import PayForAppointmentModal from "../sections/PayForAppointment";
 import Help from "../authLayouts/Help";
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons";
+import MedicalReportsModal from "../sections/MedicalReportsModal";
 import {
   Box,
   Button,
@@ -68,6 +69,7 @@ const ClientDash = () => {
   const [apiMessage] = useState("");
   const [showPayAppointmentModal, setShowPayAppointmentModal] = useState(false);
   const [matchedAppointments, setMatchedAppointments] = useState([]);
+  const [isMedicalReportsModalOpen, setMedicalReportsModalOpen] = useState(false);
   const [showMatchedAppointmentsModal, setShowMatchedAppointmentsModal] =
     useState(false);
 
@@ -120,6 +122,10 @@ const ClientDash = () => {
   const formatAmount = (amount) => {
     const num = Number(amount);
     return num.toLocaleString();
+  };
+
+  const handleOpenMedicalReportsModal = () => {
+    setMedicalReportsModalOpen(true);
   };
 
 useEffect(() => {
@@ -669,6 +675,7 @@ useEffect(() => {
                     fontWeight="bold"
                     fontFamily="body"
                     textAlign="center"
+                    onClick={handleOpenMedicalReportsModal}
                     style={{
                       marginTop: "15px",
                       fontStyle: "italic",
@@ -779,6 +786,10 @@ useEffect(() => {
         isOpen={showPayAppointmentModal}
         onClose={() => setShowPayAppointmentModal(false)}
         appointment={pendingAppointment}
+      />
+      <MedicalReportsModal
+        isOpen={isMedicalReportsModalOpen}
+        onClose={() => setMedicalReportsModalOpen(false)}
       />
     </ChakraProvider>
   );

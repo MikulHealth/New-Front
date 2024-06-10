@@ -256,7 +256,7 @@ const LandingPage = () => {
                   >
                     <option value="Registered Nurse">Registered Nurse</option>
                     <option value="Physiotherapist">Physiotherapist</option>
-                    <option value="Assistant Nurse">Assistant Nurse</option>
+                    <option value="Assistant Nurse">Nurse Assistant</option>
                   </Select>
                 </Box>
                 <Box flex="1">

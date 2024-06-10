@@ -165,8 +165,8 @@ const BookBeneficiaryAppointmentModal = ({
     try {
       const token = localStorage.getItem("token");
       const apiUrl = 
-      // "https://backend-c1pz.onrender.com/v1/appointment/save";
-      `http://localhost:8080/v1/appointment/save`;
+      "https://backend-c1pz.onrender.com/v1/appointment/save";
+      // `http://localhost:8080/v1/appointment/save`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

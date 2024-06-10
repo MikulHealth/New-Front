@@ -25,6 +25,7 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
 
 const customTheme = extendTheme({
   components: {
@@ -59,6 +60,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState("");
   const [activities, setActivities] = useState([]);
+  const [patiendId, setPatientId] = useState();
   const [medications, setMedications] = useState([
     { name: "", dosage: "", route: "", time: new Date() },
   ]);
@@ -71,7 +73,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     respiration: "",
     comments: "",
     recommendations: "",
-    picture: null,
+    // picture: null,
     confirmation: false,
   });
 
@@ -83,10 +85,25 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get("https://your-backend-api.com/patients");
-      setPatients(response.data);
+      const response = await axios.get(
+        // `http://localhost:8080/v1/appointment/get-active-patient`,
+        "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      // Assuming the actual patient data is nested inside response.data.data
+      if (response.data && Array.isArray(response.data.data)) {
+        setPatients(response.data.data);
+        setPatientId(response.data.data[0].appointment.id);
+      } else {
+        setPatients([]);
+      }
     } catch (error) {
       console.error("Error fetching patients:", error);
+      setPatients([]);
     }
   };
 
@@ -98,12 +115,12 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      picture: e.target.files[0],
-    }));
-  };
+  // const handleFileChange = (e) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     picture: e.target.files[0],
+  //   }));
+  // };
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
@@ -140,26 +157,41 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async () => {
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
-    });
-    data.append("activities", activities);
-    data.append("patientId", selectedPatient);
-    data.append("medications", JSON.stringify(medications));
-
+    console.log("Id is "+ patiendId)
+    const serializedMedications = medications.map(med => 
+      `${med.name},${med.dosage},${med.route},${med.time.toISOString()}`
+    );
+  
+    const data = {
+      ...formData,
+      activities: activities,
+      appointmentId: patiendId,
+      medications: serializedMedications,  
+    };
+  
     try {
       const response = await axios.post(
-        "https://your-backend-api.com/patient-report",
-        data
+        // `http://localhost:8080/v1/appointment/send-report`,
+        "https://backend-c1pz.onrender.com/v1/appointment/send-report",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            'Content-Type': 'application/json',  
+          },
+        }
       );
-      console.log("Report submitted successfully:", response.data);
-      onClose();
+  
+      if (response.data.success) {
+        toast.success(response.data.message);
+      } else {
+        toast.error("Error sending report");
+      }
     } catch (error) {
-      console.error("Error submitting report:", error);
+      toast.error("Error sending report");
     }
   };
-
+  
   return (
     <Drawer
       theme={customTheme}
@@ -186,11 +218,13 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                   value={selectedPatient}
                   onChange={(e) => setSelectedPatient(e.target.value)}
                 >
-                  {patients.map((patient) => (
-                    <option key={patient.id} value={patient.id}>
-                      {patient.name}
-                    </option>
-                  ))}
+                  {Array.isArray(patients) &&
+                    patients.map((patient) => (
+                      <option key={patient.id} value={patient.id}>
+                        {patient.appointment.recipientFirstname}{" "}
+                        {patient.appointment.recipientLastname}
+                      </option>
+                    ))}
                 </Select>
               </FormControl>
               <FormControl isRequired mb="4">
@@ -434,7 +468,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 <FormLabel fontFamily="body">
                   Picture Evidence (Optional)
                 </FormLabel>
-                <Input type="file" name="picture" onChange={handleFileChange} />
+                <Input type="file" name="picture" />
               </FormControl>
               <FormControl isRequired mb="4">
                 <Checkbox

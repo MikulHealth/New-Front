@@ -4,9 +4,16 @@ import WalletIcon from "../../assets/MedicWallet.svg";
 import Patients from "../../assets/MedicPatients.svg";
 import Report from "../../assets/MedicReport.svg";
 import PatientReportDrawer from "./PatientReportDrawer";
+import { useNavigate } from "react-router-dom";
 
 const SummaryCards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
+
+  const opendPatientsPage = () => {
+    navigate("/patients");
+  }
 
   return (
     <Box display={{ base: "block", md: "none" }} marginTop="10px">
@@ -65,6 +72,7 @@ const SummaryCards = () => {
             w={{ base: "180px", md: "300px" }}
             ml={{ base: "5px" }}
             borderRadius="5px"
+            onClick={opendPatientsPage}
           >
             <Box>
               <Flex>

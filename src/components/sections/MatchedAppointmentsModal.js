@@ -45,8 +45,8 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
     try {
       const token = localStorage.getItem("token");
       const apiUrl = 
-      // "https://backend-c1pz.onrender.com/v1/appointment/accept";
-      `http://localhost:8080/v1/appointment/accept`;
+      "https://backend-c1pz.onrender.com/v1/appointment/accept";
+      // `http://localhost:8080/v1/appointment/accept`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
           duration: 6000,
         });
         setAppointmentDetails(response.data.data);
-        onClose(); // Close the modal after successful acceptance
+        onClose(); 
       } else {
         toast({
           title: "Error accepting appointment",

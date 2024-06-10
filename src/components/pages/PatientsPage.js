@@ -9,59 +9,67 @@ import {
   Th,
   Td,
   Text,
-  Button,
   VStack,
+  Badge,
   Avatar,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
   extendTheme,
   ChakraProvider,
-  Badge,
-  Checkbox,
+  useBreakpointValue,
+  useDisclosure,
 } from "@chakra-ui/react";
-// import { AddIcon } from '@chakra-ui/icons';
-import LeftSideBar from "../authLayouts/MedicSideBar";
-import NavBar from "../authLayouts/MedicNavBar";
-import MobileFooter from "../authLayouts/MedicFooter";
-import RequestAppointmentModal from "../sections/RequestAppModal";
+import axios from "axios";
+import MedicSideBar from "../authLayouts/MedicSideBar";
+import MedicNavBar from "../authLayouts/MedicNavBar";
+import MobileFooter from "../authLayouts/MobileFooter";
+import LoadingSpinner from "../../utils/Spiner";
 import PatientReportDrawer from "../sections/PatientReportDrawer";
 
-
 const customTheme = extendTheme({
-    components: {
-      Link: {
-        baseStyle: {
-          _focus: {
-            boxShadow: "none",
-          },
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
         },
       },
     },
-    fonts: {
-      body: "Montserrat, sans-serif",
-      heading: "Gill Sans MT, sans-serif",
-    },
-  });
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const PatientsPage = () => {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  const openDrawer = () => setIsDrawerOpen(true);
-  const closeDrawer = () => setIsDrawerOpen(false);
+  const [loading, setLoading] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    // Fetch patients data from the backend
     const fetchPatients = async () => {
+      setLoading(true);
       try {
-        // Replace this with your API call
-        const response = await fetch("https://your-backend-api.com/patients");
-        const data = await response.json();
-        setPatients(data);
+        const response = await axios.get(
+          // "http://localhost:8080/v1/appointment/get-active-patient",
+           "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setPatients(response.data.data.map((app) => app.appointment)); // Mapping only the appointment details
+        }
       } catch (error) {
         console.error("Error fetching patients:", error);
       } finally {
@@ -72,154 +80,217 @@ const PatientsPage = () => {
     fetchPatients();
   }, []);
 
-  const handlePatientClick = (patient) => {
+  const openModal = (patient) => {
     setSelectedPatient(patient);
+    setIsModalOpen(true);
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.toLocaleDateString()}`;
+  };
+
+  const tableSize = useBreakpointValue({ base: "sm", md: "md" });
 
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
   };
 
   return (
-    <ChakraProvider theme={customTheme} overflow="hidden">
-      <LeftSideBar />
-      <VStack
+    <ChakraProvider theme={customTheme}>
+      <Flex
         style={settingsContainerStyle}
-        ml={{ md: "170px" }}
-        w={{ base: "100%", md: "70%" }}
-        h={{ base: "100%", md: "100%" }}
+        direction={{ base: "column", md: "row" }}
       >
-          <NavBar />
-        
-
-        <Box  mt="150px" p="20px">
-          {loading ? (
-            <Text>Loading...</Text>
-          ) : patients.length === 0 ? (
-            <Text>
-              No patients seen yet. Click{" "}
-              <Text
-                as="span"
-                color="#A210C6"
-                onClick={openModal}
-                cursor="pointer"
-              >
-                request appointment
-              </Text>{" "}
-              to begin.
-            </Text>
-          ) : (
-            <Flex>
-              <Table variant="simple" w="60%">
-                <Thead>
-                  <Tr>
-                    <Th>RN</Th>
-                    <Th>Patient name</Th>
-                    <Th>Appointment type</Th>
-                    <Th>Status</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {patients.map((patient) => (
-                    <Tr
-                      key={patient.id}
-                      onClick={() => handlePatientClick(patient)}
-                      cursor="pointer"
-                    >
-                      <Td>
-                        <Checkbox value={patient.id} />
-                        {patient.rn}
-                      </Td>
-                      <Td>
-                        <Flex alignItems="center">
-                          <Avatar
-                            size="sm"
-                            name={patient.name}
-                            src={patient.imageUrl}
-                          />
-                          <Text ml="3">{patient.name}</Text>
-                        </Flex>
-                      </Td>
-                      <Td>{patient.appointmentType}</Td>
-                      <Td>
-                        <Badge
-                          colorScheme={
-                            patient.status === "Ongoing" ? "green" : "purple"
-                          }
-                          variant="solid"
-                          px="4"
-                          py="1"
-                          borderRadius="20px"
+        <Box w={{ base: "100%", md: "20%" }}>
+          <MedicSideBar />
+        </Box>
+        <VStack w={{ base: "100%", md: "80%" }}>
+          <MedicNavBar />
+          <Box p="4" w="full" overflowY="auto">
+            <Flex direction="column" p="4">
+              {loading ? (
+                <LoadingSpinner />
+              ) : (
+                <>
+                  <Table variant="simple" size={tableSize}>
+                    <Thead>
+                      <Tr>
+                        <Th>RN</Th>
+                        <Th>Patient Name</Th>
+                        <Th>Appointment Type</Th>
+                        <Th>Status</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {patients.map((patient) => (
+                        <Tr
+                          key={patient.id}
+                          onClick={() => openModal(patient)}
+                          cursor="pointer"
                         >
-                          {patient.status}
-                        </Badge>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-              {selectedPatient && (
-                <Box w="40%" p="20px">
-                  <Box
-                    borderWidth="1px"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    p="6"
-                  >
-                    <Text
-                      fontSize="xl"
-                      fontWeight="bold"
-                      mb="4"
-                      textAlign="center"
-                      color="#A210C6"
-                    >
-                      PATIENT INFO
-                    </Text>
-                    <Flex justifyContent="center" mb="4">
-                      <Avatar
-                        size="2xl"
-                        name={selectedPatient.name}
-                        src={selectedPatient.imageUrl}
-                      />
-                    </Flex>
-                    <Text mb="2">
-                      <strong>Name:</strong> {selectedPatient.name}
-                    </Text>
-                    <Text mb="2">
-                      <strong>Location:</strong> {selectedPatient.location}
-                    </Text>
-                    <Text mb="2">
-                      <strong>RN:</strong> {selectedPatient.rn}
-                    </Text>
-                    <Text mb="2">
-                      <strong>Plan:</strong> {selectedPatient.plan}
-                    </Text>
-                    <Text mb="2">
-                      <strong>Shift:</strong> {selectedPatient.shift}
-                    </Text>
-                    <Text mb="2">
-                      <strong>Amount payable:</strong>{" "}
-                      {selectedPatient.amountPayable}
-                    </Text>
-                    <Button
-                      mt="4"
-                      bg="#A210C6"
-                      color="white"
-                      w="100%"
-                      onClick={openDrawer}
-                    >
-                      Upload report
-                    </Button>
-                  </Box>
-                </Box>
+                          <Td>{patient.customerId}</Td>
+                          <Td>
+                            <Flex alignItems="center">
+                              <Avatar
+                                w="30px"
+                                h="30px"
+                                bg="gray.500"
+                                color="white"
+                                name={`${patient.recipientFirstname} ${patient.recipientLastname}`}
+                              />
+                              <Text ml="2">{`${patient.recipientFirstname} ${patient.recipientLastname}`}</Text>
+                            </Flex>
+                          </Td>
+                          <Td>{patient.servicePlan}</Td>
+                          <Td>
+                            <Badge
+                              borderRadius="5px"
+                              color="#057B1F"
+                              p="4px"
+                              bg={
+                                patient.appointmentActive ? "green" : "#ACE1C1"
+                              }
+                            >
+                              {patient.appointmentActive
+                                ? "Completed"
+                                : "Ongoing"}
+                            </Badge>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                  {selectedPatient && (
+                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                      <ModalOverlay />
+                      <ModalContent>
+                        <ModalHeader color="#A210C6" textAlign="center">
+                          Patient Details
+                        </ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                          <Flex
+                            direction="column"
+                            align="center"
+                            justify="center"
+                            textAlign="center"
+                          >
+                            <Avatar
+                              name={`${selectedPatient.recipientFirstname} ${selectedPatient.recipientLastname}`}
+                              src={selectedPatient.picturePath}
+                              bg="gray.500"
+                              color="white"
+                              w={{ base: "100px", md: "100px" }}
+                              h={{ base: "100px", md: "100px" }}
+                            />
+                            <Box textAlign="left" w="full">
+                              <Flex>
+                                <Text fontWeight="bold" fontSize="lg" mt="2">
+                                  Name:
+                                </Text>
+                                <Text ml="5px" fontSize="lg" mt="2">
+                                  {selectedPatient.recipientFirstname}{" "}
+                                  {selectedPatient.recipientLastname}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Location:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {selectedPatient.currentLocation}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Phone number:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {selectedPatient.recipientPhoneNumber}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Gender:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {selectedPatient.recipientGender}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Date of Birth:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {formatDateTime(selectedPatient.recipientDOB)}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Medical history:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {selectedPatient.recipientHealthHistory}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Service Plan:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {selectedPatient.servicePlan}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Shift:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {selectedPatient.shift}
+                                </Text>
+                              </Flex>
+                              <Flex>
+                                <Text fontWeight="bold" mt="2">
+                                  Amount Payable:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  N{" "}
+                                  {parseFloat(
+                                    selectedPatient.costOfService
+                                  ).toLocaleString()}
+                                </Text>
+                              </Flex>
+                            </Box>
+
+                            <Button
+                              mb="20px"
+                              mt="4"
+                              color="white"
+                              bg="#A210C6"
+                              borderRadius="50px"
+                              onClick={onOpen}
+                            >
+                              Upload report
+                            </Button>
+                          </Flex>
+                        </ModalBody>
+                      </ModalContent>
+                    </Modal>
+                  )}
+                </>
               )}
             </Flex>
-          )}
-        </Box>
-        <RequestAppointmentModal isOpen={isModalOpen} onClose={closeModal} />
-        <PatientReportDrawer isOpen={isDrawerOpen} onClose={closeDrawer} />
-        <MobileFooter />
-      </VStack>
+          </Box>
+          <MobileFooter />
+        </VStack>
+      </Flex>
+      <PatientReportDrawer isOpen={isOpen} onClose={onClose} />
     </ChakraProvider>
   );
 };

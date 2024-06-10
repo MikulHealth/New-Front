@@ -59,7 +59,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
   const [shiftDisabled, setShiftDisabled] = useState(false);
-  const [urgency, setUrgency] = useState("");
+  const [priority, setUrgency] = useState("");
 
   const [formFields, setFormFields] = useState({
     recipientFirstname: "",
@@ -177,7 +177,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
         recipientDOB: formatDateWithDayAdjustment(formFields.recipientDOB),
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
-        urgency,
+        priority,
       };
       const requestBody = JSON.stringify(formDataWithDates);
       const response = await axios.post(apiUrl, requestBody, { headers });
@@ -580,15 +580,15 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   Urgency
                 </FormLabel>
                 <Select
-                  name="urgency"
+                  name="priority"
                   placeholder="select urgency level"
-                  value={urgency}
+                  value={priority}
                   onChange={handleUrgencyChange}
                   w={{ base: "300px", md: "270px" }}
                 >
-                  <option value="High (Within 12hrs)">High (Within 12hrs)</option>
-                  <option value="Medium (Within 24hrs)">Medium (Within 24hrs)</option>
-                  <option value="Normal (48hrs)">Normal (48hrs)</option>
+                  <option value="High">High (Within 12hrs)</option>
+                  <option value="Medium">Medium (Within 24hrs)</option>
+                  <option value="Normal">Normal (48hrs)</option>
                   <option value="Flexible">Flexible</option>
                 </Select>
               </Box>

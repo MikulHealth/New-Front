@@ -154,9 +154,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const apiUrl = 
-      // "https://backend-c1pz.onrender.com/v1/appointment/save";
-      `http://localhost:8080/v1/appointment/save`;
+      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
+      // `http://localhost:8080/v1/appointment/save`;
 
       const headers = {
         "Content-Type": "application/json",

@@ -15,6 +15,8 @@
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.0.14",
+    "json2csv": "^6.0.0-alpha.2",
+    "jspdf": "^2.5.1",
     "nuxt": "^3.11.2",
     "react": "^18.2.0",
     "react-countup": "^6.5.3",
@@ -30,7 +32,8 @@
     "react-scroll-trigger": "^0.6.14",
     "react-swipeable": "^7.0.1",
     "react-toastify": "^10.0.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",
