@@ -113,7 +113,7 @@ const PatientsPage = () => {
                       color="#212427B2"
                       fontSize={{ base: "10px", md: "16px" }}
                     >
-                      <Text fontWeight="bold">RN</Text>
+                      <Text fontWeight="bold">Polify No.</Text>
                       <Text fontWeight="bold">Patient name</Text>
                       <Text fontWeight="bold">Appointment type</Text>
                       <Text fontWeight="bold">Status</Text>
@@ -150,6 +150,8 @@ const PatientsPage = () => {
                         >
                           <Avatar
                             size="sm"
+                            bg="#212427B2"
+                            color="white"
                             name={`${patient.recipientFirstname} ${patient.recipientLastname}`}
                           />
                           <Text ml="2">{`${patient.recipientFirstname} ${patient.recipientLastname}`}</Text>
@@ -164,6 +166,7 @@ const PatientsPage = () => {
                           color={
                             patient.appointmentActive ? "#A210C6" : "#057B1F"
                           }
+                          fontSize="11px"
                         >
                           {patient.appointmentActive ? "Completed" : "Ongoing"}
                         </Badge>
@@ -177,7 +180,10 @@ const PatientsPage = () => {
                       size={{ base: "sm", md: "md" }}
                     >
                       <ModalOverlay />
-                      <ModalContent borderRadius="20px" border="3px solid #A210C6">
+                      <ModalContent
+                        borderRadius="20px"
+                        border="3px solid #A210C6"
+                      >
                         <ModalHeader color="#A210C6" textAlign="center">
                           Patient Details
                         </ModalHeader>
@@ -196,6 +202,7 @@ const PatientsPage = () => {
                               color="white"
                               w={{ base: "100px", md: "100px" }}
                               h={{ base: "100px", md: "100px" }}
+                              border="3px solid #057B1F"
                             />
                             <Box textAlign="left" w="full">
                               <Flex wrap="wrap">
@@ -239,14 +246,7 @@ const PatientsPage = () => {
                                   {formatDateTime(selectedPatient.recipientDOB)}
                                 </Text>
                               </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Medical history:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {selectedPatient.recipientHealthHistory}
-                                </Text>
-                              </Flex>
+
                               <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Service Plan:
@@ -272,6 +272,18 @@ const PatientsPage = () => {
                                   {parseFloat(
                                     selectedPatient.costOfService
                                   ).toLocaleString()}
+                                </Text>
+                              </Flex>
+                              <Flex wrap="wrap">
+                                <Text fontWeight="bold" mt="2">
+                                  Medical history:
+                                </Text>
+                                <Text
+                                  maxW={{ base: "50px", md: "450px" }}
+                                  ml="5px"
+                                  mt="2"
+                                >
+                                  {selectedPatient.recipientHealthHistory}
                                 </Text>
                               </Flex>
                             </Box>

@@ -192,7 +192,12 @@ const MatchedMedicAppointmentsModal = ({
                   <Text fontWeight="bold" color="black" mb={2}>
                     Priority: {acceptedAppointment.appointment.priority}
                   </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
+                  <Text
+                    maxW={{ base: "50px", md: "450px" }}
+                    fontWeight="bold"
+                    color="black"
+                    mb={2}
+                  >
                     Health History:{" "}
                     {acceptedAppointment.appointment.recipientHealthHistory}
                   </Text>
