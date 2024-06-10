@@ -22,7 +22,7 @@ import {
 import axios from "axios";
 import MedicSideBar from "../authLayouts/MedicSideBar";
 import MedicNavBar from "../authLayouts/MedicNavBar";
-import MobileFooter from "../authLayouts/MobileFooter";
+import MobileFooter from "../authLayouts/MedicFooter";
 import LoadingSpinner from "../../utils/Spiner";
 import PatientReportDrawer from "../sections/PatientReportDrawer";
 import Check from "../../assets/Check.svg";
@@ -113,7 +113,7 @@ const PatientsPage = () => {
                       color="#212427B2"
                       fontSize={{ base: "10px", md: "16px" }}
                     >
-                      <Text fontWeight="bold">Polify No.</Text>
+                      <Text fontWeight="bold">Policy No.</Text>
                       <Text fontWeight="bold">Patient name</Text>
                       <Text fontWeight="bold">Appointment type</Text>
                       <Text fontWeight="bold">Status</Text>
