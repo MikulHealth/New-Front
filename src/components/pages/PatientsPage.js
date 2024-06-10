@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   Text,
   VStack,
   Badge,
@@ -21,8 +15,9 @@ import {
   ModalBody,
   extendTheme,
   ChakraProvider,
-  useBreakpointValue,
   useDisclosure,
+  Image,
+  Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
 import MedicSideBar from "../authLayouts/MedicSideBar";
@@ -30,6 +25,7 @@ import MedicNavBar from "../authLayouts/MedicNavBar";
 import MobileFooter from "../authLayouts/MobileFooter";
 import LoadingSpinner from "../../utils/Spiner";
 import PatientReportDrawer from "../sections/PatientReportDrawer";
+import Check from "../../assets/Check.svg";
 
 const customTheme = extendTheme({
   components: {
@@ -59,8 +55,7 @@ const PatientsPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/get-active-patient",
-           "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
+          "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -95,18 +90,9 @@ const PatientsPage = () => {
     return `${date.toLocaleDateString()}`;
   };
 
-  const tableSize = useBreakpointValue({ base: "sm", md: "md" });
-
-  const settingsContainerStyle = {
-    animation: "slideInUp 0.9s ease-in-out",
-  };
-
   return (
     <ChakraProvider theme={customTheme}>
-      <Flex
-        style={settingsContainerStyle}
-        direction={{ base: "column", md: "row" }}
-      >
+      <Flex direction={{ base: "column", md: "row" }}>
         <Box w={{ base: "100%", md: "20%" }}>
           <MedicSideBar />
         </Box>
@@ -118,58 +104,80 @@ const PatientsPage = () => {
                 <LoadingSpinner />
               ) : (
                 <>
-                  <Table variant="simple" size={tableSize}>
-                    <Thead>
-                      <Tr>
-                        <Th>RN</Th>
-                        <Th>Patient Name</Th>
-                        <Th>Appointment Type</Th>
-                        <Th>Status</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {patients.map((patient) => (
-                        <Tr
-                          key={patient.id}
-                          onClick={() => openModal(patient)}
-                          cursor="pointer"
+                  <Box mb="20px">
+                    <Flex
+                      w="full"
+                      p={4}
+                      borderRadius="md"
+                      justifyContent="space-between"
+                      color="#212427B2"
+                      fontSize={{ base: "10px", md: "16px" }}
+                    >
+                      <Text fontWeight="bold">RN</Text>
+                      <Text fontWeight="bold">Patient name</Text>
+                      <Text fontWeight="bold">Appointment type</Text>
+                      <Text fontWeight="bold">Status</Text>
+                    </Flex>
+                    <Divider my={1} borderColor="gray.500" />
+                  </Box>
+
+                  <VStack color="#212427B2" spacing={4} align="stretch">
+                    {patients.map((patient) => (
+                      <Flex
+                        fontSize={{ base: "10px", md: "16px" }}
+                        key={patient.id}
+                        p={4}
+                        borderRadius="md"
+                        bg="#ECCFF4"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        w="full"
+                        onClick={() => openModal(patient)}
+                        cursor="pointer"
+                        _hover={{ bg: "purple.100" }}
+                      >
+                        <Image
+                          src={Check}
+                          // mt={{ base: "40px", md: "40px" }}
+                          w={{ base: "16px", md: "16px" }}
+                          h={{ base: "16px", md: "16px" }}
+                        />
+                        {/* <Text>{patient.customerId}</Text> */}
+                        <Flex
+                          maxW={{ base: "60px", md: "150px" }}
+                          color="#212427B2"
+                          alignItems="center"
                         >
-                          <Td>{patient.customerId}</Td>
-                          <Td>
-                            <Flex alignItems="center">
-                              <Avatar
-                                w="30px"
-                                h="30px"
-                                bg="gray.500"
-                                color="white"
-                                name={`${patient.recipientFirstname} ${patient.recipientLastname}`}
-                              />
-                              <Text ml="2">{`${patient.recipientFirstname} ${patient.recipientLastname}`}</Text>
-                            </Flex>
-                          </Td>
-                          <Td>{patient.servicePlan}</Td>
-                          <Td>
-                            <Badge
-                              borderRadius="5px"
-                              color="#057B1F"
-                              p="4px"
-                              bg={
-                                patient.appointmentActive ? "green" : "#ACE1C1"
-                              }
-                            >
-                              {patient.appointmentActive
-                                ? "Completed"
-                                : "Ongoing"}
-                            </Badge>
-                          </Td>
-                        </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
+                          <Avatar
+                            size="sm"
+                            name={`${patient.recipientFirstname} ${patient.recipientLastname}`}
+                          />
+                          <Text ml="2">{`${patient.recipientFirstname} ${patient.recipientLastname}`}</Text>
+                        </Flex>
+                        <Text maxW={{ base: "50px", md: "150px" }}>
+                          {patient.servicePlan}
+                        </Text>
+                        <Badge
+                          bg={patient.appointmentActive ? "#D087E2" : "#ACE1C1"}
+                          p={2}
+                          borderRadius="30px"
+                          color={
+                            patient.appointmentActive ? "#A210C6" : "#057B1F"
+                          }
+                        >
+                          {patient.appointmentActive ? "Completed" : "Ongoing"}
+                        </Badge>
+                      </Flex>
+                    ))}
+                  </VStack>
                   {selectedPatient && (
-                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                    <Modal
+                      isOpen={isModalOpen}
+                      onClose={closeModal}
+                      size={{ base: "sm", md: "md" }}
+                    >
                       <ModalOverlay />
-                      <ModalContent>
+                      <ModalContent borderRadius="20px" border="3px solid #A210C6">
                         <ModalHeader color="#A210C6" textAlign="center">
                           Patient Details
                         </ModalHeader>
@@ -190,7 +198,7 @@ const PatientsPage = () => {
                               h={{ base: "100px", md: "100px" }}
                             />
                             <Box textAlign="left" w="full">
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" fontSize="lg" mt="2">
                                   Name:
                                 </Text>
@@ -199,7 +207,7 @@ const PatientsPage = () => {
                                   {selectedPatient.recipientLastname}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Location:
                                 </Text>
@@ -207,7 +215,7 @@ const PatientsPage = () => {
                                   {selectedPatient.currentLocation}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Phone number:
                                 </Text>
@@ -215,7 +223,7 @@ const PatientsPage = () => {
                                   {selectedPatient.recipientPhoneNumber}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Gender:
                                 </Text>
@@ -223,7 +231,7 @@ const PatientsPage = () => {
                                   {selectedPatient.recipientGender}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Date of Birth:
                                 </Text>
@@ -231,7 +239,7 @@ const PatientsPage = () => {
                                   {formatDateTime(selectedPatient.recipientDOB)}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Medical history:
                                 </Text>
@@ -239,7 +247,7 @@ const PatientsPage = () => {
                                   {selectedPatient.recipientHealthHistory}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Service Plan:
                                 </Text>
@@ -247,7 +255,7 @@ const PatientsPage = () => {
                                   {selectedPatient.servicePlan}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Shift:
                                 </Text>
@@ -255,7 +263,7 @@ const PatientsPage = () => {
                                   {selectedPatient.shift}
                                 </Text>
                               </Flex>
-                              <Flex>
+                              <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Amount Payable:
                                 </Text>

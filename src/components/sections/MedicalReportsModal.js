@@ -147,7 +147,9 @@ function MedicalReportsModal({ isOpen, onClose }) {
                     Report for: {report.recipientFullName} on{" "}
                     {formatDateTime(report.createdAt)}
                   </Text>
-                  <Text>Reported by: {report.medicFullName}</Text>
+                  <Text fontStyle="italic">
+                    Reported by: {report.medicFullName}
+                  </Text>
                 </ListItem>
               ))}
             </List>
@@ -199,11 +201,11 @@ function MedicalReportsModal({ isOpen, onClose }) {
                 {selectedReport.activities.join(", ")}
               </Text>
               <Text fontWeight="bold" maxWidth="100%">
-                Comments:
+                Comments/Observation:
               </Text>
               <Text maxWidth="100%">{selectedReport.comments}</Text>
               <Text fontWeight="bold" maxWidth="100%">
-                Recommendations:
+                Recommendations/Requests:
               </Text>
               <Text maxWidth="100%">{selectedReport.recommendations}</Text>
               <Text fontStyle="italic" fontWeight="bold">

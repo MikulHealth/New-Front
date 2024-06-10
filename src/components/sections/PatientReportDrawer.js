@@ -157,18 +157,19 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async () => {
-    console.log("Id is "+ patiendId)
-    const serializedMedications = medications.map(med => 
-      `${med.name},${med.dosage},${med.route},${med.time.toISOString()}`
+    console.log("Id is " + patiendId);
+    const serializedMedications = medications.map(
+      (med) =>
+        `${med.name},${med.dosage},${med.route},${med.time.toISOString()}`
     );
-  
+
     const data = {
       ...formData,
       activities: activities,
       appointmentId: patiendId,
-      medications: serializedMedications,  
+      medications: serializedMedications,
     };
-  
+
     try {
       const response = await axios.post(
         // `http://localhost:8080/v1/appointment/send-report`,
@@ -177,11 +178,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-            'Content-Type': 'application/json',  
+            "Content-Type": "application/json",
           },
         }
       );
-  
+
       if (response.data.success) {
         toast.success(response.data.message);
       } else {
@@ -191,7 +192,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       toast.error("Error sending report");
     }
   };
-  
+
   return (
     <Drawer
       theme={customTheme}
@@ -210,7 +211,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           {step === 1 && (
             <>
               <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body" fontWeight="bold">
+                <FormLabel
+                  fontSize={{ base: "18px", md: "20px" }}
+                  fontFamily="body"
+                  fontWeight="bold"
+                >
                   Select Patient
                 </FormLabel>
                 <Select
@@ -228,7 +233,12 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 </Select>
               </FormControl>
               <FormControl isRequired mb="4">
-                <Text mb="5px" fontFamily="heading" fontWeight="bold">
+                <Text
+                  fontSize={{ base: "18px", md: "20px" }}
+                  mb="5px"
+                  fontFamily="body"
+                  fontWeight="bold"
+                >
                   Vitals Signs
                 </Text>
                 <FormLabel fontFamily="body">Temperature</FormLabel>
@@ -290,7 +300,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           {step === 2 && (
             <>
               <FormControl isRequired mb="4">
-                <FormLabel fontFamily="heading" fontWeight="bold">
+                <FormLabel
+                  fontFamily="body"
+                  fontSize={{ base: "18px", md: "20px" }}
+                  fontWeight="bold"
+                >
                   Medications
                 </FormLabel>
                 <VStack spacing={3}>
@@ -363,7 +377,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 </VStack>
               </FormControl>
               <FormControl isRequired mb="4">
-                <FormLabel fontFamily="heading" fontWeight="bold">
+                <FormLabel
+                  fontFamily="body"
+                  fontSize={{ base: "18px", md: "20px" }}
+                  fontWeight="bold"
+                >
                   Activities of Daily Living
                 </FormLabel>
                 <VStack align="start">
@@ -447,7 +465,13 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           {step === 3 && (
             <>
               <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Obeservation/Comments</FormLabel>
+                <FormLabel
+                  fontFamily="body"
+                  fontWeight="bold"
+                  fontSize={{ base: "18px", md: "20px" }}
+                >
+                  Obeservation/Comments
+                </FormLabel>
                 <Textarea
                   name="comments"
                   placeholder="Comments"
@@ -456,7 +480,13 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 />
               </FormControl>
               <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Recommendations</FormLabel>
+                <FormLabel
+                  fontFamily="body"
+                  fontWeight="bold"
+                  fontSize={{ base: "18px", md: "20px" }}
+                >
+                  Recommendations/Requests
+                </FormLabel>
                 <Textarea
                   name="recommendations"
                   placeholder="Recommendations"
@@ -465,7 +495,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 />
               </FormControl>
               <FormControl mb="4">
-                <FormLabel fontFamily="body">
+                <FormLabel
+                  fontFamily="body"
+                  fontWeight="bold"
+                  fontSize={{ base: "18px", md: "20px" }}
+                >
                   Picture Evidence (Optional)
                 </FormLabel>
                 <Input type="file" name="picture" />
