@@ -15,6 +15,7 @@ import {
   Image,
   VStack,
   useBreakpointValue,
+  Spinner,
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -23,13 +24,15 @@ import { jsPDF } from "jspdf";
 function MedicalReportsModal({ isOpen, onClose }) {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const modalSize = useBreakpointValue({ base: "full", md: "2xl" });
 
   const fetchReports = useCallback(async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
-        // "http://localhost:8080/v1/appointment/fetch-reports",
         "https://backend-c1pz.onrender.com/v1/appointment/fetch-reports",
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -44,6 +47,7 @@ function MedicalReportsModal({ isOpen, onClose }) {
           status: "error",
           duration: 9000,
           isClosable: true,
+          position: "top-right",
         });
       }
     } catch (error) {
@@ -53,7 +57,10 @@ function MedicalReportsModal({ isOpen, onClose }) {
         status: "error",
         duration: 9000,
         isClosable: true,
+        position: "top-right",
       });
+    } finally {
+      setIsLoading(false);
     }
   }, [toast]);
 
@@ -74,46 +81,68 @@ function MedicalReportsModal({ isOpen, onClose }) {
     return `${parts[0]}, ${parts[1]}, ${parts[2]}, ${time.toLocaleString()}`;
   };
 
-  const generatePDF = (report) => {
-    const doc = new jsPDF();
-    doc.setFontSize(12);
+  const generatePDF = async (report) => {
+    setIsDownloading(true);
+    try {
+      const doc = new jsPDF();
+      doc.setFontSize(12);
 
-    const addText = (label, text, offsetY) => {
-      const splitText = doc.splitTextToSize(`${label}: ${text}`, 180);
-      doc.text(splitText, 10, offsetY);
-      return offsetY + splitText.length * 10;
-    };
+      const addText = (label, text, offsetY) => {
+        const splitText = doc.splitTextToSize(`${label}: ${text}`, 180);
+        doc.text(splitText, 10, offsetY);
+        return offsetY + splitText.length * 10;
+      };
 
-    let offsetY = 10;
-    offsetY = addText("Beneficiary name", report.recipientFullName, offsetY);
-    offsetY = addText("Service Plan", report.servicePlan, offsetY);
-    offsetY = addText(
-      "Report date and time",
-      formatDateTime(report.createdAt),
-      offsetY
-    );
-    offsetY = addText("Temperature", `${report.temperature}°C`, offsetY);
-    offsetY = addText("Blood Pressure", report.bloodPressure, offsetY);
-    offsetY = addText("Pulse", `${report.pulse} bpm`, offsetY);
-    offsetY = addText("Blood Sugar", report.bloodSugar, offsetY);
-    offsetY = addText("SpO2", `${report.sp02}%`, offsetY);
-    offsetY = addText("Respiration", `${report.respiration} c/m`, offsetY);
+      let offsetY = 10;
+      offsetY = addText("Beneficiary name", report.recipientFullName, offsetY);
+      offsetY = addText("Service Plan", report.servicePlan, offsetY);
+      offsetY = addText(
+        "Report date and time",
+        formatDateTime(report.createdAt),
+        offsetY
+      );
+      offsetY = addText("Temperature", `${report.temperature}°C`, offsetY);
+      offsetY = addText("Blood Pressure", report.bloodPressure, offsetY);
+      offsetY = addText("Pulse", `${report.pulse} bpm`, offsetY);
+      offsetY = addText("Blood Sugar", report.bloodSugar, offsetY);
+      offsetY = addText("SpO2", `${report.sp02}%`, offsetY);
+      offsetY = addText("Respiration", `${report.respiration} c/m`, offsetY);
 
-    offsetY = addText(
-      "Medications",
-      report.medications.map(formatMedicationTime).join(", "),
-      offsetY
-    );
-    offsetY = addText("Activities", report.activities.join(", "), offsetY);
-    offsetY = addText("Comments", report.comments, offsetY);
-    offsetY = addText("Recommendations", report.recommendations, offsetY);
-    offsetY = addText("Reported by", report.medicFullName, offsetY);
+      offsetY = addText(
+        "Medications",
+        report.medications.map(formatMedicationTime).join(", "),
+        offsetY
+      );
+      offsetY = addText("Activities", report.activities.join(", "), offsetY);
+      offsetY = addText("Comments", report.comments, offsetY);
+      offsetY = addText("Recommendations", report.recommendations, offsetY);
+      offsetY = addText("Reported by", report.medicFullName, offsetY);
 
-    if (report.picturePath) {
-      doc.addImage(report.picturePath, "JPEG", 10, offsetY, 180, 160);
+      if (report.picturePath) {
+        doc.addImage(report.picturePath, "JPEG", 10, offsetY, 180, 160);
+      }
+
+      doc.save(`${report.recipientFullName}_Medical_Report.pdf`);
+      toast({
+        title: "Download Complete",
+        description: "Report downloaded successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while generating the PDF.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        position: "top-right",
+      });
+    } finally {
+      setIsDownloading(false);
     }
-
-    doc.save(`${report.recipientFullName}_Medical_Report.pdf`);
   };
 
   return (
@@ -130,7 +159,11 @@ function MedicalReportsModal({ isOpen, onClose }) {
         <ModalHeader color="#A210C6">Medical Reports</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {reports.length === 0 ? (
+          {isLoading ? (
+            <Flex justifyContent="center" alignItems="center" height="100%">
+              <Spinner size="xl" />
+            </Flex>
+          ) : reports.length === 0 ? (
             <Text>You have no medical report yet.</Text>
           ) : !selectedReport ? (
             <List mb="10px" spacing={3} color="white">
@@ -222,6 +255,8 @@ function MedicalReportsModal({ isOpen, onClose }) {
                 color="white"
                 leftIcon={<DownloadIcon />}
                 onClick={() => generatePDF(selectedReport)}
+                isLoading={isDownloading}
+                loadingText="Downloading..."
               >
                 Download Report as PDF
               </Button>
