@@ -69,7 +69,8 @@ const ClientDash = () => {
   const [apiMessage] = useState("");
   const [showPayAppointmentModal, setShowPayAppointmentModal] = useState(false);
   const [matchedAppointments, setMatchedAppointments] = useState([]);
-  const [isMedicalReportsModalOpen, setMedicalReportsModalOpen] = useState(false);
+  const [isMedicalReportsModalOpen, setMedicalReportsModalOpen] =
+    useState(false);
   const [showMatchedAppointmentsModal, setShowMatchedAppointmentsModal] =
     useState(false);
 
@@ -95,10 +96,8 @@ const ClientDash = () => {
         if (response.data.success) {
           checkUnpaidAppointments(response.data.data);
         } else {
-          console.error("Failed to fetch appointments");
         }
       } catch (error) {
-        console.error("Error fetching appointments:", error);
       } finally {
         // setLoading(false);
       }
@@ -128,49 +127,41 @@ const ClientDash = () => {
     setMedicalReportsModalOpen(true);
   };
 
-useEffect(() => {
-  const fetchMatchedAppointments = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:8080/v1/appointment/match-appointment`,
-        // "https://backend-c1pz.onrender.com/v1/appointment/match-appointment",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Response from matched appointments:", data);
-        setMatchedAppointments(data.data);
-        console.log("Response from api message", data.message);
-
-        // Check if data.data exists and is an array with length > 0
-        if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-          setShowMatchedAppointmentsModal(true);
+  useEffect(() => {
+    const fetchMatchedAppointments = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:8080/v1/appointment/match-appointment`,
+          // "https://backend-c1pz.onrender.com/v1/appointment/match-appointment",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setMatchedAppointments(data.data);
+          if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+            setShowMatchedAppointmentsModal(true);
+          } else {
+          }
         } else {
-          console.log("No matched appointments found in data.");
         }
-      } else {
-        console.error("Failed to fetch matched appointments:", data.error);
-      }
-    } catch (error) {
-      console.error("Error fetching matched appointments:", error);
-    }
-  };
+      } catch (error) {}
+    };
 
-  // Fetch matched appointments initially
-  setTimeout(fetchMatchedAppointments, 5000);
+    // Fetch matched appointments initially
+    setTimeout(fetchMatchedAppointments, 5000);
 
-  const intervalId = setInterval(fetchMatchedAppointments, 15 * 60 * 1000);
+    const intervalId = setInterval(fetchMatchedAppointments, 15 * 60 * 1000);
 
-  // Clear interval on component unmount
-  return () => clearInterval(intervalId);
-}, []);
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleOpenAppointmentModal = () => {
     setShowAppointmentModal(true);
@@ -195,10 +186,8 @@ useEffect(() => {
           if (response.success) {
             dispatch(SetUser(response.data));
           } else {
-            console.error("API request failed:", response.error);
           }
         } catch (error) {
-          console.error("Error in GetCurrentUser API:", error);
           navigate("/login");
           window.location.reload();
         } finally {

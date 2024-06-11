@@ -35,11 +35,16 @@ import VerifyMedicForm from "./components/pages/VerifyMedicForm";
 import CompletionPage from "./components/pages/ComplitionPage";
 import MedicDashboard from "./components/pages/MedicDashboard";
 import PatientsPage from "./components/pages/PatientsPage";
+import InactivityLogout from "./InactivityLogout";
+import MedicAppPage from "./components/pages/MedicAppPage";
+
 
 function App() {
+  
   return (
     <div className="App">
       <BrowserRouter>
+      {/* <InactivityLogout/> */}
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<AboutPage />}></Route>
@@ -50,6 +55,8 @@ function App() {
           <Route path="/verify-number" element={<VerifyNumber />}></Route>
           <Route path="/complete" element={<CompletionPage />}></Route>
           <Route path="/patients" element={<PatientsPage />}></Route>
+          <Route path="/medic-appointment" element={<MedicAppPage />}></Route>
+          
           <Route
             path="/verify-medic-number"
             element={<VerifyMedicNumber />}

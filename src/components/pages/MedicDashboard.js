@@ -63,6 +63,7 @@ const MedicDashboard = () => {
     AOS.init();
   }, []);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
