@@ -1,33 +1,41 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerCloseButton,
+  DrawerBody,
   Button,
   List,
   ListItem,
   Flex,
   Text,
+  // Divider,
   useToast,
   Image,
   VStack,
   useBreakpointValue,
   Spinner,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  Input,
 } from "@chakra-ui/react";
-import { DownloadIcon } from "@chakra-ui/icons";
+import { DownloadIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { jsPDF } from "jspdf";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-function MedicalReportsModal({ isOpen, onClose }) {
+function MedicalReportsDrawer({ isOpen, onClose }) {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchDate, setSearchDate] = useState(null);
   const toast = useToast();
-  const modalSize = useBreakpointValue({ base: "full", md: "2xl" });
+  const drawerSize = useBreakpointValue({ base: "full", md: "lg" });
 
   const fetchReports = useCallback(async () => {
     setIsLoading(true);
@@ -39,7 +47,10 @@ function MedicalReportsModal({ isOpen, onClose }) {
         }
       );
       if (response.data.success) {
-        setReports(response.data.data);
+        const sortedReports = response.data.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setReports(sortedReports);
       } else {
         toast({
           title: "Failed to load reports",
@@ -64,11 +75,65 @@ function MedicalReportsModal({ isOpen, onClose }) {
     }
   }, [toast]);
 
+  const searchReports = useCallback(
+    async (date) => {
+      if (!date) return;
+      setIsLoading(true);
+      try {
+        const newDate = new Date(date);
+        newDate.setDate(newDate.getDate() + 1);
+        const formattedDate = new Date(newDate).toISOString().split("T")[0];
+        const response = await axios.get(
+          // `http://localhost:8080/v1/appointment/search-report?date=${formattedDate}`,
+          `https://backend-c1pz.onrender.com/v1/appointment/search-report?date=${formattedDate}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          const sortedReports = response.data.data.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setReports(sortedReports);
+        } else {
+          toast({
+            title: "Failed to load reports",
+            description: response.data.message,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+            position: "top-right",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An error occurred while fetching medical reports.",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top-right",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [toast]
+  );
+
   useEffect(() => {
     if (isOpen) {
       fetchReports();
     }
   }, [isOpen, fetchReports]);
+
+  useEffect(() => {
+    if (searchDate) {
+      searchReports(searchDate);
+    }
+  }, [searchDate, searchReports]);
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
@@ -146,19 +211,20 @@ function MedicalReportsModal({ isOpen, onClose }) {
   };
 
   return (
-    <Modal
+    <Drawer
       isOpen={isOpen}
       onClose={() => {
         onClose();
         setSelectedReport(null);
+        setSearchDate(null);
       }}
-      size={modalSize}
+      size={drawerSize}
     >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader color="#A210C6">Medical Reports</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerHeader color="#A210C6">Medical Reports</DrawerHeader>
+        <DrawerCloseButton />
+        <DrawerBody>
           {isLoading ? (
             <Flex justifyContent="center" alignItems="center" height="100%">
               <Spinner size="xl" />
@@ -166,10 +232,43 @@ function MedicalReportsModal({ isOpen, onClose }) {
           ) : reports.length === 0 ? (
             <Text>You have no medical report yet.</Text>
           ) : !selectedReport ? (
-            <List mb="10px" spacing={3} color="white">
+            <List mb="10px" spacing={3} color="#A210C6">
+              <InputGroup borderRadius="10px" mb="10px" border="4px solid gray">
+                <DatePicker
+                  selected={searchDate}
+                  onChange={(date) => setSearchDate(date)}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="Search report by bate"
+                  customInput={
+                    <Input
+                      placeholder="Search report by date"
+                      value={
+                        searchDate ? searchDate.toISOString().split("T")[0] : ""
+                      }
+                      border="none"
+                    />
+                  }
+                />
+                <InputRightElement>
+                  {searchDate ? (
+                    <IconButton
+                      icon={<CloseIcon />}
+                      onClick={() => {
+                        setSearchDate(null);
+                        fetchReports();
+                      }}
+                    />
+                  ) : (
+                    <IconButton
+                      icon={<SearchIcon />}
+                      onClick={() => searchReports(searchDate)}
+                    />
+                  )}
+                </InputRightElement>
+              </InputGroup>
               {reports.map((report) => (
                 <ListItem
-                  bg="#A210C6"
+                  border="1px solid #A210C6"
                   p="10px"
                   borderRadius="5px"
                   key={report.id}
@@ -181,19 +280,33 @@ function MedicalReportsModal({ isOpen, onClose }) {
                     {formatDateTime(report.createdAt)}
                   </Text>
                   <Text fontStyle="italic">
-                    Reported by: {report.medicFullName}
+                    Submitted by: {report.medicFullName}
                   </Text>
                 </ListItem>
               ))}
             </List>
           ) : (
             <VStack spacing={4} align="start" w="100%">
+              <Flex justifyContent="space-between" w="100%">
               <Button
                 colorScheme="blue"
                 onClick={() => setSelectedReport(null)}
               >
                 Back
               </Button>
+              <Button
+                mb="10px"
+                bg="green.500"
+                color="white"
+                leftIcon={<DownloadIcon />}
+                onClick={() => generatePDF(selectedReport)}
+                isLoading={isDownloading}
+                loadingText="Downloading..."
+              >
+                Download as PDF
+              </Button>
+              </Flex>
+              {/* <Divider my={2} borderColor="gray.500" /> */}
               <Flex
                 justifyContent="space-between"
                 flexDirection={{ base: "column", md: "row" }}
@@ -242,30 +355,20 @@ function MedicalReportsModal({ isOpen, onClose }) {
               </Text>
               <Text maxWidth="100%">{selectedReport.recommendations}</Text>
               <Text fontStyle="italic" fontWeight="bold">
-                Reported by: {selectedReport.medicFullName}
+              Submitted by: {selectedReport.medicFullName}
               </Text>
 
               {selectedReport.picturePath && (
                 <Image src={selectedReport.picturePath} alt="Medical Image" />
               )}
 
-              <Button
-                mb="10px"
-                bg="green.500"
-                color="white"
-                leftIcon={<DownloadIcon />}
-                onClick={() => generatePDF(selectedReport)}
-                isLoading={isDownloading}
-                loadingText="Downloading..."
-              >
-                Download Report as PDF
-              </Button>
+            
             </VStack>
           )}
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
-export default MedicalReportsModal;
+export default MedicalReportsDrawer;

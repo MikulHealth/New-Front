@@ -22,13 +22,15 @@ import {
   Skeleton,
   useTabs,
 } from "@chakra-ui/react";
-import { CheckIcon } from "@chakra-ui/icons";
 import familyIcon from "../../assets/MedTeam.svg";
 // import SearchAppointmentsModal from "../sections/SearchAppointmentByDate";
 import NavBar from "../authLayouts/MedicNavBar";
 import AppointmentTab from "../authLayouts/AllMedicApp";
 // import PendingApp from "../authLayouts/PendingAppointmentTab";
 import MobileFooter from "../authLayouts/MedicFooter";
+import PendingMedicAppTab from "../authLayouts/PendingMedicApp";
+import ActiveMedicAppTab from "../authLayouts/ActiveMedicTab";
+import CompletedMedicAppTab from "../authLayouts/CompletedMedicApp";
 
 const customTheme = extendTheme({
   components: {
@@ -50,20 +52,20 @@ const MedicAppPage = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-  const [showSearchAppointmentsModal, setShowSearchAppointmentsModal] =
-    useState(false);
+//   const [showSearchAppointmentsModal, setShowSearchAppointmentsModal] =
+//     useState(false);
 
   const handleOpenAppointmentModal = () => {
     setShowAppointmentModal(true);
   };
 
-  const handleOpenSearchAppointmentsModal = () => {
-    setShowSearchAppointmentsModal(true);
-  };
+//   const handleOpenSearchAppointmentsModal = () => {
+//     setShowSearchAppointmentsModal(true);
+//   };
 
-  const handleCloseSearchAppointmentsModal = () => {
-    setShowSearchAppointmentsModal(false);
-  };
+//   const handleCloseSearchAppointmentsModal = () => {
+//     setShowSearchAppointmentsModal(false);
+//   };
 
   const handleCloseAppointmentModal = () => {
     setShowAppointmentModal(false);
@@ -97,7 +99,7 @@ const MedicAppPage = () => {
       <VStack
         style={settingsContainerStyle}
         position="fixed"
-        ml={{ md: "230px" }}
+        ml={{ md: "200px" }}
         w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}
       >
@@ -134,7 +136,7 @@ const MedicAppPage = () => {
                     cursor: "pointer",
                   }}
                   _hover={{ color: "#A210C6" }}
-                  onClick={handleOpenSearchAppointmentsModal}
+                //   onClick={handleOpenSearchAppointmentsModal}
                 >
                   Search Appointment by date
                 </Text>
@@ -157,7 +159,7 @@ const MedicAppPage = () => {
                   fontSize={{ base: "12px", md: "20px" }}
                   fontFamily="heading"
                   marginTop="15px"
-                  ml={{ base: "30px", md: "60px" }}
+                  ml={{ base: "30px", md: "" }}
                   textAlign="left"
                 >
                   Hello {user?.firstName},
@@ -165,30 +167,30 @@ const MedicAppPage = () => {
                 <Text
                   fontFamily="body"
                   fontSize={{ base: "10px", md: "15px" }}
-                  ml={{ base: "30px", md: "60px" }}
+                  ml={{ base: "30px", md: "" }}
                   mt={{ md: "5px" }}
                   textAlign="left"
                 >
-                  Would you like to book an appointment <br></br> for yourself
-                  or a loved one?
+                  Would you like to request for an appointment?
                 </Text>
-
-                <Button
-                  onClick={handleOpenAppointmentModal}
-                  bg="white"
-                  color="#A210C6"
-                  fontFamily="body"
-                  mt={{ base: "10px", md: "30px" }}
-                  _hover={{ color: "" }}
-                  padding={{ base: "5px", md: "0" }}
-                  w={{ base: "140px", md: "190px" }}
-                  h={{ base: "25px", md: "40px" }}
-                  fontSize={{ base: "12px", md: "16px" }}
-                  borderRadius="15px"
-                  //   leftIcon={<CheckIcon />}
-                >
-                  Request appointment
-                </Button>
+                <Box>
+                  <Button
+                    onClick={handleOpenAppointmentModal}
+                    bg="white"
+                    color="#A210C6"
+                    fontFamily="body"
+                    mt={{ base: "10px", md: "30px" }}
+                    _hover={{ color: "" }}
+                    padding={{ base: "5px", md: "0" }}
+                    w={{ base: "140px", md: "190px" }}
+                    h={{ base: "25px", md: "40px" }}
+                    fontSize={{ base: "12px", md: "16px" }}
+                    borderRadius="15px"
+                    //   leftIcon={<CheckIcon />}
+                  >
+                    Request appointment
+                  </Button>
+                </Box>
               </Box>
               <Box mr={{ md: "20px" }}>
                 <Image
@@ -211,7 +213,7 @@ const MedicAppPage = () => {
               className="appointment-tabs"
               overflow={{ base: "hidden", md: "hidden" }}
             >
-              <VStack ml={{ md: "-200px" }} w="full" {...swipeHandlers}>
+              <VStack ml={{ md: "-180px" }} w="full" {...swipeHandlers}>
                 <Tabs
                   index={index}
                   onChange={setIndex}
@@ -256,9 +258,15 @@ const MedicAppPage = () => {
                     <TabPanel>
                       <AppointmentTab />
                     </TabPanel>
-                    <TabPanel>{/* <PendingApp /> */}</TabPanel>
-                    <TabPanel>{/* <ActiveApp /> */}</TabPanel>
-                    <TabPanel>{/* <CompletedApp /> */}</TabPanel>
+                    <TabPanel>
+                      <PendingMedicAppTab />
+                    </TabPanel>
+                    <TabPanel>
+                      <ActiveMedicAppTab />
+                    </TabPanel>
+                    <TabPanel>
+                      <CompletedMedicAppTab />
+                    </TabPanel>
                   </TabPanels>
                 </Tabs>
               </VStack>
@@ -268,10 +276,6 @@ const MedicAppPage = () => {
               isOpen={showAppointmentModal}
               onClose={handleCloseAppointmentModal}
             />
-            {/* <SearchAppointmentsModal
-              isOpen={showSearchAppointmentsModal}
-              onClose={handleCloseSearchAppointmentsModal}
-            /> */}
           </Box>
         )}
         <MobileFooter />

@@ -19,7 +19,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 
-const AllMedicAppTab = () => {
+const PendingMedicAppTab = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -32,8 +32,8 @@ const AllMedicAppTab = () => {
         try {
           const token = localStorage.getItem("token");
           const response = await axios.get(
-            // "http://localhost:8080/v1/appointment/all",
-            "https://backend-c1pz.onrender.com/v1/appointment/all",
+            // "http://localhost:8080/v1/appointment/pending",
+            "https://backend-c1pz.onrender.com/v1/appointment/pending",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -77,8 +77,8 @@ const AllMedicAppTab = () => {
   if (appointments.length === 0) {
     return (
       <VStack spacing={4} align="stretch">
-        <Text>
-          You have no appointments yet. Would you like to request one?
+        <Text fontSize={{ base: "12px", md: "16px" }}>
+          You have no pending appointment yet.
         </Text>
       </VStack>
     );
@@ -87,15 +87,6 @@ const AllMedicAppTab = () => {
   return (
     <VStack spacing={4} align="stretch">
       {appointments.map((appointment, index) => {
-        let borderColor = "gray.200";
-        if (appointment.active) {
-          borderColor = "#ACE1C1";
-        } else if (appointment.pending) {
-          borderColor = "#F4DDA2";
-        } else if (appointment.completed) {
-          borderColor = "#A210C6";
-        }
-
         return (
           <Flex
             key={index}
@@ -103,7 +94,7 @@ const AllMedicAppTab = () => {
             borderRadius="lg"
             justify="space-between"
             align="center"
-            border={appointment.active ? "1px solid green" : "1px solid orange"}
+            border="1px solid #F4DDA2"
             w="full"
           >
             <Flex>
@@ -147,23 +138,34 @@ const AllMedicAppTab = () => {
               <Box ml={{ base: "50", md: "300px" }}>
                 <Badge
                   mb="20px"
-                  bg={borderColor}
+                  bg="white"
                   p={2}
                   borderRadius="5px"
                   color="white"
                   fontSize={{ base: "10px", md: "12px" }}
-                >
-                  Policy No.
-                </Badge>
-                <Text
-                  fontSize={{ base: "10px", md: "16px" }}
-                  cursor="pointer"
-                  fontStyle="italic"
-                  color="#107AC6"
-                  onClick={() => handleDetailsClick(appointment)}
-                >
-                  Details
-                </Text>
+                ></Badge>
+                <Flex mt="20px">
+                  <Text
+                    ml="-10px"
+                    fontSize={{ base: "10px", md: "16px" }}
+                    cursor="pointer"
+                    fontStyle="italic"
+                    color="#C21111B2"
+                    onClick={() => handleDetailsClick(appointment)}
+                  >
+                    Cancel
+                  </Text>
+                  <Text
+                    ml="10px"
+                    fontSize={{ base: "10px", md: "16px" }}
+                    cursor="pointer"
+                    fontStyle="italic"
+                    color="#107AC6"
+                    onClick={() => handleDetailsClick(appointment)}
+                  >
+                    Edit
+                  </Text>
+                </Flex>
               </Box>
             </Flex>
           </Flex>
@@ -257,4 +259,4 @@ const AllMedicAppTab = () => {
   );
 };
 
-export default AllMedicAppTab;
+export default PendingMedicAppTab;

@@ -7,6 +7,7 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  useToast,
   Button,
   extendTheme,
   Text,
@@ -25,8 +26,6 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { toast } from "react-toastify";
-
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -61,6 +60,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [selectedPatient, setSelectedPatient] = useState("");
   const [activities, setActivities] = useState([]);
   const [patiendId, setPatientId] = useState();
+  const toast = useToast();
   const [medications, setMedications] = useState([
     { name: "", dosage: "", route: "", time: new Date() },
   ]);
@@ -184,12 +184,32 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       );
 
       if (response.data.success) {
-        toast.success(response.data.message);
+        toast({
+          title: response.data.message,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
       } else {
-        toast.error("Error sending report");
+        toast({
+          title: "Error",
+          description: "Failded send  reports.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
       }
     } catch (error) {
-      toast.error("Error sending report");
+      toast({
+        title: "Error",
+        description: "An error occurred while sending  reports.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
     }
   };
 
