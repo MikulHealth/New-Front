@@ -350,7 +350,7 @@ export default function PendingApp() {
                       bg={
                         appointment.appointment.appointmentPending
                           ? "#F4DDA2"
-                          : "black"
+                          : "#F4DDA2"
                       }
                     >
                       <Text
@@ -358,12 +358,12 @@ export default function PendingApp() {
                         color={
                           appointment.appointment?.appointmentPending
                             ? "#B48B25"
-                            : "black"
+                            : "#B48B25"
                         }
                       >
                         {appointment.appointment?.appointmentPending
                           ? "Pending"
-                          : "Unknown"}
+                          : "Paired"}
                       </Text>
                     </Box>
                     <Box

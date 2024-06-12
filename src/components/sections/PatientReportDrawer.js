@@ -160,7 +160,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     console.log("Id is " + patiendId);
     const serializedMedications = medications.map(
       (med) =>
-        `${med.name},${med.dosage},${med.route},${med.time.toISOString()}`
+        `Name:${med.name},Dosage:${med.dosage},Route:${med.route},Time:${med.time.toISOString()}`
     );
 
     const data = {

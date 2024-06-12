@@ -142,52 +142,82 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
 
   const formatMedicationTime = (medication) => {
     const parts = medication.split(",");
-    const time = new Date(parts[3]);
-    return `${parts[0]}, ${parts[1]}, ${parts[2]}, ${time.toLocaleString()}`;
-  };
+    const timePart = parts.find(part => part.startsWith("Time:"));
+    const time = timePart ? new Date(timePart.replace("Time:", "")) : new Date(NaN);
+    return `${parts[0]}, ${parts[1]}, ${parts[2]}, ${
+      !isNaN(time.getTime()) ? `Time:${time.toLocaleString()}` : "Time:Invalid Date"
+    }`;
+  };  
 
   const generatePDF = async (report) => {
     setIsDownloading(true);
     try {
       const doc = new jsPDF();
+      doc.setFontSize(20);
+      doc.setFont("helvetica", "bold");
+      
+      // Add title
+      const title = `${report.recipientFullName} MH Report`;
+      doc.text(title, 10, 20);
+      
       doc.setFontSize(12);
-
+  
       const addText = (label, text, offsetY) => {
-        const splitText = doc.splitTextToSize(`${label}: ${text}`, 180);
-        doc.text(splitText, 10, offsetY);
-        return offsetY + splitText.length * 10;
+        doc.setFont("helvetica", "bold");
+        const splitLabel = doc.splitTextToSize(`${label}: `, 180);
+        doc.text(splitLabel, 10, offsetY);
+        const labelHeight = splitLabel.length * 10;
+  
+        doc.setFont("helvetica", "normal");
+        const splitText = doc.splitTextToSize(text, 180);
+        doc.text(splitText, 10 + doc.getTextDimensions(splitLabel[0]).w, offsetY);
+        const textHeight = splitText.length * 10;
+  
+        const totalHeight = Math.max(labelHeight, textHeight);
+        if (offsetY + totalHeight > 280) {
+          doc.addPage();
+          offsetY = 10;
+        }
+  
+        return offsetY + totalHeight;
       };
-
-      let offsetY = 10;
-      offsetY = addText("Beneficiary name", report.recipientFullName, offsetY);
-      offsetY = addText("Service Plan", report.servicePlan, offsetY);
-      offsetY = addText(
-        "Report date and time",
-        formatDateTime(report.createdAt),
-        offsetY
-      );
-      offsetY = addText("Temperature", `${report.temperature}°C`, offsetY);
-      offsetY = addText("Blood Pressure", report.bloodPressure, offsetY);
-      offsetY = addText("Pulse", `${report.pulse} bpm`, offsetY);
-      offsetY = addText("Blood Sugar", report.bloodSugar, offsetY);
-      offsetY = addText("SpO2", `${report.sp02}%`, offsetY);
-      offsetY = addText("Respiration", `${report.respiration} c/m`, offsetY);
-
-      offsetY = addText(
-        "Medications",
-        report.medications.map(formatMedicationTime).join(", "),
-        offsetY
-      );
-      offsetY = addText("Activities", report.activities.join(", "), offsetY);
-      offsetY = addText("Comments", report.comments, offsetY);
-      offsetY = addText("Recommendations", report.recommendations, offsetY);
-      offsetY = addText("Reported by", report.medicFullName, offsetY);
-
+  
+      let offsetY = 30;  // Start below the title
+      offsetY = addText("Beneficiary name ", report.recipientFullName, offsetY);
+      offsetY = addText("Service Plan ", report.servicePlan, offsetY);
+      offsetY = addText("Report date and time ", formatDateTime(report.createdAt), offsetY);
+      offsetY = addText("Temperature ", `${report.temperature}°C`, offsetY);
+      offsetY = addText("Blood Pressure ", report.bloodPressure, offsetY);
+      offsetY = addText("Pulse ", `${report.pulse} bpm`, offsetY);
+      offsetY = addText("Blood Sugar ", report.bloodSugar, offsetY);
+      offsetY = addText("SpO2 ", `${report.sp02}%`, offsetY);
+      offsetY = addText("Respiration ", `${report.respiration} c/m`, offsetY);
+  
+      // Adding medications
+      offsetY = addText("Medications ", "", offsetY);
+      report.medications.forEach(medication => {
+        offsetY = addText("", formatMedicationTime(medication), offsetY);
+      });
+  
+      // Adding activities
+      offsetY = addText("Activities ", "", offsetY);
+      report.activities.forEach(activity => {
+        offsetY = addText("", activity, offsetY);
+      });
+  
+      offsetY = addText("Comments ", report.comments, offsetY);
+      offsetY = addText("Recommendations ", report.recommendations, offsetY);
+      offsetY = addText("Reported by ", report.medicFullName, offsetY);
+  
       if (report.picturePath) {
+        if (offsetY + 160 > 280) {
+          doc.addPage();
+          offsetY = 10;
+        }
         doc.addImage(report.picturePath, "JPEG", 10, offsetY, 180, 160);
       }
-
-      doc.save(`${report.recipientFullName}_Medical_Report.pdf`);
+  
+      doc.save(`${report.recipientFullName}_${formatDateTime(report.createdAt)}_MH_Medical_Report.pdf`);
       toast({
         title: "Download Complete",
         description: "Report downloaded successfully.",
@@ -209,6 +239,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
       setIsDownloading(false);
     }
   };
+  
 
   return (
     <Drawer
@@ -288,23 +319,23 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
           ) : (
             <VStack spacing={4} align="start" w="100%">
               <Flex justifyContent="space-between" w="100%">
-              <Button
-                colorScheme="blue"
-                onClick={() => setSelectedReport(null)}
-              >
-                Back
-              </Button>
-              <Button
-                mb="10px"
-                bg="green.500"
-                color="white"
-                leftIcon={<DownloadIcon />}
-                onClick={() => generatePDF(selectedReport)}
-                isLoading={isDownloading}
-                loadingText="Downloading..."
-              >
-                Download as PDF
-              </Button>
+                <Button
+                  colorScheme="blue"
+                  onClick={() => setSelectedReport(null)}
+                >
+                  Back
+                </Button>
+                <Button
+                  mb="10px"
+                  bg="green.500"
+                  color="white"
+                  leftIcon={<DownloadIcon />}
+                  onClick={() => generatePDF(selectedReport)}
+                  isLoading={isDownloading}
+                  loadingText="Downloading..."
+                >
+                  Download as PDF
+                </Button>
               </Flex>
               {/* <Divider my={2} borderColor="gray.500" /> */}
               <Flex
@@ -335,17 +366,19 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
               <Text>SpO2: {selectedReport.sp02}%</Text>
               <Text>Respiration: {selectedReport.respiration} c/m</Text>
               <Text fontWeight="bold">Medications:</Text>
-              <Text>
-                {selectedReport.medications
-                  .map(formatMedicationTime)
-                  .join(", ")}
-              </Text>
+              <VStack align="start" spacing={1}>
+                {selectedReport.medications.map((medication, index) => (
+                  <Text key={index}>{formatMedicationTime(medication)}</Text>
+                ))}
+              </VStack>
               <Text fontWeight="bold" maxWidth="100%">
                 Activities:
               </Text>
-              <Text maxWidth="100%">
-                {selectedReport.activities.join(", ")}
-              </Text>
+              <VStack align="start" spacing={1}>
+                {selectedReport.activities.map((activity, index) => (
+                  <Text key={index}>{activity}</Text>
+                ))}
+              </VStack>
               <Text fontWeight="bold" maxWidth="100%">
                 Comments/Observation:
               </Text>
@@ -355,14 +388,12 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
               </Text>
               <Text maxWidth="100%">{selectedReport.recommendations}</Text>
               <Text fontStyle="italic" fontWeight="bold">
-              Submitted by: {selectedReport.medicFullName}
+                Submitted by: {selectedReport.medicFullName}
               </Text>
 
               {selectedReport.picturePath && (
                 <Image src={selectedReport.picturePath} alt="Medical Image" />
               )}
-
-            
             </VStack>
           )}
         </DrawerBody>

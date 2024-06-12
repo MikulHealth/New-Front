@@ -89,7 +89,7 @@ const AllMedicAppTab = () => {
       {appointments.map((appointment, index) => {
         let borderColor = "gray.200";
         if (appointment.active) {
-          borderColor = "#ACE1C1";
+          borderColor = "#057B1FC6";
         } else if (appointment.pending) {
           borderColor = "#F4DDA2";
         } else if (appointment.completed) {

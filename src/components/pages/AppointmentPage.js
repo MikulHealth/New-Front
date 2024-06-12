@@ -29,6 +29,8 @@ import NavBar from "../authLayouts/NavBar";
 import AppointmentTab from "../authLayouts/AllAppointmentTab";
 import PendingApp from "../authLayouts/PendingAppointmentTab";
 import MobileFooter from "../authLayouts/MobileFooter";
+import ActiveApp from "../authLayouts/ActiveAppTab";
+import CompletedApp from "../authLayouts/CompletedAppTab";
 
 const customTheme = extendTheme({
   components: {
@@ -267,10 +269,10 @@ const AppointmentPage = () => {
                       <PendingApp />
                     </TabPanel>
                     <TabPanel>
-                      <PendingApp />
+                      <ActiveApp/>
                     </TabPanel>
                     <TabPanel>
-                      <PendingApp />
+                      <CompletedApp/>
                     </TabPanel>
                     <TabPanel>
                       <PendingApp />
