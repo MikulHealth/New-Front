@@ -317,7 +317,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
               ))}
             </List>
           ) : (
-            <VStack spacing={4} align="start" w="100%">
+            <VStack mb="50px" spacing={4} align="start" w="100%">
               <Flex justifyContent="space-between" w="100%">
                 <Button
                   colorScheme="blue"
