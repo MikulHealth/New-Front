@@ -99,8 +99,8 @@ const MedicDashboard = () => {
         try {
           const token = localStorage.getItem("token");
           const response = await axios.get(
-            `http://localhost:8080/v1/appointment/find-patient`,
-            // "https://backend-c1pz.onrender.com/v1/appointment/find-patient",
+            // `http://localhost:8080/v1/appointment/find-patient`,
+            "https://backend-c1pz.onrender.com/v1/appointment/find-patient",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
