@@ -31,6 +31,7 @@ import PendingApp from "../authLayouts/PendingAppointmentTab";
 import MobileFooter from "../authLayouts/MobileFooter";
 import ActiveApp from "../authLayouts/ActiveAppTab";
 import CompletedApp from "../authLayouts/CompletedAppTab";
+// import CancelledApp from "../authLayouts/CanceledCustomerApp";
 
 const customTheme = extendTheme({
   components: {
@@ -253,13 +254,13 @@ const AppointmentPage = () => {
                     >
                       Completed
                     </Tab>
-                    <Tab
+                    {/* <Tab
                       fontSize={{ base: "11px", md: "16px" }}
                       color="red.500"
                       fontWeight="bold"
                     >
                       Cancelled
-                    </Tab>
+                    </Tab> */}
                   </TabList>
                   <TabPanels ml={{ base: "0px", md: "0px" }}>
                     <TabPanel>
@@ -274,9 +275,9 @@ const AppointmentPage = () => {
                     <TabPanel>
                       <CompletedApp/>
                     </TabPanel>
-                    <TabPanel>
-                      <PendingApp />
-                    </TabPanel>
+                    {/* <TabPanel>
+                      <CancelledApp/>
+                    </TabPanel> */}
                   </TabPanels>
                 </Tabs>
               </VStack>

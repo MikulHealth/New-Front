@@ -78,8 +78,8 @@ export default function CompletedApp() {
     setDetailsModalOpen(false);
     // navigate("/appointment");
     // window.location.reload()
-    setSelectedAppointment(null); 
-   };
+    setSelectedAppointment(null);
+  };
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
@@ -94,8 +94,8 @@ export default function CompletedApp() {
       };
 
       const response = await axios.get(
-        // "http://localhost:8080/v1/appointment/pendingAppointments",
-        "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
+        "http://localhost:8080/v1/appointment/findCompletedAppointments",
+        // "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
         config
       );
 
@@ -136,8 +136,8 @@ export default function CompletedApp() {
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = `http://localhost:8080/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
-      // const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
+      // const apiUrl = `http://localhost:8080/v1/appointment/findCompletedAppointmentDetails/${appointmentId}`;
+      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findCompletedAppointmentDetails/${appointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -161,9 +161,9 @@ export default function CompletedApp() {
     }
   };
 
-  const handleOpenAppointmentModal = () => {
-    setShowAppointmentModal(true);
-  };
+  // const handleOpenAppointmentModal = () => {
+  //   setShowAppointmentModal(true);
+  // };
 
   const handleCloseAppointmentModal = () => {
     setShowAppointmentModal(false);
@@ -263,23 +263,7 @@ export default function CompletedApp() {
             ml={{ base: "-8px", md: "-20px" }}
             fontSize={{ base: "12px", md: "16px" }}
           >
-            No pending appointments yet. Click{" "}
-            <button
-              style={{
-                color: "#A210C6",
-                fontStyle: "italic",
-                textDecoration: "none",
-                cursor: "pointer",
-                border: "none",
-                background: "none",
-                padding: "0",
-                font: "inherit",
-              }}
-              onClick={handleOpenAppointmentModal}
-            >
-              book appointment
-            </button>{" "}
-            to book.
+            No completed appointments yet.
           </Text>
         ) : (
           <Box>
@@ -691,8 +675,8 @@ export default function CompletedApp() {
                 No
               </Button>
               <Button
-                 bg="#E1ACAE"
-                 color="red.500"
+                bg="#E1ACAE"
+                color="red.500"
                 marginLeft="5px"
                 onClick={handleConfirmation}
               >

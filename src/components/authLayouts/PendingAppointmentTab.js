@@ -263,7 +263,7 @@ export default function PendingApp() {
             ml={{ base: "-8px", md: "-20px" }}
             fontSize={{ base: "12px", md: "16px" }}
           >
-            No pending appointments yet. Click{" "}
+            No pending appointments. Click{" "}
             <button
               style={{
                 color: "#A210C6",

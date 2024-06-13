@@ -4,7 +4,7 @@ import LoadingSpinner from "../../utils/Spiner";
 // import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BookAppointmentModal from "../sections/BookAppointment";
-import { EditIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import {CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
 import { WarningIcon } from "@chakra-ui/icons";
 import {
@@ -47,11 +47,8 @@ export default function ActiveApp() {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [cancellingAppointmentId, setCancellingAppointmentId] = useState(null);
-  const handleCancelAppointment = (appointmentId) => {
-    setCancellingAppointmentId(appointmentId);
-    setConfirmationModalOpen(true);
-  };
+  const [cancellingAppointmentId] = useState(null);
+;
 
   const handleCancelModalClose = () => {
     setConfirmationModalOpen(false);
@@ -69,10 +66,7 @@ export default function ActiveApp() {
   };
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
-  const handleEditAppointment = (id) => {
-    setEditModalOpen(true);
-    setDetailsModalOpen(false);
-  };
+
 
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
@@ -136,8 +130,8 @@ export default function ActiveApp() {
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = `http://localhost:8080/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
-      // const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
+      // const apiUrl = `http://localhost:8080/v1/appointment/findMatchedAppointmentDetails/${appointmentId}`;
+      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findMatchedAppointmentDetails/${appointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -640,7 +634,7 @@ export default function ActiveApp() {
               </Flex>
             </DrawerBody>
             <DrawerFooter justifyContent="space-between">
-              <Button
+              {/* <Button
                 bg="#A210C6"
                 color="white"
                 _hover={{ color: "" }}
@@ -659,7 +653,7 @@ export default function ActiveApp() {
                 onClick={() => handleCancelAppointment(selectedAppointment.id)}
               >
                 Cancel
-              </Button>
+              </Button> */}
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

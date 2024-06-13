@@ -63,7 +63,7 @@ const PatientsPage = () => {
           }
         );
         if (response.data.success) {
-          setPatients(response.data.data.map((app) => app.appointment)); // Mapping only the appointment details
+          setPatients(response.data.data.map((app) => app.appointment)); 
         }
       } catch (error) {
         console.error("Error fetching patients:", error);

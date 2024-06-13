@@ -15,6 +15,7 @@ import {
   FormControl,
   FormLabel,
   Select,
+  Flex,
   Checkbox,
   Box,
   Textarea,
@@ -26,6 +27,7 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -59,7 +61,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState("");
   const [activities, setActivities] = useState([]);
-  const [patiendId, setPatientId] = useState();
+  const [patientId, setPatientId] = useState();
   const toast = useToast();
   const [medications, setMedications] = useState([
     { name: "", dosage: "", route: "", time: new Date() },
@@ -73,7 +75,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     respiration: "",
     comments: "",
     recommendations: "",
-    // picture: null,
+    picture: null,
     confirmation: false,
   });
 
@@ -86,7 +88,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const fetchPatients = async () => {
     try {
       const response = await axios.get(
-        // `http://localhost:8080/v1/appointment/get-active-patient`,
         "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
         {
           headers: {
@@ -94,7 +95,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           },
         }
       );
-      // Assuming the actual patient data is nested inside response.data.data
       if (response.data && Array.isArray(response.data.data)) {
         setPatients(response.data.data);
         setPatientId(response.data.data[0].appointment.id);
@@ -115,12 +115,12 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     }));
   };
 
-  // const handleFileChange = (e) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     picture: e.target.files[0],
-  //   }));
-  // };
+  const handleFileChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      picture: e.target.files[0],
+    }));
+  };
 
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
@@ -129,6 +129,50 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     } else {
       setActivities(activities.filter((activity) => activity !== name));
     }
+  };
+
+  const isFormComplete = () => {
+    // Check if all required fields in formData are filled
+    const requiredFields = [
+      "temperature",
+      "bloodPressure",
+      "pulse",
+      "bloodSugar",
+      "sp02",
+      "respiration",
+      "comments",
+      "recommendations",
+    ];
+
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        return false;
+      }
+    }
+
+    // Check if a patient is selected
+    if (!selectedPatient) {
+      return false;
+    }
+
+    // Check if all medications have required fields filled
+    for (let med of medications) {
+      if (!med.name || !med.dosage || !med.route || !med.time) {
+        return false;
+      }
+    }
+
+    // Check if at least one activity is checked
+    if (activities.length === 0) {
+      return false;
+    }
+
+    // Check if the confirmation checkbox is checked
+    if (!formData.confirmation) {
+      return false;
+    }
+
+    return true;
   };
 
   const handleMedicationChange = (index, field, value) => {
@@ -157,22 +201,34 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async () => {
-    console.log("Id is " + patiendId);
+    if (!isFormComplete()) {
+      toast({
+        title: "Incomplete Form",
+        description: "Please fill in all required fields.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      return;
+    }
+
     const serializedMedications = medications.map(
       (med) =>
-        `Name:${med.name},Dosage:${med.dosage},Route:${med.route},Time:${med.time.toISOString()}`
+        `Name:${med.name},Dosage:${med.dosage},Route:${
+          med.route
+        },Time:${med.time.toISOString()}`
     );
 
     const data = {
       ...formData,
       activities: activities,
-      appointmentId: patiendId,
+      appointmentId: patientId,
       medications: serializedMedications,
     };
 
     try {
       const response = await axios.post(
-        // `http://localhost:8080/v1/appointment/send-report`,
         "https://backend-c1pz.onrender.com/v1/appointment/send-report",
         data,
         {
@@ -191,10 +247,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           isClosable: true,
           position: "top-right",
         });
+        onClose();
       } else {
         toast({
           title: "Error",
-          description: "Failded send  reports.",
+          description: "Failed to send reports.",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -204,7 +261,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "An error occurred while sending  reports.",
+        description: "An error occurred while sending reports.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -522,7 +579,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 >
                   Picture Evidence (Optional)
                 </FormLabel>
-                <Input type="file" name="picture" />
+                <Input type="file" name="picture" onChange={handleFileChange} />
               </FormControl>
               <FormControl isRequired mb="4">
                 <Checkbox
@@ -541,39 +598,97 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
               </FormControl>
             </>
           )}
+
+          {step === 4 && (
+            <VStack spacing={4} align="start" w="100%">
+              <Text fontSize="xl" fontWeight="bold">
+                Confirmation
+              </Text>
+              <Text color="#A210C6" fontStyle="italic" fontFamily="body">
+                Proof read to confrim that the data is complete and accurate.
+              </Text>
+              <Text>Patient: {selectedPatient}</Text>
+              <Text>Temperature: {formData.temperature}°C</Text>
+              <Text>Blood Pressure: {formData.bloodPressure}</Text>
+              <Text>Pulse: {formData.pulse} bpm</Text>
+              <Text>Blood Sugar: {formData.bloodSugar}</Text>
+              <Text>SpO2: {formData.sp02}%</Text>
+              <Text>Respiration: {formData.respiration} c/m</Text>
+              <Text fontWeight="bold">Medications:</Text>
+              <VStack align="start" spacing={1}>
+                {medications.map((medication, index) => (
+                  <Text key={index}>{`Name: ${medication.name}, Dosage: ${
+                    medication.dosage
+                  }, Route: ${
+                    medication.route
+                  }, Time: ${medication.time.toLocaleString()}`}</Text>
+                ))}
+              </VStack>
+              <Text fontWeight="bold">Activities:</Text>
+              <VStack align="start" spacing={1}>
+                {activities.map((activity, index) => (
+                  <Text key={index}>{activity}</Text>
+                ))}
+              </VStack>
+              <Text>Comments: {formData.comments}</Text>
+              <Text>Recommendations: {formData.recommendations}</Text>
+              <Flex justifyContent="space-between" w="100%">
+                <Button
+                  variant="outline"
+                  onClick={() => setStep(3)}
+                  fontFamily="body"
+                  bg="gray.500"
+                  color="white"
+                >
+                  Back
+                </Button>
+                <Button
+                  bg="#A210C6"
+                  color="white"
+                  onClick={handleSubmit}
+                  isDisabled={!formData.confirmation}
+                  fontFamily="body"
+                >
+                  Confirm and Submit
+                </Button>
+              </Flex>
+            </VStack>
+          )}
         </DrawerBody>
-        <DrawerFooter>
-          {step > 1 && (
-            <Button
-              fontFamily="body"
-              variant="outline"
-              mr={3}
-              onClick={() => setStep(step - 1)}
-            >
-              Previous
-            </Button>
-          )}
-          {step < 3 ? (
-            <Button
-              bg="#A210C6"
-              color="white"
-              onClick={() => setStep(step + 1)}
-              fontFamily="body"
-            >
-              Next
-            </Button>
-          ) : (
-            <Button
-              bg="#A210C6"
-              color="white"
-              onClick={handleSubmit}
-              isDisabled={!formData.confirmation}
-              fontFamily="body"
-            >
-              Submit Report
-            </Button>
-          )}
-        </DrawerFooter>
+        {step < 4 && (
+          <DrawerFooter>
+            {step > 1 && (
+              <Button
+                fontFamily="body"
+                variant="outline"
+                mr={3}
+                onClick={() => setStep(step - 1)}
+              >
+                Previous
+              </Button>
+            )}
+            {step < 3 ? (
+              <Button
+                bg="#A210C6"
+                color="white"
+                onClick={() => setStep(step + 1)}
+                fontFamily="body"
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                bg="#A210C6"
+                color="white"
+                onClick={() => setStep(4)}
+                isDisabled={!formData.confirmation}
+                fontFamily="body"
+              >
+                Review and Confirm
+              </Button>
+            )}
+          </DrawerFooter>
+        )}
       </DrawerContent>
     </Drawer>
   );

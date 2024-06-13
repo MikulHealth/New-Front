@@ -49,7 +49,6 @@ const LandingPage = () => {
   const handleEmailInputChange = (e) => setEmailInput(e.target.value);
   const handlePasswordInputChange = (e) => setPasswordInput(e.target.value);
   const handleClick = () => setShow(!show);
-
   const validateEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
