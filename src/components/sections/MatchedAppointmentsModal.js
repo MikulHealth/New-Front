@@ -44,8 +44,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
   const handleAcceptAppointment = async (appointmentId, medicId) => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = 
-      "https://backend-c1pz.onrender.com/v1/appointment/accept";
+      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/accept";
       // `http://localhost:8080/v1/appointment/accept`;
       const headers = {
         "Content-Type": "application/json",
@@ -65,7 +64,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
           duration: 6000,
         });
         setAppointmentDetails(response.data.data);
-        onClose(); 
+        onClose();
       } else {
         toast({
           title: "Error accepting appointment",
@@ -121,9 +120,14 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                           {`${appointmentWrapper.appointment.appointment.recipientFirstname} ${appointmentWrapper.appointment.appointment.recipientLastname}`}
                         </Text>
                       </Flex>
-                      <Flex marginTop="5px">
-                        <Text fontWeight="bold" color="black">
-                          Appointment Type:
+                      {/* <Flex marginTop="5px">
+                        <Text
+                          maxW={{ base: "60px", md: "120px" }}
+                          wordWrap="break-word"
+                          fontWeight="bold"
+                          color="black"
+                        >
+                          Medic Type:
                         </Text>
                         <Text marginLeft="5px" color="black">
                           {
@@ -131,7 +135,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                               .medicSpecialization
                           }
                         </Text>
-                      </Flex>
+                      </Flex> */}
                       <Flex marginTop="5px">
                         <Text fontWeight="bold" color="black">
                           Service Plan:
