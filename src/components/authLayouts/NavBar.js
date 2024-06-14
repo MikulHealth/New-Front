@@ -295,7 +295,7 @@ export default function NavBar() {
                 fontWeight="bold"
                 fontFamily="heading"
               >
-                Hello {user?.firstName},
+                Hello {user?.firstName}
               </Heading>
               <Text
                 fontStyle="italic"

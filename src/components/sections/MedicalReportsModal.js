@@ -528,9 +528,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
           <ModalBody>
             <Text fontWeight="body" mb={4}>
               Mikul health wants to make sure it's really you trying to downlaod
-              the medical report. <br></br>To ensure the security and privacy of
-              your medical information, please confirm your identity by entering
-              your password.
+              the medical report.
             </Text>
 
             <Input

@@ -273,7 +273,7 @@ const AllMedicAppTab = () => {
                 <Box ml="20px">
                   <Flex>
                     <Text fontWeight="bold">Name</Text>
-                    <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                    <Text ml="1">
                       {selectedAppointment.appointment.recipientFirstname}{" "}
                       {selectedAppointment.appointment.recipientLastname}
                     </Text>

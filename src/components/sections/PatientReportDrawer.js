@@ -605,7 +605,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 Confirmation
               </Text>
               <Text color="#A210C6" fontStyle="italic" fontFamily="body">
-                Proof read to confrim that the data is complete and accurate.
+                Proof read to confrim that the report is complete and accurate.
               </Text>
               <Text>Patient: {selectedPatient}</Text>
               <Text>Temperature: {formData.temperature}°C</Text>
