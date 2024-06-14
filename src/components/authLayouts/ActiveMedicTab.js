@@ -76,9 +76,9 @@ const ActiveMedicAppTab = () => {
 
   if (appointments.length === 0) {
     return (
-      <VStack spacing={4} align="stretch">
-        <Text fontSize={{ base: "12px", md: "16px" }}>
-          You have no active appointments yet.
+      <VStack  ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
+        <Text fontStyle="italic" fontSize={{ base: "12px", md: "16px" }}>
+          You have no active appointment.
         </Text>
       </VStack>
     );
@@ -119,7 +119,7 @@ const ActiveMedicAppTab = () => {
                     Appointment type:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.medicSpecialization}
+                    {appointment.appointment.servicePlan}
                   </Text>
                 </Flex>
 

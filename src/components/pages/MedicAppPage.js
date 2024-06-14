@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useSwipeable } from "react-swipeable";
 import "react-datepicker/dist/react-datepicker.css";
-import BookAppointmentModal from "../sections/RequestAppModal";
 import { SearchIcon } from "@chakra-ui/icons";
 import LeftSideBar from "../authLayouts/MedicSideBar";
 import {
@@ -31,6 +30,7 @@ import MobileFooter from "../authLayouts/MedicFooter";
 import PendingMedicAppTab from "../authLayouts/PendingMedicApp";
 import ActiveMedicAppTab from "../authLayouts/ActiveMedicTab";
 import CompletedMedicAppTab from "../authLayouts/CompletedMedicApp";
+import RequestAppointmentModal from "../sections/RequestAppModal";
 
 const customTheme = extendTheme({
   components: {
@@ -272,7 +272,7 @@ const MedicAppPage = () => {
               </VStack>
             </Flex>
 
-            <BookAppointmentModal
+            <RequestAppointmentModal
               isOpen={showAppointmentModal}
               onClose={handleCloseAppointmentModal}
             />

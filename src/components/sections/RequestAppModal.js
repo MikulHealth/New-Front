@@ -9,12 +9,10 @@ import {
   ModalCloseButton,
   Button,
   extendTheme,
-  Checkbox,
   FormControl,
   FormLabel,
   Input,
   Select,
-  Flex,
   InputGroup,
   InputRightElement,
   Icon,
@@ -43,7 +41,7 @@ const customTheme = extendTheme({
 });
 
 const RequestAppointmentModal = ({ isOpen, onClose }) => {
-  const [appointments, setAppointments] = useState([]);
+  const [appointmentType, setAppointmentType] = useState("");
   const [shift, setShift] = useState("");
   const [currentLocation, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,19 +49,10 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
   const specialization = user?.medicType;
   const medicId = user?.userId;
 
-  const handleCheckboxChange = (e) => {
-    const { value } = e.target;
-    setAppointments((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value]
-    );
-  };
-
   const handleSubmit = async () => {
     setLoading(true);
     const requestData = {
-      appointments,
+      appointmentType,
       shift,
       currentLocation,
       specialization,
@@ -113,7 +102,12 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
         draggable
         pauseOnHover
       />
-      <Modal theme={customTheme} isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal
+        theme={customTheme}
+        isOpen={isOpen}
+        onClose={onClose}
+        size={{ base: "sm", md: "md" }}
+      >
         <ModalOverlay />
         <ModalContent borderRadius="20px">
           <ModalHeader fontFamily="heading" color="#A210C6">
@@ -122,67 +116,38 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
           <ModalBody>
             <FormControl isRequired>
-              <FormLabel fontFamily="body">Choose Appointment(s)</FormLabel>
-              <Flex flexWrap="wrap">
-                <Checkbox
-                  value="Elderly care"
-                  fontFamily="body"
-                  mr="10px"
-                  mb="10px"
-                  onChange={handleCheckboxChange}
+              <FormLabel fontFamily="body">Choose Appointment Type</FormLabel>
+              <InputGroup>
+                <Select
+                  placeholder="Select appointment type"
+                  value={appointmentType}
+                  onChange={(e) => setAppointmentType(e.target.value)}
                 >
-                  Elderly care
-                </Checkbox>
-                <Checkbox
-                  value="Recovery care"
-                  fontFamily="body"
-                  mr="10px"
-                  mb="10px"
-                  onChange={handleCheckboxChange}
-                >
-                  Recovery care
-                </Checkbox>
-                <Checkbox
-                  value="Short home visit"
-                  fontFamily="body"
-                  mr="10px"
-                  mb="10px"
-                  onChange={handleCheckboxChange}
-                >
-                  Short home visit
-                </Checkbox>
-                <Checkbox
-                  value="Postpartum care"
-                  fontFamily="body"
-                  mr="10px"
-                  mb="10px"
-                  onChange={handleCheckboxChange}
-                >
-                  Postpartum care
-                </Checkbox>
-                <Checkbox
-                  value="Nanny services"
-                  fontFamily="body"
-                  mr="10px"
-                  mb="10px"
-                  onChange={handleCheckboxChange}
-                >
-                  Nanny services
-                </Checkbox>
-              </Flex>
+                  <option value="Elderly care">Elderly care</option>
+                  <option value="Recovery care">Recovery care</option>
+                  <option value="Short home visit">Short home visit</option>
+                  <option value="Postpartum care">Postpartum care</option>
+                  <option value="Nanny services">Nanny services</option>
+                </Select>
+                <InputRightElement pointerEvents="none">
+                  <ChevronDownIcon color="gray.300" />
+                </InputRightElement>
+              </InputGroup>
             </FormControl>
             <FormControl isRequired mt="4">
-              <FormLabel fontFamily="body">Choose shift</FormLabel>
+              <FormLabel fontFamily="body">Choose Shift</FormLabel>
               <InputGroup>
                 <Select
                   placeholder="Select shift"
                   value={shift}
                   onChange={(e) => setShift(e.target.value)}
                 >
-                <option value="Day Shift(8hrs)">Day Shift(8hrs)</option>
-                <option value="Night Shift(12hrs)">Night Shift (12hrs)</option>
-                <option value="Live-in(24hrs)">Live-in (24hrs)</option>
-                <option value="Any">Any of the above</option>
+                  <option value="Day Shift(8hrs)">Day Shift(8hrs)</option>
+                  <option value="Night Shift(12hrs)">
+                    Night Shift (12hrs)
+                  </option>
+                  <option value="Live-in(24hrs)">Live-in (24hrs)</option>
+                  <option value="Any">Any of the above</option>
                 </Select>
                 <InputRightElement pointerEvents="none">
                   <ChevronDownIcon color="gray.300" />

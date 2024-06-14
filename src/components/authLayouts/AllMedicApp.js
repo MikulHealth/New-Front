@@ -76,7 +76,7 @@ const AllMedicAppTab = () => {
 
   if (appointments.length === 0) {
     return (
-      <VStack spacing={4} align="stretch">
+      <VStack  ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
         <Text>
           You have no appointments yet. Would you like to request one?
         </Text>
@@ -89,7 +89,7 @@ const AllMedicAppTab = () => {
       {appointments.map((appointment, index) => {
         let borderColor = "gray.200";
         if (appointment.active) {
-          borderColor = "#057B1FC6";
+          borderColor = "#ACE1C1";
         } else if (appointment.pending) {
           borderColor = "#F4DDA2";
         } else if (appointment.completed) {
@@ -103,55 +103,133 @@ const AllMedicAppTab = () => {
             borderRadius="lg"
             justify="space-between"
             align="center"
-            border={appointment.active ? "1px solid green" : "1px solid orange"}
+            border={`1px solid ${borderColor}`}
             w="full"
           >
-            <Flex>
-              <Box textAlign="left">
-                <Flex>
-                  <Text
-                    fontSize={{ base: "10px", md: "16px" }}
-                    fontWeight="bold"
-                  >
-                    Patient name:
-                  </Text>
-                  <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.recipientFirstname}{" "}
-                    {appointment.appointment.recipientLastname}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text
-                    fontWeight="bold"
-                    fontSize={{ base: "10px", md: "16px" }}
-                  >
-                    Appointment type:
-                  </Text>
-                  <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.medicSpecialization}
-                  </Text>
-                </Flex>
+            <Flex direction="column" flex="1">
+              {appointment.pending ? (
+                <>
+                  <Flex>
+                    <Box>
+                      <Flex>
+                        <Text
+                          fontWeight="bold"
+                          fontSize={{ base: "10px", md: "16px" }}
+                        >
+                          Preferred service plan:
+                        </Text>
+                        <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                          {appointment.appointmentType}
+                        </Text>
+                      </Flex>
 
-                <Flex>
-                  <Text
-                    fontWeight="bold"
-                    fontSize={{ base: "10px", md: "16px" }}
-                  >
-                    Location:
-                  </Text>
-                  <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.currentLocation}
-                  </Text>
-                </Flex>
-              </Box>
+                      <Flex>
+                        <Text
+                          fontWeight="bold"
+                          fontSize={{ base: "10px", md: "16px" }}
+                        >
+                          Preferred shift:
+                        </Text>
+                        <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                          {appointment.shift}
+                        </Text>
+                      </Flex>
+
+                      <Flex>
+                        <Text
+                          fontWeight="bold"
+                          fontSize={{ base: "10px", md: "16px" }}
+                        >
+                          Location:
+                        </Text>
+                        <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                          {appointment.currentLocation}
+                        </Text>
+                      </Flex>
+                    </Box>
+                    <Box ml={{ base: "50", md: "280px" }}>
+                      <Flex mr="30px" mt={{ base: "30px", md: "50px" }}>
+                        <Text
+                          ml="-10px"
+                          fontSize={{ base: "10px", md: "16px" }}
+                          cursor="pointer"
+                          fontStyle="italic"
+                          color="#C21111B2"
+                          // onClick={() => handleDetailsClick(appointment)}
+                        >
+                          Cancel
+                        </Text>
+                        <Text
+                          ml="15px"
+                          fontSize={{ base: "10px", md: "16px" }}
+                          cursor="pointer"
+                          fontStyle="italic"
+                          color="#107AC6"
+                          // onClick={() => handleDetailsClick(appointment)}
+                        >
+                          Edit
+                        </Text>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  <Flex>
+                    <Text
+                      fontWeight="bold"
+                      fontSize={{ base: "10px", md: "16px" }}
+                    >
+                      Patient name:
+                    </Text>
+                    <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                      {appointment.appointment.recipientFirstname}{" "}
+                      {appointment.appointment.recipientLastname}
+                    </Text>
+                  </Flex>
+
+                  <Flex>
+                    <Text
+                      fontWeight="bold"
+                      fontSize={{ base: "10px", md: "16px" }}
+                    >
+                      Service plan:
+                    </Text>
+                    <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                      {appointment.appointment.servicePlan}
+                    </Text>
+                  </Flex>
+
+                  <Flex>
+                    <Text
+                      fontWeight="bold"
+                      fontSize={{ base: "10px", md: "16px" }}
+                    >
+                      Location:
+                    </Text>
+                    <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                      {appointment.appointment.currentLocation}
+                    </Text>
+                  </Flex>
+                </>
+              )}
+            </Flex>
+            {appointment.active || appointment.completed ? (
               <Box ml={{ base: "50", md: "300px" }}>
                 <Badge
                   mb="20px"
-                  bg={borderColor}
+                  bg={
+                    appointment.active
+                      ? "#057B1FC6"
+                      : appointment.completed
+                      ? "#A210C6"
+                      : "black"
+                  }
                   p={2}
                   borderRadius="5px"
                   color="white"
                   fontSize={{ base: "10px", md: "12px" }}
+                
                 >
                   Policy No.
                 </Badge>
@@ -165,7 +243,7 @@ const AllMedicAppTab = () => {
                   Details
                 </Text>
               </Box>
-            </Flex>
+            ) : null}
           </Flex>
         );
       })}
@@ -183,7 +261,7 @@ const AllMedicAppTab = () => {
             <ModalBody>
               <Flex align="center" mb={4}>
                 <Avatar
-                  name={`${selectedAppointment.appointment.recipientFirstname} ${selectedAppointment.appointment.recipientLastname}`}
+                  name={`${selectedAppointment.appointment.patientName}`}
                   src={selectedAppointment.appointment.image}
                   bg="gray.500"
                   color="white"
@@ -195,7 +273,7 @@ const AllMedicAppTab = () => {
                 <Box ml="20px">
                   <Flex>
                     <Text fontWeight="bold">Name</Text>
-                    <Text ml="5px" fontSize="md">
+                    <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
                       {selectedAppointment.appointment.recipientFirstname}{" "}
                       {selectedAppointment.appointment.recipientLastname}
                     </Text>

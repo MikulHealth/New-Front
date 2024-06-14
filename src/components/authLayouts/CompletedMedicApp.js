@@ -76,9 +76,9 @@ const CompletedMedicAppTab = () => {
 
   if (appointments.length === 0) {
     return (
-      <VStack spacing={4} align="stretch">
-        <Text fontSize={{ base: "12px", md: "16px" }}>
-          You have no completed appointments yet.
+      <VStack ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
+        <Text fontStyle="italic" fontSize={{ base: "12px", md: "16px" }}>
+          You have no completed appointment.
         </Text>
       </VStack>
     );

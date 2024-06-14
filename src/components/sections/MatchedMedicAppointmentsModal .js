@@ -154,53 +154,101 @@ const MatchedMedicAppointmentsModal = ({
               </Text>
               <Flex direction="column" alignItems="left">
                 <Box alignItems="left">
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    {`${acceptedAppointment.appointment.recipientFirstname} ${acceptedAppointment.appointment.recipientLastname}`}
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Phone Number:{" "}
-                    <a
-                      href={`tel:${acceptedAppointment.appointment.recipientPhoneNumber}`}
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Name
+                    </Text>
+                    <Text ml="10px" color="black" mb={2}>
+                      {`${acceptedAppointment.appointment.recipientFirstname} ${acceptedAppointment.appointment.recipientLastname}`}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Phone Number:
+                    </Text>
+                    <Text ml="10px" color="black" mb={2}>
+                      <a
+                        href={`tel:${acceptedAppointment.appointment.recipientPhoneNumber}`}
+                      >
+                        {acceptedAppointment.appointment.recipientPhoneNumber}
+                      </a>
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Gender:
+                    </Text>
+                    <Text ml="10px" color="black" mb={2}>
+                      {acceptedAppointment.appointment.recipientGender}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Date of Birth:{" "}
+                    </Text>
+                    <Text ml="10px" color="black" mb={2}>
+                      {new Date(
+                        acceptedAppointment.appointment.recipientDOB
+                      ).toLocaleDateString()}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Location:
+                    </Text>
+                    <Text ml="10px" fontWeight="bold" color="black" mb={2}>
+                      {acceptedAppointment.appointment.currentLocation}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Shift:
+                    </Text>
+                    <Text ml="10px" color="black" mb={2}>
+                      {acceptedAppointment.appointment.shift}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Service Plan:
+                    </Text>
+                    <Text ml="10px" color="black" mb={2}>
+                      {acceptedAppointment.appointment.servicePlan}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Start Date:{" "}
+                    </Text>
+                    <Text ml="10px" fontWeight="bold" color="black" mb={2}>
+                      {new Date(
+                        acceptedAppointment.appointment.startDate
+                      ).toLocaleDateString()}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Priority:
+                    </Text>
+                    <Text ml="10px" color="black" mb={2}>
+                      {acceptedAppointment.appointment.priority}
+                    </Text>
+                  </Flex>
+
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Health History:{" "}
+                    </Text>
+                    <Text
+                      ml="10px"
+                      maxW={{ base: "50px", md: "450px" }}
+                      fontWeight="bold"
+                      color="black"
+                      mb={2}
                     >
-                      {acceptedAppointment.appointment.recipientPhoneNumber}
-                    </a>
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Gender: {acceptedAppointment.appointment.recipientGender}
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Date of Birth:{" "}
-                    {new Date(
-                      acceptedAppointment.appointment.recipientDOB
-                    ).toLocaleDateString()}
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Location: {acceptedAppointment.appointment.currentLocation}
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Shift: {acceptedAppointment.appointment.shift}
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Service Plan: {acceptedAppointment.appointment.servicePlan}
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Start Date:{" "}
-                    {new Date(
-                      acceptedAppointment.appointment.startDate
-                    ).toLocaleDateString()}
-                  </Text>
-                  <Text fontWeight="bold" color="black" mb={2}>
-                    Priority: {acceptedAppointment.appointment.priority}
-                  </Text>
-                  <Text
-                    maxW={{ base: "50px", md: "450px" }}
-                    fontWeight="bold"
-                    color="black"
-                    mb={2}
-                  >
-                    Health History:{" "}
-                    {acceptedAppointment.appointment.recipientHealthHistory}
-                  </Text>
+                      {acceptedAppointment.appointment.recipientHealthHistory}
+                    </Text>
+                  </Flex>
                 </Box>
                 <Button
                   colorScheme="green"
@@ -269,7 +317,7 @@ const MatchedMedicAppointmentsModal = ({
                             <Text fontWeight="bold">Urgency:</Text>
                             <Text marginLeft="5px">{appointment.priority}</Text>
                           </Flex>
-                          <Text fontWeight="bold" color="black" mb={2}>
+                          <Text fontWeight="bold" mb={2}>
                             Start Date:{" "}
                             {new Date(
                               appointment.startDate

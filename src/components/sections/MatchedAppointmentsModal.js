@@ -208,14 +208,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                               {medic.currentLocation}
                             </Text>
                           </Flex>
-                          <Flex marginTop="5px">
-                            <Text fontWeight="bold" color="black">
-                              Shift:
-                            </Text>
-                            <Text marginLeft="5px" color="black">
-                              {medic.shift}
-                            </Text>
-                          </Flex>
+                          
                           <Flex marginTop="5px">
                             <Text fontWeight="bold" color="black">
                               Years of Experience:

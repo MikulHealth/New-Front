@@ -7,16 +7,13 @@ import {
   Flex,
   Spinner,
   Modal,
-  Avatar,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Progress,
   useDisclosure,
-  Badge,
 } from "@chakra-ui/react";
 
 const PendingMedicAppTab = () => {
@@ -76,9 +73,9 @@ const PendingMedicAppTab = () => {
 
   if (appointments.length === 0) {
     return (
-      <VStack spacing={4} align="stretch">
-        <Text fontSize={{ base: "12px", md: "16px" }}>
-          You have no pending appointment yet.
+      <VStack  ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
+        <Text fontStyle="italic"  fontSize={{ base: "12px", md: "16px" }}>
+          You have no pending appointment.
         </Text>
       </VStack>
     );
@@ -99,16 +96,16 @@ const PendingMedicAppTab = () => {
           >
             <Flex>
               <Box textAlign="left">
+              
                 <Flex>
                   <Text
-                    fontSize={{ base: "10px", md: "16px" }}
                     fontWeight="bold"
+                    fontSize={{ base: "10px", md: "16px" }}
                   >
-                    Patient name:
+                   Preferred service plan:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.recipientFirstname}{" "}
-                    {appointment.appointment.recipientLastname}
+                    {appointment.appointmentType}
                   </Text>
                 </Flex>
                 <Flex>
@@ -116,10 +113,10 @@ const PendingMedicAppTab = () => {
                     fontWeight="bold"
                     fontSize={{ base: "10px", md: "16px" }}
                   >
-                    Appointment type:
+                   Preferred shift:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.medicSpecialization}
+                    {appointment.shift}
                   </Text>
                 </Flex>
 
@@ -131,20 +128,20 @@ const PendingMedicAppTab = () => {
                     Location:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.currentLocation}
+                    {appointment.currentLocation}
                   </Text>
                 </Flex>
               </Box>
-              <Box ml={{ base: "50", md: "300px" }}>
-                <Badge
+              <Box ml={{ base: "50", md: "280px" }}>
+                {/* <Badge
                   mb="20px"
                   bg="white"
                   p={2}
                   borderRadius="5px"
                   color="white"
                   fontSize={{ base: "10px", md: "12px" }}
-                ></Badge>
-                <Flex mt="20px">
+                ></Badge> */}
+                <Flex  mr="30px" mt={{base: "30px", md: "50px"}}>
                   <Text
                     ml="-10px"
                     fontSize={{ base: "10px", md: "16px" }}
@@ -156,15 +153,17 @@ const PendingMedicAppTab = () => {
                     Cancel
                   </Text>
                   <Text
-                    ml="10px"
+                    ml="15px"
                     fontSize={{ base: "10px", md: "16px" }}
                     cursor="pointer"
                     fontStyle="italic"
                     color="#107AC6"
                     onClick={() => handleDetailsClick(appointment)}
+                   
                   >
                     Edit
                   </Text>
+                 
                 </Flex>
               </Box>
             </Flex>
@@ -180,13 +179,13 @@ const PendingMedicAppTab = () => {
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader color="#A210C6">Appointment details</ModalHeader>
+            <ModalHeader color="#A210C6">Edit Request</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Flex align="center" mb={4}>
+              {/* <Flex align="center" mb={4}>
                 <Avatar
-                  name={`${selectedAppointment.appointment.recipientFirstname} ${selectedAppointment.appointment.recipientLastname}`}
-                  src={selectedAppointment.appointment.image}
+                  name={`${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`}
+                  src={selectedAppointment.image}
                   bg="gray.500"
                   color="white"
                   w={{ base: "100px", md: "100px" }}
@@ -249,7 +248,7 @@ const PendingMedicAppTab = () => {
               />
               <Text fontSize="sm" color="gray.500" mt={2}>
                 33% completed
-              </Text>
+              </Text> */}
             </ModalBody>
             <ModalFooter></ModalFooter>
           </ModalContent>

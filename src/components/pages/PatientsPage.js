@@ -18,6 +18,7 @@ import {
   useDisclosure,
   Image,
   Divider,
+  Link,
 } from "@chakra-ui/react";
 import axios from "axios";
 import MedicSideBar from "../authLayouts/MedicSideBar";
@@ -26,6 +27,7 @@ import MobileFooter from "../authLayouts/MedicFooter";
 import LoadingSpinner from "../../utils/Spiner";
 import PatientReportDrawer from "../sections/PatientReportDrawer";
 import Check from "../../assets/Check.svg";
+import RequestAppointmentModal from "../sections/RequestAppModal";
 
 const customTheme = extendTheme({
   components: {
@@ -50,6 +52,16 @@ const PatientsPage = () => {
   const [loading, setLoading] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+
+  const handleOpenAppointmentModal = () => {
+    setShowAppointmentModal(true);
+  };
+
+  const handleCloseAppointmentModal = () => {
+    setShowAppointmentModal(false);
+  };
+
   useEffect(() => {
     const fetchPatients = async () => {
       setLoading(true);
@@ -63,7 +75,7 @@ const PatientsPage = () => {
           }
         );
         if (response.data.success) {
-          setPatients(response.data.data.map((app) => app.appointment)); 
+          setPatients(response.data.data.map((app) => app.appointment));
         }
       } catch (error) {
         console.error("Error fetching patients:", error);
@@ -112,6 +124,7 @@ const PatientsPage = () => {
                       justifyContent="space-between"
                       color="#212427B2"
                       fontSize={{ base: "10px", md: "16px" }}
+                      fontFamily="body"
                     >
                       <Text fontWeight="bold">Policy No.</Text>
                       <Text fontWeight="bold">Patient name</Text>
@@ -121,58 +134,81 @@ const PatientsPage = () => {
                     <Divider my={1} borderColor="gray.500" />
                   </Box>
 
-                  <VStack color="#212427B2" spacing={4} align="stretch">
-                    {patients.map((patient) => (
-                      <Flex
-                        fontSize={{ base: "10px", md: "16px" }}
-                        key={patient.id}
-                        p={4}
-                        borderRadius="md"
-                        bg="#ECCFF4"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        w="full"
-                        onClick={() => openModal(patient)}
-                        cursor="pointer"
-                        _hover={{ bg: "purple.100" }}
+                  {patients.length === 0 ? (
+                    <Text
+                      fontSize={{ base: "12px", md: "16px" }}
+                      fontFamily="body"
+                      fontStyle="italic"
+                    >
+                      No patient seen yet, click{" "}
+                      <Link
+                        onClick={handleOpenAppointmentModal}
+                        color="#A210C6"
                       >
-                        <Image
-                          src={Check}
-                          // mt={{ base: "40px", md: "40px" }}
-                          w={{ base: "16px", md: "16px" }}
-                          h={{ base: "16px", md: "16px" }}
-                        />
-                        {/* <Text>{patient.customerId}</Text> */}
+                        "request appointment to begin"
+                      </Link>
+                      {" "}
+                      to begin.
+                    </Text>
+                  ) : (
+                    <VStack color="#212427B2" spacing={4} align="stretch">
+                      {patients.map((patient) => (
                         <Flex
-                          maxW={{ base: "60px", md: "150px" }}
-                          color="#212427B2"
+                          fontSize={{ base: "10px", md: "16px" }}
+                          key={patient.id}
+                          p={4}
+                          borderRadius="md"
+                          bg="#ECCFF4"
+                          justifyContent="space-between"
                           alignItems="center"
+                          w="full"
+                          onClick={() => openModal(patient)}
+                          cursor="pointer"
+                          _hover={{ bg: "purple.100" }}
                         >
-                          <Avatar
-                            size="sm"
-                            bg="#212427B2"
-                            color="white"
-                            name={`${patient.recipientFirstname} ${patient.recipientLastname}`}
+                          <Image
+                            src={Check}
+                            // mt={{ base: "40px", md: "40px" }}
+                            w={{ base: "16px", md: "16px" }}
+                            h={{ base: "16px", md: "16px" }}
                           />
-                          <Text ml="2">{`${patient.recipientFirstname} ${patient.recipientLastname}`}</Text>
+                          {/* <Text>{patient.customerId}</Text> */}
+                          <Flex
+                            maxW={{ base: "60px", md: "150px" }}
+                            color="#212427B2"
+                            alignItems="center"
+                          >
+                            <Avatar
+                              size="sm"
+                              bg="#212427B2"
+                              color="white"
+                              name={`${patient.recipientFirstname} ${patient.recipientLastname}`}
+                            />
+                            <Text ml="2">{`${patient.recipientFirstname} ${patient.recipientLastname}`}</Text>
+                          </Flex>
+                          <Text maxW={{ base: "50px", md: "150px" }}>
+                            {patient.servicePlan}
+                          </Text>
+                          <Badge
+                            bg={
+                              patient.appointmentActive ? "#D087E2" : "#ACE1C1"
+                            }
+                            p={2}
+                            borderRadius="30px"
+                            color={
+                              patient.appointmentActive ? "#A210C6" : "#057B1F"
+                            }
+                            fontSize="11px"
+                          >
+                            {patient.appointmentActive
+                              ? "Completed"
+                              : "Ongoing"}
+                          </Badge>
                         </Flex>
-                        <Text maxW={{ base: "50px", md: "150px" }}>
-                          {patient.servicePlan}
-                        </Text>
-                        <Badge
-                          bg={patient.appointmentActive ? "#D087E2" : "#ACE1C1"}
-                          p={2}
-                          borderRadius="30px"
-                          color={
-                            patient.appointmentActive ? "#A210C6" : "#057B1F"
-                          }
-                          fontSize="11px"
-                        >
-                          {patient.appointmentActive ? "Completed" : "Ongoing"}
-                        </Badge>
-                      </Flex>
-                    ))}
-                  </VStack>
+                      ))}
+                    </VStack>
+                  )}
+
                   {selectedPatient && (
                     <Modal
                       isOpen={isModalOpen}
@@ -184,7 +220,11 @@ const PatientsPage = () => {
                         borderRadius="20px"
                         border="3px solid #A210C6"
                       >
-                        <ModalHeader color="#A210C6" textAlign="center">
+                        <ModalHeader
+                          fontFamily="heading"
+                          color="#A210C6"
+                          textAlign="center"
+                        >
                           Patient Details
                         </ModalHeader>
                         <ModalCloseButton />
@@ -204,7 +244,7 @@ const PatientsPage = () => {
                               h={{ base: "100px", md: "100px" }}
                               border="3px solid #057B1F"
                             />
-                            <Box textAlign="left" w="full">
+                            <Box fontFamily="body" textAlign="left" w="full">
                               <Flex wrap="wrap">
                                 <Text fontWeight="bold" fontSize="lg" mt="2">
                                   Name:
@@ -246,7 +286,6 @@ const PatientsPage = () => {
                                   {formatDateTime(selectedPatient.recipientDOB)}
                                 </Text>
                               </Flex>
-
                               <Flex wrap="wrap">
                                 <Text fontWeight="bold" mt="2">
                                   Service Plan:
@@ -295,6 +334,7 @@ const PatientsPage = () => {
                               bg="#A210C6"
                               borderRadius="50px"
                               onClick={onOpen}
+                              fontFamily="body"
                             >
                               Upload report
                             </Button>
@@ -311,6 +351,10 @@ const PatientsPage = () => {
         </VStack>
       </Flex>
       <PatientReportDrawer isOpen={isOpen} onClose={onClose} />
+      <RequestAppointmentModal
+        isOpen={showAppointmentModal}
+        onClose={handleCloseAppointmentModal}
+      />
     </ChakraProvider>
   );
 };
