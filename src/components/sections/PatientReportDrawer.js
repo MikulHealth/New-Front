@@ -88,8 +88,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const fetchPatients = async () => {
     try {
       const response = await axios.get(
-       // "https://backend-c1pz.onrender.com/v1/appointment/active",
-       "http://localhost:8080/v1/appointment/active",
+       "https://backend-c1pz.onrender.com/v1/appointment/active",
+      //  "http://localhost:8080/v1/appointment/active",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

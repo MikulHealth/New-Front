@@ -390,14 +390,14 @@ const AllMedicAppTab = () => {
                         {selectedAppointment.customerAppointment.shift}
                       </Text>
                     </Flex>
-                    <Flex>
+                    {/* <Flex>
                       <Text fontWeight="bold" fontSize="md">
                         Contact details:
                       </Text>
                       <Text ml="5px" fontSize="md">
                         {selectedAppointment.customerAppointment.customerPhoneNumber}
                       </Text>
-                    </Flex>
+                    </Flex> */}
                   </Box>
                 </Flex>
               )}
