@@ -54,7 +54,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [selectedDob] = useState(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
-  const [priority, setUrgency] = useState("");
+  const [priority, setPriority] = useState("");
 
   const [formFields, setFormFields] = useState({
     startDate: null,
@@ -78,6 +78,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
     setFormFields({ ...formFields, startDate: date });
+    calculateUrgency(date);
   };
 
   const handleInputChange = (e) => {
@@ -115,8 +116,19 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleUrgencyChange = (e) => {
-    setUrgency(e.target.value);
+  const calculateUrgency = (date) => {
+    const now = new Date();
+    const diffInHours = (date - now) / (1000 * 60 * 60);
+
+    if (diffInHours <= 24) {
+      setPriority("High");
+    } else if (diffInHours <= 48) {
+      setPriority("Medium");
+    } else if (diffInHours <= 72) {
+      setPriority("Normal");
+    } else {
+      setPriority("Flexible");
+    }
   };
 
   useEffect(() => {
@@ -155,7 +167,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       const token = localStorage.getItem("token");
 
       const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
-      // `http://localhost:8080/v1/appointment/save`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -196,7 +207,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           currentLocation: "",
           medicalReport: "",
           recipientHealthHistory: "",
-          costOfService: "",
         });
         toast.success("Appointment saved");
         setPaymentData({
@@ -441,23 +451,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                 />
               </Box>
 
-              <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
-                <FormLabel fontWeight="bold" fontFamily="body">
-                  Urgency{" "}
-                </FormLabel>
-                <Select
-                  name="urgency"
-                  placeholder="select urgency level"
-                  w={{ base: "300px", md: "270px" }}
-                  value={priority}
-                  onChange={handleUrgencyChange}
-                >
-                  <option value="High">High (Within 12hrs)</option>
-                  <option value="Medium">Medium (Within 24hrs)</option>
-                  <option value="Normal">Normal (48hrs)</option>
-                  <option value="Flexible">Flexible</option>
-                </Select>
-              </Box>
+             
             </FormControl>
           </DrawerBody>
           <DrawerFooter>

@@ -56,7 +56,7 @@ const BookBeneficiaryAppointmentModal = ({
   const [customizedPlans, setCustomizedPlans] = useState([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({}); 
-  const [priority, setUrgency] = useState("");
+  const [priority, setPriority] = useState("");
 
   const [formPages, setFormPages] = useState({
     recipientFirstname: selectedBeneficiary.recipientFirstName,
@@ -120,13 +120,25 @@ const BookBeneficiaryAppointmentModal = ({
     }
   };
 
-  const handleUrgencyChange = (e) => {
-    setUrgency(e.target.value);
-  };
-
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
     setFormPages({ ...formPages, startDate: date });
+    calculateUrgency(date);
+  };
+
+  const calculateUrgency = (date) => {
+    const now = new Date();
+    const diffInHours = (date - now) / (1000 * 60 * 60);
+
+    if (diffInHours <= 24) {
+      setPriority("High");
+    } else if (diffInHours <= 48) {
+      setPriority("Medium");
+    } else if (diffInHours <= 72) {
+      setPriority("Normal");
+    } else {
+      setPriority("Flexible");
+    }
   };
 
   const handleFormSubmit = async () => {
@@ -137,7 +149,7 @@ const BookBeneficiaryAppointmentModal = ({
       servicePlan: "Service Plan",
       startDate: "Start Date",
       currentLocation: "Current Location",
-      priority: "priority",
+     
     };
 
     const requiredFields = [
@@ -145,19 +157,13 @@ const BookBeneficiaryAppointmentModal = ({
       "servicePlan",
       "startDate",
       "currentLocation",
-      "priority",
+     
     ];
 
     for (const fieldName of requiredFields) {
-      if (!formPages[fieldName] && fieldName !== "priority") {
+      if (!formPages[fieldName]) {
         setLoading(false);
-        toast({
-          title: `${fieldNameMappings[fieldName]} is required`,
-          description: `Please fill in the ${fieldNameMappings[fieldName]} field.`,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
+        toast.error(`${fieldNameMappings[fieldName]} is required`);
         return;
       }
     }
@@ -166,7 +172,6 @@ const BookBeneficiaryAppointmentModal = ({
       const token = localStorage.getItem("token");
       const apiUrl = 
       "https://backend-c1pz.onrender.com/v1/appointment/save";
-      // `http://localhost:8080/v1/appointment/save`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -467,23 +472,18 @@ const BookBeneficiaryAppointmentModal = ({
                     w={{ base: "300px", md: "550px" }}
                   />
                 </Box>
-                <Box ml={{ md: "40px" }}>
-                    <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                      Urgency{" "}
-                    </FormLabel>
-                    <Select
-                      name="priority"
-                      placeholder="select urgency level"
-                      w={{ base: "300px", md: "270px" }}
-                      value={priority}
-                      onChange={handleUrgencyChange}
-                    >
-                      <option value="High">High (Within 12hrs)</option>
-                      <option value="Medium">Medium (Within 24hrs)</option>
-                      <option value="Normal">Normal (48hrs)</option>
-                      <option value="Flexible">Flexible</option>
-                    </Select>
-                  </Box>
+                {/* <Box ml={{ md: "40px" }}>
+                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                    Urgency{" "}
+                  </FormLabel>
+                  <Input
+                    name="priority"
+                    type="text"
+                    placeholder="urgency level"
+                    value={priority}
+                    isReadOnly
+                  />
+                </Box> */}
               </Box>
             </FormControl>
           </DrawerBody>

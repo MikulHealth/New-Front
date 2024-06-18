@@ -49,7 +49,7 @@ const customTheme = extendTheme({
   },
 });
 
-const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
+const OthersAppointmentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -59,7 +59,7 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
   const [shiftDisabled, setShiftDisabled] = useState(false);
-  const [priority, setUrgency] = useState("");
+  const [priority, setPriority] = useState("");
 
   const [formFields, setFormFields] = useState({
     recipientFirstname: "",
@@ -101,42 +101,25 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleUrgencyChange = (e) => {
-    setUrgency(e.target.value);
+  const calculateUrgency = (date) => {
+    const now = new Date();
+    const diffInHours = (date - now) / (1000 * 60 * 60);
+
+    if (diffInHours <= 24) {
+      setPriority("High");
+    } else if (diffInHours <= 48) {
+      setPriority("Medium");
+    } else if (diffInHours <= 72) {
+      setPriority("Normal");
+    } else {
+      setPriority("Flexible");
+    }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        };
-
-        const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
-          config
-        );
-
-        if (response.data.success) {
-          setCustomizedPlans(response.data.data);
-        } else {
-          console.error("Failed to fetch custom services");
-        }
-      } catch (error) {
-        console.error("Error fetching custom services:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
     setFormFields({ ...formFields, startDate: date });
+    calculateUrgency(date);
   };
 
   const handleDOBChange = (date) => {
@@ -261,6 +244,35 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     calculateServiceCost();
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        };
+
+        const response = await axios.get(
+          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
+          config
+        );
+
+        if (response.data.success) {
+          setCustomizedPlans(response.data.data);
+        } else {
+          console.error("Failed to fetch custom services");
+        }
+      } catch (error) {
+        console.error("Error fetching custom services:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSwitchChange = async () => {
     setLoading(true);
@@ -575,23 +587,6 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
                   w={{ base: "300px", md: "550px" }}
                 />
               </Box>
-              <Box ml={{ md: "5px" }}>
-                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                  Urgency
-                </FormLabel>
-                <Select
-                  name="priority"
-                  placeholder="select urgency level"
-                  value={priority}
-                  onChange={handleUrgencyChange}
-                  w={{ base: "300px", md: "270px" }}
-                >
-                  <option value="High">High (Within 12hrs)</option>
-                  <option value="Medium">Medium (Within 24hrs)</option>
-                  <option value="Normal">Normal (48hrs)</option>
-                  <option value="Flexible">Flexible</option>
-                </Select>
-              </Box>
             </FormControl>
             <Flex justify="right" marginTop="10px">
               <Text fontFamily="body" color="#A210C6" fontStyle="italic">
@@ -635,4 +630,4 @@ const BeneficiaryAppointmentModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default BeneficiaryAppointmentModal;
+export default OthersAppointmentModal;

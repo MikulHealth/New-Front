@@ -88,7 +88,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const fetchPatients = async () => {
     try {
       const response = await axios.get(
-        "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
+       // "https://backend-c1pz.onrender.com/v1/appointment/active",
+       "http://localhost:8080/v1/appointment/active",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -97,7 +98,13 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       );
       if (response.data && Array.isArray(response.data.data)) {
         setPatients(response.data.data);
-        setPatientId(response.data.data[0].appointment.id);
+        const activePatient = response.data.data.find(
+          (patient) => patient.customerAppointment.appointmentActive
+        );
+        if (activePatient) {
+          setPatientId(activePatient.customerAppointment.id);
+          setSelectedPatient(activePatient.customerAppointment.id);
+        }
       } else {
         setPatients([]);
       }
@@ -132,7 +139,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const isFormComplete = () => {
-    // Check if all required fields in formData are filled
     const requiredFields = [
       "temperature",
       "bloodPressure",
@@ -150,24 +156,20 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       }
     }
 
-    // Check if a patient is selected
     if (!selectedPatient) {
       return false;
     }
 
-    // Check if all medications have required fields filled
     for (let med of medications) {
       if (!med.name || !med.dosage || !med.route || !med.time) {
         return false;
       }
     }
 
-    // Check if at least one activity is checked
     if (activities.length === 0) {
       return false;
     }
 
-    // Check if the confirmation checkbox is checked
     if (!formData.confirmation) {
       return false;
     }
@@ -298,15 +300,27 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 <Select
                   placeholder="Select patient"
                   value={selectedPatient}
-                  onChange={(e) => setSelectedPatient(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedPatient(e.target.value);
+                    setPatientId(e.target.value);
+                  }}
                 >
                   {Array.isArray(patients) &&
-                    patients.map((patient) => (
-                      <option key={patient.id} value={patient.id}>
-                        {patient.appointment.recipientFirstname}{" "}
-                        {patient.appointment.recipientLastname}
-                      </option>
-                    ))}
+                    patients
+                      .filter(
+                        (patient) =>
+                          patient.customerAppointment &&
+                          patient.customerAppointment.appointmentActive
+                      )
+                      .map((patient) => (
+                        <option
+                          key={patient.customerAppointment.id}
+                          value={patient.customerAppointment.id}
+                        >
+                          {patient.customerAppointment.recipientFirstname}{" "}
+                          {patient.customerAppointment.recipientLastname}
+                        </option>
+                      ))}
                 </Select>
               </FormControl>
               <FormControl isRequired mb="4">
@@ -607,7 +621,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
               <Text color="#A210C6" fontStyle="italic" fontFamily="body">
                 Proof read to confrim that the report is complete and accurate.
               </Text>
-              <Text>Patient: {selectedPatient}</Text>
+              {/* <Text>Patient: {selectedPatient} </Text> */}
               <Text>Temperature: {formData.temperature}°C</Text>
               <Text>Blood Pressure: {formData.bloodPressure}</Text>
               <Text>Pulse: {formData.pulse} bpm</Text>

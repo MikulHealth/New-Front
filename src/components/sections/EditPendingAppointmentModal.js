@@ -39,13 +39,10 @@ const EditPendingAppointment = ({
     setFormData({ ...formData, [name]: value });
   };
 
-  // const handleSubmit = () => {
-  //   onSubmit(formData);
-  //   onClose();
-  // };
 
   useEffect(() => {
     setFormData(appointmentDetails);
+    console.log("form edit modal", appointmentDetails);
   }, [appointmentDetails]);
 
   const handleStartDateChange = (date) => {

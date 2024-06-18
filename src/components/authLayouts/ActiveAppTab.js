@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../utils/Spiner";
-// import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import BookAppointmentModal from "../sections/BookAppointment";
-import {CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
-import { WarningIcon } from "@chakra-ui/icons";
+import {CloseIcon } from "@chakra-ui/icons";
 import {
   VStack,
   Drawer,
@@ -15,69 +10,29 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useMediaQuery,
   Button,
-  useToast,
   Box,
   Text,
   Flex,
-  // extendTheme,
   Divider,
 } from "@chakra-ui/react";
-import PaymentModal from "../sections/PaymentMethod";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ActiveApp() {
-  const toast = useToast();
-  // const navigate = useNavigate();
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [paymentData, setPaymentData] = useState({});
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [cancellingAppointmentId] = useState(null);
-;
-
-  const handleCancelModalClose = () => {
-    setConfirmationModalOpen(false);
-  };
-
-  const handlePayment = (selectedAppointment) => {
-    setPaymentData({
-      costOfService: selectedAppointment.costOfService,
-      appointmentId: selectedAppointment.id,
-      beneficiary: `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`,
-    });
-    setTimeout(() => {
-      setIsPaymentModalOpen(true);
-    }, 1000);
-  };
-  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const modalWidth = isLargerThan768 ? "400px" : "90vw";
+  
 
 
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
-    // navigate("/appointment");
-    // window.location.reload()
-    setSelectedAppointment(null); 
-   };
-
-  const handleCloseEditModal = () => {
-    setEditModalOpen(false);
+    setSelectedAppointment(null);
   };
+
+ 
 
   const fetchData = async () => {
     try {
@@ -88,7 +43,6 @@ export default function ActiveApp() {
       };
 
       const response = await axios.get(
-        // "http://localhost:8080/v1/appointment/matchedAppointments",
         "https://backend-c1pz.onrender.com/v1/appointment/matchedAppointments",
         config
       );
@@ -114,99 +68,14 @@ export default function ActiveApp() {
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-
-    // Create a new Date object from the dateString
     const date = new Date(dateString);
-
-    // Add one hour to the date
     date.setHours(date.getHours() + 1);
-
-    // Format the date
-    const formattedDate = date.toLocaleDateString(undefined, options);
-
-    return formattedDate;
+    return date.toLocaleDateString(undefined, options);
   };
 
-  const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
-    try {
-      const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/findMatchedAppointmentDetails/${appointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findMatchedAppointmentDetails/${appointmentId}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.get(apiUrl, { headers });
-
-      if (response && response.data && response.data.success) {
-        setSelectedAppointment(response.data.data.data);
-        console.log("apps " + response.data.data.data);
-        setDetailsModalOpen(true);
-      } else {
-        console.error("Error fetching appointment details");
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching appointment details:",
-        error
-      );
-    }
-  };
-
-  const handleOpenAppointmentModal = () => {
-    setShowAppointmentModal(true);
-  };
-
-  const handleCloseAppointmentModal = () => {
-    setShowAppointmentModal(false);
-  };
-
-  const handleConfirmation = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.post(apiUrl, {}, { headers });
-
-      if (response.data.success) {
-        toast({
-          // title: "Info",
-          description: response.data.message,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-        fetchData();
-        setDetailsModalOpen(false);
-      } else {
-        toast.error("error canceling appointment");
-        console.error("Error canceling appointment");
-      }
-    } catch (error) {
-      console.error("An error occurred while canceling appointment:", error);
-    } finally {
-      setConfirmationModalOpen(false);
-    }
-  };
-
-  const handleViewMore = async (id) => {
-    toast({
-      // title: "Success",
-      description: "Please wait.",
-      status: "info",
-      duration: 2000,
-      isClosable: true,
-      position: "top-right",
-    });
-    await fetchAndDisplayAppointmentDetails(id);
+  const handleViewMore = (appointment) => {
+    setSelectedAppointment(appointment);
+    setDetailsModalOpen(true);
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -218,11 +87,7 @@ export default function ActiveApp() {
       minute: "numeric",
       second: "numeric",
     };
-    const formattedDateTime = new Date(dateTimeString).toLocaleDateString(
-      undefined,
-      options
-    );
-    return formattedDateTime;
+    return new Date(dateTimeString).toLocaleDateString(undefined, options);
   };
 
   const formattedCost = (amount) => {
@@ -230,6 +95,7 @@ export default function ActiveApp() {
     return "₦ " + num.toLocaleString();
   };
 
+ 
   return (
     <Box
       className="pending-appointment"
@@ -257,23 +123,8 @@ export default function ActiveApp() {
             ml={{ base: "-8px", md: "-20px" }}
             fontSize={{ base: "12px", md: "16px" }}
           >
-            No pending appointments yet. Click{" "}
-            <button
-              style={{
-                color: "#A210C6",
-                fontStyle: "italic",
-                textDecoration: "none",
-                cursor: "pointer",
-                border: "none",
-                background: "none",
-                padding: "0",
-                font: "inherit",
-              }}
-              onClick={handleOpenAppointmentModal}
-            >
-              book appointment
-            </button>{" "}
-            to book.
+            No active appointment.
+          
           </Text>
         ) : (
           <Box>
@@ -306,11 +157,9 @@ export default function ActiveApp() {
             >
               {pendingAppointments.map((appointment) => (
                 <Box
-                  style={{
-                    cursor: "pointer",
-                  }}
+                  style={{ cursor: "pointer" }}
                   key={appointment.id}
-                  onClick={() => handleViewMore(appointment.id)}
+                  onClick={() => handleViewMore(appointment)}
                   w={{ base: "85vw", md: "57vw" }}
                   p={4}
                   borderBottom="1px solid #e2e8f0"
@@ -322,42 +171,26 @@ export default function ActiveApp() {
                     ml={{ base: "-15px", md: "-16px" }}
                     justifyContent="space-between"
                   >
-                    <Text
-                      maxW={{ base: "80px", md: "100px" }}
-                      wordWrap="break-word"
-                    >
-                      {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
+                    <Text maxW={{ base: "80px", md: "100px" }} wordWrap="break-word">
+                      {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                     </Text>
-                    <Text
-                      maxW={{ base: "50px", md: "120px" }}
-                    >{`${appointment.appointment.shift} `}</Text>
-                    <Text
-                      maxW={{ base: "60px", md: "120px" }}
-                      wordWrap="break-word"
-                    >{`${appointment.appointment.servicePlan} `}</Text>
+                    <Text maxW={{ base: "50px", md: "120px" }}>{`${appointment.shift} `}</Text>
+                    <Text maxW={{ base: "60px", md: "120px" }} wordWrap="break-word">
+                      {`${appointment.servicePlan} `}
+                    </Text>
                     <Box
                       w={{ base: "50px", md: "97px" }}
                       h={{ base: "25px", md: "33px" }}
                       textAlign="center"
                       borderRadius="10px"
                       p="5px"
-                      bg={
-                        appointment.appointment.appointmentActive
-                          ? "#ACE1C1"
-                          : "#ACE1C1"
-                      }
+                      bg={appointment.appointmentActive ? "#ACE1C1" : "#ACE1C1"}
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
-                        color={
-                          appointment.appointment?.appointmentActive
-                            ? "#057B1F"
-                            : "#057B1F"
-                        }
+                        color={appointment.appointmentActive ? "#057B1F" : "#057B1F"}
                       >
-                        {appointment.appointment?.appointmentActive
-                          ? "Active"
-                          : "Active"}
+                        {appointment.appointmentActive ? "Active" : "Active"}
                       </Text>
                     </Box>
                     <Box
@@ -365,19 +198,14 @@ export default function ActiveApp() {
                       h={{ base: "25px", md: "33px" }}
                       borderRadius="10px"
                       p="5px"
-                      // bg={appointment.appointment?.paid ? "#ACE1C1" : "red.200"}
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
                         fontWeight="bold"
                         textAlign="center"
-                        color={
-                          appointment.appointment?.paid
-                            ? "#057B1F"
-                            : "black.500"
-                        }
+                        color={appointment.paid ? "#057B1F" : "black.500"}
                       >
-                        {appointment?.appointment.paid ? "Paid" : "Unpaid"}
+                        {appointment.paid ? "Paid" : "Unpaid"}
                       </Text>
                     </Box>
                   </Flex>
@@ -388,11 +216,7 @@ export default function ActiveApp() {
         )}
       </VStack>
       {detailsModalOpen && selectedAppointment && (
-        <Drawer
-          isOpen={detailsModalOpen}
-          onClose={closeDetailsDrawer}
-          size="md"
-        >
+        <Drawer isOpen={detailsModalOpen} onClose={closeDetailsDrawer} size="md">
           <DrawerOverlay />
           <DrawerContent>
             <DrawerHeader
@@ -405,25 +229,9 @@ export default function ActiveApp() {
               color="#A210C6"
             >
               Appointment Details
-              <Button
-                variant="ghost"
-                onClick={closeDetailsDrawer}
-                leftIcon={<CloseIcon />}
-              />
+              <Button variant="ghost" onClick={closeDetailsDrawer} leftIcon={<CloseIcon />} />
             </DrawerHeader>
-            {!selectedAppointment.paid && (
-              <Button
-                ml={{ base: "5px" }}
-                bg="green.400"
-                color="white"
-                _hover={{ color: "" }}
-                onClick={() => handlePayment(selectedAppointment)}
-                leftIcon={<CheckIcon />}
-              >
-                Pay for appointment
-              </Button>
-            )}
-
+            
             <DrawerBody>
               <Flex flexDirection="column">
                 <Flex justifyContent="space-between" alignItems="center">
@@ -459,8 +267,7 @@ export default function ActiveApp() {
                     Beneficiary name:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientFirstname &&
-                    selectedAppointment.recipientLastname
+                    {selectedAppointment.recipientFirstname && selectedAppointment.recipientLastname
                       ? `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`
                       : "Not available"}
                   </Text>
@@ -471,33 +278,10 @@ export default function ActiveApp() {
                     Phone Number:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientPhoneNumber ||
-                      "Not available"}
+                    {selectedAppointment.recipientPhoneNumber || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Beneficiary name:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientFirstname &&
-                    selectedAppointment.recipientLastname
-                      ? `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`
-                      : "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                {/* <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Phone Number:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientPhoneNumber ||
-                      "Not available"}
-                  </Text>
-                </Flex> */}
-                {/* <Divider my={4} borderColor="gray.500" /> */}
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Gender:
@@ -512,8 +296,7 @@ export default function ActiveApp() {
                     Date of Birth:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment.recipientDOB) ||
-                      "Not available"}
+                    {formatDate(selectedAppointment.recipientDOB) || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -525,9 +308,7 @@ export default function ActiveApp() {
                     {selectedAppointment.currentLocation || "Not availabe"}
                   </Text>
                 </Flex>
-
                 <Divider my={4} borderColor="gray.500" />
-
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Relationship:
@@ -546,7 +327,6 @@ export default function ActiveApp() {
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
-
                 <Box marginRight="20px">
                   <Flex>
                     <Text fontWeight="bold" color="black">
@@ -557,7 +337,6 @@ export default function ActiveApp() {
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
-
                   <Flex marginTop="5px">
                     <Text fontWeight="bold" color="black">
                       Service Plan:
@@ -572,8 +351,7 @@ export default function ActiveApp() {
                       Type of caregiver:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.medicSpecialization ||
-                        "Not availabe"}
+                      {selectedAppointment.medicSpecialization || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -582,8 +360,7 @@ export default function ActiveApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formattedCost(selectedAppointment.costOfService) ||
-                        "Not availabe"}
+                      {formattedCost(selectedAppointment.costOfService) || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -592,8 +369,7 @@ export default function ActiveApp() {
                       Start Date:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formatDate(selectedAppointment.startDate) ||
-                        "Not availabe"}
+                      {formatDate(selectedAppointment.startDate) || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -616,7 +392,6 @@ export default function ActiveApp() {
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
                 </Box>
-
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Health History:
@@ -627,89 +402,17 @@ export default function ActiveApp() {
                     maxW="600px"
                     maxH="1000px"
                   >
-                    {selectedAppointment.recipientHealthHistory ||
-                      "Not available"}
+                    {selectedAppointment.recipientHealthHistory || "Not available"}
                   </Text>
                 </Flex>
               </Flex>
             </DrawerBody>
-            <DrawerFooter justifyContent="space-between">
-              {/* <Button
-                bg="#A210C6"
-                color="white"
-                _hover={{ color: "" }}
-                leftIcon={<EditIcon />}
-                // fontSize={{ base: "12px", md: "16px" }}
-                onClick={handleEditAppointment}
-              >
-                Edit
-              </Button>
-              <Button
-                // fontSize={{ base: "13px", md: "14px" }}
-                bg="#E1ACAE"
-                color="red.500"
-                // border="2px solid red"
-                _hover={{ color: "" }}
-                onClick={() => handleCancelAppointment(selectedAppointment.id)}
-              >
-                Cancel
-              </Button> */}
-            </DrawerFooter>
+            <DrawerFooter justifyContent="space-between"></DrawerFooter>
           </DrawerContent>
         </Drawer>
       )}
-
-      {confirmationModalOpen && (
-        <Modal
-          isOpen={confirmationModalOpen}
-          onClose={handleCancelModalClose}
-          size="md"
-        >
-          <ModalOverlay />
-          <ModalContent width={modalWidth} borderRadius="25px 25px 25px 0px">
-            <ModalHeader>
-              {" "}
-              <WarningIcon w={10} h={10} color="yellow.400" />
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              Are you sure you want to cancel this appointment? <br></br>
-              This action is irreversible.
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                bg="#A210C6"
-                color="white"
-                onClick={handleCancelModalClose}
-              >
-                No
-              </Button>
-              <Button
-                 bg="#E1ACAE"
-                 color="red.500"
-                marginLeft="5px"
-                onClick={handleConfirmation}
-              >
-                Yes
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      )}
-      <EditPendingAppointmentModal
-        isOpen={editModalOpen}
-        onClose={handleCloseEditModal}
-        appointmentDetails={selectedAppointment}
-      />
-      <BookAppointmentModal
-        isOpen={showAppointmentModal}
-        onClose={handleCloseAppointmentModal}
-      />
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        paymentData={paymentData}
-      />
+     
+     
     </Box>
   );
 }

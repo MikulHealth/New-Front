@@ -107,8 +107,8 @@ const ActiveMedicAppTab = () => {
                     Patient name:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.recipientFirstname}{" "}
-                    {appointment.appointment.recipientLastname}
+                    {appointment.customerAppointment.recipientFirstname}{" "}
+                    {appointment.customerAppointment.recipientLastname}
                   </Text>
                 </Flex>
                 <Flex>
@@ -119,7 +119,7 @@ const ActiveMedicAppTab = () => {
                     Appointment type:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.servicePlan}
+                    {appointment.customerAppointment.servicePlan}
                   </Text>
                 </Flex>
 
@@ -131,7 +131,7 @@ const ActiveMedicAppTab = () => {
                     Location:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.appointment.currentLocation}
+                    {appointment.customerAppointment.currentLocation}
                   </Text>
                 </Flex>
               </Box>
@@ -174,8 +174,8 @@ const ActiveMedicAppTab = () => {
             <ModalBody>
               <Flex align="center" mb={4}>
                 <Avatar
-                  name={`${selectedAppointment.appointment.recipientFirstname} ${selectedAppointment.appointment.recipientLastname}`}
-                  src={selectedAppointment.appointment.image}
+                  name={`${selectedAppointment.customerAppointment.recipientFirstname} ${selectedAppointment.customerAppointment.recipientLastname}`}
+                  src={selectedAppointment.customerAppointment.image}
                   bg="gray.500"
                   color="white"
                   w={{ base: "100px", md: "100px" }}
@@ -187,8 +187,8 @@ const ActiveMedicAppTab = () => {
                   <Flex>
                     <Text fontWeight="bold">Name</Text>
                     <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.recipientFirstname}{" "}
-                      {selectedAppointment.appointment.recipientLastname}
+                      {selectedAppointment.customerAppointment.recipientFirstname}{" "}
+                      {selectedAppointment.customerAppointment.recipientLastname}
                     </Text>
                   </Flex>
                   <Flex>
@@ -196,7 +196,7 @@ const ActiveMedicAppTab = () => {
                       Location:
                     </Text>
                     <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.currentLocation}
+                      {selectedAppointment.customerAppointment.currentLocation}
                     </Text>
                   </Flex>
 
@@ -205,7 +205,7 @@ const ActiveMedicAppTab = () => {
                       Plan:
                     </Text>
                     <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.servicePlan}
+                      {selectedAppointment.customerAppointment.servicePlan}
                     </Text>
                   </Flex>
                   <Flex>
@@ -213,7 +213,7 @@ const ActiveMedicAppTab = () => {
                       Shift:
                     </Text>
                     <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.shift}
+                      {selectedAppointment.customerAppointment.shift}
                     </Text>
                   </Flex>
                   <Flex>
@@ -221,7 +221,7 @@ const ActiveMedicAppTab = () => {
                       Contact details:
                     </Text>
                     <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.customerPhoneNumber}
+                      {selectedAppointment.customerAppointment.customerPhoneNumber}
                     </Text>
                   </Flex>
                 </Box>

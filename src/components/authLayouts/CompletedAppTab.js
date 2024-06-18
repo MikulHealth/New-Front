@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../utils/Spiner";
-// import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import BookAppointmentModal from "../sections/BookAppointment";
-import { EditIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
-import { WarningIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   VStack,
   Drawer,
@@ -15,74 +10,26 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useMediaQuery,
   Button,
-  useToast,
+  // useToast,
   Box,
   Text,
   Flex,
-  // extendTheme,
   Divider,
 } from "@chakra-ui/react";
-import PaymentModal from "../sections/PaymentMethod";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CompletedApp() {
-  const toast = useToast();
-  // const navigate = useNavigate();
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [paymentData, setPaymentData] = useState({});
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [pendingAppointments, setPendingAppointments] = useState([]);
+  // const toast = useToast();
+  const [completedAppointments, setCompletedAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [cancellingAppointmentId, setCancellingAppointmentId] = useState(null);
-  const handleCancelAppointment = (appointmentId) => {
-    setCancellingAppointmentId(appointmentId);
-    setConfirmationModalOpen(true);
-  };
-
-  const handleCancelModalClose = () => {
-    setConfirmationModalOpen(false);
-  };
-
-  const handlePayment = (selectedAppointment) => {
-    setPaymentData({
-      costOfService: selectedAppointment.costOfService,
-      appointmentId: selectedAppointment.id,
-      beneficiary: `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`,
-    });
-    setTimeout(() => {
-      setIsPaymentModalOpen(true);
-    }, 1000);
-  };
-  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-  const modalWidth = isLargerThan768 ? "400px" : "90vw";
-  const handleEditAppointment = (id) => {
-    setEditModalOpen(true);
-    setDetailsModalOpen(false);
-  };
 
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
-    // navigate("/appointment");
-    // window.location.reload()
     setSelectedAppointment(null);
-  };
-
-  const handleCloseEditModal = () => {
-    setEditModalOpen(false);
   };
 
   const fetchData = async () => {
@@ -94,16 +41,16 @@ export default function CompletedApp() {
       };
 
       const response = await axios.get(
-        "http://localhost:8080/v1/appointment/findCompletedAppointments",
-        // "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
+        // "http://localhost:8080/v1/appointment/findCompletedAppointments",
+          "https://backend-c1pz.onrender.com/v1/appointment/findCompletedAppointments",
         config
       );
 
       if (response.data.success) {
-        const sortedAppointments = response.data.data.sort(
+        const sortedAppointments = response.data.data.data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setPendingAppointments(sortedAppointments);
+        setCompletedAppointments(sortedAppointments);
       } else {
         console.error("Failed to fetch appointments");
       }
@@ -120,99 +67,15 @@ export default function CompletedApp() {
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
-
-    // Create a new Date object from the dateString
     const date = new Date(dateString);
-
-    // Add one hour to the date
     date.setHours(date.getHours() + 1);
-
-    // Format the date
     const formattedDate = date.toLocaleDateString(undefined, options);
-
     return formattedDate;
   };
 
-  const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
-    try {
-      const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/findCompletedAppointmentDetails/${appointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findCompletedAppointmentDetails/${appointmentId}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.get(apiUrl, { headers });
-
-      if (response && response.data && response.data.success) {
-        setSelectedAppointment(response.data.data.data);
-        console.log("apps " + response.data.data.data);
-        setDetailsModalOpen(true);
-      } else {
-        console.error("Error fetching appointment details");
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching appointment details:",
-        error
-      );
-    }
-  };
-
-  // const handleOpenAppointmentModal = () => {
-  //   setShowAppointmentModal(true);
-  // };
-
-  const handleCloseAppointmentModal = () => {
-    setShowAppointmentModal(false);
-  };
-
-  const handleConfirmation = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.post(apiUrl, {}, { headers });
-
-      if (response.data.success) {
-        toast({
-          // title: "Info",
-          description: response.data.message,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-        fetchData();
-        setDetailsModalOpen(false);
-      } else {
-        toast.error("error canceling appointment");
-        console.error("Error canceling appointment");
-      }
-    } catch (error) {
-      console.error("An error occurred while canceling appointment:", error);
-    } finally {
-      setConfirmationModalOpen(false);
-    }
-  };
-
-  const handleViewMore = async (id) => {
-    toast({
-      // title: "Success",
-      description: "Please wait.",
-      status: "info",
-      duration: 2000,
-      isClosable: true,
-      position: "top-right",
-    });
-    await fetchAndDisplayAppointmentDetails(id);
+  const handleViewMore = (appointment) => {
+    setSelectedAppointment(appointment);
+    setDetailsModalOpen(true);
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -238,7 +101,7 @@ export default function CompletedApp() {
 
   return (
     <Box
-      className="pending-appointment"
+      className="completed-appointment"
       overflow="scroll"
       w={{ base: "100%", md: "100%" }}
       h={{ base: "60vh", md: "60vh" }}
@@ -257,7 +120,7 @@ export default function CompletedApp() {
       <VStack align="start" spacing={4}>
         {loading ? (
           <LoadingSpinner />
-        ) : pendingAppointments.length === 0 ? (
+        ) : completedAppointments.length === 0 ? (
           <Text
             w={{ base: "90vw", md: "60vw" }}
             ml={{ base: "-8px", md: "-20px" }}
@@ -294,13 +157,13 @@ export default function CompletedApp() {
               align="start"
               spacing={4}
             >
-              {pendingAppointments.map((appointment) => (
+              {completedAppointments.map((appointment) => (
                 <Box
                   style={{
                     cursor: "pointer",
                   }}
                   key={appointment.id}
-                  onClick={() => handleViewMore(appointment.id)}
+                  onClick={() => handleViewMore(appointment)}
                   w={{ base: "85vw", md: "57vw" }}
                   p={4}
                   borderBottom="1px solid #e2e8f0"
@@ -316,38 +179,30 @@ export default function CompletedApp() {
                       maxW={{ base: "80px", md: "100px" }}
                       wordWrap="break-word"
                     >
-                      {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
+                      {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                     </Text>
-                    <Text
-                      maxW={{ base: "50px", md: "120px" }}
-                    >{`${appointment.appointment.shift} `}</Text>
+                    <Text maxW={{ base: "50px", md: "120px" }}>
+                      {`${appointment.shift} `}
+                    </Text>
                     <Text
                       maxW={{ base: "60px", md: "120px" }}
                       wordWrap="break-word"
-                    >{`${appointment.appointment.servicePlan} `}</Text>
+                    >
+                      {`${appointment.servicePlan} `}
+                    </Text>
                     <Box
-                      w={{ base: "50px", md: "97px" }}
+                      w={{ base: "60px", md: "97px" }}
                       h={{ base: "25px", md: "33px" }}
                       textAlign="center"
                       borderRadius="10px"
                       p="5px"
-                      bg={
-                        appointment.appointment.appointmentPending
-                          ? "#F4DDA2"
-                          : "#F4DDA2"
-                      }
+                      bg="#D087E2"
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
-                        color={
-                          appointment.appointment?.appointmentPending
-                            ? "#B48B25"
-                            : "#B48B25"
-                        }
+                        color="#A210C6"
                       >
-                        {appointment.appointment?.appointmentPending
-                          ? "Pending"
-                          : "Paired"}
+                        Completed
                       </Text>
                     </Box>
                     <Box
@@ -355,19 +210,14 @@ export default function CompletedApp() {
                       h={{ base: "25px", md: "33px" }}
                       borderRadius="10px"
                       p="5px"
-                      // bg={appointment.appointment?.paid ? "#ACE1C1" : "red.200"}
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
                         fontWeight="bold"
                         textAlign="center"
-                        color={
-                          appointment.appointment?.paid
-                            ? "#057B1F"
-                            : "black.500"
-                        }
+                        color={appointment.paid ? "#057B1F" : "black.500"}
                       >
-                        {appointment?.appointment.paid ? "Paid" : "Unpaid"}
+                        {appointment.paid ? "Paid" : "Unpaid"}
                       </Text>
                     </Box>
                   </Flex>
@@ -401,46 +251,13 @@ export default function CompletedApp() {
                 leftIcon={<CloseIcon />}
               />
             </DrawerHeader>
-            {!selectedAppointment.paid && (
-              <Button
-                ml={{ base: "5px" }}
-                bg="green.400"
-                color="white"
-                _hover={{ color: "" }}
-                onClick={() => handlePayment(selectedAppointment)}
-                leftIcon={<CheckIcon />}
-              >
-                Pay for appointment
-              </Button>
-            )}
 
             <DrawerBody>
               <Flex flexDirection="column">
                 <Flex justifyContent="space-between" alignItems="center">
                   <Text fontWeight="bold">Status</Text>
-                  <Text
-                    fontSize="16px"
-                    color={
-                      selectedAppointment.appointmentCompleted
-                        ? "green.500"
-                        : selectedAppointment.appointmentActive
-                        ? "blue.500"
-                        : selectedAppointment.appointmentMatched
-                        ? "yellow.500"
-                        : selectedAppointment.appointmentPending
-                        ? "yellow.500"
-                        : "black"
-                    }
-                  >
-                    {selectedAppointment.appointmentCompleted
-                      ? "Completed"
-                      : selectedAppointment.appointmentActive
-                      ? "Active"
-                      : selectedAppointment.appointmentMatched
-                      ? "Paired"
-                      : selectedAppointment.appointmentPending
-                      ? "Pending"
-                      : "Unknown"}
+                  <Text fontSize="16px" color="#A210C6">
+                    Completed
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -466,28 +283,6 @@ export default function CompletedApp() {
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Beneficiary name:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientFirstname &&
-                    selectedAppointment.recipientLastname
-                      ? `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`
-                      : "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                {/* <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Phone Number:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientPhoneNumber ||
-                      "Not available"}
-                  </Text>
-                </Flex> */}
-                {/* <Divider my={4} borderColor="gray.500" /> */}
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Gender:
@@ -512,7 +307,7 @@ export default function CompletedApp() {
                     Current Location:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.currentLocation || "Not availabe"}
+                    {selectedAppointment.currentLocation || "Not available"}
                   </Text>
                 </Flex>
 
@@ -543,7 +338,7 @@ export default function CompletedApp() {
                       Shift:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.shift || "Not availabe"}
+                      {selectedAppointment.shift || "Not available"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -553,7 +348,7 @@ export default function CompletedApp() {
                       Service Plan:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.servicePlan || "Not availabe"}
+                      {selectedAppointment.servicePlan || "Not available"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -563,7 +358,7 @@ export default function CompletedApp() {
                     </Text>
                     <Text marginLeft="20px" color="black">
                       {selectedAppointment.medicSpecialization ||
-                        "Not availabe"}
+                        "Not available"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -573,7 +368,7 @@ export default function CompletedApp() {
                     </Text>
                     <Text marginLeft="20px" color="black">
                       {formattedCost(selectedAppointment.costOfService) ||
-                        "Not availabe"}
+                        "Not available"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -583,7 +378,7 @@ export default function CompletedApp() {
                     </Text>
                     <Text marginLeft="20px" color="black">
                       {formatDate(selectedAppointment.startDate) ||
-                        "Not availabe"}
+                        "Not available"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -592,7 +387,7 @@ export default function CompletedApp() {
                       Medical Report:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.medicalReport || "Not availabe"}
+                      {selectedAppointment.medicalReport || "Not available"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -623,83 +418,10 @@ export default function CompletedApp() {
                 </Flex>
               </Flex>
             </DrawerBody>
-            <DrawerFooter justifyContent="space-between">
-              <Button
-                bg="#A210C6"
-                color="white"
-                _hover={{ color: "" }}
-                leftIcon={<EditIcon />}
-                // fontSize={{ base: "12px", md: "16px" }}
-                onClick={handleEditAppointment}
-              >
-                Edit
-              </Button>
-              <Button
-                // fontSize={{ base: "13px", md: "14px" }}
-                bg="#E1ACAE"
-                color="red.500"
-                // border="2px solid red"
-                _hover={{ color: "" }}
-                onClick={() => handleCancelAppointment(selectedAppointment.id)}
-              >
-                Cancel
-              </Button>
-            </DrawerFooter>
+            <DrawerFooter justifyContent="space-between"></DrawerFooter>
           </DrawerContent>
         </Drawer>
       )}
-
-      {confirmationModalOpen && (
-        <Modal
-          isOpen={confirmationModalOpen}
-          onClose={handleCancelModalClose}
-          size="md"
-        >
-          <ModalOverlay />
-          <ModalContent width={modalWidth} borderRadius="25px 25px 25px 0px">
-            <ModalHeader>
-              {" "}
-              <WarningIcon w={10} h={10} color="yellow.400" />
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              Are you sure you want to cancel this appointment? <br></br>
-              This action is irreversible.
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                bg="#A210C6"
-                color="white"
-                onClick={handleCancelModalClose}
-              >
-                No
-              </Button>
-              <Button
-                bg="#E1ACAE"
-                color="red.500"
-                marginLeft="5px"
-                onClick={handleConfirmation}
-              >
-                Yes
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      )}
-      <EditPendingAppointmentModal
-        isOpen={editModalOpen}
-        onClose={handleCloseEditModal}
-        appointmentDetails={selectedAppointment}
-      />
-      <BookAppointmentModal
-        isOpen={showAppointmentModal}
-        onClose={handleCloseAppointmentModal}
-      />
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        paymentData={paymentData}
-      />
     </Box>
   );
 }

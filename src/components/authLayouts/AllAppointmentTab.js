@@ -57,6 +57,7 @@ export default function AppointmentTab() {
 
       const response = await axios.get(
         "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
+        // "http://localhost:8080/v1/appointment/allAppointments",
         config
       );
 
@@ -82,7 +83,6 @@ export default function AppointmentTab() {
   const handleConfirmation = async () => {
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
       const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
 
       const headers = {
@@ -94,7 +94,6 @@ export default function AppointmentTab() {
 
       if (response.data.success) {
         toast({
-          // title: "Success",
           description: response.data.message,
           status: "success",
           duration: 5000,
@@ -103,7 +102,7 @@ export default function AppointmentTab() {
         fetchData();
         setDetailsModalOpen(false);
       } else {
-        toast.error("error canceling appointment");
+        toast.error("Error canceling appointment");
         console.error("Error canceling appointment");
       }
     } catch (error) {
@@ -116,42 +115,12 @@ export default function AppointmentTab() {
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
 
-    // Create a new Date object from the dateString
     const date = new Date(dateString);
-
-    // Add one hour to the date
     date.setHours(date.getHours() + 1);
 
-    // Format the date
     const formattedDate = date.toLocaleDateString(undefined, options);
 
     return formattedDate;
-  };
-
-  const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
-    try {
-      const token = localStorage.getItem("token");
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findAppointmentDetails/${appointmentId}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.get(apiUrl, { headers });
-
-      if (response && response.data && response.data.success) {
-        setSelectedAppointment(response.data.data.data);
-        setDetailsModalOpen(true);
-      } else {
-        console.error("Error fetching appointment details");
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching appointment details:",
-        error
-      );
-    }
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -170,16 +139,9 @@ export default function AppointmentTab() {
     return formattedDateTime;
   };
 
-  const handleViewMore = async (id) => {
-    toast({
-      // title: "Info",
-      description: "Please wait.",
-      status: "info",
-      duration: 2000,
-      isClosable: true,
-      position: "top-right",
-    });
-    await fetchAndDisplayAppointmentDetails(id);
+  const handleViewMore = (appointment) => {
+    setSelectedAppointment(appointment);
+    setDetailsModalOpen(true);
   };
 
   const handleOpenAppointmentModal = () => {
@@ -192,8 +154,6 @@ export default function AppointmentTab() {
 
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
-    // navigate("/appointment");
-    // window.location.reload()
     setSelectedAppointment(null);
   };
 
@@ -212,6 +172,7 @@ export default function AppointmentTab() {
       setIsPaymentModalOpen(true);
     }, 1000);
   };
+
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
 
@@ -236,7 +197,7 @@ export default function AppointmentTab() {
       h={{ base: "60vh", md: "60vh" }}
       overflowY="scroll"
     >
-       <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
@@ -275,8 +236,6 @@ export default function AppointmentTab() {
             to begin.
           </Text>
         ) : (
-
-
           <Box>
             <Flex
               mt={{ base: "-10px", md: "-10px" }}
@@ -308,9 +267,8 @@ export default function AppointmentTab() {
               {appointments.map((appointment) => (
                 <Box
                   ml={{ base: "10px" }}
-                  onClick={() => handleViewMore(appointment.id)}
+                  onClick={() => handleViewMore(appointment)}
                   key={appointment.id}
-                  // overflow="scroll"
                   style={{
                     cursor: "pointer",
                   }}
@@ -319,18 +277,12 @@ export default function AppointmentTab() {
                   borderBottom="1px solid #e2e8f0"
                 >
                   <Flex
-                    _hover={
-                      {
-                        // transform: "translateY(-10px)",
-                      }
-                    }
                     fontSize={{ base: "10px", md: "14px" }}
                     textAlign="left"
                     ml={{ base: "-15px", md: "-16px" }}
                     justifyContent="space-between"
                   >
                     <Text
-                      // ml={{ md: "-5px" }}
                       textAlign="left"
                       maxW={{ base: "80px", md: "100px" }}
                       wordWrap="break-word"
@@ -347,7 +299,7 @@ export default function AppointmentTab() {
                       wordWrap="break-word"
                     >{`${appointment.servicePlan} `}</Text>
                     <Box
-                      w={{ base: "50px", md: "97px" }}
+                      w={{ base: "60px", md: "97px" }}
                       h={{ base: "25px", md: "33px" }}
                       textAlign="center"
                       borderRadius="10px"
@@ -395,25 +347,18 @@ export default function AppointmentTab() {
                       h={{ base: "25px", md: "33px" }}
                       borderRadius="10px"
                       p="5px"
-                      // bg={appointment?.paid ? "#ACE1C1" : "red.200"}
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
                         fontWeight="bold"
                         textAlign="center"
-                        color={appointment?.paid ? "#057B1F" : "black.500"}
+                        color={appointment?.paid ? "#057B1F" : "red.500"}
                       >
                         {appointment?.paid ? "Paid" : "Unpaid"}
                       </Text>
                     </Box>
-
-                    {/* <Text ml={{ md: "60px" }} color="black">
-                      {appointment?.paid ? "Paid" : "Not paid"}
-                    </Text> */}
                   </Flex>
                 </Box>
-
-                
               ))}
             </VStack>
           </Box>
@@ -664,7 +609,6 @@ export default function AppointmentTab() {
                 <Button
                   bg="#E1ACAE"
                   color="red.500"
-                  // border="2px solid red"
                   _hover={{ color: "" }}
                   onClick={() =>
                     handleCancelAppointment(selectedAppointment.id)

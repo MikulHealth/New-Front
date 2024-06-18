@@ -129,7 +129,7 @@ const PaymentConfirmationPage = () => {
   };
 
   const handleCancel = () => {
-    navigate("/dashboard");
+    navigate("/client-dashboard");
     // window.location.reload();
   };
 

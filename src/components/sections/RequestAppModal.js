@@ -50,6 +50,12 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
   const medicId = user?.userId;
 
   const handleSubmit = async () => {
+    // Validate all fields
+    if (!appointmentType || !shift || !currentLocation) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
     setLoading(true);
     const requestData = {
       appointmentType,

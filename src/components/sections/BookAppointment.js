@@ -11,7 +11,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import SelfAppointmentModal from "./SelfAppointmentForm";
-import BeneficiaryAppointmentModal from "./OthersAppForm";
+import OthersAppointmentModal from "./OthersAppForm";
 import BeneficiariesModal from "./Beneficiaries";
 
 const customTheme = extendTheme({
@@ -124,7 +124,7 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
           />
         )}
         {isBeneficiaryAppointmentModalOpen && (
-          <BeneficiaryAppointmentModal
+          <OthersAppointmentModal
             isOpen={isBeneficiaryAppointmentModalOpen}
             onClose={handleCloseBeneficiaryAppointmentModal}
             pages={pages}

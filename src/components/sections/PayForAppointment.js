@@ -24,14 +24,6 @@ const PayForAppointmentModal = ({ isOpen, onClose, appointment }) => {
 
 
   const handlePayment = () => {
-    // const costOfService = appointment.costOfService;
-    // const appointmentId = appointment.id;
-    // const beneficiary =
-    //   appointment.recipientFirstname + " " + appointment.recipientLastname;
-    // // navigate("/make-payment", {
-    //   state: { costOfService, appointmentId, beneficiary },
-    // });
-
      setPaymentData({
           costOfService: appointment.costOfService,
           appointmentId: appointment.id,

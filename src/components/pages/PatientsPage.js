@@ -51,7 +51,6 @@ const PatientsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
 
   const handleOpenAppointmentModal = () => {
@@ -67,6 +66,7 @@ const PatientsPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
+          // "http://localhost:8080/v1/appointment/get-active-patient",
           "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
           {
             headers: {
@@ -75,7 +75,7 @@ const PatientsPage = () => {
           }
         );
         if (response.data.success) {
-          setPatients(response.data.data.map((app) => app.appointment));
+          setPatients(response.data.data);
         }
       } catch (error) {
         console.error("Error fetching patients:", error);
@@ -88,8 +88,10 @@ const PatientsPage = () => {
   }, []);
 
   const openModal = (patient) => {
-    setSelectedPatient(patient);
-    setIsModalOpen(true);
+    if (!patient.completed) {
+      setSelectedPatient(patient);
+      setIsModalOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -97,9 +99,18 @@ const PatientsPage = () => {
     setSelectedPatient(null);
   };
 
+  const openReportDrawer = () => {
+    closeModal(); 
+    onOpen(); 
+  };
+
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
     return `${date.toLocaleDateString()}`;
+  };
+
+  const settingsContainerStyle = {
+    animation: "slideInUp 0.9s ease-in-out",
   };
 
   return (
@@ -108,7 +119,7 @@ const PatientsPage = () => {
         <Box w={{ base: "100%", md: "20%" }}>
           <MedicSideBar />
         </Box>
-        <VStack w={{ base: "100%", md: "80%" }}>
+        <VStack style={settingsContainerStyle} w={{ base: "100%", md: "80%" }}>
           <MedicNavBar />
           <Box p="4" w="full" overflowY="auto">
             <Flex direction="column" p="4">
@@ -146,8 +157,7 @@ const PatientsPage = () => {
                         color="#A210C6"
                       >
                         "request appointment to begin"
-                      </Link>
-                      {" "}
+                      </Link>{" "}
                       to begin.
                     </Text>
                   ) : (
@@ -156,25 +166,23 @@ const PatientsPage = () => {
                         <Flex
                           fontSize={{ base: "10px", md: "16px" }}
                           key={patient.id}
-                          p={4}
+                          p={3}
                           borderRadius="md"
                           bg="#ECCFF4"
                           justifyContent="space-between"
                           alignItems="center"
                           w="full"
                           onClick={() => openModal(patient)}
-                          cursor="pointer"
-                          _hover={{ bg: "purple.100" }}
+                          cursor={patient.completed ? "not-allowed" : "pointer"}
+                          _hover={patient.completed ? {} : { bg: "purple.100" }}
                         >
                           <Image
                             src={Check}
-                            // mt={{ base: "40px", md: "40px" }}
                             w={{ base: "16px", md: "16px" }}
                             h={{ base: "16px", md: "16px" }}
                           />
-                          {/* <Text>{patient.customerId}</Text> */}
                           <Flex
-                            maxW={{ base: "60px", md: "150px" }}
+                            maxW={{ base: "60px", md: "170px" }}
                             color="#212427B2"
                             alignItems="center"
                           >
@@ -182,27 +190,21 @@ const PatientsPage = () => {
                               size="sm"
                               bg="#212427B2"
                               color="white"
-                              name={`${patient.recipientFirstname} ${patient.recipientLastname}`}
+                              name={`${patient.customerAppointment.recipientFirstname} ${patient.customerAppointment.recipientLastname}`}
                             />
-                            <Text ml="2">{`${patient.recipientFirstname} ${patient.recipientLastname}`}</Text>
+                            <Text ml="2">{`${patient.customerAppointment.recipientFirstname} ${patient.customerAppointment.recipientLastname}`}</Text>
                           </Flex>
                           <Text maxW={{ base: "50px", md: "150px" }}>
-                            {patient.servicePlan}
+                            {patient.customerAppointment.servicePlan}
                           </Text>
                           <Badge
-                            bg={
-                              patient.appointmentActive ? "#D087E2" : "#ACE1C1"
-                            }
+                            bg={patient.active ? "#ACE1C1" : patient.completed ? "#D087E2" : "gray"}
                             p={2}
                             borderRadius="30px"
-                            color={
-                              patient.appointmentActive ? "#A210C6" : "#057B1F"
-                            }
+                            color={patient.active ? "#057B1F" : patient.completed ? "#A210C6" : "white"}
                             fontSize="11px"
                           >
-                            {patient.appointmentActive
-                              ? "Completed"
-                              : "Ongoing"}
+                            {patient.active ? "Ongoing" : patient.completed ? "Completed" : "Unknown"}
                           </Badge>
                         </Flex>
                       ))}
@@ -236,8 +238,8 @@ const PatientsPage = () => {
                             textAlign="center"
                           >
                             <Avatar
-                              name={`${selectedPatient.recipientFirstname} ${selectedPatient.recipientLastname}`}
-                              src={selectedPatient.picturePath}
+                              name={`${selectedPatient.customerAppointment.recipientFirstname} ${selectedPatient.customerAppointment.recipientLastname}`}
+                              src={selectedPatient.customerAppointment.picturePath}
                               bg="gray.500"
                               color="white"
                               w={{ base: "100px", md: "100px" }}
@@ -250,8 +252,8 @@ const PatientsPage = () => {
                                   Name:
                                 </Text>
                                 <Text ml="5px" fontSize="lg" mt="2">
-                                  {selectedPatient.recipientFirstname}{" "}
-                                  {selectedPatient.recipientLastname}
+                                  {selectedPatient.customerAppointment.recipientFirstname}{" "}
+                                  {selectedPatient.customerAppointment.recipientLastname}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -259,7 +261,7 @@ const PatientsPage = () => {
                                   Location:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.currentLocation}
+                                  {selectedPatient.customerAppointment.currentLocation}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -267,7 +269,7 @@ const PatientsPage = () => {
                                   Phone number:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.recipientPhoneNumber}
+                                  {selectedPatient.customerAppointment.recipientPhoneNumber}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -275,7 +277,7 @@ const PatientsPage = () => {
                                   Gender:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.recipientGender}
+                                  {selectedPatient.customerAppointment.recipientGender}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -283,7 +285,7 @@ const PatientsPage = () => {
                                   Date of Birth:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {formatDateTime(selectedPatient.recipientDOB)}
+                                  {formatDateTime(selectedPatient.customerAppointment.recipientDOB)}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -291,7 +293,7 @@ const PatientsPage = () => {
                                   Service Plan:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.servicePlan}
+                                  {selectedPatient.customerAppointment.servicePlan}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -299,7 +301,7 @@ const PatientsPage = () => {
                                   Shift:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.shift}
+                                  {selectedPatient.customerAppointment.shift}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -309,7 +311,7 @@ const PatientsPage = () => {
                                 <Text ml="5px" mt="2">
                                   N{" "}
                                   {parseFloat(
-                                    selectedPatient.costOfService
+                                    selectedPatient.customerAppointment.costOfService
                                   ).toLocaleString()}
                                 </Text>
                               </Flex>
@@ -322,7 +324,7 @@ const PatientsPage = () => {
                                   ml="5px"
                                   mt="2"
                                 >
-                                  {selectedPatient.recipientHealthHistory}
+                                  {selectedPatient.customerAppointment.recipientHealthHistory}
                                 </Text>
                               </Flex>
                             </Box>
@@ -333,7 +335,7 @@ const PatientsPage = () => {
                               color="white"
                               bg="#A210C6"
                               borderRadius="50px"
-                              onClick={onOpen}
+                              onClick={openReportDrawer}
                               fontFamily="body"
                             >
                               Upload report

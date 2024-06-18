@@ -13,54 +13,121 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
+  useMediaQuery,
+  useToast,
+  Button,
 } from "@chakra-ui/react";
+import { WarningIcon } from "@chakra-ui/icons";
+import EditPendingMediRequest from "../sections/EditPendingMedicRequest";
 
 const PendingMedicAppTab = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const toast = useToast();
+  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+  const modalWidth = isLargerThan768 ? "400px" : "90vw";
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+  };
+
+  const fetchAppointments = async () => {
+    setLoading(true);
+    if (localStorage.getItem("token")) {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:8080/v1/appointment/pending",
+          // "https://backend-c1pz.onrender.com/v1/appointment/pending",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setLoading(false);
+          setAppointments(response.data.data);
+        } else {
+          setLoading(false);
+          console.error("Failed to fetch appointments:", response.data.message);
+        }
+      } catch (error) {
+        setLoading(false);
+        console.error("Error fetching appointments:", error);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      setLoading(true);
-      if (localStorage.getItem("token")) {
-        try {
-          const token = localStorage.getItem("token");
-          const response = await axios.get(
-            // "http://localhost:8080/v1/appointment/pending",
-            "https://backend-c1pz.onrender.com/v1/appointment/pending",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          if (response.data.success) {
-            setLoading(false);
-            setAppointments(response.data.data);
-          } else {
-            setLoading(false);
-            console.error(
-              "Failed to fetch appointments:",
-              response.data.message
-            );
-          }
-        } catch (error) {
-          setLoading(false);
-          console.error("Error fetching appointments:", error);
-        }
-      }
-    };
-
     fetchAppointments();
   }, []);
 
-  const handleDetailsClick = (appointment) => {
-    setSelectedAppointment(appointment);
-    onOpen();
+
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [requestId, setCancellingAppointmentId] = useState(null);
+
+  const handleCancelAppointment = (appointmentId) => {
+    setCancellingAppointmentId(appointmentId);
+    setConfirmationModalOpen(true);
+  };
+
+  const handleCancelModalClose = () => {
+    setConfirmationModalOpen(false);
+  };
+
+  const handleConfirmation = async () => {
+      try {
+        const token = localStorage.getItem("token");
+  
+        const response = await axios.post(
+          // `http://localhost:8080/v1/appointment/cancel-request/${requestId}`,
+          `https://backend-c1pz.onrender.com/v1/appointment/cancel-request/${requestId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+      if (response.data.success) {
+        toast({
+          description: response.data.message,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right"
+        });
+        fetchAppointments();
+        setConfirmationModalOpen(false);
+      } else {
+        toast({
+          description: "Failed to cancel request:",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        console.error("Error canceling appointment:", response.data.message);
+      }
+    } catch (error) {
+      console.error("An error occurred while canceling request:", error);
+      toast({
+        description: "An error occurred while canceling request:",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setConfirmationModalOpen(false);
+    }
+  };
+
+  const handleEditAppointment = (id) => {
+    setSelectedAppointment(id);
+    setEditModalOpen(true);
   };
 
   if (loading) {
@@ -73,8 +140,8 @@ const PendingMedicAppTab = () => {
 
   if (appointments.length === 0) {
     return (
-      <VStack  ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
-        <Text fontStyle="italic"  fontSize={{ base: "12px", md: "16px" }}>
+      <VStack ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
+        <Text fontStyle="italic" fontSize={{ base: "12px", md: "16px" }}>
           You have no pending appointment.
         </Text>
       </VStack>
@@ -96,13 +163,12 @@ const PendingMedicAppTab = () => {
           >
             <Flex>
               <Box textAlign="left">
-              
                 <Flex>
                   <Text
                     fontWeight="bold"
                     fontSize={{ base: "10px", md: "16px" }}
                   >
-                   Preferred service plan:
+                    Preferred service plan:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
                     {appointment.appointmentType}
@@ -113,7 +179,7 @@ const PendingMedicAppTab = () => {
                     fontWeight="bold"
                     fontSize={{ base: "10px", md: "16px" }}
                   >
-                   Preferred shift:
+                    Preferred shift:
                   </Text>
                   <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
                     {appointment.shift}
@@ -133,22 +199,14 @@ const PendingMedicAppTab = () => {
                 </Flex>
               </Box>
               <Box ml={{ base: "50", md: "280px" }}>
-                {/* <Badge
-                  mb="20px"
-                  bg="white"
-                  p={2}
-                  borderRadius="5px"
-                  color="white"
-                  fontSize={{ base: "10px", md: "12px" }}
-                ></Badge> */}
-                <Flex  mr="30px" mt={{base: "30px", md: "50px"}}>
+                <Flex mr="30px" mt={{ base: "30px", md: "50px" }}>
                   <Text
                     ml="-10px"
                     fontSize={{ base: "10px", md: "16px" }}
                     cursor="pointer"
                     fontStyle="italic"
                     color="#C21111B2"
-                    onClick={() => handleDetailsClick(appointment)}
+                    onClick={() => handleCancelAppointment(appointment.id)}
                   >
                     Cancel
                   </Text>
@@ -158,12 +216,10 @@ const PendingMedicAppTab = () => {
                     cursor="pointer"
                     fontStyle="italic"
                     color="#107AC6"
-                    onClick={() => handleDetailsClick(appointment)}
-                   
+                    onClick={() => handleEditAppointment(appointment.id)}
                   >
                     Edit
                   </Text>
-                 
                 </Flex>
               </Box>
             </Flex>
@@ -171,89 +227,48 @@ const PendingMedicAppTab = () => {
         );
       })}
 
-      {selectedAppointment && (
+      {confirmationModalOpen && (
         <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          size={{ base: "sm", md: "md" }}
+          isOpen={confirmationModalOpen}
+          onClose={handleCancelModalClose}
+          size="md"
         >
           <ModalOverlay />
-          <ModalContent>
-            <ModalHeader color="#A210C6">Edit Request</ModalHeader>
+          <ModalContent width={modalWidth} borderRadius="25px 25px 25px 0px">
+            <ModalHeader>
+              {" "}
+              <WarningIcon w={10} h={10} color="yellow.400" />
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              {/* <Flex align="center" mb={4}>
-                <Avatar
-                  name={`${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`}
-                  src={selectedAppointment.image}
-                  bg="gray.500"
-                  color="white"
-                  w={{ base: "100px", md: "100px" }}
-                  h={{ base: "100px", md: "100px" }}
-                  border="3px solid #057B1F"
-                  mt="-60px"
-                />
-                <Box ml="20px">
-                  <Flex>
-                    <Text fontWeight="bold">Name</Text>
-                    <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.recipientFirstname}{" "}
-                      {selectedAppointment.appointment.recipientLastname}
-                    </Text>
-                  </Flex>
-                  <Flex>
-                    <Text fontWeight="bold" fontSize="md">
-                      Location:
-                    </Text>
-                    <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.currentLocation}
-                    </Text>
-                  </Flex>
-
-                  <Flex>
-                    <Text fontWeight="bold" fontSize="md">
-                      Plan:
-                    </Text>
-                    <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.servicePlan}
-                    </Text>
-                  </Flex>
-                  <Flex>
-                    <Text fontWeight="bold" fontSize="md">
-                      Shift:
-                    </Text>
-                    <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.shift}
-                    </Text>
-                  </Flex>
-                  <Flex>
-                    <Text fontWeight="bold" fontSize="md">
-                      Contact details:
-                    </Text>
-                    <Text ml="5px" fontSize="md">
-                      {selectedAppointment.appointment.customerPhoneNumber}
-                    </Text>
-                  </Flex>
-                </Box>
-              </Flex>
-
-              <Progress
-                value={33}
-                size="md"
-                colorScheme="purple"
-                hasStripe
-                isAnimated
-                mt={4}
-                borderRadius="20px"
-              />
-              <Text fontSize="sm" color="gray.500" mt={2}>
-                33% completed
-              </Text> */}
+              Are you sure you want to cancel this request? <br></br>
+              This action is irreversible.
             </ModalBody>
-            <ModalFooter></ModalFooter>
+            <ModalFooter>
+              <Button
+                bg="#A210C6"
+                color="white"
+                onClick={handleCancelModalClose}
+              >
+                No
+              </Button>
+              <Button
+                bg="#E1ACAE"
+                color="red.500"
+                marginLeft="5px"
+                onClick={handleConfirmation}
+              >
+                Yes
+              </Button>
+            </ModalFooter>
           </ModalContent>
         </Modal>
       )}
+      <EditPendingMediRequest
+        isOpen={editModalOpen}
+        onClose={handleCloseEditModal}
+        appointmentDetails={selectedAppointment}
+      />
     </VStack>
   );
 };

@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../utils/Spiner";
-// import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import BookAppointmentModal from "../sections/BookAppointment";
-import { EditIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { EditIcon, CheckIcon, CloseIcon, WarningIcon } from "@chakra-ui/icons";
 import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
-import { WarningIcon } from "@chakra-ui/icons";
 import {
   VStack,
   Drawer,
@@ -28,7 +24,6 @@ import {
   Box,
   Text,
   Flex,
-  // extendTheme,
   Divider,
 } from "@chakra-ui/react";
 import PaymentModal from "../sections/PaymentMethod";
@@ -37,10 +32,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function PendingApp() {
   const toast = useToast();
-  // const navigate = useNavigate();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
-  const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +41,7 @@ export default function PendingApp() {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [cancellingAppointmentId, setCancellingAppointmentId] = useState(null);
+
   const handleCancelAppointment = (appointmentId) => {
     setCancellingAppointmentId(appointmentId);
     setConfirmationModalOpen(true);
@@ -59,16 +53,18 @@ export default function PendingApp() {
 
   const handlePayment = (selectedAppointment) => {
     setPaymentData({
-      costOfService: selectedAppointment.costOfService,
-      appointmentId: selectedAppointment.id,
-      beneficiary: `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`,
+      costOfService: selectedAppointment.customerAppointment.costOfService,
+      appointmentId: selectedAppointment.customerAppointment.id,
+      beneficiary: `${selectedAppointment.customerAppointment.recipientFirstname} ${selectedAppointment.customerAppointment.recipientLastname}`,
     });
     setTimeout(() => {
       setIsPaymentModalOpen(true);
     }, 1000);
   };
+
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
+
   const handleEditAppointment = (id) => {
     setEditModalOpen(true);
     setDetailsModalOpen(false);
@@ -76,10 +72,8 @@ export default function PendingApp() {
 
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
-    // navigate("/appointment");
-    // window.location.reload()
-    setSelectedAppointment(null); 
-   };
+    setSelectedAppointment(null);
+  };
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
@@ -94,7 +88,6 @@ export default function PendingApp() {
       };
 
       const response = await axios.get(
-        // "http://localhost:8080/v1/appointment/pendingAppointments",
         "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
         config
       );
@@ -121,58 +114,25 @@ export default function PendingApp() {
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
 
-    // Create a new Date object from the dateString
     const date = new Date(dateString);
-
-    // Add one hour to the date
     date.setHours(date.getHours() + 1);
 
-    // Format the date
     const formattedDate = date.toLocaleDateString(undefined, options);
 
     return formattedDate;
   };
 
-  const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
-    try {
-      const token = localStorage.getItem("token");
-      const apiUrl = `http://localhost:8080/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
-      // const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findPendingAppointmentDetails/${appointmentId}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.get(apiUrl, { headers });
-
-      if (response && response.data && response.data.success) {
-        setSelectedAppointment(response.data.data.data);
-        console.log("apps " + response.data.data.data);
-        setDetailsModalOpen(true);
-      } else {
-        console.error("Error fetching appointment details");
-      }
-    } catch (error) {
-      console.error(
-        "An error occurred while fetching appointment details:",
-        error
-      );
-    }
-  };
-
-  const handleOpenAppointmentModal = () => {
-    setShowAppointmentModal(true);
-  };
-
-  const handleCloseAppointmentModal = () => {
-    setShowAppointmentModal(false);
+  const handleViewMore = (appointmentId) => {
+    const appointment = pendingAppointments.find(
+      (app) => app.id === appointmentId
+    );
+    setSelectedAppointment(appointment || null);
+    setDetailsModalOpen(true);
   };
 
   const handleConfirmation = async () => {
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
       const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
 
       const headers = {
@@ -184,7 +144,6 @@ export default function PendingApp() {
 
       if (response.data.success) {
         toast({
-          // title: "Info",
           description: response.data.message,
           status: "success",
           duration: 5000,
@@ -193,7 +152,7 @@ export default function PendingApp() {
         fetchData();
         setDetailsModalOpen(false);
       } else {
-        toast.error("error canceling appointment");
+        toast.error("Error canceling appointment");
         console.error("Error canceling appointment");
       }
     } catch (error) {
@@ -201,18 +160,6 @@ export default function PendingApp() {
     } finally {
       setConfirmationModalOpen(false);
     }
-  };
-
-  const handleViewMore = async (id) => {
-    toast({
-      // title: "Success",
-      description: "Please wait.",
-      status: "info",
-      duration: 2000,
-      isClosable: true,
-      position: "top-right",
-    });
-    await fetchAndDisplayAppointmentDetails(id);
   };
 
   const formatDateTime = (dateTimeString) => {
@@ -263,23 +210,8 @@ export default function PendingApp() {
             ml={{ base: "-8px", md: "-20px" }}
             fontSize={{ base: "12px", md: "16px" }}
           >
-            No pending appointments. Click{" "}
-            <button
-              style={{
-                color: "#A210C6",
-                fontStyle: "italic",
-                textDecoration: "none",
-                cursor: "pointer",
-                border: "none",
-                background: "none",
-                padding: "0",
-                font: "inherit",
-              }}
-              onClick={handleOpenAppointmentModal}
-            >
-              book appointment
-            </button>{" "}
-            to book.
+            No pending appointments. 
+           
           </Text>
         ) : (
           <Box>
@@ -312,9 +244,7 @@ export default function PendingApp() {
             >
               {pendingAppointments.map((appointment) => (
                 <Box
-                  style={{
-                    cursor: "pointer",
-                  }}
+                  style={{ cursor: "pointer" }}
                   key={appointment.id}
                   onClick={() => handleViewMore(appointment.id)}
                   w={{ base: "85vw", md: "57vw" }}
@@ -332,15 +262,17 @@ export default function PendingApp() {
                       maxW={{ base: "80px", md: "100px" }}
                       wordWrap="break-word"
                     >
-                      {`${appointment.appointment.recipientFirstname} ${appointment.appointment.recipientLastname}`}
+                      {`${appointment.customerAppointment.recipientFirstname} ${appointment.customerAppointment.recipientLastname}`}
                     </Text>
-                    <Text
-                      maxW={{ base: "50px", md: "120px" }}
-                    >{`${appointment.appointment.shift} `}</Text>
+                    <Text maxW={{ base: "50px", md: "120px" }}>
+                      {`${appointment.customerAppointment.shift} `}
+                    </Text>
                     <Text
                       maxW={{ base: "60px", md: "120px" }}
                       wordWrap="break-word"
-                    >{`${appointment.appointment.servicePlan} `}</Text>
+                    >
+                      {`${appointment.customerAppointment.servicePlan} `}
+                    </Text>
                     <Box
                       w={{ base: "50px", md: "97px" }}
                       h={{ base: "25px", md: "33px" }}
@@ -348,7 +280,7 @@ export default function PendingApp() {
                       borderRadius="10px"
                       p="5px"
                       bg={
-                        appointment.appointment.appointmentPending
+                        appointment.customerAppointment.appointmentPending
                           ? "#F4DDA2"
                           : "#F4DDA2"
                       }
@@ -356,12 +288,12 @@ export default function PendingApp() {
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
                         color={
-                          appointment.appointment?.appointmentPending
+                          appointment.customerAppointment?.appointmentPending
                             ? "#B48B25"
                             : "#B48B25"
                         }
                       >
-                        {appointment.appointment?.appointmentPending
+                        {appointment.customerAppointment?.appointmentPending
                           ? "Pending"
                           : "Paired"}
                       </Text>
@@ -371,19 +303,18 @@ export default function PendingApp() {
                       h={{ base: "25px", md: "33px" }}
                       borderRadius="10px"
                       p="5px"
-                      // bg={appointment.appointment?.paid ? "#ACE1C1" : "red.200"}
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
                         fontWeight="bold"
                         textAlign="center"
                         color={
-                          appointment.appointment?.paid
+                          appointment.customerAppointment?.paid
                             ? "#057B1F"
-                            : "black.500"
+                            : "red.500"
                         }
                       >
-                        {appointment?.appointment.paid ? "Paid" : "Unpaid"}
+                        {appointment.customerAppointment?.paid ? "Paid" : "Unpaid"}
                       </Text>
                     </Box>
                   </Flex>
@@ -417,7 +348,7 @@ export default function PendingApp() {
                 leftIcon={<CloseIcon />}
               />
             </DrawerHeader>
-            {!selectedAppointment.paid && (
+            {!selectedAppointment.customerAppointment.paid && (
               <Button
                 ml={{ base: "5px" }}
                 bg="green.400"
@@ -429,7 +360,6 @@ export default function PendingApp() {
                 Pay for appointment
               </Button>
             )}
-
             <DrawerBody>
               <Flex flexDirection="column">
                 <Flex justifyContent="space-between" alignItems="center">
@@ -437,24 +367,24 @@ export default function PendingApp() {
                   <Text
                     fontSize="16px"
                     color={
-                      selectedAppointment.appointmentCompleted
+                      selectedAppointment?.customerAppointment?.appointmentCompleted
                         ? "green.500"
-                        : selectedAppointment.appointmentActive
+                        : selectedAppointment?.customerAppointment?.appointmentActive
                         ? "blue.500"
-                        : selectedAppointment.appointmentMatched
+                        : selectedAppointment?.customerAppointment?.appointmentMatched
                         ? "yellow.500"
-                        : selectedAppointment.appointmentPending
+                        : selectedAppointment?.customerAppointment?.appointmentPending
                         ? "yellow.500"
                         : "black"
                     }
                   >
-                    {selectedAppointment.appointmentCompleted
+                    {selectedAppointment?.customerAppointment?.appointmentCompleted
                       ? "Completed"
-                      : selectedAppointment.appointmentActive
+                      : selectedAppointment?.customerAppointment?.appointmentActive
                       ? "Active"
-                      : selectedAppointment.appointmentMatched
+                      : selectedAppointment?.customerAppointment?.appointmentMatched
                       ? "Paired"
-                      : selectedAppointment.appointmentPending
+                      : selectedAppointment?.customerAppointment?.appointmentPending
                       ? "Pending"
                       : "Unknown"}
                   </Text>
@@ -465,9 +395,9 @@ export default function PendingApp() {
                     Beneficiary name:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientFirstname &&
-                    selectedAppointment.recipientLastname
-                      ? `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`
+                    {selectedAppointment?.customerAppointment?.recipientFirstname &&
+                    selectedAppointment?.customerAppointment?.recipientLastname
+                      ? `${selectedAppointment?.customerAppointment?.recipientFirstname} ${selectedAppointment?.customerAppointment?.recipientLastname}`
                       : "Not available"}
                   </Text>
                 </Flex>
@@ -477,39 +407,18 @@ export default function PendingApp() {
                     Phone Number:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientPhoneNumber ||
+                    {selectedAppointment?.customerAppointment?.recipientPhoneNumber ||
                       "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
-                <Flex>
-                  <Text fontWeight="bold" color="black">
-                    Beneficiary name:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientFirstname &&
-                    selectedAppointment.recipientLastname
-                      ? `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`
-                      : "Not available"}
-                  </Text>
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-                {/* <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
-                    Phone Number:
-                  </Text>
-                  <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientPhoneNumber ||
-                      "Not available"}
-                  </Text>
-                </Flex> */}
-                {/* <Divider my={4} borderColor="gray.500" /> */}
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Gender:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientGender || "Not available"}
+                    {selectedAppointment?.customerAppointment?.recipientGender ||
+                      "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -518,7 +427,7 @@ export default function PendingApp() {
                     Date of Birth:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment.recipientDOB) ||
+                    {formatDate(selectedAppointment?.customerAppointment?.recipientDOB) ||
                       "Not available"}
                   </Text>
                 </Flex>
@@ -528,18 +437,17 @@ export default function PendingApp() {
                     Current Location:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.currentLocation || "Not availabe"}
+                    {selectedAppointment?.customerAppointment?.currentLocation ||
+                      "Not availabe"}
                   </Text>
                 </Flex>
-
                 <Divider my={4} borderColor="gray.500" />
-
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Relationship:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.relationship || "Nil"}
+                    {selectedAppointment?.customerAppointment?.relationship || "Nil"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -548,28 +456,26 @@ export default function PendingApp() {
                     Booked on:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formatDateTime(selectedAppointment.createdAt)}
+                    {formatDateTime(selectedAppointment?.customerAppointment?.createdAt)}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
-
                 <Box marginRight="20px">
                   <Flex>
                     <Text fontWeight="bold" color="black">
                       Shift:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.shift || "Not availabe"}
+                      {selectedAppointment?.customerAppointment?.shift || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
-
                   <Flex marginTop="5px">
                     <Text fontWeight="bold" color="black">
                       Service Plan:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.servicePlan || "Not availabe"}
+                      {selectedAppointment?.customerAppointment?.servicePlan || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -578,7 +484,7 @@ export default function PendingApp() {
                       Type of caregiver:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.medicSpecialization ||
+                      {selectedAppointment?.customerAppointment?.medicSpecialization ||
                         "Not availabe"}
                     </Text>
                   </Flex>
@@ -588,7 +494,7 @@ export default function PendingApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formattedCost(selectedAppointment.costOfService) ||
+                      {formattedCost(selectedAppointment?.customerAppointment?.costOfService) ||
                         "Not availabe"}
                     </Text>
                   </Flex>
@@ -598,7 +504,7 @@ export default function PendingApp() {
                       Start Date:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formatDate(selectedAppointment.startDate) ||
+                      {formatDate(selectedAppointment?.customerAppointment?.startDate) ||
                         "Not availabe"}
                     </Text>
                   </Flex>
@@ -608,7 +514,7 @@ export default function PendingApp() {
                       Medical Report:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.medicalReport || "Not availabe"}
+                      {selectedAppointment?.customerAppointment?.medicalReport || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -617,12 +523,11 @@ export default function PendingApp() {
                       Paid:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.paid ? "Yes" : "No"}
+                      {selectedAppointment?.customerAppointment?.paid ? "Yes" : "No"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
                 </Box>
-
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Health History:
@@ -633,7 +538,7 @@ export default function PendingApp() {
                     maxW="600px"
                     maxH="1000px"
                   >
-                    {selectedAppointment.recipientHealthHistory ||
+                    {selectedAppointment?.customerAppointment?.recipientHealthHistory ||
                       "Not available"}
                   </Text>
                 </Flex>
@@ -645,18 +550,15 @@ export default function PendingApp() {
                 color="white"
                 _hover={{ color: "" }}
                 leftIcon={<EditIcon />}
-                // fontSize={{ base: "12px", md: "16px" }}
                 onClick={handleEditAppointment}
               >
                 Edit
               </Button>
               <Button
-                // fontSize={{ base: "13px", md: "14px" }}
                 bg="#E1ACAE"
                 color="red.500"
-                // border="2px solid red"
                 _hover={{ color: "" }}
-                onClick={() => handleCancelAppointment(selectedAppointment.id)}
+                onClick={() => handleCancelAppointment(selectedAppointment?.customerAppointment.id)}
               >
                 Cancel
               </Button>
@@ -691,8 +593,8 @@ export default function PendingApp() {
                 No
               </Button>
               <Button
-                 bg="#E1ACAE"
-                 color="red.500"
+                bg="#E1ACAE"
+                color="red.500"
                 marginLeft="5px"
                 onClick={handleConfirmation}
               >
@@ -706,10 +608,6 @@ export default function PendingApp() {
         isOpen={editModalOpen}
         onClose={handleCloseEditModal}
         appointmentDetails={selectedAppointment}
-      />
-      <BookAppointmentModal
-        isOpen={showAppointmentModal}
-        onClose={handleCloseAppointmentModal}
       />
       <PaymentModal
         isOpen={isPaymentModalOpen}
