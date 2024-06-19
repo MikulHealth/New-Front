@@ -38,13 +38,11 @@ import PatientsPage from "./components/pages/PatientsPage";
 import InactivityLogout from "./InactivityLogout";
 import MedicAppPage from "./components/pages/MedicAppPage";
 
-
 function App() {
-  
   return (
     <div className="App">
       <BrowserRouter>
-      <InactivityLogout/>
+        {/* <InactivityLogout /> */}
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<AboutPage />}></Route>
@@ -56,7 +54,6 @@ function App() {
           <Route path="/complete" element={<CompletionPage />}></Route>
           <Route path="/patients" element={<PatientsPage />}></Route>
           <Route path="/medic-appointment" element={<MedicAppPage />}></Route>
-          
           <Route
             path="/verify-medic-number"
             element={<VerifyMedicNumber />}

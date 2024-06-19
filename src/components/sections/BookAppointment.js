@@ -43,6 +43,11 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
     setSelfAppointmentModalOpen(true);
   };
 
+  // const openReportDrawer = () => {
+  //   closeModal(); 
+  //   onOpen(); 
+  // };
+
   const handleCloseSelfAppointmentModal = () => {
     setSelfAppointmentModalOpen(false);
     setPages(null);

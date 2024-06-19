@@ -1,7 +1,7 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { WarningIcon } from "@chakra-ui/icons";
@@ -25,9 +25,9 @@ import {
   extendTheme,
   Textarea,
 } from "@chakra-ui/react";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SpecialNeedsForm from "./SpecialNeedsForm";
 
 const customTheme = extendTheme({
   components: {
@@ -45,6 +45,43 @@ const customTheme = extendTheme({
   },
 });
 
+const townsInLagos = [
+  "Ikeja",
+  "Ogudu",
+  "Berger",
+  "Surulere",
+  "Ikorodu",
+  "Epe",
+  "Badagry",
+  "Yaba",
+  "Victoria Island",
+  "Lekki",
+  "Lagos Island",
+  "Ajah",
+  "Sangotedo",
+  "Agege",
+  "Ikoyi",
+  "Okota",
+  "Mushin",
+  "Iyana Ipaja",
+  "Oshodi",
+  "Isolo",
+  "Ikotun",
+  "Festac",
+  "Ijesha",
+  "Maryland",
+  "Ojota",
+];
+
+const majorLanguages = [
+  "English",
+  "Yoruba",
+  "Igbo",
+  "Hausa",
+  "Pidgin",
+  "Other",
+];
+
 const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
@@ -55,6 +92,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [paymentData, setPaymentData] = useState({});
   const [priority, setPriority] = useState("");
+  const [specialNeeds, setSpecialNeeds] = useState([]);
+  const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
 
   const [formFields, setFormFields] = useState({
     startDate: null,
@@ -63,6 +102,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     currentLocation: "",
     medicalReport: "",
     recipientHealthHistory: "",
+    recipientTown: "",
+    preferredMedicGender: "",
+    preferredLanguage: "",
     costOfService: "",
   });
 
@@ -166,7 +208,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
+      const apiUrl = 
+       `http://localhost:8080/v1/appointment/save`;
+      // "https://backend-c1pz.onrender.com/v1/appointment/save";
 
       const headers = {
         "Content-Type": "application/json",
@@ -192,6 +236,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
         priority,
+        specialNeeds, // Include specialNeeds in the request
         ...userFieldsForBookForSelf,
       };
 
@@ -207,6 +252,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           currentLocation: "",
           medicalReport: "",
           recipientHealthHistory: "",
+          recipientTown: "",
+          preferredMedicGender: "",
+          preferredLanguage: "",
         });
         toast.success("Appointment saved");
         setPaymentData({
@@ -297,177 +345,249 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
             Book Appointment
           </DrawerHeader>
 
-          <Text p="40px" pt="5px">
-            <WarningIcon
-              fontFamily="body"
-              mb="5px"
-              w={10}
-              h={10}
-              color="yellow.400"
+          {showSpecialNeedsForm ? (
+            <SpecialNeedsForm
+              specialNeeds={specialNeeds}
+              setSpecialNeeds={setSpecialNeeds}
+              handleSubmit={handleFormSubmit}
+              handleBack={() => setShowSpecialNeedsForm(false)}
             />
-            <br /> Please note, all the services listed under{" "}
-            <strong>Service Plan</strong> are for monthly subscription with
-            24hrs shift or 8hrs (day) shift, and they expire after one month of
-            start of care. With the exception of short home visit and any custom
-            plan. You can create a custom plan here{" "}
-            <Link
-              to="/customize-service"
-              style={{
-                color: "#A210C6",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-              fontFamily="body"
-            >
-              create plan
-            </Link>
-          </Text>
+          ) : (
+            <>
+              <Text p="40px" pt="5px">
+                <WarningIcon
+                  fontFamily="body"
+                  mb="5px"
+                  w={10}
+                  h={10}
+                  color="yellow.400"
+                />
+                <br /> Please note, all the services listed under{" "}
+                <strong>Service Plan</strong> are for monthly subscription with
+                24hrs shift or 8hrs (day) shift, and they expire after one month
+                of start of care. With the exception of short home visit and any
+                custom plan. You can create a custom plan here{" "}
+                <Link
+                  to="/customize-service"
+                  style={{
+                    color: "#A210C6",
+                    fontWeight: "bold",
+                    fontStyle: "italic",
+                  }}
+                  fontFamily="body"
+                >
+                  create plan
+                </Link>
+              </Text>
 
-          <DrawerBody>
-            <FormControl>
-              <Flex
-                ml={{ base: "20px", md: "40px" }}
-                flexWrap="wrap"
-                marginTop="20px"
-              >
-                <Box w={{ base: "300px", md: "270px" }}>
-                  <FormLabel fontFamily="body" fontWeight="bold">
-                    Service Plan{" "}
-                  </FormLabel>
-                  <Select
-                    isRequired
-                    name="servicePlan"
-                    placeholder="preferred service plan"
-                    w={{ base: "300px", md: "270px" }}
-                    fontSize={{ base: "14px", md: "16px" }}
-                    value={formFields.servicePlan}
-                    onChange={handleInputChange}
-                  >
-                    <optgroup label="Standard Plans">
-                      <option value="Elderly care by a Licensed Nurse">
-                        Elderly care by a Licensed Nurse
-                      </option>
-                      <option value="Elderly care by a Nurse Assistant">
-                        Elderly care by a Nurse Assistant
-                      </option>
-                      <option value="Postpartum care">
-                        Postpartum care by a Licensed Nurse/Midwife
-                      </option>
-                      <option value="Nanny care">
-                        Nanny service by a Professional Nanny
-                      </option>
-                      <option value="Recovery care">
-                        Recovery care by a Licensed Nurse
-                      </option>
-                      <option value="Short home visit">
-                        Short home visit by a Licensed Nurse
-                      </option>
-                    </optgroup>
-                    <optgroup label="Custom Plans">
-                      {customizedPlans.map((plan) => (
-                        <option key={plan.id} value={plan.name}>
-                          {plan.name}
-                        </option>
-                      ))}
-                    </optgroup>
-                  </Select>
-                </Box>
-                <Box fontFamily="body" ml={{ md: "5px" }}>
-                  <FormLabel fontWeight="bold">Shift </FormLabel>
-                  <Select
-                    isRequired
-                    name="shift"
-                    placeholder="select preferred shift"
-                    w={{ base: "300px", md: "270px" }}
-                    value={formFields.shift}
-                    onChange={handleInputChange}
-                    disabled={isShiftDisabled}
-                  >
-                    <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
-                    <option value="Live-in (24hrs)">Live-in (24hrs)</option>
-                  </Select>
-                </Box>
-              </Flex>
-
-              <Flex flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
-                <Box w={{ base: "300px", md: "270px" }}>
-                  <FormLabel
-                    fontFamily="body"
-                    fontWeight="bold"
+              <DrawerBody>
+                <FormControl>
+                  <Flex
+                    ml={{ base: "20px", md: "40px" }}
+                    flexWrap="wrap"
                     marginTop="20px"
                   >
-                    Start Date
-                  </FormLabel>
-                  <Flex
-                    h="5vh"
-                    paddingTop="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
-                      isRequired
-                      selected={selectedStartDate}
-                      onChange={handleStartDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to start"
-                      className="form-control"
-                      minDate={new Date()}
-                    />
+                    <Box w={{ base: "300px", md: "270px" }}>
+                      <FormLabel fontFamily="body" fontWeight="bold">
+                        Service Plan{" "}
+                      </FormLabel>
+                      <Select
+                        isRequired
+                        name="servicePlan"
+                        placeholder="preferred service plan"
+                        w={{ base: "300px", md: "270px" }}
+                        fontSize={{ base: "14px", md: "16px" }}
+                        value={formFields.servicePlan}
+                        onChange={handleInputChange}
+                      >
+                        <optgroup label="Standard Plans">
+                          <option value="Elderly care by a Licensed Nurse">
+                            Elderly care by a Licensed Nurse
+                          </option>
+                          <option value="Elderly care by a Nurse Assistant">
+                            Elderly care by a Nurse Assistant
+                          </option>
+                          <option value="Postpartum care">
+                            Postpartum care by a Licensed Nurse/Midwife
+                          </option>
+                          <option value="Nanny care">
+                            Nanny service by a Professional Nanny
+                          </option>
+                          <option value="Recovery care">
+                            Recovery care by a Licensed Nurse
+                          </option>
+                          <option value="Short home visit">
+                            Short home visit by a Licensed Nurse
+                          </option>
+                        </optgroup>
+                        <optgroup label="Custom Plans">
+                          {customizedPlans.map((plan) => (
+                            <option key={plan.id} value={plan.name}>
+                              {plan.name}
+                            </option>
+                          ))}
+                        </optgroup>
+                      </Select>
+                    </Box>
+                    <Box fontFamily="body" ml={{ md: "5px" }}>
+                      <FormLabel fontWeight="bold">Shift </FormLabel>
+                      <Select
+                        isRequired
+                        name="shift"
+                        placeholder="select preferred shift"
+                        w={{ base: "300px", md: "270px" }}
+                        value={formFields.shift}
+                        onChange={handleInputChange}
+                        disabled={isShiftDisabled}
+                      >
+                        <option value="Day Shift (8hrs)">
+                          Day Shift (8hrs)
+                        </option>
+                        <option value="Live-in (24hrs)">Live-in (24hrs)</option>
+                      </Select>
+                    </Box>
                   </Flex>
-                </Box>
-                <Box ml={{ md: "5px" }} marginTop="20px">
-                  <FormLabel fontWeight="bold" fontFamily="body">
-                    Current Location{" "}
-                  </FormLabel>
-                  <Flex>
-                    <Input
+
+                  <Flex flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
+                    <Box w={{ base: "300px", md: "270px" }}>
+                      <FormLabel
+                        fontFamily="body"
+                        fontWeight="bold"
+                        marginTop="20px"
+                      >
+                        Start Date
+                      </FormLabel>
+                      <Flex
+                        h="5vh"
+                        paddingTop="5px"
+                        paddingLeft="15px"
+                        style={{
+                          border: "1px solid #ccc",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        <DatePicker
+                          isRequired
+                          selected={selectedStartDate}
+                          onChange={handleStartDateChange}
+                          peekNextMonth
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                          dateFormat="dd-MM-yyyy"
+                          placeholderText="preferred date to start"
+                          className="form-control"
+                          minDate={new Date()}
+                        />
+                      </Flex>
+                    </Box>
+                    <Box ml={{ md: "5px" }} marginTop="20px">
+                      <FormLabel fontWeight="bold" fontFamily="body">
+                        Current Location{" "}
+                      </FormLabel>
+                      <Flex>
+                        <Input
+                          isRequired
+                          name="currentLocation"
+                          type="text"
+                          placeholder="current Location"
+                          value={formFields.currentLocation}
+                          onChange={handleInputChange}
+                          w={{ base: "300px", md: "270px" }}
+                        />
+                      </Flex>
+                    </Box>
+                  </Flex>
+
+                  <Flex flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
+                    <Box w={{ base: "300px", md: "270px" }}>
+                      <FormLabel fontFamily="body" fontWeight="bold">
+                        Town{" "}
+                      </FormLabel>
+                      <Select
+                        isRequired
+                        name="recipientTown"
+                        placeholder="select town"
+                        w={{ base: "300px", md: "270px" }}
+                        fontSize={{ base: "14px", md: "16px" }}
+                        value={formFields.recipientTown}
+                        onChange={handleInputChange}
+                      >
+                        {townsInLagos.map((town) => (
+                          <option key={town} value={town}>
+                            {town}
+                          </option>
+                        ))}
+                      </Select>
+                    </Box>
+                    <Box ml={{ md: "5px" }} marginTop="20px">
+                      <FormLabel fontWeight="bold" fontFamily="body">
+                        Preferred Medic Gender{" "}
+                      </FormLabel>
+                      <Select
+                        isRequired
+                        name="preferredMedicGender"
+                        placeholder="select gender"
+                        w={{ base: "300px", md: "270px" }}
+                        fontSize={{ base: "14px", md: "16px" }}
+                        value={formFields.preferredMedicGender}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </Select>
+                    </Box>
+                  </Flex>
+
+                  <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                    <FormLabel fontWeight="bold" fontFamily="body">
+                      Preferred Language{" "}
+                    </FormLabel>
+                    <Select
                       isRequired
-                      name="currentLocation"
-                      type="text"
-                      placeholder="current Location"
-                      value={formFields.currentLocation}
-                      onChange={handleInputChange}
+                      name="preferredLanguage"
+                      placeholder="select language"
                       w={{ base: "300px", md: "270px" }}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      value={formFields.preferredLanguage}
+                      onChange={handleInputChange}
+                    >
+                      {majorLanguages.map((language) => (
+                        <option key={language} value={language}>
+                          {language}
+                        </option>
+                      ))}
+                    </Select>
+                  </Box>
+
+                  <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                    <FormLabel fontWeight="bold" fontFamily="body">
+                      Health History <br></br>(Is there anything you'd like us to know?)
+                    </FormLabel>
+                    <Textarea
+                      name="recipientHealthHistory"
+                      type="text"
+                      placeholder="share health history"
+                      value={formFields.recipientHealthHistory}
+                      onChange={handleInputChange}
+                      w={{ base: "300px", md: "550px" }}
                     />
-                  </Flex>
-                </Box>
-              </Flex>
-
-              <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
-                <FormLabel fontWeight="bold" fontFamily="body">
-                  Health History{" "}
-                </FormLabel>
-                <Textarea
-                  name="recipientHealthHistory"
-                  type="text"
-                  placeholder="share health history and any special need we should know"
-                  value={formFields.recipientHealthHistory}
-                  onChange={handleInputChange}
-                  w={{ base: "300px", md: "550px" }}
-                />
-              </Box>
-
-             
-            </FormControl>
-          </DrawerBody>
-          <DrawerFooter>
-            <Button
-              w="150px"
-              isLoading={loading}
-              loadingText="Processing..."
-              bg="#A210C6"
-              color="white"
-              onClick={handleFormSubmit}
-              borderRadius="100px"
-              _hover={{ color: "" }}
-            >
-              {loading ? "Processing..." : "Submit"}
-            </Button>
-          </DrawerFooter>
+                  </Box>
+                  <Box justifyContent="center">
+                    <Button
+                      w="150px"
+                      bg="#A210C6"
+                      color="white"
+                      mt="20px"
+                      onClick={() => setShowSpecialNeedsForm(true)}
+                    >
+                      Next
+                    </Button>
+                  </Box>
+                </FormControl>
+              </DrawerBody>
+            </>
+          )}
         </DrawerContent>
       </Drawer>
       <PaymentModal

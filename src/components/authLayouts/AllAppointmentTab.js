@@ -56,8 +56,8 @@ export default function AppointmentTab() {
       };
 
       const response = await axios.get(
-        "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
-        // "http://localhost:8080/v1/appointment/allAppointments",
+       // "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
+       "http://localhost:8080/v1/appointment/allAppointments",
         config
       );
 
@@ -486,7 +486,33 @@ export default function AppointmentTab() {
                     {selectedAppointment.currentLocation || "Not available"}
                   </Text>
                 </Flex>
-
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Town:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.recipientTown || "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Gender:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.preferredMedicGender || "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Language:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.preferredLanguage || "Not available"}
+                  </Text>
+                </Flex>
                 <Divider my={4} borderColor="gray.500" />
 
                 <Flex marginTop="5px">
@@ -588,6 +614,24 @@ export default function AppointmentTab() {
                   >
                     {selectedAppointment.recipientHealthHistory ||
                       "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+              </Box>
+              <Box>
+                <Flex marginTop="5px">
+                  <Text marginLeft="20px" fontWeight="bold" color="black">
+                    Special Needs:
+                  </Text>
+                  <Text
+                    marginLeft="10px"
+                    color="black"
+                    maxW="600px"
+                    maxH="1000px"
+                  >
+                    {selectedAppointment.specialNeeds && selectedAppointment.specialNeeds.length > 0
+                      ? selectedAppointment.specialNeeds.join(", ")
+                      : "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />

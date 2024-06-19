@@ -81,20 +81,22 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     const { name, value } = e.target;
 
     if (name === "servicePlan") {
-      const selectedPlan = customizedPlans.find(plan => plan.name === value);
+      const selectedPlan = customizedPlans.find((plan) => plan.name === value);
 
       if (selectedPlan) {
         setFormFields({
           ...formFields,
           [name]: value,
           shift: selectedPlan.shift,
-          costOfService: parseFloat(selectedPlan.costOfService.replace(/[,]/g, "")),
+          costOfService: parseFloat(
+            selectedPlan.costOfService.replace(/[,]/g, "")
+          ),
           medicSpecialization: selectedPlan.preferredCaregiver,
         });
-        setShiftDisabled(true);  // Disable shift selection because it's a customized plan
+        setShiftDisabled(true); // Disable shift selection because it's a customized plan
       } else {
-        setFormFields({ ...formFields, [name]: value, shift: '' });
-        setShiftDisabled(false);  // Enable shift selection for non-customized plans
+        setFormFields({ ...formFields, [name]: value, shift: "" });
+        setShiftDisabled(false); // Enable shift selection for non-customized plans
       }
     } else {
       setFormFields({ ...formFields, [name]: value });
@@ -194,7 +196,9 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
       } else {
         setLoading(false);
         console.error("Error booking appointment");
-        const errorMessage = response.data ? response.data.message : "Unknown error";
+        const errorMessage = response.data
+          ? response.data.message
+          : "Unknown error";
         toast.error(errorMessage);
       }
     } catch (error) {
@@ -278,7 +282,8 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary";
+      const apiUrl =
+        "https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary";
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -304,7 +309,9 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
       } else {
         setLoading(false);
         console.error("Error adding beneficiary");
-        const errorMessage = response.data ? response.data.message : "Unknown error";
+        const errorMessage = response.data
+          ? response.data.message
+          : "Unknown error";
         toast.error(errorMessage);
       }
     } catch (error) {
@@ -316,7 +323,12 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+      <Drawer
+        theme={customTheme}
+        isOpen={isOpen}
+        onClose={onClose}
+        size={{ base: "md", md: "lg" }}
+      >
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -331,16 +343,22 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent alignItems="center">
           <DrawerCloseButton />
-          <DrawerHeader color="#A210C6" fontFamily="heading">Book Appointment</DrawerHeader>
+          <DrawerHeader color="#A210C6" fontFamily="heading">
+            Book Appointment
+          </DrawerHeader>
           <Text p="40px" pt="5px">
-            <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
-            <br /> Please note, all the services listed under <strong>
-              Service Plan
-            </strong>{" "}
-            are for monthly subscription with 24hrs shift or 8hrs (day) shift,
-            and they expire after one month of start of care. With the exception of short home visit and any custom
-            plan. You can create a
-            custom plan here{" "}
+            <WarningIcon
+              fontFamily="body"
+              mb="5px"
+              w={10}
+              h={10}
+              color="yellow.400"
+            />
+            <br /> Please note, all the services listed under{" "}
+            <strong>Service Plan</strong> are for monthly subscription with
+            24hrs shift or 8hrs (day) shift, and they expire after one month of
+            start of care. With the exception of short home visit and any custom
+            plan. You can create a custom plan here{" "}
             <Link
               to="/customize-service"
               style={{
@@ -354,8 +372,13 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
             </Link>
           </Text>
           <DrawerBody>
-            <FormControl ml={{ base: "25px", md: "0" }} w={{base: "80%", md: "100%"}}>
-              <FormLabel fontWeight="bold" fontFamily="heading">Enter Beneficiary details</FormLabel>
+            <FormControl
+              ml={{ base: "25px", md: "0" }}
+              w={{ base: "80%", md: "100%" }}
+            >
+              <FormLabel fontWeight="bold" fontFamily="heading">
+                Enter Beneficiary details
+              </FormLabel>
               <Flex display={{ base: "block", md: "flex" }}>
                 <InputGroup>
                   <Input
@@ -379,7 +402,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
               <Flex flexWrap="wrap">
                 <Box>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                  <FormLabel
+                    fontFamily="body"
+                    fontWeight="bold"
+                    marginTop="20px"
+                  >
                     Gender{" "}
                   </FormLabel>
                   <Select
@@ -393,7 +420,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                     <option value="Female">Female</option>
                   </Select>
                 </Box>
-                <Box fontFamily="body" ml={{ md: "5px" }} w={{ base: "300px", md: "270px" }}>
+                <Box
+                  fontFamily="body"
+                  ml={{ md: "5px" }}
+                  w={{ base: "300px", md: "270px" }}
+                >
                   <FormLabel fontWeight="bold" marginTop="20px">
                     Date of Birth
                   </FormLabel>
@@ -421,7 +452,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
               <Flex flexWrap="wrap" marginTop="1px">
                 <Box>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                  <FormLabel
+                    fontFamily="body"
+                    fontWeight="bold"
+                    marginTop="20px"
+                  >
                     Contact Number{" "}
                   </FormLabel>
                   <InputGroup>
@@ -439,7 +474,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                   </InputGroup>
                 </Box>
                 <Box ml={{ md: "5px" }}>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                  <FormLabel
+                    fontFamily="body"
+                    fontWeight="bold"
+                    marginTop="20px"
+                  >
                     Relationship with beneficiary{" "}
                   </FormLabel>
                   <Select
@@ -473,7 +512,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
               </Flex>
               <Flex flexWrap="wrap">
                 <Box ml={{ md: "5px" }}>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                  <FormLabel
+                    fontFamily="body"
+                    fontWeight="bold"
+                    marginTop="20px"
+                  >
                     Service Plan{" "}
                   </FormLabel>
                   <Select
@@ -516,7 +559,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                 </Box>
 
                 <Box ml={{ md: "5px" }}>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                  <FormLabel
+                    fontFamily="body"
+                    fontWeight="bold"
+                    marginTop="20px"
+                  >
                     Shift{" "}
                   </FormLabel>
                   <Select
@@ -559,7 +606,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                   </Flex>
                 </Box>
                 <Box ml={{ md: "5px" }}>
-                  <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                  <FormLabel
+                    fontFamily="body"
+                    fontWeight="bold"
+                    marginTop="20px"
+                  >
                     Current Location{" "}
                   </FormLabel>
                   <Flex>
