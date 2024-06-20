@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import {
   FormLabel,
   Checkbox,
@@ -18,7 +18,7 @@ const SpecialNeedsForm = ({
   handleBack,
 }) => {
     
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const specialNeedsCategories = {
     "Mobility Assistance": [
       "Wheelchair User",
@@ -132,13 +132,14 @@ const SpecialNeedsForm = ({
           Back
         </Button>
         <Button
-          isLoading={loading}
-          loadingText="Processing..."
+          // isLoading={loading}
+          // loadingText="Processing..."
           onClick={handleSubmit}
           bg="#A210C6"
           color="white"
         >
-           {loading ? "Processing..." : "Submit"}
+           {/* {loading ? "Processing..." : "Submit"} */}
+           Submit
         </Button>
       </Flex>
     </Box>
