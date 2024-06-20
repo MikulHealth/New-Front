@@ -212,6 +212,7 @@ const MedicAppPage = () => {
               justifyContent="center"
               className="appointment-tabs"
               overflow={{ base: "hidden", md: "hidden" }}
+              
             >
               <VStack ml={{ md: "-180px" }} w="full" {...swipeHandlers}>
                 <Tabs

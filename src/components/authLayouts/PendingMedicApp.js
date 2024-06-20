@@ -38,8 +38,8 @@ const PendingMedicAppTab = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:8080/v1/appointment/pending",
-          // "https://backend-c1pz.onrender.com/v1/appointment/pending",
+          // "http://localhost:8080/v1/appointment/pending",
+          "https://backend-c1pz.onrender.com/v1/appointment/pending",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -49,7 +49,11 @@ const PendingMedicAppTab = () => {
 
         if (response.data.success) {
           setLoading(false);
-          setAppointments(response.data.data);
+          const sortedAppointments = response.data.data.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setAppointments(sortedAppointments);
+          // setAppointments(response.data.data);
         } else {
           setLoading(false);
           console.error("Failed to fetch appointments:", response.data.message);

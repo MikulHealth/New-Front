@@ -13,7 +13,7 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
-  DrawerFooter,
+  // DrawerFooter,
   FormControl,
   FormLabel,
   Input,
@@ -208,9 +208,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const apiUrl = 
-       `http://localhost:8080/v1/appointment/save`;
-      // "https://backend-c1pz.onrender.com/v1/appointment/save";
+      const apiUrl =
+        //  `http://localhost:8080/v1/appointment/save`;
+        "https://backend-c1pz.onrender.com/v1/appointment/save";
 
       const headers = {
         "Content-Type": "application/json",
@@ -562,7 +562,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
                   <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
                     <FormLabel fontWeight="bold" fontFamily="body">
-                      Health History <br></br>(Is there anything you'd like us to know?)
+                      Health History <br></br>(Is there anything you'd like us
+                      to know?)
                     </FormLabel>
                     <Textarea
                       name="recipientHealthHistory"
@@ -575,13 +576,15 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                   </Box>
                   <Box justifyContent="center">
                     <Button
+                      isLoading={loading}
+                      loadingText="Loading..."
                       w="150px"
                       bg="#A210C6"
                       color="white"
                       mt="20px"
                       onClick={() => setShowSpecialNeedsForm(true)}
                     >
-                      Next
+                      {loading ? "Loading..." : "Next"}
                     </Button>
                   </Box>
                 </FormControl>

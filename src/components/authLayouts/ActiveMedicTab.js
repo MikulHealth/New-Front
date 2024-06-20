@@ -43,7 +43,11 @@ const ActiveMedicAppTab = () => {
 
           if (response.data.success) {
             setLoading(false);
-            setAppointments(response.data.data);
+            const sortedAppointments = response.data.data.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
+            setAppointments(sortedAppointments);
+            // setAppointments(response.data.data);
           } else {
             setLoading(false);
             console.error(
@@ -76,7 +80,7 @@ const ActiveMedicAppTab = () => {
 
   if (appointments.length === 0) {
     return (
-      <VStack  ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
+      <VStack ml={{ base: "50", md: "300px" }} spacing={4} align="stretch">
         <Text fontStyle="italic" fontSize={{ base: "12px", md: "16px" }}>
           You have no active appointment.
         </Text>
@@ -187,8 +191,14 @@ const ActiveMedicAppTab = () => {
                   <Flex>
                     <Text fontWeight="bold">Name</Text>
                     <Text ml="5px" fontSize="md">
-                      {selectedAppointment.customerAppointment.recipientFirstname}{" "}
-                      {selectedAppointment.customerAppointment.recipientLastname}
+                      {
+                        selectedAppointment.customerAppointment
+                          .recipientFirstname
+                      }{" "}
+                      {
+                        selectedAppointment.customerAppointment
+                          .recipientLastname
+                      }
                     </Text>
                   </Flex>
                   <Flex>
@@ -221,7 +231,10 @@ const ActiveMedicAppTab = () => {
                       Contact details:
                     </Text>
                     <Text ml="5px" fontSize="md">
-                      {selectedAppointment.customerAppointment.customerPhoneNumber}
+                      {
+                        selectedAppointment.customerAppointment
+                          .customerPhoneNumber
+                      }
                     </Text>
                   </Flex>
                 </Box>

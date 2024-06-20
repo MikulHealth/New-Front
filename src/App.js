@@ -42,7 +42,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <InactivityLogout /> */}
+        <InactivityLogout />
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<AboutPage />}></Route>

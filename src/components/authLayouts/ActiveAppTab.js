@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../utils/Spiner";
 import axios from "axios";
-import {CloseIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   VStack,
   Drawer,
@@ -24,15 +24,11 @@ export default function ActiveApp() {
   const [loading, setLoading] = useState(true);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  
-
 
   const closeDetailsDrawer = () => {
     setDetailsModalOpen(false);
     setSelectedAppointment(null);
   };
-
- 
 
   const fetchData = async () => {
     try {
@@ -95,7 +91,6 @@ export default function ActiveApp() {
     return "₦ " + num.toLocaleString();
   };
 
- 
   return (
     <Box
       className="pending-appointment"
@@ -124,7 +119,6 @@ export default function ActiveApp() {
             fontSize={{ base: "12px", md: "16px" }}
           >
             No active appointment.
-          
           </Text>
         ) : (
           <Box>
@@ -171,11 +165,19 @@ export default function ActiveApp() {
                     ml={{ base: "-15px", md: "-16px" }}
                     justifyContent="space-between"
                   >
-                    <Text maxW={{ base: "80px", md: "100px" }} wordWrap="break-word">
+                    <Text
+                      maxW={{ base: "80px", md: "100px" }}
+                      wordWrap="break-word"
+                    >
                       {`${appointment.recipientFirstname} ${appointment.recipientLastname}`}
                     </Text>
-                    <Text maxW={{ base: "50px", md: "120px" }}>{`${appointment.shift} `}</Text>
-                    <Text maxW={{ base: "60px", md: "120px" }} wordWrap="break-word">
+                    <Text
+                      maxW={{ base: "50px", md: "120px" }}
+                    >{`${appointment.shift} `}</Text>
+                    <Text
+                      maxW={{ base: "60px", md: "120px" }}
+                      wordWrap="break-word"
+                    >
                       {`${appointment.servicePlan} `}
                     </Text>
                     <Box
@@ -188,7 +190,9 @@ export default function ActiveApp() {
                     >
                       <Text
                         fontSize={{ base: "10px", md: "14px" }}
-                        color={appointment.appointmentActive ? "#057B1F" : "#057B1F"}
+                        color={
+                          appointment.appointmentActive ? "#057B1F" : "#057B1F"
+                        }
                       >
                         {appointment.appointmentActive ? "Active" : "Active"}
                       </Text>
@@ -216,7 +220,11 @@ export default function ActiveApp() {
         )}
       </VStack>
       {detailsModalOpen && selectedAppointment && (
-        <Drawer isOpen={detailsModalOpen} onClose={closeDetailsDrawer} size="md">
+        <Drawer
+          isOpen={detailsModalOpen}
+          onClose={closeDetailsDrawer}
+          size="md"
+        >
           <DrawerOverlay />
           <DrawerContent>
             <DrawerHeader
@@ -229,9 +237,13 @@ export default function ActiveApp() {
               color="#A210C6"
             >
               Appointment Details
-              <Button variant="ghost" onClick={closeDetailsDrawer} leftIcon={<CloseIcon />} />
+              <Button
+                variant="ghost"
+                onClick={closeDetailsDrawer}
+                leftIcon={<CloseIcon />}
+              />
             </DrawerHeader>
-            
+
             <DrawerBody>
               <Flex flexDirection="column">
                 <Flex justifyContent="space-between" alignItems="center">
@@ -267,7 +279,8 @@ export default function ActiveApp() {
                     Beneficiary name:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientFirstname && selectedAppointment.recipientLastname
+                    {selectedAppointment.recipientFirstname &&
+                    selectedAppointment.recipientLastname
                       ? `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`
                       : "Not available"}
                   </Text>
@@ -278,7 +291,8 @@ export default function ActiveApp() {
                     Phone Number:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment.recipientPhoneNumber || "Not available"}
+                    {selectedAppointment.recipientPhoneNumber ||
+                      "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -296,7 +310,8 @@ export default function ActiveApp() {
                     Date of Birth:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment.recipientDOB) || "Not available"}
+                    {formatDate(selectedAppointment.recipientDOB) ||
+                      "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -306,6 +321,34 @@ export default function ActiveApp() {
                   </Text>
                   <Text marginLeft="20px" color="black">
                     {selectedAppointment.currentLocation || "Not availabe"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    City/Town:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.recipientTown || "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Caregiver Gender:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.preferredMedicGender ||
+                      "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Cargiver Language:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.preferredLanguage || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -351,7 +394,8 @@ export default function ActiveApp() {
                       Type of caregiver:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment.medicSpecialization || "Not availabe"}
+                      {selectedAppointment.medicSpecialization ||
+                        "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -360,7 +404,8 @@ export default function ActiveApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formattedCost(selectedAppointment.costOfService) || "Not availabe"}
+                      {formattedCost(selectedAppointment.costOfService) ||
+                        "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -369,7 +414,8 @@ export default function ActiveApp() {
                       Start Date:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formatDate(selectedAppointment.startDate) || "Not availabe"}
+                      {formatDate(selectedAppointment.startDate) ||
+                        "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -392,6 +438,8 @@ export default function ActiveApp() {
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
                 </Box>
+              </Flex>
+              <Box>
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Health History:
@@ -402,17 +450,36 @@ export default function ActiveApp() {
                     maxW="600px"
                     maxH="1000px"
                   >
-                    {selectedAppointment.recipientHealthHistory || "Not available"}
+                    {selectedAppointment.recipientHealthHistory ||
+                      "Not available"}
                   </Text>
                 </Flex>
-              </Flex>
+                <Divider my={4} borderColor="gray.500" />
+              </Box>
+              <Box>
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Special Needs:
+                  </Text>
+                  <Text
+                    marginLeft="10px"
+                    color="black"
+                    maxW="600px"
+                    maxH="1000px"
+                  >
+                    {selectedAppointment.specialNeeds &&
+                    selectedAppointment.specialNeeds.length > 0
+                      ? selectedAppointment.specialNeeds.join(", ")
+                      : "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+              </Box>
             </DrawerBody>
             <DrawerFooter justifyContent="space-between"></DrawerFooter>
           </DrawerContent>
         </Drawer>
       )}
-     
-     
     </Box>
   );
 }

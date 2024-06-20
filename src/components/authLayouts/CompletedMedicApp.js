@@ -23,7 +23,11 @@ const CompletedMedicAppTab = () => {
 
           if (response.data.success) {
             setLoading(false);
-            setAppointments(response.data.data);
+            const sortedAppointments = response.data.data.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
+            setAppointments(sortedAppointments);
+            // setAppointments(response.data.data);
           } else {
             setLoading(false);
             console.error(

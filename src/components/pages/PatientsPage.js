@@ -100,8 +100,8 @@ const PatientsPage = () => {
   };
 
   const openReportDrawer = () => {
-    closeModal(); 
-    onOpen(); 
+    closeModal();
+    onOpen();
   };
 
   const formatDateTime = (dateString) => {
@@ -198,13 +198,29 @@ const PatientsPage = () => {
                             {patient.customerAppointment.servicePlan}
                           </Text>
                           <Badge
-                            bg={patient.active ? "#ACE1C1" : patient.completed ? "#D087E2" : "gray"}
+                            bg={
+                              patient.active
+                                ? "#ACE1C1"
+                                : patient.completed
+                                ? "#D087E2"
+                                : "gray"
+                            }
                             p={2}
                             borderRadius="30px"
-                            color={patient.active ? "#057B1F" : patient.completed ? "#A210C6" : "white"}
+                            color={
+                              patient.active
+                                ? "#057B1F"
+                                : patient.completed
+                                ? "#A210C6"
+                                : "white"
+                            }
                             fontSize="11px"
                           >
-                            {patient.active ? "Ongoing" : patient.completed ? "Completed" : "Unknown"}
+                            {patient.active
+                              ? "Ongoing"
+                              : patient.completed
+                              ? "Completed"
+                              : "Unknown"}
                           </Badge>
                         </Flex>
                       ))}
@@ -215,7 +231,7 @@ const PatientsPage = () => {
                     <Modal
                       isOpen={isModalOpen}
                       onClose={closeModal}
-                      size={{ base: "sm", md: "md" }}
+                      size={{ base: "sm", md: "2xl" }}
                     >
                       <ModalOverlay />
                       <ModalContent
@@ -239,7 +255,9 @@ const PatientsPage = () => {
                           >
                             <Avatar
                               name={`${selectedPatient.customerAppointment.recipientFirstname} ${selectedPatient.customerAppointment.recipientLastname}`}
-                              src={selectedPatient.customerAppointment.picturePath}
+                              src={
+                                selectedPatient.customerAppointment.picturePath
+                              }
                               bg="gray.500"
                               color="white"
                               w={{ base: "100px", md: "100px" }}
@@ -252,8 +270,14 @@ const PatientsPage = () => {
                                   Name:
                                 </Text>
                                 <Text ml="5px" fontSize="lg" mt="2">
-                                  {selectedPatient.customerAppointment.recipientFirstname}{" "}
-                                  {selectedPatient.customerAppointment.recipientLastname}
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .recipientFirstname
+                                  }{" "}
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .recipientLastname
+                                  }
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -261,7 +285,21 @@ const PatientsPage = () => {
                                   Location:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.customerAppointment.currentLocation}
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .currentLocation
+                                  }
+                                </Text>
+                              </Flex>
+                              <Flex wrap="wrap">
+                                <Text fontWeight="bold" mt="2">
+                                  City/Town:
+                                </Text>
+                                <Text ml="5px" mt="2">
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .recipientTown
+                                  }
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -269,7 +307,10 @@ const PatientsPage = () => {
                                   Phone number:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.customerAppointment.recipientPhoneNumber}
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .recipientPhoneNumber
+                                  }
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -277,7 +318,10 @@ const PatientsPage = () => {
                                   Gender:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.customerAppointment.recipientGender}
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .recipientGender
+                                  }
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -285,7 +329,10 @@ const PatientsPage = () => {
                                   Date of Birth:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {formatDateTime(selectedPatient.customerAppointment.recipientDOB)}
+                                  {formatDateTime(
+                                    selectedPatient.customerAppointment
+                                      .recipientDOB
+                                  )}
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -293,7 +340,10 @@ const PatientsPage = () => {
                                   Service Plan:
                                 </Text>
                                 <Text ml="5px" mt="2">
-                                  {selectedPatient.customerAppointment.servicePlan}
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .servicePlan
+                                  }
                                 </Text>
                               </Flex>
                               <Flex wrap="wrap">
@@ -311,7 +361,8 @@ const PatientsPage = () => {
                                 <Text ml="5px" mt="2">
                                   N{" "}
                                   {parseFloat(
-                                    selectedPatient.customerAppointment.costOfService
+                                    selectedPatient.customerAppointment
+                                      .costOfService
                                   ).toLocaleString()}
                                 </Text>
                               </Flex>
@@ -324,7 +375,28 @@ const PatientsPage = () => {
                                   ml="5px"
                                   mt="2"
                                 >
-                                  {selectedPatient.customerAppointment.recipientHealthHistory}
+                                  {
+                                    selectedPatient.customerAppointment
+                                      .recipientHealthHistory
+                                  }
+                                </Text>
+                              </Flex>
+                              <Flex wrap="wrap">
+                                <Text fontWeight="bold" mt="2">
+                                  Special Needs:
+                                </Text>
+                                <Text
+                                  marginLeft="10px"
+                                  color="black"
+                                  maxW="600px"
+                                  maxH="1000px"
+                                >
+                                  {selectedPatient?.customerAppointment?.specialNeeds &&
+                                  selectedPatient?.customerAppointment?.specialNeeds.length > 0
+                                    ? selectedPatient.customerAppointment.specialNeeds.join(
+                                        ", "
+                                      )
+                                    : "Not available"}
                                 </Text>
                               </Flex>
                             </Box>

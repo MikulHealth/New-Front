@@ -55,7 +55,11 @@ const AllMedicAppTab = () => {
 
         if (response.data.success) {
           setLoading(false);
-          setAppointments(response.data.data);
+          const sortedAppointments = response.data.data.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setAppointments(sortedAppointments);
+          // setAppointments(response.data.data);
         } else {
           setLoading(false);
           console.error("Failed to fetch appointments:", response.data.message);
@@ -162,7 +166,7 @@ const AllMedicAppTab = () => {
   }
 
   return (
-    <VStack spacing={4} align="stretch">
+    <VStack  spacing={4} align="stretch">
       {appointments.map((appointment, index) => {
         let borderColor = "gray.200";
         if (appointment.active) {
@@ -182,12 +186,12 @@ const AllMedicAppTab = () => {
             borderRadius="lg"
             justify="space-between"
             align="center"
+            
             border={`1px solid ${borderColor}`}
             w="full"
           >
             <Flex direction="column" flex="1">
-              {appointment.pending ||
-              appointment.matched ? (
+              {appointment.pending || appointment.matched ? (
                 <>
                   <Flex>
                     <Box>
@@ -300,8 +304,7 @@ const AllMedicAppTab = () => {
                 </>
               )}
             </Flex>
-            {appointment.active ||
-            appointment.completed ? (
+            {appointment.active || appointment.completed ? (
               <Box ml={{ base: "50", md: "310px" }}>
                 <Badge
                   mb="20px"
@@ -361,8 +364,14 @@ const AllMedicAppTab = () => {
                     <Flex>
                       <Text fontWeight="bold">Name</Text>
                       <Text ml="1">
-                        {selectedAppointment.customerAppointment.recipientFirstname}{" "}
-                        {selectedAppointment.customerAppointment.recipientLastname}
+                        {
+                          selectedAppointment.customerAppointment
+                            .recipientFirstname
+                        }{" "}
+                        {
+                          selectedAppointment.customerAppointment
+                            .recipientLastname
+                        }
                       </Text>
                     </Flex>
                     <Flex>
@@ -370,7 +379,10 @@ const AllMedicAppTab = () => {
                         Location:
                       </Text>
                       <Text ml="5px" fontSize="md">
-                        {selectedAppointment.customerAppointment.currentLocation}
+                        {
+                          selectedAppointment.customerAppointment
+                            .currentLocation
+                        }
                       </Text>
                     </Flex>
 
@@ -403,7 +415,7 @@ const AllMedicAppTab = () => {
               )}
 
               <Progress
-                value={33}
+                value={100}
                 size="md"
                 colorScheme="purple"
                 hasStripe
@@ -412,7 +424,7 @@ const AllMedicAppTab = () => {
                 borderRadius="20px"
               />
               <Text fontSize="sm" color="gray.500" mt={2}>
-                33% completed
+                100% completed
               </Text>
             </ModalBody>
             <ModalFooter></ModalFooter>

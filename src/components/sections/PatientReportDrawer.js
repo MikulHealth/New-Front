@@ -73,6 +73,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     bloodSugar: "",
     sp02: "",
     respiration: "",
+    mood: "",
+    emotionalState: "",
+    physicalState: "",
+    spiritualState: "",
+    painLevel: "",
     comments: "",
     recommendations: "",
     picture: null,
@@ -88,8 +93,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const fetchPatients = async () => {
     try {
       const response = await axios.get(
-       "https://backend-c1pz.onrender.com/v1/appointment/active",
-      //  "http://localhost:8080/v1/appointment/active",
+        "https://backend-c1pz.onrender.com/v1/appointment/active",
+        //  "http://localhost:8080/v1/appointment/active",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -146,6 +151,10 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       "bloodSugar",
       "sp02",
       "respiration",
+      "mood",
+      "emotionalState",
+      "physicalState",
+      "painLevel",
       "comments",
       "recommendations",
     ];
@@ -231,6 +240,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
+        //  "http://localhost:8080/v1/appointment/send-report",
         "https://backend-c1pz.onrender.com/v1/appointment/send-report",
         data,
         {
@@ -384,6 +394,63 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                   value={formData.respiration}
                   onChange={handleChange}
                 />
+              </FormControl>
+              <FormControl isRequired mb="4">
+                <FormLabel fontFamily="body">Mood</FormLabel>
+                <Select
+                  name="mood"
+                  placeholder="Select Mood"
+                  value={formData.mood}
+                  onChange={handleChange}
+                >
+                  <option value="Happy">Happy</option>
+                  <option value="Sad">Sad</option>
+                  <option value="Anxious">Anxious</option>
+                  <option value="Calm">Calm</option>
+                  <option value="Angry">Angry</option>
+                </Select>
+              </FormControl>
+              <FormControl isRequired mb="4">
+                <FormLabel fontFamily="body">Emotional State</FormLabel>
+                <Select
+                  name="emotionalState"
+                  placeholder="Select Emotional State"
+                  value={formData.emotionalState}
+                  onChange={handleChange}
+                >
+                  <option value="Stable">Stable</option>
+                  <option value="Unstable">Unstable</option>
+                  <option value="Depressed">Depressed</option>
+                  <option value="Elevated">Elevated</option>
+                </Select>
+              </FormControl>
+              <FormControl isRequired mb="4">
+                <FormLabel fontFamily="body">Physical State</FormLabel>
+                <Select
+                  name="physicalState"
+                  placeholder="Select Physical State"
+                  value={formData.physicalState}
+                  onChange={handleChange}
+                >
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Poor">Poor</option>
+                </Select>
+              </FormControl>
+              <FormControl isRequired mb="4">
+                <FormLabel fontFamily="body">Pain Level</FormLabel>
+                <Select
+                  name="painLevel"
+                  placeholder="Select Pain Level"
+                  value={formData.painLevel}
+                  onChange={handleChange}
+                >
+                  <option value="None">None</option>
+                  <option value="Mild">Mild</option>
+                  <option value="Moderate">Moderate</option>
+                  <option value="Severe">Severe</option>
+                  <option value="Very Severe">Very Severe</option>
+                </Select>
               </FormControl>
             </>
           )}
@@ -628,6 +695,11 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
               <Text>Blood Sugar: {formData.bloodSugar}</Text>
               <Text>SpO2: {formData.sp02}%</Text>
               <Text>Respiration: {formData.respiration} c/m</Text>
+              <Text>Mood: {formData.mood}</Text>
+              <Text>Emotional State: {formData.emotionalState}</Text>
+              <Text>Physical State: {formData.physicalState}</Text>
+              <Text>Spiritual State: {formData.spiritualState}</Text>
+              <Text>Pain Level: {formData.painLevel}</Text>
               <Text fontWeight="bold">Medications:</Text>
               <VStack align="start" spacing={1}>
                 {medications.map((medication, index) => (

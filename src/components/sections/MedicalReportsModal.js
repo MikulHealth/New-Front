@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   Drawer,
@@ -62,9 +61,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
   const [searchDate, setSearchDate] = useState(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [passwordInput, setPassword] = useState("");
-  // const [passwordError, setPasswordError] = useState("");
   const { user } = useSelector((state) => state.userReducer);
-  // const navigate = useNavigate();
   const toast = useToast();
   const drawerSize = useBreakpointValue({ base: "full", md: "lg" });
   const emailInput = user?.email;
@@ -110,7 +107,6 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
   const handlePasswordSubmit = async () => {
     setIsLoading(true);
     const apiUrl = "https://backend-c1pz.onrender.com/login";
-    // const apiUrl = "http://localhost:8080/login";
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -157,7 +153,6 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
         newDate.setDate(newDate.getDate() + 1);
         const formattedDate = new Date(newDate).toISOString().split("T")[0];
         const response = await axios.get(
-          // `http://localhost:8080/v1/appointment/search-report?date=${formattedDate}`,
           `https://backend-c1pz.onrender.com/v1/appointment/search-report?date=${formattedDate}`,
           {
             headers: {
@@ -233,7 +228,6 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
       doc.setFontSize(20);
       doc.setFont("helvetica", "bold");
 
-      // Add title
       const title = `${report.recipientFullName} MH Report`;
       doc.text(title, 10, 20);
 
@@ -263,7 +257,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
         return offsetY + totalHeight;
       };
 
-      let offsetY = 30; // Start below the title
+      let offsetY = 30;
       offsetY = addText("Beneficiary name ", report.recipientFullName, offsetY);
       offsetY = addText("Service Plan ", report.servicePlan, offsetY);
       offsetY = addText(
@@ -278,13 +272,11 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
       offsetY = addText("SpO2 ", `${report.sp02}%`, offsetY);
       offsetY = addText("Respiration ", `${report.respiration} c/m`, offsetY);
 
-      // Adding medications
       offsetY = addText("Medications ", "", offsetY);
       report.medications.forEach((medication) => {
         offsetY = addText("", formatMedicationTime(medication), offsetY);
       });
 
-      // Adding activities
       offsetY = addText("Activities ", "", offsetY);
       report.activities.forEach((activity) => {
         offsetY = addText("", activity, offsetY);
@@ -332,15 +324,67 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
   const openPasswordModal = () => setIsPasswordModalOpen(true);
   const closePasswordModal = () => setIsPasswordModalOpen(false);
 
-  // const handlePasswordSubmit = () => {
-  //   if (password === "yourPassword") {
-  //     // Replace "yourPassword" with your actual password or validation logic
-  //     closePasswordModal();
-  //     generatePDF(selectedReport);
-  //   } else {
-  //     setPasswordError("Invalid password. Please try again.");
-  //   }
-  // };
+  const getMoodEmoji = (mood) => {
+    switch (mood) {
+      case "Happy":
+        return "😊";
+      case "Sad":
+        return "😢";
+      case "Anxious":
+        return "😟";
+      case "Calm":
+        return "😌";
+      case "Angry":
+        return "😠";
+      default:
+        return "😶";
+    }
+  };
+
+  const getEmotionalStateEmoji = (emotionalState) => {
+    switch (emotionalState) {
+      case "Stable":
+        return "😌";
+      case "Unstable":
+        return "😵";
+      case "Depressed":
+        return "😞";
+      case "Elevated":
+        return "😃";
+      default:
+        return "😶";
+    }
+  };
+
+  const getPhysicalStateEmoji = (physicalState) => {
+    switch (physicalState) {
+      case "Good":
+        return "💪";
+      case "Fair":
+        return "🤔";
+      case "Poor":
+        return "🤕";
+      default:
+        return "😶";
+    }
+  };
+
+  const getPainLevelEmoji = (painLevel) => {
+    switch (painLevel) {
+      case "None":
+        return "😀";
+      case "Mild":
+        return "🙂";
+      case "Moderate":
+        return "😐";
+      case "Severe":
+        return "😖";
+      case "Very Severe":
+        return "😫";
+      default:
+        return "😶";
+    }
+  };
 
   return (
     <Drawer
@@ -373,7 +417,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
                   selected={searchDate}
                   onChange={(date) => setSearchDate(date)}
                   dateFormat="yyyy-MM-dd"
-                  placeholderText="Search report by bate"
+                  placeholderText="Search report by date"
                   customInput={
                     <Input
                       placeholder="Search report by date"
@@ -441,19 +485,18 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
                   PDF
                 </Button>
               </Flex>
-              {/* <Divider my={2} borderColor="gray.500" /> */}
               <Flex
                 justifyContent="space-between"
                 flexDirection={{ base: "column", md: "row" }}
                 w="100%"
                 fontFamily="body"
               >
-                <Flex mb={{ base: 2, md: 0 }}>
+                <Flex mb={{ base: 1, md: 0 }}>
                   <Text fontWeight="bold">Beneficiary name:</Text>
                   <Text ml={2}>{selectedReport.recipientFullName}</Text>
                 </Flex>
 
-                <Flex mb={{ base: 2, md: 0 }}>
+                <Flex mb={{ base: 1, md: 0 }}>
                   <Text ml={{ base: 0, md: "10px" }} fontWeight="bold">
                     Service Plan:
                   </Text>
@@ -474,13 +517,42 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
                 <Text>Blood Sugar: {selectedReport.bloodSugar}</Text>
                 <Text>SpO2: {selectedReport.sp02}%</Text>
                 <Text>Respiration: {selectedReport.respiration} c/m</Text>
-                <Text fontWeight="bold">Medications:</Text>
+                <Flex mt="5px">
+                  <Text fontWeight="bold">Mood:</Text>
+                  <Text ml="5px">
+                    {getMoodEmoji(selectedReport.mood)} {selectedReport.mood}
+                  </Text>
+                </Flex>
+                <Flex>
+                  <Text fontWeight="bold">Emotional State: </Text>
+                  <Text ml="5px">
+                    {getEmotionalStateEmoji(selectedReport.emotionalState)}{" "}
+                    {selectedReport.emotionalState}
+                  </Text>
+                </Flex>
+                <Flex>
+                  <Text fontWeight="bold">Physical State: </Text>
+                  <Text ml="5px">
+                    {getPhysicalStateEmoji(selectedReport.physicalState)}{" "}
+                    {selectedReport.physicalState}
+                  </Text>
+                </Flex>
+                <Flex>
+                  <Text fontWeight="bold">Pain Level: </Text>
+                  <Text ml="5px">
+                    {getPainLevelEmoji(selectedReport.painLevel)}{" "}
+                    {selectedReport.painLevel}
+                  </Text>
+                </Flex>
+                <Text mt="5px" fontWeight="bold">
+                  Medications:
+                </Text>
                 <VStack align="start" spacing={1}>
                   {selectedReport.medications.map((medication, index) => (
                     <Text key={index}>{formatMedicationTime(medication)}</Text>
                   ))}
                 </VStack>
-                <Text fontWeight="bold" maxWidth="100%">
+                <Text mt="5px" fontWeight="bold" maxWidth="100%">
                   Activities:
                 </Text>
                 <VStack align="start" spacing={1}>
@@ -488,16 +560,16 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
                     <Text key={index}>{activity}</Text>
                   ))}
                 </VStack>
-                <Text fontWeight="bold" maxWidth="100%">
+                <Text mt="5px" fontWeight="bold" maxWidth="100%">
                   Comments/Observation:
                 </Text>
                 <Text maxWidth="100%">{selectedReport.comments}</Text>
-                <Text fontWeight="bold" maxWidth="100%">
+                <Text mt="5px" fontWeight="bold" maxWidth="100%">
                   Recommendations/Requests:
                 </Text>
                 <Text maxWidth="100%">{selectedReport.recommendations}</Text>
                 <Flex>
-                  <Text fontStyle="italic" fontWeight="bold">
+                  <Text mt="5px" fontStyle="italic" fontWeight="bold">
                     Submitted by:
                   </Text>
                   <Text ml="10px" fontStyle="italic">
@@ -527,7 +599,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
           <ModalCloseButton />
           <ModalBody>
             <Text fontWeight="body" mb={4}>
-              Mikul health wants to make sure it's really you trying to downlaod
+              Mikul health wants to make sure it's really you trying to download
               the medical report.
             </Text>
 
@@ -538,7 +610,6 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
               onChange={(e) => setPassword(e.target.value)}
               mb={3}
             />
-            {/* {passwordError && <Text color="red.500">{passwordError}</Text>} */}
           </ModalBody>
           <ModalFooter>
             <Button

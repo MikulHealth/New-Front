@@ -45,9 +45,9 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = 
-      // `http://localhost:8080/v1/appointment/accept`;
-      `https://backend-c1pz.onrender.com/v1/appointment/accept`;
+      const apiUrl =
+        // `http://localhost:8080/v1/appointment/accept`;
+        `https://backend-c1pz.onrender.com/v1/appointment/accept`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -130,7 +130,10 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                           Service Plan:
                         </Text>
                         <Text marginLeft="5px" color="black">
-                          {appointmentWrapper.appointment.customerAppointment.servicePlan}
+                          {
+                            appointmentWrapper.appointment.customerAppointment
+                              .servicePlan
+                          }
                         </Text>
                       </Flex>
                       <Flex marginTop="5px">
@@ -138,7 +141,10 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                           Shift:
                         </Text>
                         <Text marginLeft="5px" color="black">
-                          {appointmentWrapper.appointment.customerAppointment.shift}
+                          {
+                            appointmentWrapper.appointment.customerAppointment
+                              .shift
+                          }
                         </Text>
                       </Flex>
                       <Flex marginTop="5px">
@@ -146,7 +152,9 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                           Booked on:
                         </Text>
                         <Text marginLeft="5px" color="black">
-                          {new Date(appointmentWrapper.appointment.customerAppointment.createdAt).toLocaleString()}
+                          {new Date(
+                            appointmentWrapper.appointment.customerAppointment.createdAt
+                          ).toLocaleString()}
                         </Text>
                       </Flex>
                     </Box>
@@ -247,7 +255,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
         <Modal
           isOpen={true}
           onClose={() => setAppointmentDetails(null)}
-          size={modalSize}
+          size={{ base: "sm", md: "md" }}
         >
           <ModalOverlay />
           <ModalContent>
@@ -256,7 +264,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
               fontFamily="heading"
               textAlign="center"
             >
-              Notice
+              Notification!
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
@@ -278,7 +286,6 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
               >
                 Please wait while the caregiver confirms the appointment.
               </Text>
-              <Divider my={4} borderColor="gray.500" />
             </ModalBody>
           </ModalContent>
         </Modal>

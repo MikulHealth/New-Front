@@ -210,8 +210,7 @@ export default function PendingApp() {
             ml={{ base: "-8px", md: "-20px" }}
             fontSize={{ base: "12px", md: "16px" }}
           >
-            No pending appointments. 
-           
+            No pending appointments.
           </Text>
         ) : (
           <Box>
@@ -314,7 +313,9 @@ export default function PendingApp() {
                             : "red.500"
                         }
                       >
-                        {appointment.customerAppointment?.paid ? "Paid" : "Unpaid"}
+                        {appointment.customerAppointment?.paid
+                          ? "Paid"
+                          : "Unpaid"}
                       </Text>
                     </Box>
                   </Flex>
@@ -367,24 +368,32 @@ export default function PendingApp() {
                   <Text
                     fontSize="16px"
                     color={
-                      selectedAppointment?.customerAppointment?.appointmentCompleted
+                      selectedAppointment?.customerAppointment
+                        ?.appointmentCompleted
                         ? "green.500"
-                        : selectedAppointment?.customerAppointment?.appointmentActive
+                        : selectedAppointment?.customerAppointment
+                            ?.appointmentActive
                         ? "blue.500"
-                        : selectedAppointment?.customerAppointment?.appointmentMatched
+                        : selectedAppointment?.customerAppointment
+                            ?.appointmentMatched
                         ? "yellow.500"
-                        : selectedAppointment?.customerAppointment?.appointmentPending
+                        : selectedAppointment?.customerAppointment
+                            ?.appointmentPending
                         ? "yellow.500"
                         : "black"
                     }
                   >
-                    {selectedAppointment?.customerAppointment?.appointmentCompleted
+                    {selectedAppointment?.customerAppointment
+                      ?.appointmentCompleted
                       ? "Completed"
-                      : selectedAppointment?.customerAppointment?.appointmentActive
+                      : selectedAppointment?.customerAppointment
+                          ?.appointmentActive
                       ? "Active"
-                      : selectedAppointment?.customerAppointment?.appointmentMatched
+                      : selectedAppointment?.customerAppointment
+                          ?.appointmentMatched
                       ? "Paired"
-                      : selectedAppointment?.customerAppointment?.appointmentPending
+                      : selectedAppointment?.customerAppointment
+                          ?.appointmentPending
                       ? "Pending"
                       : "Unknown"}
                   </Text>
@@ -395,7 +404,8 @@ export default function PendingApp() {
                     Beneficiary name:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment?.recipientFirstname &&
+                    {selectedAppointment?.customerAppointment
+                      ?.recipientFirstname &&
                     selectedAppointment?.customerAppointment?.recipientLastname
                       ? `${selectedAppointment?.customerAppointment?.recipientFirstname} ${selectedAppointment?.customerAppointment?.recipientLastname}`
                       : "Not available"}
@@ -407,8 +417,8 @@ export default function PendingApp() {
                     Phone Number:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment?.recipientPhoneNumber ||
-                      "Not available"}
+                    {selectedAppointment?.customerAppointment
+                      ?.recipientPhoneNumber || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -417,8 +427,8 @@ export default function PendingApp() {
                     Gender:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment?.recipientGender ||
-                      "Not available"}
+                    {selectedAppointment?.customerAppointment
+                      ?.recipientGender || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -427,8 +437,9 @@ export default function PendingApp() {
                     Date of Birth:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formatDate(selectedAppointment?.customerAppointment?.recipientDOB) ||
-                      "Not available"}
+                    {formatDate(
+                      selectedAppointment?.customerAppointment?.recipientDOB
+                    ) || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -437,17 +448,47 @@ export default function PendingApp() {
                     Current Location:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment?.currentLocation ||
-                      "Not availabe"}
+                    {selectedAppointment?.customerAppointment
+                      ?.currentLocation || "Not availabe"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
+                    City/Town:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment?.customerAppointment.recipientTown || "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Caregiver Gender:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment?.customerAppointment.preferredMedicGender ||
+                      "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Cargiver Language:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment?.customerAppointment.preferredLanguage || "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
                     Relationship:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment?.relationship || "Nil"}
+                    {selectedAppointment?.customerAppointment?.relationship ||
+                      "Nil"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -456,7 +497,9 @@ export default function PendingApp() {
                     Booked on:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {formatDateTime(selectedAppointment?.customerAppointment?.createdAt)}
+                    {formatDateTime(
+                      selectedAppointment?.customerAppointment?.createdAt
+                    )}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -466,7 +509,8 @@ export default function PendingApp() {
                       Shift:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment?.customerAppointment?.shift || "Not availabe"}
+                      {selectedAppointment?.customerAppointment?.shift ||
+                        "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -475,7 +519,8 @@ export default function PendingApp() {
                       Service Plan:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment?.customerAppointment?.servicePlan || "Not availabe"}
+                      {selectedAppointment?.customerAppointment?.servicePlan ||
+                        "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -484,8 +529,8 @@ export default function PendingApp() {
                       Type of caregiver:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment?.customerAppointment?.medicSpecialization ||
-                        "Not availabe"}
+                      {selectedAppointment?.customerAppointment
+                        ?.medicSpecialization || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -494,8 +539,9 @@ export default function PendingApp() {
                       Cost of service:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formattedCost(selectedAppointment?.customerAppointment?.costOfService) ||
-                        "Not availabe"}
+                      {formattedCost(
+                        selectedAppointment?.customerAppointment?.costOfService
+                      ) || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -504,8 +550,9 @@ export default function PendingApp() {
                       Start Date:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {formatDate(selectedAppointment?.customerAppointment?.startDate) ||
-                        "Not availabe"}
+                      {formatDate(
+                        selectedAppointment?.customerAppointment?.startDate
+                      ) || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -514,7 +561,8 @@ export default function PendingApp() {
                       Medical Report:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment?.customerAppointment?.medicalReport || "Not availabe"}
+                      {selectedAppointment?.customerAppointment
+                        ?.medicalReport || "Not availabe"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
@@ -523,11 +571,15 @@ export default function PendingApp() {
                       Paid:
                     </Text>
                     <Text marginLeft="20px" color="black">
-                      {selectedAppointment?.customerAppointment?.paid ? "Yes" : "No"}
+                      {selectedAppointment?.customerAppointment?.paid
+                        ? "Yes"
+                        : "No"}
                     </Text>
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
                 </Box>
+              </Flex>
+              <Box>
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
                     Health History:
@@ -538,11 +590,31 @@ export default function PendingApp() {
                     maxW="600px"
                     maxH="1000px"
                   >
-                    {selectedAppointment?.customerAppointment?.recipientHealthHistory ||
+                    {selectedAppointment?.customerAppointment.recipientHealthHistory ||
                       "Not available"}
                   </Text>
                 </Flex>
-              </Flex>
+                <Divider my={4} borderColor="gray.500" />
+              </Box>
+              <Box>
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Special Needs:
+                  </Text>
+                  <Text
+                    marginLeft="10px"
+                    color="black"
+                    maxW="600px"
+                    maxH="1000px"
+                  >
+                    {selectedAppointment?.customerAppointment.specialNeeds &&
+                    selectedAppointment?.customerAppointment.specialNeeds.length > 0
+                      ? selectedAppointment?.customerAppointment.specialNeeds.join(", ")
+                      : "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+              </Box>
             </DrawerBody>
             <DrawerFooter justifyContent="space-between">
               <Button
@@ -558,7 +630,11 @@ export default function PendingApp() {
                 bg="#E1ACAE"
                 color="red.500"
                 _hover={{ color: "" }}
-                onClick={() => handleCancelAppointment(selectedAppointment?.customerAppointment.id)}
+                onClick={() =>
+                  handleCancelAppointment(
+                    selectedAppointment?.customerAppointment.id
+                  )
+                }
               >
                 Cancel
               </Button>

@@ -42,7 +42,7 @@ export default function CompletedApp() {
 
       const response = await axios.get(
         // "http://localhost:8080/v1/appointment/findCompletedAppointments",
-          "https://backend-c1pz.onrender.com/v1/appointment/findCompletedAppointments",
+        "https://backend-c1pz.onrender.com/v1/appointment/findCompletedAppointments",
         config
       );
 
@@ -312,6 +312,34 @@ export default function CompletedApp() {
                 </Flex>
 
                 <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                  City/Town:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.recipientTown || "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Caregiver Gender:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.preferredMedicGender ||
+                      "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+                <Flex marginTop="5px">
+                  <Text fontWeight="bold" color="black">
+                    Preferred Cargiver Language:
+                  </Text>
+                  <Text marginLeft="20px" color="black">
+                    {selectedAppointment.preferredLanguage || "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
 
                 <Flex marginTop="5px">
                   <Text fontWeight="bold" color="black">
@@ -401,9 +429,10 @@ export default function CompletedApp() {
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
                 </Box>
-
+              </Flex>
+              <Box>
                 <Flex marginTop="5px">
-                  <Text fontWeight="bold" color="black">
+                  <Text  fontWeight="bold" color="black">
                     Health History:
                   </Text>
                   <Text
@@ -416,7 +445,27 @@ export default function CompletedApp() {
                       "Not available"}
                   </Text>
                 </Flex>
-              </Flex>
+                <Divider my={4} borderColor="gray.500" />
+              </Box>
+              <Box>
+                <Flex marginTop="5px">
+                  <Text  fontWeight="bold" color="black">
+                    Special Needs:
+                  </Text>
+                  <Text
+                    marginLeft="10px"
+                    color="black"
+                    maxW="600px"
+                    maxH="1000px"
+                  >
+                    {selectedAppointment.specialNeeds &&
+                    selectedAppointment.specialNeeds.length > 0
+                      ? selectedAppointment.specialNeeds.join(", ")
+                      : "Not available"}
+                  </Text>
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
+              </Box>
             </DrawerBody>
             <DrawerFooter justifyContent="space-between"></DrawerFooter>
           </DrawerContent>

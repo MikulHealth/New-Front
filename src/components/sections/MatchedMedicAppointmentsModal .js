@@ -145,17 +145,31 @@ const MatchedMedicAppointmentsModal = ({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading" textAlign="center">
-          Notice!
+          Notification!
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {acceptedAppointment ? (
             <Box p="5" borderWidth="1px" borderRadius="md" mb="4">
-              <Text fontSize="18px" fontFamily="body" textAlign="left" mb={2}>
-                Welldone, you have accepted the appointment.
+              <Text
+                fontSize="18px"
+                fontFamily="heading"
+                fontWeight="bold"
+                // textAlign="left"
+                textAlign={{base: "left", md: "center"}}
+                mb={2}
+              >
+                Welldone, appointment accepted.
               </Text>
-              <Text fontSize="18px" fontFamily="body" textAlign="left" mb={2}>
-                Please call the client to confirm the details.
+              <Text
+                fontSize="14px"
+                fontStyle="italic"
+                fontFamily="body"
+                fontWeight="bold"
+                textAlign="left"
+                mb={2}
+              >
+                Please call the client to confirm the details and start care.
               </Text>
               <Flex direction="column" alignItems="left">
                 <Box alignItems="left">
@@ -199,9 +213,23 @@ const MatchedMedicAppointmentsModal = ({
                   </Flex>
                   <Flex>
                     <Text fontWeight="bold" color="black" mb={2}>
-                      Location:
+                      City/Town:
                     </Text>
                     <Text ml="10px" color="black" mb={2}>
+                      {acceptedAppointment.appointment.recipientTown}
+                    </Text>
+                  </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" color="black" mb={2}>
+                      Location:{" "}
+                    </Text>
+                    <Text
+                      ml="10px"
+                      maxW="600px"
+                      maxH="1000px"
+                      color="black"
+                      mb={2}
+                    >
                       {acceptedAppointment.appointment.currentLocation}
                     </Text>
                   </Flex>
@@ -246,22 +274,41 @@ const MatchedMedicAppointmentsModal = ({
                     </Text>
                     <Text
                       ml="10px"
-                      maxW={{ base: "50px", md: "450px" }}
-                      fontWeight="bold"
+                      maxW="600px"
+                      maxH="1000px"
                       color="black"
                       mb={2}
                     >
                       {acceptedAppointment.appointment.recipientHealthHistory}
                     </Text>
                   </Flex>
+                  <Flex marginTop="5px">
+                    <Text fontWeight="bold" color="black">
+                      Special Needs:
+                    </Text>
+                    <Text
+                      marginLeft="10px"
+                      color="black"
+                      maxW="600px"
+                      maxH="1000px"
+                    >
+                      {acceptedAppointment.appointment.specialNeeds &&
+                      acceptedAppointment.appointment.specialNeeds.length > 0
+                        ? acceptedAppointment.appointment.specialNeeds.join(
+                            ", "
+                          )
+                        : "Not available"}
+                    </Text>
+                  </Flex>
                 </Box>
                 <Button
+                  mt="10px"
                   colorScheme="green"
                   as="a"
                   href={`tel:${acceptedAppointment.appointment.recipientPhoneNumber}`}
                   leftIcon={<PhoneIcon />}
                 >
-                  Call Patient
+                  Call
                 </Button>
               </Flex>
             </Box>
@@ -278,101 +325,103 @@ const MatchedMedicAppointmentsModal = ({
               {matchedAppointments &&
                 matchedAppointments.length > 0 &&
                 matchedAppointments.map((appointmentWrapper) =>
-                  appointmentWrapper.customerAppointments.map(
-                    (appointment) => (
-                      <Box
-                        key={appointment.id}
-                        p="5"
-                        borderWidth="1px"
-                        borderRadius="md"
-                        mb="4"
-                        bg="#A210C6"
-                        color="white"
+                  appointmentWrapper.customerAppointments.map((appointment) => (
+                    <Box
+                      key={appointment.id}
+                      p="5"
+                      borderWidth="1px"
+                      borderRadius="md"
+                      mb="4"
+                      bg="#A210C6"
+                      color="white"
+                    >
+                      <Flex
+                        direction={{ base: "column", md: "row" }}
+                        justifyContent="space-between"
                       >
-                        <Flex
-                          direction={{ base: "column", md: "row" }}
-                          justifyContent="space-between"
-                        >
-                          <Box color="white">
-                            <Flex color="white" marginTop="5px">
-                              <Text fontWeight="bold">Health history:</Text>
-                              <Text
-                                maxW={{ base: "300px", md: "450px" }}
-                                marginLeft="5px"
-                              >
-                                {appointment.recipientHealthHistory || "N/A"}
-                              </Text>
-                            </Flex>
-                            <Flex marginTop="5px">
-                              <Text fontWeight="bold">Service Plan:</Text>
-                              <Text marginLeft="5px">
-                                {appointment.servicePlan}
-                              </Text>
-                            </Flex>
-                            <Flex marginTop="5px">
-                              <Text fontWeight="bold">Shift:</Text>
-                              <Text marginLeft="5px">{appointment.shift}</Text>
-                            </Flex>
-                            <Flex marginTop="5px">
-                              <Text fontWeight="bold">Location:</Text>
-                              <Text marginLeft="5px">
-                                {appointment.currentLocation}
-                              </Text>
-                            </Flex>
-                            <Flex marginTop="5px">
-                              <Text fontWeight="bold">Urgency:</Text>
-                              <Text marginLeft="5px">
-                                {appointment.priority}
-                              </Text>
-                            </Flex>
-                            <Text fontWeight="bold" mb={2}>
-                              Start Date:{" "}
-                              {new Date(
-                                appointment.startDate
-                              ).toLocaleDateString()}
-                            </Text>
-                            <Flex marginTop="5px" direction="column">
-                              <Text fontWeight="bold">Time left to accept:</Text>
-
-                              <Progress
-                                border="1px solid white"
-                                value={progress[appointment.id]}
-                                size="md"
-                                colorScheme="red"
-                              />
-
-                              <Text marginLeft="5px">
-                                {Math.floor(
-                                  timeLeft[appointment.id] / 3600000
-                                )}
-                                :
-                                {Math.floor(
-                                  (timeLeft[appointment.id] % 3600000) / 60000
-                                )}{" "}
-                                hours/minutes
-                              </Text>
-                            </Flex>
-                          </Box>
-                          <motion.div
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ repeat: Infinity, duration: 4.5 }}
-                          >
-                            <Button
-                              isLoading={loading}
-                              loadingText="Loading..."
-                              border="2px solid white"
-                              colorScheme="green"
-                              onClick={() => handleAccept(appointment.id)}
-                              mt={{ base: "20px", md: "20px" }}
-                              ml={{ base: "30px", md: "0" }}
+                        <Box color="white">
+                          <Flex color="white" marginTop="5px">
+                            <Text fontWeight="bold">Health history:</Text>
+                            <Text
+                              maxW={{ base: "300px", md: "450px" }}
+                              marginLeft="5px"
                             >
-                              {loading ? "Loading..." : "Accept"}
-                            </Button>
-                          </motion.div>
-                        </Flex>
-                      </Box>
-                    )
-                  )
+                              {appointment.recipientHealthHistory || "N/A"}
+                            </Text>
+                          </Flex>
+                          <Flex marginTop="5px">
+                            <Text fontWeight="bold">Service Plan:</Text>
+                            <Text marginLeft="5px">
+                              {appointment.servicePlan}
+                            </Text>
+                          </Flex>
+                          <Flex marginTop="5px">
+                            <Text fontWeight="bold">Shift:</Text>
+                            <Text marginLeft="5px">{appointment.shift}</Text>
+                          </Flex>
+                          <Flex marginTop="5px">
+                            <Text fontWeight="bold">City/Town:</Text>
+                            <Text marginLeft="5px">
+                              {appointment.recipientTown}
+                            </Text>
+                          </Flex>
+                          <Flex marginTop="5px">
+                            <Text fontWeight="bold">Urgency:</Text>
+                            <Text marginLeft="5px">{appointment.priority}</Text>
+                          </Flex>
+                          <Text fontWeight="bold" mb={2}>
+                            Start Date:{" "}
+                            {new Date(
+                              appointment.startDate
+                            ).toLocaleDateString()}
+                          </Text>
+                          <Flex marginTop="5px" direction="column">
+                            <Text fontWeight="bold">Time left to accept:</Text>
+
+                            <Progress
+                              border="1px solid white"
+                              value={progress[appointment.id]}
+                              size="md"
+                              colorScheme="red"
+                            />
+
+                            <Text marginLeft="5px">
+                              {Math.floor(timeLeft[appointment.id] / 3600000)}:
+                              {Math.floor(
+                                (timeLeft[appointment.id] % 3600000) / 60000
+                              )}{" "}
+                              hours/minutes
+                            </Text>
+                          </Flex>
+                          <Flex marginTop="5px">
+                            <Text fontWeight="bold">Special Needs:</Text>
+                            <Text marginLeft="10px" maxW="600px" maxH="1000px">
+                              {appointment.specialNeeds &&
+                              appointment.specialNeeds.length > 0
+                                ? appointment.specialNeeds.join(", ")
+                                : "Not available"}
+                            </Text>
+                          </Flex>
+                        </Box>
+                        <motion.div
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ repeat: Infinity, duration: 4.5 }}
+                        >
+                          <Button
+                            isLoading={loading}
+                            loadingText="Loading..."
+                            border="2px solid white"
+                            colorScheme="green"
+                            onClick={() => handleAccept(appointment.id)}
+                            mt={{ base: "20px", md: "20px" }}
+                            ml={{ base: "30px", md: "0" }}
+                          >
+                            {loading ? "Loading..." : "Accept"}
+                          </Button>
+                        </motion.div>
+                      </Flex>
+                    </Box>
+                  ))
                 )}
             </>
           )}
