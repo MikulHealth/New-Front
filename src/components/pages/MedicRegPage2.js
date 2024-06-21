@@ -50,6 +50,7 @@ const LandingPage = () => {
     accountName: "",
     phoneNumber: localStorage.getItem("phoneNumber"),
     yearsOfExp: "",
+    preferredLanguage: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -67,9 +68,17 @@ const LandingPage = () => {
   };
   const toast = useToast();
 
+  const majorLanguages = [
+    "English",
+    "Yoruba",
+    "Igbo",
+    "Hausa",
+    "Pidgin",
+    "Other",
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     await postCv(cvCopy, formData, setFormData);
     await postLicense(license, formData, setFormData);
     setLoading(true);
@@ -275,6 +284,26 @@ const LandingPage = () => {
                   </Select>
                 </Box>
               </Stack>
+
+              <Box spacing={4} marginTop="20px" flex="1">
+                <FormLabel>Native Language</FormLabel>
+                <Select
+                  isRequired
+                  name="preferredLanguage"
+                  placeholder="select language"
+                  // w={{ base: "300px", md: "270px" }}
+                  // w={{ base: "300px", md: "450px" }}
+                  // fontSize={{ base: "14px", md: "16px" }}
+                  value={formData.preferredLanguage}
+                  onChange={handleInputChange}
+                >
+                  {majorLanguages.map((language) => (
+                    <option key={language} value={language}>
+                      {language}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
               <Box spacing={4} marginTop="20px" flex="1">
                 <FormLabel>Years of experience</FormLabel>
 
