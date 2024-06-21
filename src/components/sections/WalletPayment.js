@@ -94,7 +94,7 @@ const handleWalletPayment = async () => {
   };
 
   const handleCancel = () => {
-    navigate("/dashboard");
+    navigate("/client-dashboard");
     // window.location.reload();
   };
 
@@ -167,7 +167,7 @@ const handleWalletPayment = async () => {
                   bg="#E1ACAE"
                   color="red.500"
                   onClick={handleCancel}
-                  _hover={{ bg: "red.500" }}
+                  _hover={{ bg: "red.500", color: "white" }}
                 >
                   Cancel payment
                 </Button>

@@ -60,6 +60,7 @@ const LandingPage = () => {
     gender: "",
     dob: new Date(),
     image: "",
+    preferredLanguage: "",
   });
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
@@ -238,6 +239,15 @@ const LandingPage = () => {
     }
   };
 
+  const majorLanguages = [
+    "English",
+    "Yoruba",
+    "Igbo",
+    "Hausa",
+    "Pidgin",
+    "Other",
+  ];
+
   return (
     <ChakraProvider overflow="hidden" theme={customTheme}>
       <ToastContainer
@@ -342,6 +352,25 @@ const LandingPage = () => {
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </Select>
+              </Box>
+              <Box marginTop="20px">
+                <FormLabel>Native Language</FormLabel>
+                <Select
+                      isRequired
+                      name="preferredLanguage"
+                      placeholder="select language"
+                      // w={{ base: "300px", md: "270px" }}
+                      w={{ base: "300px", md: "450px" }}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      value={formData.preferredLanguage}
+                      onChange={handleInputChange}
+                    >
+                      {majorLanguages.map((language) => (
+                        <option key={language} value={language}>
+                          {language}
+                        </option>
+                      ))}
+                    </Select>
               </Box>
 
               <Box

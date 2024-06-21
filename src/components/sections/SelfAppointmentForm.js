@@ -458,7 +458,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                         Start Date
                       </FormLabel>
                       <Flex
-                        h="5vh"
+                        h="6.5vh"
                         paddingTop="5px"
                         paddingLeft="15px"
                         style={{
@@ -483,26 +483,27 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     </Box>
                     <Box ml={{ md: "5px" }} marginTop="20px">
                       <FormLabel fontWeight="bold" fontFamily="body">
-                        Current Location{" "}
+                        Preferred Medic Gender{" "}
                       </FormLabel>
-                      <Flex>
-                        <Input
-                          isRequired
-                          name="currentLocation"
-                          type="text"
-                          placeholder="current Location"
-                          value={formFields.currentLocation}
-                          onChange={handleInputChange}
-                          w={{ base: "300px", md: "270px" }}
-                        />
-                      </Flex>
+                      <Select
+                        isRequired
+                        name="preferredMedicGender"
+                        placeholder="select gender"
+                        w={{ base: "300px", md: "270px" }}
+                        fontSize={{ base: "14px", md: "16px" }}
+                        value={formFields.preferredMedicGender}
+                        onChange={handleInputChange}
+                      >
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </Select>
                     </Box>
                   </Flex>
 
                   <Flex flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
-                    <Box w={{ base: "300px", md: "270px" }}>
+                    <Box w={{ base: "300px", md: "270px" }} marginTop="20px">
                       <FormLabel fontFamily="body" fontWeight="bold">
-                        Town{" "}
+                        City/Town{" "}
                       </FormLabel>
                       <Select
                         isRequired
@@ -522,20 +523,19 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     </Box>
                     <Box ml={{ md: "5px" }} marginTop="20px">
                       <FormLabel fontWeight="bold" fontFamily="body">
-                        Preferred Medic Gender{" "}
+                        Location{" "}
                       </FormLabel>
-                      <Select
-                        isRequired
-                        name="preferredMedicGender"
-                        placeholder="select gender"
-                        w={{ base: "300px", md: "270px" }}
-                        fontSize={{ base: "14px", md: "16px" }}
-                        value={formFields.preferredMedicGender}
-                        onChange={handleInputChange}
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </Select>
+                      <Flex>
+                        <Input
+                          isRequired
+                          name="currentLocation"
+                          type="text"
+                          placeholder="current Location"
+                          value={formFields.currentLocation}
+                          onChange={handleInputChange}
+                          w={{ base: "300px", md: "270px" }}
+                        />
+                      </Flex>
                     </Box>
                   </Flex>
 
@@ -547,7 +547,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       isRequired
                       name="preferredLanguage"
                       placeholder="select language"
-                      w={{ base: "300px", md: "270px" }}
+                      // w={{ base: "300px", md: "270px" }}
+                      w={{ base: "300px", md: "550px" }}
                       fontSize={{ base: "14px", md: "16px" }}
                       value={formFields.preferredLanguage}
                       onChange={handleInputChange}
@@ -562,8 +563,10 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
                   <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
                     <FormLabel fontWeight="bold" fontFamily="body">
-                      Health History <br></br>(Is there anything you'd like us
-                      to know?)
+                      Health History
+                    </FormLabel>
+                    <FormLabel fontSize="14px" fontFamily="body">
+                      (Is there anything you'd like us to know?)
                     </FormLabel>
                     <Textarea
                       name="recipientHealthHistory"
@@ -574,7 +577,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       w={{ base: "300px", md: "550px" }}
                     />
                   </Box>
-                  <Box justifyContent="center">
+                  <Box mb="20px" ml="75%" >
                     <Button
                       isLoading={loading}
                       loadingText="Loading..."

@@ -43,11 +43,40 @@ const customTheme = extendTheme({
 const RequestAppointmentModal = ({ isOpen, onClose }) => {
   const [appointmentType, setAppointmentType] = useState("");
   const [shift, setShift] = useState("");
+  const [preferredTown, setPreferredTown] = useState("");
   const [currentLocation, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.userReducer);
   const specialization = user?.medicType;
   const medicId = user?.userId;
+
+  const townsInLagos = [
+    "Ikeja",
+    "Ogudu",
+    "Berger",
+    "Surulere",
+    "Ikorodu",
+    "Epe",
+    "Badagry",
+    "Yaba",
+    "Victoria Island",
+    "Lekki",
+    "Lagos Island",
+    "Ajah",
+    "Sangotedo",
+    "Agege",
+    "Ikoyi",
+    "Okota",
+    "Mushin",
+    "Iyana Ipaja",
+    "Oshodi",
+    "Isolo",
+    "Ikotun",
+    "Festac",
+    "Ijesha",
+    "Maryland",
+    "Ojota",
+  ];
 
   const handleSubmit = async () => {
     // Validate all fields
@@ -63,6 +92,7 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
       currentLocation,
       specialization,
       medicId,
+      preferredTown: "",
     };
 
     try {
@@ -157,6 +187,29 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
                 </Select>
                 <InputRightElement pointerEvents="none">
                   <ChevronDownIcon color="gray.300" />
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <FormControl isRequired mt="4">
+              <FormLabel fontFamily="body">City/Town</FormLabel>
+              <InputGroup>
+                <Select
+                  isRequired
+                  // name="Select preferred town"
+                  placeholder="Select preferred town"
+                  // w={{ base: "300px", md: "270px" }}
+                  fontSize={{ base: "14px", md: "16px" }}
+                  value={preferredTown}
+                  onChange={(e) => setPreferredTown(e.target.value)}
+                >
+                  {townsInLagos.map((town) => (
+                    <option key={town} value={town}>
+                      {town}
+                    </option>
+                  ))}
+                </Select>
+                <InputRightElement pointerEvents="none">
+                  <Icon as={MdLocationOn} color="gray.300" />
                 </InputRightElement>
               </InputGroup>
             </FormControl>

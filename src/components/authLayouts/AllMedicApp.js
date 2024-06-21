@@ -159,7 +159,7 @@ const AllMedicAppTab = () => {
         align="stretch"
       >
         <Text>
-          You have no appointments yet. Would you like to request one?
+          You have no appointment yet. Would you like to request one?
         </Text>
       </VStack>
     );

@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   FormLabel,
@@ -6,10 +5,27 @@ import {
   CheckboxGroup,
   Box,
   Button,
+  extendTheme,
   SimpleGrid,
   Text,
   Flex,
 } from "@chakra-ui/react";
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const SpecialNeedsForm = ({
   specialNeeds,
@@ -17,7 +33,6 @@ const SpecialNeedsForm = ({
   handleSubmit,
   handleBack,
 }) => {
-    
   // const [loading, setLoading] = useState(false);
   const specialNeedsCategories = {
     "Mobility Assistance": [
@@ -103,7 +118,16 @@ const SpecialNeedsForm = ({
   };
 
   return (
-    <Box overflow="scroll" p="40px">
+    <Box theme={customTheme} overflow="scroll" p="40px">
+      <Text
+        color="#A210C6"
+        fontFamily="heading"
+        fontWeight="bold"
+        fontSize="20px"
+         mb="5px"
+      >
+        Special Needs
+      </Text>
       <Text mb="10px" fontSize="md" color="gray.600">
         Please carefully select the special needs that apply to the care
         recipient. Your accurate selections will help us provide the best
@@ -138,8 +162,8 @@ const SpecialNeedsForm = ({
           bg="#A210C6"
           color="white"
         >
-           {/* {loading ? "Processing..." : "Submit"} */}
-           Submit
+          {/* {loading ? "Processing..." : "Submit"} */}
+          Submit
         </Button>
       </Flex>
     </Box>

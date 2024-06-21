@@ -7,6 +7,7 @@ import { WarningIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { FaPhoneAlt } from "react-icons/fa";
 import PaymentModal from "./PaymentMethod";
+import SpecialNeedsForm from "./SpecialNeedsForm";
 import {
   Drawer,
   DrawerOverlay,
@@ -14,7 +15,6 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
-  DrawerFooter,
   FormControl,
   FormLabel,
   InputGroup,
@@ -49,6 +49,43 @@ const customTheme = extendTheme({
   },
 });
 
+const townsInLagos = [
+  "Ikeja",
+  "Ogudu",
+  "Berger",
+  "Surulere",
+  "Ikorodu",
+  "Epe",
+  "Badagry",
+  "Yaba",
+  "Victoria Island",
+  "Lekki",
+  "Lagos Island",
+  "Ajah",
+  "Sangotedo",
+  "Agege",
+  "Ikoyi",
+  "Okota",
+  "Mushin",
+  "Iyana Ipaja",
+  "Oshodi",
+  "Isolo",
+  "Ikotun",
+  "Festac",
+  "Ijesha",
+  "Maryland",
+  "Ojota",
+];
+
+const majorLanguages = [
+  "English",
+  "Yoruba",
+  "Igbo",
+  "Hausa",
+  "Pidgin",
+  "Other",
+];
+
 const OthersAppointmentModal = ({ isOpen, onClose }) => {
   const { user } = useSelector((state) => state.userReducer);
   const [loading, setLoading] = useState(false);
@@ -60,6 +97,8 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
   const [paymentData, setPaymentData] = useState({});
   const [shiftDisabled, setShiftDisabled] = useState(false);
   const [priority, setPriority] = useState("");
+  const [specialNeeds, setSpecialNeeds] = useState([]);
+  const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
 
   const [formFields, setFormFields] = useState({
     recipientFirstname: "",
@@ -75,6 +114,9 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     relationship: "",
     medicalReport: "",
     recipientHealthHistory: "",
+    recipientTown: "",
+    preferredMedicGender: "",
+    preferredLanguage: "",
   });
 
   const handleInputChange = (e) => {
@@ -163,6 +205,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
         priority,
+        specialNeeds, // Include specialNeeds in the request
       };
       const requestBody = JSON.stringify(formDataWithDates);
       const response = await axios.post(apiUrl, requestBody, { headers });
@@ -183,6 +226,9 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
           relationship: "",
           medicalReport: "",
           recipientHealthHistory: "",
+          recipientTown: "",
+          preferredMedicGender: "",
+          preferredLanguage: "",
         });
         toast.success("Appointment saved");
         setPaymentData({
@@ -372,273 +418,377 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
             </Link>
           </Text>
           <DrawerBody>
-            <FormControl
-              ml={{ base: "25px", md: "0" }}
-              w={{ base: "80%", md: "100%" }}
-            >
-              <FormLabel fontWeight="bold" fontFamily="heading">
-                Enter Beneficiary details
-              </FormLabel>
-              <Flex display={{ base: "block", md: "flex" }}>
-                <InputGroup>
-                  <Input
-                    name="recipientFirstname"
-                    placeholder="first name"
-                    value={formFields.recipientFirstname}
-                    onChange={handleInputChange}
-                    w={{ base: "300px", md: "270px" }}
-                  />
-                </InputGroup>
-                <InputGroup mt={{ base: "20px", md: "0" }} ml={{ md: "40px" }}>
-                  <Input
-                    name="recipientLastname"
-                    ml={{ md: "-35px" }}
-                    placeholder="last name"
-                    value={formFields.recipientLastname}
-                    onChange={handleInputChange}
-                    w={{ base: "300px", md: "270px" }}
-                  />
-                </InputGroup>
-              </Flex>
-              <Flex flexWrap="wrap">
-                <Box>
-                  <FormLabel
-                    fontFamily="body"
-                    fontWeight="bold"
-                    marginTop="20px"
-                  >
-                    Gender{" "}
-                  </FormLabel>
-                  <Select
-                    name="recipientGender"
-                    placeholder="select gender"
-                    w={{ base: "300px", md: "270px" }}
-                    value={formFields.recipientGender}
-                    onChange={handleInputChange}
-                  >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </Select>
-                </Box>
-                <Box
-                  fontFamily="body"
-                  ml={{ md: "5px" }}
-                  w={{ base: "300px", md: "270px" }}
+            {showSpecialNeedsForm ? (
+              <SpecialNeedsForm
+                specialNeeds={specialNeeds}
+                setSpecialNeeds={setSpecialNeeds}
+                handleSubmit={handleFormSubmit}
+                handleBack={() => setShowSpecialNeedsForm(false)}
+              />
+            ) : (
+              <FormControl
+                ml={{ base: "25px", md: "0" }}
+                w={{ base: "80%", md: "100%" }}
+              >
+                <FormLabel
+                  ml={{ base: "20px", md: "30px" }}
+                  fontWeight="bold"
+                  fontFamily="heading"
                 >
-                  <FormLabel fontWeight="bold" marginTop="20px">
-                    Date of Birth
-                  </FormLabel>
-                  <Flex
-                    h="5vh"
-                    padding="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                  >
-                    <DatePicker
-                      name="recipientDOB"
-                      selected={selectedDob}
-                      onChange={handleDOBChange}
-                      maxDate={new Date()}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="select date of birth"
-                      className="form-control"
-                    />
-                  </Flex>
-                </Box>
-              </Flex>
-              <Flex flexWrap="wrap" marginTop="1px">
-                <Box>
-                  <FormLabel
-                    fontFamily="body"
-                    fontWeight="bold"
-                    marginTop="20px"
-                  >
-                    Contact Number{" "}
-                  </FormLabel>
+                  Enter Beneficiary details
+                </FormLabel>
+                <Flex
+                  display={{ base: "block", md: "flex" }}
+                  ml={{ base: "20px", md: "30px" }}
+                >
                   <InputGroup>
                     <Input
-                      name="recipientPhoneNumber"
-                      type="tel"
-                      placeholder="recipient phone number"
-                      value={formFields.recipientPhoneNumber}
+                      name="recipientFirstname"
+                      placeholder="first name"
+                      value={formFields.recipientFirstname}
                       onChange={handleInputChange}
                       w={{ base: "300px", md: "270px" }}
                     />
-                    <InputRightElement pointerEvents="none">
-                      <FaPhoneAlt color="gray.300" />
-                    </InputRightElement>
                   </InputGroup>
-                </Box>
-                <Box ml={{ md: "5px" }}>
-                  <FormLabel
-                    fontFamily="body"
-                    fontWeight="bold"
-                    marginTop="20px"
+                  <InputGroup
+                    mt={{ base: "20px", md: "0" }}
+                    ml={{ md: "40px" }}
                   >
-                    Relationship with beneficiary{" "}
-                  </FormLabel>
-                  <Select
-                    name="relationship"
-                    placeholder="Select the appropriate relationship type"
+                    <Input
+                      name="recipientLastname"
+                      ml={{ md: "-35px" }}
+                      placeholder="last name"
+                      value={formFields.recipientLastname}
+                      onChange={handleInputChange}
+                      w={{ base: "300px", md: "270px" }}
+                    />
+                  </InputGroup>
+                </Flex>
+                <Flex flexWrap="wrap" ml={{ base: "20px", md: "30px" }}>
+                  <Box>
+                    <FormLabel
+                      fontFamily="body"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
+                      Gender{" "}
+                    </FormLabel>
+                    <Select
+                      name="recipientGender"
+                      placeholder="select gender"
+                      w={{ base: "300px", md: "270px" }}
+                      value={formFields.recipientGender}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </Select>
+                  </Box>
+                  <Box
+                    fontFamily="body"
+                    ml={{ md: "5px" }}
                     w={{ base: "300px", md: "270px" }}
-                    onChange={handleInputChange}
                   >
-                    <option value="Mum">Mum</option>
-                    <option value="Dad">Dad</option>
-                    <option value="Wife">Wife</option>
-                    <option value="Husband">Husband</option>
-                    <option value="Sister">Sister</option>
-                    <option value="Brother">Brother</option>
-                    <option value="Uncle">Uncle</option>
-                    <option value="Aunt">Aunt</option>
-                    <option value="Son">Son</option>
-                    <option value="Daughter">Daughter</option>
-                    <option value="Niece">Niece</option>
-                    <option value="Nephew">Nephew</option>
-                    <option value="Cousin">Cousin</option>
-                    <option value="Friend">Friend</option>
-                    <option value="Colleague">Colleague</option>
-                    <option value="Neighbour">Neighbour</option>
-                    <option value="MotherInLaw">Mother in-law</option>
-                    <option value="FatherInLaw">Father in-law</option>
-                    <option value="Grandmother">Grand mother</option>
-                    <option value="Grandfather">Grand father</option>
-                  </Select>
-                </Box>
-              </Flex>
-              <Flex flexWrap="wrap">
-                <Box ml={{ md: "5px" }}>
-                  <FormLabel
-                    fontFamily="body"
-                    fontWeight="bold"
-                    marginTop="20px"
-                  >
-                    Service Plan{" "}
+                    <FormLabel fontWeight="bold" marginTop="20px">
+                      Date of Birth
+                    </FormLabel>
+                    <Flex
+                      h="6vh"
+                      padding="5px"
+                      paddingLeft="15px"
+                      style={{
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      <DatePicker
+                        name="recipientDOB"
+                        selected={selectedDob}
+                        onChange={handleDOBChange}
+                        maxDate={new Date()}
+                        peekNextMonth
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        dateFormat="dd-MM-yyyy"
+                        placeholderText="select date of birth"
+                        className="form-control"
+                      />
+                    </Flex>
+                  </Box>
+                </Flex>
+                <Flex
+                  flexWrap="wrap"
+                  marginTop="1px"
+                  ml={{ base: "20px", md: "30px" }}
+                >
+                  <Box>
+                    <FormLabel
+                      fontFamily="body"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
+                      Contact Number{" "}
+                    </FormLabel>
+                    <InputGroup>
+                      <Input
+                        name="recipientPhoneNumber"
+                        type="tel"
+                        placeholder="recipient phone number"
+                        value={formFields.recipientPhoneNumber}
+                        onChange={handleInputChange}
+                        w={{ base: "300px", md: "270px" }}
+                      />
+                      <InputRightElement pointerEvents="none">
+                        <FaPhoneAlt color="gray.300" />
+                      </InputRightElement>
+                    </InputGroup>
+                  </Box>
+                  <Box ml={{ md: "5px" }}>
+                    <FormLabel
+                      fontFamily="body"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
+                      Relationship with beneficiary{" "}
+                    </FormLabel>
+                    <Select
+                      name="relationship"
+                      placeholder="Select the appropriate relationship type"
+                      w={{ base: "300px", md: "270px" }}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Mum">Mum</option>
+                      <option value="Dad">Dad</option>
+                      <option value="Wife">Wife</option>
+                      <option value="Husband">Husband</option>
+                      <option value="Sister">Sister</option>
+                      <option value="Brother">Brother</option>
+                      <option value="Uncle">Uncle</option>
+                      <option value="Aunt">Aunt</option>
+                      <option value="Son">Son</option>
+                      <option value="Daughter">Daughter</option>
+                      <option value="Niece">Niece</option>
+                      <option value="Nephew">Nephew</option>
+                      <option value="Cousin">Cousin</option>
+                      <option value="Friend">Friend</option>
+                      <option value="Colleague">Colleague</option>
+                      <option value="Neighbour">Neighbour</option>
+                      <option value="MotherInLaw">Mother in-law</option>
+                      <option value="FatherInLaw">Father in-law</option>
+                      <option value="Grandmother">Grand mother</option>
+                      <option value="Grandfather">Grand father</option>
+                    </Select>
+                  </Box>
+                </Flex>
+                <Flex flexWrap="wrap" ml={{ base: "20px", md: "30px" }}>
+                  <Box>
+                    <FormLabel
+                      fontFamily="body"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
+                      Service Plan{" "}
+                    </FormLabel>
+                    <Select
+                      isRequired
+                      name="servicePlan"
+                      placeholder="preferred service plan"
+                      w={{ base: "200px", md: "270px" }}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      value={formFields.servicePlan}
+                      onChange={handleInputChange}
+                    >
+                      <optgroup label="Standard Plans">
+                        <option value="Elderly care by a Licensed Nurse">
+                          Elderly care by a Licensed Nurse
+                        </option>
+                        <option value="Elderly care by a Nurse Assistant">
+                          Elderly care by a Nurse Assistant
+                        </option>
+                        <option value="Postpartum care">
+                          Postpartum care by a Licensed Nurse/Midwife
+                        </option>
+                        <option value="Nanny care">
+                          Nanny service by a Professional Nanny
+                        </option>
+                        <option value="Recovery care">
+                          Recovery care by a Licensed Nurse
+                        </option>
+                        <option value="Short home visit">
+                          Short home visit by a Licensed Nurse
+                        </option>
+                      </optgroup>
+                      <optgroup label="Custom Plans">
+                        {customizedPlans.map((plan) => (
+                          <option key={plan.id} value={plan.name}>
+                            {plan.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    </Select>
+                  </Box>
+
+                  <Box ml={{ md: "5px" }}>
+                    <FormLabel
+                      fontFamily="body"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
+                      Shift{" "}
+                    </FormLabel>
+                    <Select
+                      name="shift"
+                      placeholder="select preferred shift"
+                      w={{ base: "300px", md: "270px" }}
+                      value={formFields.shift}
+                      onChange={handleInputChange}
+                      disabled={shiftDisabled}
+                    >
+                      <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
+                      <option value="Live-in (24hrs)">Live-in (24hrs)</option>
+                    </Select>
+                  </Box>
+                </Flex>
+                <Flex flexWrap="wrap" ml={{ base: "20px", md: "30px" }}>
+                  <Box fontFamily="body" w={{ base: "300px", md: "270px" }}>
+                    <FormLabel fontWeight="bold" marginTop="20px">
+                      Start Date
+                    </FormLabel>
+
+                    <Flex
+                      h="6vh"
+                      padding="5px"
+                      paddingLeft="15px"
+                      style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                    >
+                      <DatePicker
+                        selected={selectedStartDate}
+                        onChange={handleStartDateChange}
+                        peekNextMonth
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        dateFormat="dd-MM-yyyy"
+                        placeholderText="preferred date to start"
+                        className="form-control"
+                        minDate={new Date()}
+                      />
+                    </Flex>
+                  </Box>
+                  <Box ml={{ md: "5px" }}>
+                    <FormLabel
+                      fontFamily="body"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
+                      Current Location{" "}
+                    </FormLabel>
+                    <Flex>
+                      <Input
+                        name="currentLocation"
+                        type="text"
+                        placeholder="current Location"
+                        value={formFields.currentLocation}
+                        onChange={handleInputChange}
+                        w={{ base: "300px", md: "270px" }}
+                      />
+                    </Flex>
+                  </Box>
+                </Flex>
+
+                <Flex flexWrap="wrap" ml={{ base: "20px", md: "30px" }}>
+                  <Box w={{ base: "300px", md: "270px" }} marginTop="20px">
+                    <FormLabel fontFamily="body" fontWeight="bold">
+                      City/Town{" "}
+                    </FormLabel>
+                    <Select
+                      isRequired
+                      name="recipientTown"
+                      placeholder="select town"
+                      w={{ base: "300px", md: "270px" }}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      value={formFields.recipientTown}
+                      onChange={handleInputChange}
+                    >
+                      {townsInLagos.map((town) => (
+                        <option key={town} value={town}>
+                          {town}
+                        </option>
+                      ))}
+                    </Select>
+                  </Box>
+                  <Box ml={{ md: "5px" }} marginTop="20px">
+                    <FormLabel fontWeight="bold" fontFamily="body">
+                      Preferred Medic Gender{" "}
+                    </FormLabel>
+                    <Select
+                      isRequired
+                      name="preferredMedicGender"
+                      placeholder="select gender"
+                      w={{ base: "300px", md: "270px" }}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      value={formFields.preferredMedicGender}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </Select>
+                  </Box>
+                </Flex>
+
+                <Box ml={{ base: "20px", md: "30px" }} marginTop="20px">
+                  <FormLabel fontWeight="bold" fontFamily="body">
+                    Preferred Language{" "}
                   </FormLabel>
                   <Select
                     isRequired
-                    name="servicePlan"
-                    placeholder="preferred service plan"
-                    w={{ base: "200px", md: "270px" }}
+                    name="preferredLanguage"
+                    placeholder="select language"
+                    w={{ base: "300px", md: "550px" }}
                     fontSize={{ base: "14px", md: "16px" }}
-                    value={formFields.servicePlan}
+                    value={formFields.preferredLanguage}
                     onChange={handleInputChange}
                   >
-                    <optgroup label="Standard Plans">
-                      <option value="Elderly care by a Licensed Nurse">
-                        Elderly care by a Licensed Nurse
+                    {majorLanguages.map((language) => (
+                      <option key={language} value={language}>
+                        {language}
                       </option>
-                      <option value="Elderly care by a Nurse Assistant">
-                        Elderly care by a Nurse Assistant
-                      </option>
-                      <option value="Postpartum care">
-                        Postpartum care by a Licensed Nurse/Midwife
-                      </option>
-                      <option value="Nanny care">
-                        Nanny service by a Professional Nanny
-                      </option>
-                      <option value="Recovery care">
-                        Recovery care by a Licensed Nurse
-                      </option>
-                      <option value="Short home visit">
-                        Short home visit by a Licensed Nurse
-                      </option>
-                    </optgroup>
-                    <optgroup label="Custom Plans">
-                      {customizedPlans.map((plan) => (
-                        <option key={plan.id} value={plan.name}>
-                          {plan.name}
-                        </option>
-                      ))}
-                    </optgroup>
+                    ))}
                   </Select>
                 </Box>
 
-                <Box ml={{ md: "5px" }}>
-                  <FormLabel
-                    fontFamily="body"
-                    fontWeight="bold"
-                    marginTop="20px"
-                  >
-                    Shift{" "}
+                <Box ml={{ base: "20px", md: "30px" }} marginTop="20px">
+                  <FormLabel fontWeight="bold" fontFamily="body">
+                    Health History
                   </FormLabel>
-                  <Select
-                    name="shift"
-                    placeholder="select preferred shift"
-                    w={{ base: "300px", md: "270px" }}
-                    value={formFields.shift}
+                  <FormLabel fontSize="14px" fontFamily="body">
+                    (Is there anything you'd like us to know?)
+                  </FormLabel>
+                  <Textarea
+                    name="recipientHealthHistory"
+                    type="text"
+                    placeholder="share health history"
+                    value={formFields.recipientHealthHistory}
                     onChange={handleInputChange}
-                    disabled={shiftDisabled}
-                  >
-                    <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
-                    <option value="Live-in (24hrs)">Live-in (24hrs)</option>
-                  </Select>
+                    w={{ base: "300px", md: "550px" }}
+                  />
                 </Box>
-              </Flex>
-              <Flex flexWrap="wrap" ml={{ md: "5px" }}>
-                <Box fontFamily="body" w={{ base: "300px", md: "270px" }}>
-                  <FormLabel fontWeight="bold" marginTop="20px">
-                    Start Date
-                  </FormLabel>
-
-                  <Flex
-                    h="6vh"
-                    padding="5px"
-                    paddingLeft="15px"
-                    style={{ border: "1px solid #ccc", borderRadius: "5px" }}
+                <Box mb="20px" ml="75%">
+                  <Button
+                    isLoading={loading}
+                    loadingText="Loading..."
+                    w="150px"
+                    bg="#A210C6"
+                    color="white"
+                    mt="20px"
+                    onClick={() => setShowSpecialNeedsForm(true)}
                   >
-                    <DatePicker
-                      selected={selectedStartDate}
-                      onChange={handleStartDateChange}
-                      peekNextMonth
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="dd-MM-yyyy"
-                      placeholderText="preferred date to start"
-                      className="form-control"
-                      minDate={new Date()}
-                    />
-                  </Flex>
+                    {loading ? "Loading..." : "Next"}
+                  </Button>
                 </Box>
-                <Box ml={{ md: "5px" }}>
-                  <FormLabel
-                    fontFamily="body"
-                    fontWeight="bold"
-                    marginTop="20px"
-                  >
-                    Current Location{" "}
-                  </FormLabel>
-                  <Flex>
-                    <Input
-                      name="currentLocation"
-                      type="text"
-                      placeholder="current Location"
-                      value={formFields.currentLocation}
-                      onChange={handleInputChange}
-                      w={{ base: "300px", md: "270px" }}
-                    />
-                  </Flex>
-                </Box>
-              </Flex>
-              <Box ml={{ md: "5px" }}>
-                <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
-                  Health History{" "}
-                </FormLabel>
-                <Textarea
-                  name="recipientHealthHistory"
-                  type="text"
-                  placeholder="share health history and any special need we should know"
-                  value={formFields.recipientHealthHistory}
-                  onChange={handleInputChange}
-                  w={{ base: "300px", md: "550px" }}
-                />
-              </Box>
-            </FormControl>
+              </FormControl>
+            )}
             <Flex justify="right" marginTop="10px">
               <Text fontFamily="body" color="#A210C6" fontStyle="italic">
                 Add to beneficiary list?
@@ -656,20 +806,22 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
               />
             </Flex>
           </DrawerBody>
-          <DrawerFooter>
-            <Button
-              mb={{ base: "20px", md: "0" }}
-              w="150px"
-              borderRadius="100px"
-              isLoading={loading}
-              loadingText="Processing..."
-              bg="#A210C6"
-              color="white"
-              onClick={handleFormSubmit}
-            >
-              {loading ? "Processing..." : "Submit"}
-            </Button>
-          </DrawerFooter>
+          {/* {!showSpecialNeedsForm && (
+            <DrawerFooter>
+              <Button
+                mb={{ base: "20px", md: "0" }}
+                w="150px"
+                borderRadius="100px"
+                isLoading={loading}
+                loadingText="Processing..."
+                bg="#A210C6"
+                color="white"
+                onClick={handleFormSubmit}
+              >
+                {loading ? "Processing..." : "Submit"}
+              </Button>
+            </DrawerFooter>
+          )} */}
         </DrawerContent>
       </Drawer>
       <PaymentModal

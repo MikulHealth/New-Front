@@ -12,7 +12,6 @@ import {
   ListItem,
   Flex,
   Text,
-  useToast,
   Box,
   Image,
   VStack,
@@ -21,13 +20,14 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
-  Input,
   Modal,
   ModalOverlay,
+  ModalFooter,
+  Input,
+  useToast,
   extendTheme,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
@@ -272,6 +272,11 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
       offsetY = addText("SpO2 ", `${report.sp02}%`, offsetY);
       offsetY = addText("Respiration ", `${report.respiration} c/m`, offsetY);
 
+      offsetY = addText("Mood ", report.mood, offsetY);
+      offsetY = addText("Emotional State ", report.emotionalState, offsetY);
+      offsetY = addText("Physical State ", report.physicalState, offsetY);
+      offsetY = addText("Pain Level ", report.painLevel, offsetY);
+
       offsetY = addText("Medications ", "", offsetY);
       report.medications.forEach((medication) => {
         offsetY = addText("", formatMedicationTime(medication), offsetY);
@@ -324,67 +329,67 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
   const openPasswordModal = () => setIsPasswordModalOpen(true);
   const closePasswordModal = () => setIsPasswordModalOpen(false);
 
-  const getMoodEmoji = (mood) => {
-    switch (mood) {
-      case "Happy":
-        return "😊";
-      case "Sad":
-        return "😢";
-      case "Anxious":
-        return "😟";
-      case "Calm":
-        return "😌";
-      case "Angry":
-        return "😠";
-      default:
-        return "😶";
-    }
-  };
+  // const getMoodEmoji = (mood) => {
+  //   switch (mood) {
+  //     case "Happy":
+  //       return "😊";
+  //     case "Sad":
+  //       return "😢";
+  //     case "Anxious":
+  //       return "😟";
+  //     case "Calm":
+  //       return "😌";
+  //     case "Angry":
+  //       return "😠";
+  //     default:
+  //       return "😶";
+  //   }
+  // };
 
-  const getEmotionalStateEmoji = (emotionalState) => {
-    switch (emotionalState) {
-      case "Stable":
-        return "😌";
-      case "Unstable":
-        return "😵";
-      case "Depressed":
-        return "😞";
-      case "Elevated":
-        return "😃";
-      default:
-        return "😶";
-    }
-  };
+  // const getEmotionalStateEmoji = (emotionalState) => {
+  //   switch (emotionalState) {
+  //     case "Stable":
+  //       return "😌";
+  //     case "Unstable":
+  //       return "😵";
+  //     case "Depressed":
+  //       return "😞";
+  //     case "Elevated":
+  //       return "😃";
+  //     default:
+  //       return "😶";
+  //   }
+  // };
 
-  const getPhysicalStateEmoji = (physicalState) => {
-    switch (physicalState) {
-      case "Good":
-        return "💪";
-      case "Fair":
-        return "🤔";
-      case "Poor":
-        return "🤕";
-      default:
-        return "😶";
-    }
-  };
+  // const getPhysicalStateEmoji = (physicalState) => {
+  //   switch (physicalState) {
+  //     case "Good":
+  //       return "💪";
+  //     case "Fair":
+  //       return "🤔";
+  //     case "Poor":
+  //       return "🤕";
+  //     default:
+  //       return "😶";
+  //   }
+  // };
 
-  const getPainLevelEmoji = (painLevel) => {
-    switch (painLevel) {
-      case "None":
-        return "😀";
-      case "Mild":
-        return "🙂";
-      case "Moderate":
-        return "😐";
-      case "Severe":
-        return "😖";
-      case "Very Severe":
-        return "😫";
-      default:
-        return "😶";
-    }
-  };
+  // const getPainLevelEmoji = (painLevel) => {
+  //   switch (painLevel) {
+  //     case "None":
+  //       return "😀";
+  //     case "Mild":
+  //       return "🙂";
+  //     case "Moderate":
+  //       return "😐";
+  //     case "Severe":
+  //       return "😖";
+  //     case "Very Severe":
+  //       return "😫";
+  //     default:
+  //       return "😶";
+  //   }
+  // };
 
   return (
     <Drawer
@@ -520,28 +525,32 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
                 <Flex mt="5px">
                   <Text fontWeight="bold">Mood:</Text>
                   <Text ml="5px">
-                    {getMoodEmoji(selectedReport.mood)} {selectedReport.mood}
+                    {selectedReport.mood}
+                    {/* {getMoodEmoji(selectedReport.mood)} {selectedReport.mood} */}
                   </Text>
                 </Flex>
                 <Flex>
                   <Text fontWeight="bold">Emotional State: </Text>
                   <Text ml="5px">
-                    {getEmotionalStateEmoji(selectedReport.emotionalState)}{" "}
                     {selectedReport.emotionalState}
+                    {/* {getEmotionalStateEmoji(selectedReport.emotionalState)}{" "}
+                    {selectedReport.emotionalState} */}
                   </Text>
                 </Flex>
                 <Flex>
                   <Text fontWeight="bold">Physical State: </Text>
                   <Text ml="5px">
-                    {getPhysicalStateEmoji(selectedReport.physicalState)}{" "}
                     {selectedReport.physicalState}
+                    {/* {getPhysicalStateEmoji(selectedReport.physicalState)}{" "}
+                    {selectedReport.physicalState} */}
                   </Text>
                 </Flex>
                 <Flex>
                   <Text fontWeight="bold">Pain Level: </Text>
                   <Text ml="5px">
-                    {getPainLevelEmoji(selectedReport.painLevel)}{" "}
                     {selectedReport.painLevel}
+                    {/* {getPainLevelEmoji(selectedReport.painLevel)}{" "}
+                    {selectedReport.painLevel} */}
                   </Text>
                 </Flex>
                 <Text mt="5px" fontWeight="bold">
@@ -568,8 +577,8 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
                   Recommendations/Requests:
                 </Text>
                 <Text maxWidth="100%">{selectedReport.recommendations}</Text>
-                <Flex>
-                  <Text mt="5px" fontStyle="italic" fontWeight="bold">
+                <Flex mt="5px">
+                  <Text fontStyle="italic" fontWeight="bold">
                     Submitted by:
                   </Text>
                   <Text ml="10px" fontStyle="italic">

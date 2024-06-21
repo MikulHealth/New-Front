@@ -4,6 +4,10 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  ModalFooter,
+  Button,
+  Input,
+  useToast,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -46,6 +50,12 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   const balance = user?.walletBalance;
   const [amountNeeded, setAmountNeeded] = useState(0);
   const [showInsufficientModal, setShowInsufficientModal] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordInput, setPassword] = useState("");
+  const toast = useToast();
+  const emailInput = user?.email;
+  const openPasswordModal = () => setIsPasswordModalOpen(true);
+  const closePasswordModal = () => setIsPasswordModalOpen(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +81,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   const handleWalletPayment = () => {
     const { costOfService } = paymentData;
     const numericBalance = Number(balance);
+
     const numericCostOfService = Number(paymentData.costOfService);
 
     if (numericBalance > numericCostOfService) {
@@ -83,6 +94,44 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
     } else {
       setAmountNeeded(costOfService);
       setShowInsufficientModal(true);
+    }
+  };
+
+  const handlePasswordSubmit = async () => {
+    const apiUrl = "https://backend-c1pz.onrender.com/login";
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailInput,
+          password: passwordInput,
+        }),
+      });
+
+      if (response.ok) {
+        closePasswordModal();
+        handleWalletPayment();
+      } else {
+        toast({
+          title: "Verification Failed",
+          description: "Invalid password. Please try again.",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+          position: "top-left",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Verification Error",
+        description: "Invalid password. Please try again.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top-left",
+      });
+    } finally {
     }
   };
 
@@ -127,7 +176,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
               bg="white"
               marginLeft="8px"
               borderRadius="15px"
-              onClick={handleWalletPayment}
+              onClick={openPasswordModal}
               style={{
                 cursor: "",
               }}
@@ -214,6 +263,53 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
               </Flex>
             </Box>
           </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        size={{ base: "sm", md: "md" }}
+        isOpen={isPasswordModalOpen}
+        onClose={closePasswordModal}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontFamily="heading" color="#A210C6">
+            Enter Password
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text fontWeight="body" mb={4}>
+              Mikul health wants to make sure it's really you trying to use the
+              your wallet to make payment.
+            </Text>
+
+            <Input
+              placeholder="Password"
+              type="password"
+              value={passwordInput}
+              onChange={(e) => setPassword(e.target.value)}
+              mb={3}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              bg="#A210C6"
+              color="white"
+              mr={3}
+              onClick={handlePasswordSubmit}
+              fontFamily="body"
+            >
+              Submit
+            </Button>
+            <Button
+              fontFamily="body"
+              bg="gray.500"
+              color="white"
+              onClick={closePasswordModal}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
       {showInsufficientModal && (

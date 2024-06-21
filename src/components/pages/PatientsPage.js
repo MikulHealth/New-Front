@@ -387,6 +387,7 @@ const PatientsPage = () => {
                                 </Text>
                                 <Text
                                   marginLeft="10px"
+                                   mt="2"
                                   color="black"
                                   maxW="600px"
                                   maxH="1000px"
