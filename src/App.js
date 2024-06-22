@@ -37,6 +37,7 @@ import MedicDashboard from "./components/pages/MedicDashboard";
 import PatientsPage from "./components/pages/PatientsPage";
 import InactivityLogout from "./InactivityLogout";
 import MedicAppPage from "./components/pages/MedicAppPage";
+import MedicWalletPage from "./components/pages/MedicWalletPage";
 
 function App() {
   return (
@@ -53,7 +54,8 @@ function App() {
           <Route path="/verify-number" element={<VerifyNumber />}></Route>
           <Route path="/complete" element={<CompletionPage />}></Route>
           <Route path="/patients" element={<PatientsPage />}></Route>
-          <Route path="/medic-appointment" element={<MedicAppPage />}></Route>
+          <Route path="/medic-appointment" element={<MedicAppPage />}></Route>         
+          <Route path="/medic-wallet" element={<MedicWalletPage />}></Route>         
           <Route
             path="/verify-medic-number"
             element={<VerifyMedicNumber />}
