@@ -427,8 +427,8 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
               />
             ) : (
               <FormControl
-                ml={{ base: "25px", md: "0" }}
-                w={{ base: "80%", md: "100%" }}
+               
+                w={{ base: "100%", md: "100%" }}
               >
                 <FormLabel
                   ml={{ base: "20px", md: "30px" }}
@@ -448,6 +448,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       value={formFields.recipientFirstname}
                       onChange={handleInputChange}
                       w={{ base: "300px", md: "270px" }}
+                      h="6vh"
                     />
                   </InputGroup>
                   <InputGroup
@@ -461,6 +462,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       value={formFields.recipientLastname}
                       onChange={handleInputChange}
                       w={{ base: "300px", md: "270px" }}
+                      h="6vh"
                     />
                   </InputGroup>
                 </Flex>
@@ -477,6 +479,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       name="recipientGender"
                       placeholder="select gender"
                       w={{ base: "300px", md: "270px" }}
+                      h="6vh"
                       value={formFields.recipientGender}
                       onChange={handleInputChange}
                     >
@@ -484,11 +487,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       <option value="Female">Female</option>
                     </Select>
                   </Box>
-                  <Box
-                    fontFamily="body"
-                    ml={{ md: "5px" }}
-                    w={{ base: "300px", md: "270px" }}
-                  >
+                  <Box fontFamily="body" ml={{ md: "5px" }}>
                     <FormLabel fontWeight="bold" marginTop="20px">
                       Date of Birth
                     </FormLabel>
@@ -500,6 +499,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                         border: "1px solid #ccc",
                         borderRadius: "5px",
                       }}
+                      w={{ base: "300px", md: "270px" }}
                     >
                       <DatePicker
                         name="recipientDOB"
@@ -594,7 +594,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       isRequired
                       name="servicePlan"
                       placeholder="preferred service plan"
-                      w={{ base: "200px", md: "270px" }}
+                      w={{ base: "300px", md: "270px" }}
                       fontSize={{ base: "14px", md: "16px" }}
                       value={formFields.servicePlan}
                       onChange={handleInputChange}
@@ -660,6 +660,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       h="6vh"
                       padding="5px"
                       paddingLeft="15px"
+                      w={{ base: "300px", md: "270px" }}
                       style={{ border: "1px solid #ccc", borderRadius: "5px" }}
                     >
                       <DatePicker
@@ -774,7 +775,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                     w={{ base: "300px", md: "550px" }}
                   />
                 </Box>
-                <Box mb="20px" ml="75%">
+                <Box mb="20px" ml={{ base: "20px", md: "40px" }}>
                   <Button
                     isLoading={loading}
                     loadingText="Loading..."

@@ -33,6 +33,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
+  ModalFooter,
   extendTheme,
   ModalBody,
   Tab,
@@ -156,7 +157,12 @@ const HeadsUpModal = ({
 
 const ChooseBankModal = ({ isOpen, onClose, onOnlinePayment }) => {
   return (
-    <Modal theme={customTheme} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      size={{ base: "sm", md: "md" }}
+      theme={customTheme}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
@@ -183,7 +189,7 @@ const ChooseBankModal = ({ isOpen, onClose, onOnlinePayment }) => {
               color="#A210C6"
               marginTop="20px"
               mt={{ base: "150px", md: "80px" }}
-              mb={{ base: "150px", md: "20px" }}
+              mb={{ base: "20px", md: "20px" }}
               ml={{ base: "10px", md: "10px" }}
               leftIcon={<AddIcon />}
             >
@@ -195,56 +201,11 @@ const ChooseBankModal = ({ isOpen, onClose, onOnlinePayment }) => {
     </Modal>
   );
 };
-
-const WithdrawModal = ({ isOpen, onClose }) => {
+const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation }) => {
   const [amount, setAmount] = useState("");
-  const { user } = useSelector((state) => state.userReducer);
-  const customerId = user?.userId;
-  const [loading, setLoading] = useState(false);
-  const method = "CARD";
-  const navigate = useNavigate();
 
-  const handleAmountSubmission = async () => {
-    setLoading(true);
-
-    try {
-      const token = localStorage.getItem("token");
-
-      // const apiUrl = `http://localhost:8080/v1/api/wallets/deposit?customerId=${encodeURIComponent(customerId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/deposit?customerId=${encodeURIComponent(
-        customerId
-      )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
-        method
-      )}`;
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
-
-      const response = await axios.post(apiUrl, {}, { headers });
-
-      if (response.data.success) {
-        setLoading(false);
-        toast.success("Wallet funded successfully");
-        setAmount("");
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 5000);
-      } else {
-        setLoading(false);
-
-        console.error("Error Funding Wallet");
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown error";
-        toast.error(errorMessage);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.error("An error occurred:", error);
-      toast.error("Error funding wallet");
-    }
+  const handleWithdrawClick = () => {
+    onOpenConfirmation();
   };
 
   return (
@@ -259,6 +220,7 @@ const WithdrawModal = ({ isOpen, onClose }) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        size={{ base: "sm", md: "md" }}
       />
 
       <ModalOverlay />
@@ -277,7 +239,8 @@ const WithdrawModal = ({ isOpen, onClose }) => {
           alignItems="center"
           p={{ base: 2, md: 4 }}
         >
-          <FormControl fontFamily="body">
+          <Text>Processing fee ₦50</Text>
+          <FormControl mt="20px" fontFamily="body">
             <FormLabel fontFamily="body" textAlign="center">
               Input amount:
             </FormLabel>
@@ -294,15 +257,51 @@ const WithdrawModal = ({ isOpen, onClose }) => {
             mb="20px"
             bg="#A210C6"
             color="white"
-            isLoading={loading}
-            loadingText="Processing..."
-            onClick={handleAmountSubmission}
-            // _hover={{ backgroundColor: "blue.500" }}
+            onClick={handleWithdrawClick}
             width={{ base: "full", md: "auto" }}
           >
-            {loading ? "Processing..." : "Withdraw"}
+            Withdraw
           </Button>
         </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
+  return (
+    <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader color="#A210C6" fontFamily="heading">
+          Confirmation
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody fontFamily="body" textAlign="left">
+          <Text>
+            You are about to transfer ₦60,000 to Adebola, Busola Mercy (Wema
+            Bank).
+          </Text>
+          <Text mt="10px">A ₦50 transaction charge applies.</Text>
+        </ModalBody>
+        <ModalFooter justifyContent="center">
+          <Button
+            fontFamily="body"
+            variant="ghost"
+            color="gray.500"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            fontFamily="body"
+            colorScheme="ghost"
+            color="#A210C6"
+            onClick={onConfirm}
+          >
+            Confirm
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
@@ -312,6 +311,8 @@ const MedicWalletPage = () => {
   const [showFundWalletModal, setShowFundWalletModal] = useState(false);
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const navigate = useNavigate();
   const accountNumber = "0124536789";
   const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [loading, setLoading] = useState(true);
@@ -361,13 +362,57 @@ const MedicWalletPage = () => {
   const handleOpenOnlinePaymentModal = () => {
     setShowOnlinePaymentModal(true);
   };
-  const formatAmount = (amount) => {
-    const num = Number(amount);
-    return num.toLocaleString("en-US");
-  };
 
   const handleCloseOnlinePaymentModal = () => {
     setShowOnlinePaymentModal(false);
+  };
+
+  const handleOpenConfirmationModal = () => {
+    setShowConfirmationModal(true);
+  };
+
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+  };
+
+  const handleConfirmWithdrawal = async () => {
+    setLoading(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw`;
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.post(apiUrl, {}, { headers });
+
+      if (response.data.success) {
+        setLoading(false);
+        toast.success("Withdrawal successful");
+        setTimeout(() => {
+          navigate("/medic-dashboard");
+        }, 5000);
+      } else {
+        setLoading(false);
+        console.error("Error making withdrawal");
+        const errorMessage = response.data
+          ? response.data.message
+          : "Unknown error";
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("An error occurred:", error);
+      toast.error("Error making withdrawal");
+    }
+  };
+
+  const formatAmount = (amount) => {
+    const num = Number(amount);
+    return num.toLocaleString("en-US");
   };
 
   return (
@@ -383,7 +428,6 @@ const MedicWalletPage = () => {
         <NavBar />
         {loading ? (
           <Skeleton
-            // ml={{ base: "10px", md: "0" }}
             justifyContent="center"
             w={{ base: "375px", md: "70vw" }}
             h={{ base: "189px", md: "40vh" }}
@@ -423,7 +467,6 @@ const MedicWalletPage = () => {
             </Flex>
             <Box
               textAlign="center"
-              // ml={{ base: "10px", md: "0" }}
               w={{ base: "375px", md: "910px" }}
               h={{ base: "150px", md: "200px" }}
               mt={{ base: "10px", md: "0" }}
@@ -468,7 +511,6 @@ const MedicWalletPage = () => {
                     marginTop="20px"
                     onClick={handleOpenFundWalletModal}
                     bg="white"
-                    // leftIcon={<ExternalLinkIcon />}
                   >
                     Withdraw
                   </Button>
@@ -478,11 +520,7 @@ const MedicWalletPage = () => {
                 ml={{ base: "20px", md: "40px" }}
                 mt={{ base: "30px", md: "50px" }}
               >
-                <Box
-                  marginBottom={{ base: "50px", md: "50px" }}
-                  // marginLeft={{ base: "-50px", md: "-935px" }}
-                  color="white"
-                >
+                <Box marginBottom={{ base: "50px", md: "50px" }} color="white">
                   <Text
                     textAlign="left"
                     fontSize={{ base: "10px", md: "16px" }}
@@ -541,7 +579,6 @@ const MedicWalletPage = () => {
               ml={{ base: "0", md: "-100px" }}
               mt={{ base: "-10px", md: "-30px" }}
               justifyContent="center"
-              // overflow="hidden"
               className="transaction-tabs"
             >
               <VStack ml={{ base: "0", md: "0px" }} w="90%">
@@ -560,7 +597,6 @@ const MedicWalletPage = () => {
                       fontSize={{ base: "12px", md: "16px" }}
                       color="green.500"
                       fontWeight="bold"
-                      // ml="50px"
                     >
                       Credit
                     </Tab>
@@ -591,7 +627,6 @@ const MedicWalletPage = () => {
                 </Tabs>
                 <MobileFooter />
               </VStack>
-              {/* <Help /> */}
             </Flex>
           </Box>
         )}
@@ -611,6 +646,13 @@ const MedicWalletPage = () => {
       <WithdrawModal
         isOpen={showOnlinePaymentModal}
         onClose={handleCloseOnlinePaymentModal}
+        onOpenConfirmation={handleOpenConfirmationModal}
+      />
+
+      <ConfirmationModal
+        isOpen={showConfirmationModal}
+        onClose={handleCloseConfirmationModal}
+        onConfirm={handleConfirmWithdrawal}
       />
 
       <SearchTransactionModal

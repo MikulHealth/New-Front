@@ -415,7 +415,7 @@ const BookBeneficiaryAppointmentModal = ({
                         isRequired
                         name="servicePlan"
                         placeholder="preferred service plan"
-                        w={{ base: "200px", md: "270px" }}
+                        w={{ base: "300px", md: "270px" }}
                         value={formPages.servicePlan}
                         onChange={handleInputChange}
                         fontSize={{ base: "14px", md: "16px" }}
@@ -549,7 +549,7 @@ const BookBeneficiaryAppointmentModal = ({
                     </Box>
                   </Flex>
 
-                  <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                  <Box ml={{ base: "0px", md: "40px" }} marginTop="20px">
                     <FormLabel fontWeight="bold" fontFamily="body">
                       Preferred Language{" "}
                     </FormLabel>
@@ -570,7 +570,7 @@ const BookBeneficiaryAppointmentModal = ({
                     </Select>
                   </Box>
 
-                  <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                  <Box ml={{ base: "0px", md: "40px" }} marginTop="20px">
                     <FormLabel fontWeight="bold" fontFamily="body">
                       Health History
                     </FormLabel>
@@ -586,7 +586,7 @@ const BookBeneficiaryAppointmentModal = ({
                       w={{ base: "300px", md: "550px" }}
                     />
                   </Box>
-                  <Box mb="20px" ml="70%" >
+                  <Box mb="20px" ml={{ base: "20px", md: "40px" }} >
                     <Button
                       isLoading={loading}
                       loadingText="Loading..."

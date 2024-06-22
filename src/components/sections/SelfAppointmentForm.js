@@ -577,14 +577,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       w={{ base: "300px", md: "550px" }}
                     />
                   </Box>
-                  <Box mb="20px" ml="75%" >
+                  <Box mb="20px" ml={{ base: "20px", md: "40px" }} mt="20px">
                     <Button
                       isLoading={loading}
                       loadingText="Loading..."
                       w="150px"
                       bg="#A210C6"
                       color="white"
-                      mt="20px"
                       onClick={() => setShowSpecialNeedsForm(true)}
                     >
                       {loading ? "Loading..." : "Next"}
