@@ -383,7 +383,7 @@ const MedicWalletPage = () => {
     const method = "WALLET"; 
   
     // const apiUrl = `http://localhost:8080/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(medicId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
-    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw?medicId=${encodeURIComponent(medicId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
+    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(medicId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
   
     try {
       const token = localStorage.getItem("token"); 
