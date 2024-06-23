@@ -62,7 +62,7 @@ const SummaryCards = () => {
                   fontFamily="body"
                   color="#676568"
                 >
-                  Earnings
+                  Wallet
                 </Text>
               </Flex>
               <Text
@@ -74,7 +74,7 @@ const SummaryCards = () => {
                 color="#212427"
               >
                 {" "}
-                ₦{formatAmount(balance)}.00
+                ₦{formatAmount(balance)}
               </Text>
             </Box>
           </Box>

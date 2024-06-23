@@ -50,6 +50,7 @@ import NavBar from "../authLayouts/MedicNavBar";
 import MobileFooter from "../authLayouts/MedicFooter";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReviewBankModal from "../sections/ReviewBankModal";
 
 const customTheme = extendTheme({
   components: {
@@ -67,11 +68,7 @@ const customTheme = extendTheme({
   },
 });
 
-const HeadsUpModal = ({
-  isOpen,
-  onClose,
-  onBankTransfer,
-}) => {
+const HeadsUpModal = ({ isOpen, onClose, onBankTransfer }) => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
 
@@ -153,7 +150,47 @@ const HeadsUpModal = ({
   );
 };
 
-const ChooseBankModal = ({ isOpen, onClose, onOnlinePayment }) => {
+const ChooseBankModal = ({
+  isOpen,
+  onClose,
+  onOnlinePayment,
+  onOpenAddBankModal,
+  onSelectBank,
+}) => {
+  const { user } = useSelector((state) => state.userReducer);
+  const [banks, setBanks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (isOpen) {
+      const fetchBanks = async () => {
+        try {
+          const response = await axios.get(
+            // `http://localhost:8080/v1/api/wallets/${user?.userId}/banks`
+            `https://backend-c1pz.onrender.com/v1/api/wallets/${user?.userId}/banks`
+            
+          );
+          const fetchedBanks = Array.isArray(response.data.data)
+            ? response.data.data
+            : [];
+          setBanks(fetchedBanks);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching banks:", error);
+          setBanks([]);
+          setLoading(false);
+        }
+      };
+
+      fetchBanks();
+    }
+  }, [isOpen, user]);
+
+  const handleBankClick = (bank) => {
+    onSelectBank(bank);
+    onOnlinePayment();
+  };
+
   return (
     <Modal
       size={{ base: "sm", md: "md" }}
@@ -168,33 +205,117 @@ const ChooseBankModal = ({ isOpen, onClose, onOnlinePayment }) => {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody fontFamily="body">
-          <Box>
-            <Flex
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={onOnlinePayment}
-              justifyContent="space-between"
-            >
-              <Box p="5px">
-                <Text>Wema Bank</Text>
-                <Text>Kemi Joshua</Text>
+          {loading ? (
+            <Skeleton height="20px" my="10px" />
+          ) : banks.length === 0 ? (
+            <Box textAlign="center">
+              <Text>No banks found.</Text>
+              <Button
+                colorScheme="ghost"
+                color="#A210C6"
+                mt="10px"
+                leftIcon={<AddIcon />}
+                onClick={onOpenAddBankModal}
+              >
+                Add bank account
+              </Button>
+            </Box>
+          ) : (
+            banks.map((bank) => (
+              <Box key={bank.id}>
+                <Flex
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleBankClick(bank)}
+                  justifyContent="space-between"
+                >
+                  <Box p="5px">
+                    <Text>{bank.bankName}</Text>
+                    <Text>{bank.accountName}</Text>
+                  </Box>
+                  <ChevronRightIcon w="30px" h="45px" mt="10px" />
+                </Flex>
+                <Divider my={4} borderColor="gray.500" />
               </Box>
-              <ChevronRightIcon w="30px" h="45px" mt="10px" />
-            </Flex>
-            <Divider my={4} borderColor="gray.500" />
-            <Button
-              color="#A210C6"
-              marginTop="20px"
-              mt={{ base: "150px", md: "80px" }}
-              mb={{ base: "20px", md: "20px" }}
-              ml={{ base: "10px", md: "10px" }}
-              leftIcon={<AddIcon />}
-            >
-              Add bank account
-            </Button>
-          </Box>
+            ))
+          )}
         </ModalBody>
+        <ModalFooter>
+          <Button
+            mt="40px"
+            mb="10px"
+            colorScheme="ghost"
+            color="#A210C6"
+            leftIcon={<AddIcon />}
+            onClick={onOpenAddBankModal}
+          >
+            Add bank account
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
+  const { user } = useSelector((state) => state.userReducer);
+  const [bankName, setBankName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountName, setAccountName] = useState("");
+
+  const handleAddBank = () => {
+    const newBank = {
+      bankName,
+      accountNumber,
+      accountName,
+      userId: user?.userId,
+    };
+    onReviewBank(newBank);
+  };
+
+  return (
+    <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader color="#A210C6" fontFamily="heading">
+          Add Bank Account
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormControl>
+            <FormLabel>Bank Name</FormLabel>
+            <Input
+              value={bankName}
+              onChange={(e) => setBankName(e.target.value)}
+              placeholder="Enter bank name"
+            />
+          </FormControl>
+          <FormControl mt={4}>
+            <FormLabel>Account Number</FormLabel>
+            <Input
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
+              placeholder="Enter account number"
+            />
+          </FormControl>
+          <FormControl mt={4}>
+            <FormLabel>Account Name</FormLabel>
+            <Input
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
+              placeholder="Enter account name"
+            />
+          </FormControl>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button bg="#A210C6" color="white" onClick={handleAddBank} ml={3}>
+            Save
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
@@ -229,19 +350,18 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
         alignItems="center"
         textAlign="center"
       >
-        <ModalHeader color="#A210C6" fontFamily="heading">
+        <ModalHeader textAlign="left" color="#A210C6" fontFamily="heading">
           Choose Amount
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody
           flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
+          justifyContent="left"
+          alignItems="left"
           p={{ base: 2, md: 4 }}
         >
-          <Text>Processing fee ₦50</Text>
           <FormControl mt="20px" fontFamily="body">
-            <FormLabel fontFamily="body" textAlign="center">
+            <FormLabel fontFamily="body" textAlign="left">
               Input amount:
             </FormLabel>
             <Input
@@ -250,6 +370,7 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
               border="1px solid black"
               placeholder="₦5000"
               onChange={(e) => setInputAmount(e.target.value)}
+              width={{ base: "full", md: "auto" }}
             />
           </FormControl>
           <Button
@@ -268,7 +389,13 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
   );
 };
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, amount }) => {
+const ConfirmationModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  amount,
+  bankDetails,
+}) => {
   return (
     <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -279,8 +406,8 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, amount }) => {
         <ModalCloseButton />
         <ModalBody fontFamily="body" textAlign="left">
           <Text>
-            You are about to transfer ₦{amount} to Adebola, Busola Mercy (Wema
-            Bank).
+            You are about to transfer ₦{amount} to {bankDetails?.accountName} ({" "}
+            {bankDetails?.accountNumber} {bankDetails?.bankName}).
           </Text>
           <Text mt="10px">A ₦50 transaction charge applies.</Text>
         </ModalBody>
@@ -311,10 +438,14 @@ const MedicWalletPage = () => {
   const [showFundWalletModal, setShowFundWalletModal] = useState(false);
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
+  const [showAddBankModal, setShowAddBankModal] = useState(false);
+  const [showReviewBankModal, setShowReviewBankModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [amount, setAmount] = useState("");
+  const [reviewBankDetails, setReviewBankDetails] = useState(null);
   const navigate = useNavigate();
   const accountNumber = "0124536789";
+  const [selectedBankDetails, setSelectedBankDetails] = useState(null);
   const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
@@ -323,6 +454,11 @@ const MedicWalletPage = () => {
   const walletTotalDebit = user?.walletTotalDebit;
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
+  };
+
+  const handleOpenConfirmationModal = () => {
+    // setShowWithdrawModal(false);
+    setShowConfirmationModal(true);
   };
 
   const [showSearchTransactionsModal, setShowSearchTransactionsModal] =
@@ -368,8 +504,21 @@ const MedicWalletPage = () => {
     setShowOnlinePaymentModal(false);
   };
 
-  const handleOpenConfirmationModal = () => {
-    setShowConfirmationModal(true);
+  const handleOpenAddBankModal = () => {
+    setShowAddBankModal(true);
+  };
+
+  const handleCloseAddBankModal = () => {
+    setShowAddBankModal(false);
+  };
+
+  const handleOpenReviewBankModal = (bankDetails) => {
+    setReviewBankDetails(bankDetails);
+    setShowReviewBankModal(true);
+  };
+
+  const handleCloseReviewBankModal = () => {
+    setShowReviewBankModal(false);
   };
 
   const handleCloseConfirmationModal = () => {
@@ -378,42 +527,48 @@ const MedicWalletPage = () => {
 
   const handleConfirmWithdrawal = async () => {
     setLoading(true);
-  
-    const medicId = user?.userId;  
-    const method = "WALLET"; 
-  
-    // const apiUrl = `http://localhost:8080/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(medicId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
-    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(medicId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
-  
+
+    const medicId = user?.userId;
+    const method = "WALLET";
+
+    // const apiUrl = `http://localhost:8080/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(
+    //   medicId
+    // )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
+    //   method
+    // )}`;
+    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(
+      medicId
+    )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
+      method
+    )}`;
+
     try {
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-  
-       const response = await axios.post(apiUrl, {}, { headers });
-  
+
+      const response = await axios.post(apiUrl, {}, { headers });
+
       if (response.data.success) {
-       
         setLoading(false);
-        toast.success("Withdrawal successful");
+        toast.success("Transfer successful");
         setTimeout(() => {
           navigate("/medic-dashboard");
         }, 5000);
-
       } else {
         setLoading(false);
-            console.error("Withdrawal failed");
-            const errorMessage = response.data
-              ? response.data.message
-              : "Unknown failure";
-            toast.error(errorMessage);
+        console.error("Transfer failed");
+        const errorMessage = response.data
+          ? response.data.message
+          : "Unknown failure";
+        toast.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast.error("Error making withdrawal");
+      toast.error("Error making transfer");
     }
   };
 
@@ -648,6 +803,26 @@ const MedicWalletPage = () => {
         isOpen={showBankTransferModal}
         onClose={handleCloseBankTransferModal}
         onOnlinePayment={handleOpenOnlinePaymentModal}
+        onOpenAddBankModal={handleOpenAddBankModal}
+        onSelectBank={setSelectedBankDetails}
+      />
+      <AddBankModal
+        isOpen={showAddBankModal}
+        onClose={handleCloseAddBankModal}
+        onBankAdded={() => {
+          setShowBankTransferModal(false);
+          setShowBankTransferModal(true);
+        }}
+        onReviewBank={handleOpenReviewBankModal}
+      />
+      <ReviewBankModal
+        isOpen={showReviewBankModal}
+        onClose={handleCloseReviewBankModal}
+        bankDetails={reviewBankDetails}
+        onSave={() => {
+          setShowReviewBankModal(false);
+          setShowBankTransferModal(true);
+        }}
       />
 
       <WithdrawModal
@@ -656,14 +831,13 @@ const MedicWalletPage = () => {
         onOpenConfirmation={handleOpenConfirmationModal}
         setAmount={setAmount}
       />
-
       <ConfirmationModal
         isOpen={showConfirmationModal}
         onClose={handleCloseConfirmationModal}
         onConfirm={handleConfirmWithdrawal}
         amount={amount}
+        bankDetails={selectedBankDetails}
       />
-
       <SearchTransactionModal
         isOpen={showSearchTransactionsModal}
         onClose={handleCloseSearchTransactionsModal}

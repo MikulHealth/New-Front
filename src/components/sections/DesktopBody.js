@@ -5,12 +5,12 @@ import Patients from "../../assets/MedicPatients.svg";
 import Report from "../../assets/MedicReport.svg";
 import PatientReportDrawer from "./PatientReportDrawer";
 import { useNavigate } from "react-router-dom";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const DesktopCards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
-  
+
   const { user } = useSelector((state) => state.userReducer);
   const balance = user?.walletBalance;
 
@@ -19,13 +19,13 @@ const DesktopCards = () => {
     return num.toLocaleString();
   };
 
-const openPatientsPage = () => {
-  navigate("/patients");
-}
+  const openPatientsPage = () => {
+    navigate("/patients");
+  };
 
-const openWalletPage = () => {
-  navigate("/medic-wallet");
-}
+  const openWalletPage = () => {
+    navigate("/medic-wallet");
+  };
 
   return (
     <Box>
@@ -34,6 +34,7 @@ const openWalletPage = () => {
           <Box
             style={{
               transition: "transform 0.3s ease-in-out",
+              cursor: "pointer",
             }}
             bg="#CFF4D7"
             h={{ base: "125px", md: "186px" }}
@@ -44,7 +45,7 @@ const openWalletPage = () => {
               transform: "translateY(-10px)",
             }}
           >
-            <Box  onClick={openWalletPage}>
+            <Box onClick={openWalletPage}>
               <Flex>
                 <Image
                   src={WalletIcon}
@@ -60,7 +61,7 @@ const openWalletPage = () => {
                   fontFamily="body"
                   color="#676568"
                 >
-                  Earnings
+                  Wallet
                 </Text>
               </Flex>
               <Text
@@ -72,7 +73,7 @@ const openWalletPage = () => {
                 color="#212427"
               >
                 {" "}
-                ₦{formatAmount(balance)}.00
+                ₦{formatAmount(balance)}
               </Text>
             </Box>
           </Box>
