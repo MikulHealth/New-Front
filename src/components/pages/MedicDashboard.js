@@ -26,7 +26,7 @@ import CalendarBox from "../../components/sections/CalenderBox";
 import SummaryCards from "../sections/MobileBody";
 import DesktopCards from "../sections/DesktopBody";
 import RequestAppointmentModal from "../sections/RequestAppModal";
-import MatchedMedicAppointmentsModal from "../sections/MatchedMedicAppointmentsModal "; 
+import MatchedMedicAppointmentsModal from "../sections/MatchedMedicAppointmentsModal ";
 
 const customTheme = extendTheme({
   components: {
@@ -51,19 +51,21 @@ const MedicDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [matchedAppointments, setMatchedAppointments] = useState([]);
-  const [isMatchedAppointmentsModalOpen, setIsMatchedAppointmentsModalOpen] = useState(false); 
+  const [isMatchedAppointmentsModalOpen, setIsMatchedAppointmentsModalOpen] =
+    useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const openMatchedAppointmentsModal = () => setIsMatchedAppointmentsModalOpen(true);
-  const closeMatchedAppointmentsModal = () => setIsMatchedAppointmentsModalOpen(false);
+  const openMatchedAppointmentsModal = () =>
+    setIsMatchedAppointmentsModalOpen(true);
+  const closeMatchedAppointmentsModal = () =>
+    setIsMatchedAppointmentsModalOpen(false);
 
   useEffect(() => {
     AOS.init();
   }, []);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -111,25 +113,16 @@ const MedicDashboard = () => {
           if (response.data.success) {
             setMatchedAppointments(response.data.data);
             if (response.data.data && response.data.data.length > 0) {
-              openMatchedAppointmentsModal(); // Open the matched appointments modal if there are matched appointments
+              openMatchedAppointmentsModal();
             }
           } else {
-            console.error("Failed to fetch matched appointments:", response.data.message);
-            // toast({
-            //   title: "Failed to fetch matched appointments",
-            //   description: response.data.message,
-            //   status: "error",
-            //   duration: 6000,
-            // });
+            console.error(
+              "Failed to fetch matched appointments:",
+              response.data.message
+            );
           }
         } catch (error) {
           console.error("Error fetching matched appointments:", error);
-          // toast({
-          //   title: "Error fetching matched appointments",
-          //   description: "An error occurred. Please try again.",
-          //   status: "error",
-          //   duration: 6000,
-          // });
         }
       }
     };

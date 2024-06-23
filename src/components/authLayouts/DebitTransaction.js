@@ -99,7 +99,7 @@ export default function TransactionTab() {
             fontSize={{ base: "10px", md: "16px" }}
             ml={{ base: "10px", md: "35px" }}
           >
-            No transaction yet. Click on fund wallet to begin
+            No transaction yet. 
           </Text>
         ) : (
           <Box>

@@ -5,14 +5,26 @@ import Patients from "../../assets/MedicPatients.svg";
 import Report from "../../assets/MedicReport.svg";
 import PatientReportDrawer from "./PatientReportDrawer";
 import { useNavigate } from "react-router-dom";
+import {useSelector } from "react-redux";
 
 const DesktopCards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  
+  const { user } = useSelector((state) => state.userReducer);
+  const balance = user?.walletBalance;
 
+  const formatAmount = (amount) => {
+    const num = Number(amount);
+    return num.toLocaleString();
+  };
 
-const opendPatientsPage = () => {
+const openPatientsPage = () => {
   navigate("/patients");
+}
+
+const openWalletPage = () => {
+  navigate("/medic-wallet");
 }
 
   return (
@@ -32,7 +44,7 @@ const opendPatientsPage = () => {
               transform: "translateY(-10px)",
             }}
           >
-            <Box>
+            <Box  onClick={openWalletPage}>
               <Flex>
                 <Image
                   src={WalletIcon}
@@ -60,7 +72,7 @@ const opendPatientsPage = () => {
                 color="#212427"
               >
                 {" "}
-                N350,000
+                ₦{formatAmount(balance)}.00
               </Text>
             </Box>
           </Box>
@@ -79,7 +91,7 @@ const opendPatientsPage = () => {
             w={{ base: "180px", md: "300px" }}
             ml={{ base: "20px", md: "30px" }}
             borderRadius="5px"
-            onClick={opendPatientsPage}
+            onClick={openPatientsPage}
           >
             <Box>
               <Flex>

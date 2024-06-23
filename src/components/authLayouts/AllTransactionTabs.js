@@ -25,7 +25,7 @@ export default function TransactionTab() {
 
         const response = await axios.get(
           "https://backend-c1pz.onrender.com/v1/api/wallets/transactions",
-          //             // "http://localhost:8080/v1/api/wallets/transactions",
+                      // "http://localhost:8080/v1/api/wallets/transactions",
           config
         );
 
@@ -99,7 +99,7 @@ export default function TransactionTab() {
             fontSize={{ base: "10px", md: "16px" }}
             ml={{ base: "10px", md: "35px" }}
           >
-            No transaction yet. Click on fund wallet to begin
+            No transaction yet. 
           </Text>
         ) : (
           <Box>

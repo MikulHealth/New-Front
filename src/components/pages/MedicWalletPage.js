@@ -71,7 +71,6 @@ const HeadsUpModal = ({
   isOpen,
   onClose,
   onBankTransfer,
-  //   onOnlinePayment,
 }) => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
@@ -87,7 +86,6 @@ const HeadsUpModal = ({
       <ModalOverlay />
       <ModalContent
         width={modalWidth}
-        // borderRadius="25px 25px 25px 0px"
         justifyContent="center"
         alignItems="center"
         textAlign="center"
@@ -201,10 +199,12 @@ const ChooseBankModal = ({ isOpen, onClose, onOnlinePayment }) => {
     </Modal>
   );
 };
-const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation }) => {
-  const [amount, setAmount] = useState("");
+
+const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
+  const [inputAmount, setInputAmount] = useState("");
 
   const handleWithdrawClick = () => {
+    setAmount(inputAmount);
     onOpenConfirmation();
   };
 
@@ -246,10 +246,10 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation }) => {
             </FormLabel>
             <Input
               type="number"
-              value={amount}
+              value={inputAmount}
               border="1px solid black"
               placeholder="₦5000"
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setInputAmount(e.target.value)}
             />
           </FormControl>
           <Button
@@ -268,7 +268,7 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation }) => {
   );
 };
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, amount }) => {
   return (
     <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -279,7 +279,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
         <ModalCloseButton />
         <ModalBody fontFamily="body" textAlign="left">
           <Text>
-            You are about to transfer ₦60,000 to Adebola, Busola Mercy (Wema
+            You are about to transfer ₦{amount} to Adebola, Busola Mercy (Wema
             Bank).
           </Text>
           <Text mt="10px">A ₦50 transaction charge applies.</Text>
@@ -312,6 +312,7 @@ const MedicWalletPage = () => {
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [amount, setAmount] = useState("");
   const navigate = useNavigate();
   const accountNumber = "0124536789";
   const { hasCopied, onCopy } = useClipboard(accountNumber);
@@ -377,31 +378,37 @@ const MedicWalletPage = () => {
 
   const handleConfirmWithdrawal = async () => {
     setLoading(true);
-
+  
+    const medicId = user?.userId;  
+    const method = "WALLET"; 
+  
+    // const apiUrl = `http://localhost:8080/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(medicId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
+    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw?medicId=${encodeURIComponent(medicId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
+  
     try {
-      const token = localStorage.getItem("token");
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw`;
-
+      const token = localStorage.getItem("token"); 
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-
-      const response = await axios.post(apiUrl, {}, { headers });
-
+  
+       const response = await axios.post(apiUrl, {}, { headers });
+  
       if (response.data.success) {
+       
         setLoading(false);
         toast.success("Withdrawal successful");
         setTimeout(() => {
           navigate("/medic-dashboard");
         }, 5000);
+
       } else {
         setLoading(false);
-        console.error("Error making withdrawal");
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown error";
-        toast.error(errorMessage);
+            console.error("Withdrawal failed");
+            const errorMessage = response.data
+              ? response.data.message
+              : "Unknown failure";
+            toast.error(errorMessage);
       }
     } catch (error) {
       setLoading(false);
@@ -647,12 +654,14 @@ const MedicWalletPage = () => {
         isOpen={showOnlinePaymentModal}
         onClose={handleCloseOnlinePaymentModal}
         onOpenConfirmation={handleOpenConfirmationModal}
+        setAmount={setAmount}
       />
 
       <ConfirmationModal
         isOpen={showConfirmationModal}
         onClose={handleCloseConfirmationModal}
         onConfirm={handleConfirmWithdrawal}
+        amount={amount}
       />
 
       <SearchTransactionModal
