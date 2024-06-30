@@ -97,7 +97,7 @@ export default function MedicNavBar() {
     "/medic-edit-profile": "Settings",
     "/medic-change-password": "Settings",
     "/medic-notification-settings": "Settings",
-    "/help": "Help",
+    "/medic-help": "Help",
   };
 
   const pageTitle = pageTitles[location.pathname] || "Unknown Page";
@@ -205,7 +205,7 @@ export default function MedicNavBar() {
                       location.pathname === "/medic-edit-profile" ||
                       location.pathname === "/medic-change-password" ||
                       location.pathname === "/medic-notification-settings" ||
-                      location.pathname === "/help"
+                      location.pathname === "/medic-help"
                         ? "underline"
                         : ""
                     }
@@ -214,7 +214,7 @@ export default function MedicNavBar() {
                       location.pathname === "/medic-edit-profile" ||
                       location.pathname === "/medic-change-password" ||
                       location.pathname === "/medic-notification-settings" ||
-                      location.pathname === "/help"
+                      location.pathname === "/medic-help"
                         ? "bold"
                         : ""
                     }
@@ -223,7 +223,7 @@ export default function MedicNavBar() {
                       location.pathname === "/medic-edit-profile" ||
                       location.pathname === "/medic-change-password" ||
                       location.pathname === "/medic-notification-settings" ||
-                      location.pathname === "/help"
+                      location.pathname === "/medic-help"
                         ? "#A210C6"
                         : ""
                     }

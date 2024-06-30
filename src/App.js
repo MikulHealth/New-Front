@@ -38,12 +38,17 @@ import PatientsPage from "./components/pages/PatientsPage";
 import InactivityLogout from "./InactivityLogout";
 import MedicAppPage from "./components/pages/MedicAppPage";
 import MedicWalletPage from "./components/pages/MedicWalletPage";
+import MedicHelpPage from "./components/pages/MedicHelpPage";
+import MedicChangePasswordPage from "./components/pages/MedicChangePassword";
+import MedicEdithProfilePage from "./components/pages/MedicEdithProfile";
+import MedicNotificationSettingsPage from "./components/pages/MedicNotiSettings";
+import MedicSettingsPage from "./components/pages/MedicSettingsPage";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <InactivityLogout />
+        {/* <InactivityLogout /> */}
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<AboutPage />}></Route>
@@ -78,13 +83,21 @@ function App() {
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/medic-settings" element={<MedicSettingsPage />} />
           <Route path="/edit-profile" element={<EdithProfilePage />} />
+          <Route path="/medic-edit-profile" element={<MedicEdithProfilePage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
+          <Route path="/medic-change-password" element={<MedicChangePasswordPage />} />
           <Route
             path="/notification-settings"
             element={<NotificationSettingsPage />}
           />
+            <Route
+            path="/medic-notification-settings"
+            element={<MedicNotificationSettingsPage />}
+          />
           <Route path="/help" element={<HelpPage />} />
+          <Route path="/medic-help" element={<MedicHelpPage />} />
           <Route path="/services" element={<ServicePage />} />
           <Route path="/credit" element={<LeftSideBar />} />
           <Route path="/debit" element={<DebitPage />} />

@@ -103,7 +103,7 @@ const MedicMobileFooter = () => {
                 location.pathname === "/medic-edit-profile" ||
                 location.pathname === "/medic-change-password" ||
                 location.pathname === "/medic-notification-settings" ||
-                location.pathname === "/help"
+                location.pathname === "/medic-help"
                   ? "underline"
                   : ""
               }
@@ -112,7 +112,7 @@ const MedicMobileFooter = () => {
                 location.pathname === "/medic-edit-profile" ||
                 location.pathname === "/medic-change-password" ||
                 location.pathname === "/medic-notification-settings" ||
-                location.pathname === "/help"
+                location.pathname === "/medic-help"
                   ? "bold"
                   : ""
               }
@@ -121,7 +121,7 @@ const MedicMobileFooter = () => {
                 location.pathname === "/medic-edit-profile" ||
                 location.pathname === "/medic-change-password" ||
                 location.pathname === "/medic-notification-settings" ||
-                location.pathname === "/help"
+                location.pathname === "/medic-help"
                   ? "#A210C6"
                   : ""
               }

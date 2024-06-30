@@ -34,7 +34,7 @@ const customTheme = extendTheme({
   },
 });
 
-export default function SettingsSideBar() {
+export default function MedicSettingsSideBar() {
   const location = useLocation();
   // const [setshowProfileMobile] = useState(false);
   const isActive = (pathname) => {
@@ -66,13 +66,13 @@ export default function SettingsSideBar() {
             Account
           </Text>
           <Flex ml={{ base: "-150px" }} flexDirection="column">
-            <NavLink to="/edit-profile">
+            <NavLink to="/medic-edit-profile">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/edit-profile") && { color: "#A210C6" })}
+                {...(isActive("medic-/edit-profile") && { color: "#A210C6" })}
               >
                 <SettingsIcon boxSize={{ base: "24px", md: "32px" }} />
                 <Text
@@ -90,13 +90,13 @@ export default function SettingsSideBar() {
             </NavLink>
             <Divider my={1} borderColor="black.500" />
 
-            <NavLink to="/change-password">
+            <NavLink to="/medic-change-password">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/change-password") && { color: "#A210C6" })}
+                {...(isActive("/medic-change-password") && { color: "#A210C6" })}
               >
                 <LockIcon boxSize={{ base: "24px", md: "32px" }} />
                 <Text
@@ -113,13 +113,13 @@ export default function SettingsSideBar() {
             </NavLink>
             <Divider my={1} borderColor="black.500" />
 
-            <NavLink to="/notification-settings">
+            <NavLink to="/medic-notification-settings">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/notification-settings") && {
+                {...(isActive("/medic-notification-settings") && {
                   color: "#A210C6",
                 })}
               >
@@ -138,13 +138,13 @@ export default function SettingsSideBar() {
             </NavLink>
             <Divider my={1} borderColor="black.500" />
 
-            <NavLink to="/help">
+            <NavLink to="/medic-help">
               <Flex
                 alignItems="center"
                 marginTop="25px"
                 style={{ cursor: "pointer" }}
                 _hover={activeStyle}
-                {...(isActive("/help") && { color: "#A210C6" })}
+                {...(isActive("/medic-help") && { color: "#A210C6" })}
               >
                 <QuestionIcon boxSize={{ base: "24px", md: "32px" }} />
                 <Text

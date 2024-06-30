@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { WarningIcon } from "@chakra-ui/icons";
 import PaymentModal from "./PaymentMethod";
+import BookingInstructions from "./BookingInstructions";
 import {
   Drawer,
   DrawerOverlay,
@@ -13,7 +13,6 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
-  // DrawerFooter,
   FormControl,
   FormLabel,
   Input,
@@ -21,7 +20,6 @@ import {
   Flex,
   Box,
   Select,
-  Text,
   extendTheme,
   Textarea,
 } from "@chakra-ui/react";
@@ -94,6 +92,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [priority, setPriority] = useState("");
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
 
   const [formFields, setFormFields] = useState({
     startDate: null,
@@ -107,6 +106,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     preferredLanguage: "",
     costOfService: "",
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsBookingInstructionsOpen(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
@@ -354,32 +360,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
             />
           ) : (
             <>
-              <Text p="40px" pt="5px">
-                <WarningIcon
-                  fontFamily="body"
-                  mb="5px"
-                  w={10}
-                  h={10}
-                  color="yellow.400"
-                />
-                <br /> Please note, all the services listed under{" "}
-                <strong>Service Plan</strong> are for monthly subscription with
-                24hrs shift or 8hrs (day) shift, and they expire after one month
-                of start of care. With the exception of short home visit and any
-                custom plan. You can create a custom plan here{" "}
-                <Link
-                  to="/customize-service"
-                  style={{
-                    color: "#A210C6",
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                  }}
-                  fontFamily="body"
-                >
-                  create plan
-                </Link>
-              </Text>
-
               <DrawerBody>
                 <FormControl>
                   <Flex
@@ -547,7 +527,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       isRequired
                       name="preferredLanguage"
                       placeholder="select language"
-                      // w={{ base: "300px", md: "270px" }}
                       w={{ base: "300px", md: "550px" }}
                       fontSize={{ base: "14px", md: "16px" }}
                       value={formFields.preferredLanguage}
@@ -599,6 +578,10 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
         paymentData={paymentData}
+      />
+      <BookingInstructions
+        isOpen={isBookingInstructionsOpen}
+        onClose={() => setIsBookingInstructionsOpen(false)}
       />
     </>
   );

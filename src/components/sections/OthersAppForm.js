@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { WarningIcon } from "@chakra-ui/icons";
-import { Link } from "react-router-dom";
+import BookingInstructions from "./BookingInstructions";
+// import { Link } from "react-router-dom";
 import { FaPhoneAlt } from "react-icons/fa";
 import PaymentModal from "./PaymentMethod";
 import SpecialNeedsForm from "./SpecialNeedsForm";
@@ -100,6 +100,8 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
 
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
+
   const [formFields, setFormFields] = useState({
     recipientFirstname: "",
     recipientLastname: "",
@@ -118,6 +120,13 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     preferredMedicGender: "",
     preferredLanguage: "",
   });
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsBookingInstructionsOpen(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -392,31 +401,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
           <DrawerHeader color="#A210C6" fontFamily="heading">
             Book Appointment
           </DrawerHeader>
-          <Text p="40px" pt="5px">
-            <WarningIcon
-              fontFamily="body"
-              mb="5px"
-              w={10}
-              h={10}
-              color="yellow.400"
-            />
-            <br /> Please note, all the services listed under{" "}
-            <strong>Service Plan</strong> are for monthly subscription with
-            24hrs shift or 8hrs (day) shift, and they expire after one month of
-            start of care. With the exception of short home visit and any custom
-            plan. You can create a custom plan here{" "}
-            <Link
-              to="/customize-service"
-              style={{
-                color: "#A210C6",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-              fontFamily="body"
-            >
-              create plan
-            </Link>
-          </Text>
+         
           <DrawerBody>
             {showSpecialNeedsForm ? (
               <SpecialNeedsForm
@@ -829,6 +814,10 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
         paymentData={paymentData}
+      />
+       <BookingInstructions
+        isOpen={isBookingInstructionsOpen}
+        onClose={() => setIsBookingInstructionsOpen(false)}
       />
     </>
   );

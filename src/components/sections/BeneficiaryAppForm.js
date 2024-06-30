@@ -14,7 +14,6 @@ import {
   Textarea,
   FormControl,
   FormLabel,
-  Text,
   Box,
   Flex,
   extendTheme,
@@ -22,10 +21,10 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
-import { WarningIcon } from "@chakra-ui/icons";
+import BookingInstructions from "./BookingInstructions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import SpecialNeedsForm from "./SpecialNeedsForm";
 
 const customTheme = extendTheme({
@@ -96,6 +95,7 @@ const BookBeneficiaryAppointmentModal = ({
   const [priority, setPriority] = useState("");
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
 
   const [formPages, setFormPages] = useState({
     recipientFirstname: selectedBeneficiary.recipientFirstName,
@@ -116,6 +116,13 @@ const BookBeneficiaryAppointmentModal = ({
     preferredLanguage: "",
     recipientHealthHistory: "",
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsBookingInstructionsOpen(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const formatDateToUTC = (selectedDate) => {
     if (!selectedDate) return "";
@@ -376,24 +383,7 @@ const BookBeneficiaryAppointmentModal = ({
             Book Appointment for{" "}
             {`${selectedBeneficiary.recipientFirstName || ""} ${selectedBeneficiary.recipientLastName || ""}`}
           </DrawerHeader>
-          <Text p="40px" pt="5px">
-            <WarningIcon fontFamily="body" mb="5px" w={10} h={10} color="yellow.400" />
-            <br /> Please note, all the services listed under <strong>Service Plan</strong>{" "}
-            are for monthly subscription with 24hrs shift or 8hrs (day) shift,
-            and they expire after one month of start of care. With the exception of short home visit and any custom
-            plan. You can create a custom plan here{" "}
-            <Link
-              to="/customize-service"
-              style={{
-                color: "#A210C6",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-              fontFamily="body"
-            >
-              create plan
-            </Link>
-          </Text>
+        
           <DrawerCloseButton />
           {showSpecialNeedsForm ? (
             <SpecialNeedsForm
@@ -625,6 +615,10 @@ const BookBeneficiaryAppointmentModal = ({
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
         paymentData={paymentData}
+      />
+       <BookingInstructions
+        isOpen={isBookingInstructionsOpen}
+        onClose={() => setIsBookingInstructionsOpen(false)}
       />
     </>
   );
