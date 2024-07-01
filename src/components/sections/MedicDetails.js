@@ -65,10 +65,10 @@ const MedicDetailsDrawer = ({ isOpen, onClose }) => {
 
 //   const [setEditModalOpen] = useState(false);
 
-//   const handleEditClick = () => {
-//     navigate("/medic-edit-profile");
-//     onClose();
-//   };
+  const handleEditClick = () => {
+    navigate("/medic-edit-profile");
+    onClose();
+  };
 
 //   const handleEditModalClose = () => {
 //     setEditModalOpen(false);
@@ -170,7 +170,7 @@ const MedicDetailsDrawer = ({ isOpen, onClose }) => {
             <Text
               fontSize="19px"
               marginRight="20px"
-            //   onClick={handleEditClick}
+              onClick={handleEditClick}
               fontFamily="heading"
               style={{
                 color: "#A210C6",

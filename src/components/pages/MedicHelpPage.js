@@ -114,7 +114,7 @@ const MedicHelpPage = () => {
                           fontSize="14px"
                           fontFamily="body"
                         >
-                          How do I add my loved ones as beneficiaries?
+                         Do I have to create another account as a non-medic if I would like to access care?
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
@@ -146,8 +146,7 @@ const MedicHelpPage = () => {
                           fontSize="14px"
                           fontFamily="body"
                         >
-                          I entered the wrong details while booking my
-                          appointment. How do I change it?
+                        I entered the wrong details while requesting an appointment. How do I change it?
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
@@ -181,8 +180,7 @@ const MedicHelpPage = () => {
                           fontSize="14px"
                           fontFamily="body"
                         >
-                          I would like to book multiple services at the same
-                          time. How do I do that?
+                         Is it possible to request for multiple services at the same time?
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>

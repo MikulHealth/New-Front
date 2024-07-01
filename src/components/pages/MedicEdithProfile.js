@@ -254,7 +254,7 @@ const MedicEdithProfilePage = () => {
         setLoading(false);
         toast.success("Update Successfull");
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/medic-dashboard");
         }, 5000);
       } else {
         console.error("Failed to update user details:", response.error);
@@ -270,7 +270,7 @@ const MedicEdithProfilePage = () => {
   };
 
   const handleback = () => {
-    navigate("/settings");
+    navigate("/medic-settings");
   };
 
   return (
