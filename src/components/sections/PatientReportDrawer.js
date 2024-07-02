@@ -10,15 +10,15 @@ import {
   useToast,
   Button,
   extendTheme,
+  Checkbox,
+  Flex,
+  Textarea,
+  Box,
   Text,
   Input,
   FormControl,
   FormLabel,
   Select,
-  Flex,
-  Checkbox,
-  Box,
-  Textarea,
   VStack,
   HStack,
   IconButton,
@@ -83,6 +83,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     picture: null,
     confirmation: false,
   });
+  const [vitalsOutOfRange, setVitalsOutOfRange] = useState({});
+  const [acknowledgedOutOfRange, setAcknowledgedOutOfRange] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -211,6 +213,89 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     setMedications(newMedications);
   };
 
+  const validateVitalSigns = () => {
+    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } =
+      formData;
+
+    if (
+      isNaN(temperature) ||
+      isNaN(pulse) ||
+      isNaN(bloodSugar) ||
+      isNaN(sp02) ||
+      isNaN(respiration)
+    ) {
+      return false;
+    }
+
+    const [systolic, diastolic] = bloodPressure.split("/").map(Number);
+    if (isNaN(systolic) || isNaN(diastolic)) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const checkVitalSigns = () => {
+    const {
+      temperature,
+      bloodPressure,
+      pulse,
+      bloodSugar,
+      sp02,
+      respiration,
+    } = formData;
+
+    const thresholds = {
+      temperature: { min: 36, max: 37.5 },
+      bloodPressure: { systolic: { min: 90, max: 140 }, diastolic: { min: 60, max: 90 } },
+      pulse: { min: 60, max: 100 },
+      bloodSugar: { min: 70, max: 140 },
+      sp02: { min: 95, max: 100 },
+      respiration: { min: 12, max: 20 },
+    };
+
+    const [systolic, diastolic] = bloodPressure.split("/").map(Number);
+
+    const outOfRange = {};
+    if (temperature < thresholds.temperature.min || temperature > thresholds.temperature.max) {
+      outOfRange.temperature = true;
+    }
+    if (systolic < thresholds.bloodPressure.systolic.min || systolic > thresholds.bloodPressure.systolic.max) {
+      outOfRange.bloodPressure = true;
+    }
+    if (diastolic < thresholds.bloodPressure.diastolic.min || diastolic > thresholds.bloodPressure.diastolic.max) {
+      outOfRange.bloodPressure = true;
+    }
+    if (pulse < thresholds.pulse.min || pulse > thresholds.pulse.max) {
+      outOfRange.pulse = true;
+    }
+    if (bloodSugar < thresholds.bloodSugar.min || bloodSugar > thresholds.bloodSugar.max) {
+      outOfRange.bloodSugar = true;
+    }
+    if (sp02 < thresholds.sp02.min || sp02 > thresholds.sp02.max) {
+      outOfRange.sp02 = true;
+    }
+    if (respiration < thresholds.respiration.min || respiration > thresholds.respiration.max) {
+      outOfRange.respiration = true;
+    }
+
+    setVitalsOutOfRange(outOfRange);
+
+    if (Object.keys(outOfRange).length > 0) {
+      toast({
+        title: "Vital Signs Alert",
+        description: "Some vital signs are out of range. Please review.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async () => {
     if (!isFormComplete()) {
       toast({
@@ -221,6 +306,23 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
         isClosable: true,
         position: "top-right",
       });
+      return;
+    }
+
+    if (!validateVitalSigns()) {
+      toast({
+        title: "Invalid Vital Signs",
+        description: "Please enter valid vital signs.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      return;
+    }
+
+    if (!checkVitalSigns() && !acknowledgedOutOfRange) {
+      setAcknowledgedOutOfRange(true);
       return;
     }
 
@@ -686,15 +788,31 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 Confirmation
               </Text>
               <Text color="#A210C6" fontStyle="italic" fontFamily="body">
-                Proof read to confrim that the report is complete and accurate.
+                Proof read to confirm that the report is complete and accurate.
               </Text>
-              {/* <Text>Patient: {selectedPatient} </Text> */}
-              <Text>Temperature: {formData.temperature}°C</Text>
-              <Text>Blood Pressure: {formData.bloodPressure}</Text>
-              <Text>Pulse: {formData.pulse} bpm</Text>
-              <Text>Blood Sugar: {formData.bloodSugar}</Text>
-              <Text>SpO2: {formData.sp02}%</Text>
-              <Text>Respiration: {formData.respiration} c/m</Text>
+              {Object.keys(vitalsOutOfRange).length > 0 && (
+                <Text color="red.500" fontWeight="bold">
+                  Some vital signs are out of range. Please confirm they are correct before submitting.
+                </Text>
+              )}
+              <Text color={vitalsOutOfRange.temperature ? "red.500" : "black"}>
+                Temperature: {formData.temperature}°C
+              </Text>
+              <Text color={vitalsOutOfRange.bloodPressure ? "red.500" : "black"}>
+                Blood Pressure: {formData.bloodPressure}
+              </Text>
+              <Text color={vitalsOutOfRange.pulse ? "red.500" : "black"}>
+                Pulse: {formData.pulse} bpm
+              </Text>
+              <Text color={vitalsOutOfRange.bloodSugar ? "red.500" : "black"}>
+                Blood Sugar: {formData.bloodSugar}
+              </Text>
+              <Text color={vitalsOutOfRange.sp02 ? "red.500" : "black"}>
+                SpO2: {formData.sp02}%
+              </Text>
+              <Text color={vitalsOutOfRange.respiration ? "red.500" : "black"}>
+                Respiration: {formData.respiration} c/m
+              </Text>
               <Text>Mood: {formData.mood}</Text>
               <Text>Emotional State: {formData.emotionalState}</Text>
               <Text>Physical State: {formData.physicalState}</Text>
@@ -721,7 +839,10 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
               <Flex justifyContent="space-between" w="100%">
                 <Button
                   variant="outline"
-                  onClick={() => setStep(3)}
+                  onClick={() => {
+                    setAcknowledgedOutOfRange(false);
+                    setStep(3);
+                  }}
                   fontFamily="body"
                   bg="gray.500"
                   color="white"
