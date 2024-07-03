@@ -1,10 +1,37 @@
 import React from "react";
-import { FormControl, FormLabel, Input, Select, VStack, Text } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  VStack,
+  Text,
+  extendTheme,
+} from "@chakra-ui/react";
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: {
+        _focus: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
 
 const VitalsForm = ({ formData, handleChange }) => {
   const thresholds = {
     temperature: { min: 36, max: 37.5 },
-    bloodPressure: { systolic: { min: 90, max: 140 }, diastolic: { min: 60, max: 90 } },
+    bloodPressure: {
+      systolic: { min: 90, max: 140 },
+      diastolic: { min: 60, max: 90 },
+    },
     pulse: { min: 60, max: 100 },
     bloodSugar: { min: 70, max: 140 },
     sp02: { min: 95, max: 100 },
@@ -19,7 +46,8 @@ const VitalsForm = ({ formData, handleChange }) => {
 
   const getBloodPressureWarningMessage = (value) => {
     const [systolic, diastolic] = value.split("/").map(Number);
-    if (isNaN(systolic) || isNaN(diastolic)) return "Invalid blood pressure format.";
+    if (isNaN(systolic) || isNaN(diastolic))
+      return "Invalid blood pressure format.";
 
     let message = "";
     if (systolic < thresholds.bloodPressure.systolic.min) {
@@ -38,8 +66,8 @@ const VitalsForm = ({ formData, handleChange }) => {
   };
 
   return (
-    <VStack spacing={4} align="start">
-      <FormControl isRequired>
+    <VStack theme={customTheme} spacing={4} align="start">
+      <FormControl fontFamily="body" isRequired>
         <FormLabel>Temperature</FormLabel>
         <Input
           name="temperature"
@@ -48,8 +76,16 @@ const VitalsForm = ({ formData, handleChange }) => {
           onChange={handleChange}
         />
         {formData.temperature && (
-          <Text color="red.500">
-            {getWarningMessage(formData.temperature, thresholds.temperature.min, thresholds.temperature.max)}
+          <Text
+            fontStyle="italic"
+            fontSize={{ base: "12px", md: "14px" }}
+            color="red.500"
+          >
+            {getWarningMessage(
+              formData.temperature,
+              thresholds.temperature.min,
+              thresholds.temperature.max
+            )}
           </Text>
         )}
       </FormControl>
@@ -62,7 +98,11 @@ const VitalsForm = ({ formData, handleChange }) => {
           onChange={handleChange}
         />
         {formData.bloodPressure && (
-          <Text color="red.500">
+          <Text
+            fontStyle="italic"
+            fontSize={{ base: "12px", md: "14px" }}
+            color="red.500"
+          >
             {getBloodPressureWarningMessage(formData.bloodPressure)}
           </Text>
         )}
@@ -76,8 +116,16 @@ const VitalsForm = ({ formData, handleChange }) => {
           onChange={handleChange}
         />
         {formData.pulse && (
-          <Text color="red.500">
-            {getWarningMessage(formData.pulse, thresholds.pulse.min, thresholds.pulse.max)}
+          <Text
+            fontStyle="italic"
+            fontSize={{ base: "12px", md: "14px" }}
+            color="red.500"
+          >
+            {getWarningMessage(
+              formData.pulse,
+              thresholds.pulse.min,
+              thresholds.pulse.max
+            )}
           </Text>
         )}
       </FormControl>
@@ -90,8 +138,16 @@ const VitalsForm = ({ formData, handleChange }) => {
           onChange={handleChange}
         />
         {formData.bloodSugar && (
-          <Text color="red.500">
-            {getWarningMessage(formData.bloodSugar, thresholds.bloodSugar.min, thresholds.bloodSugar.max)}
+          <Text
+            fontStyle="italic"
+            fontSize={{ base: "12px", md: "14px" }}
+            color="red.500"
+          >
+            {getWarningMessage(
+              formData.bloodSugar,
+              thresholds.bloodSugar.min,
+              thresholds.bloodSugar.max
+            )}
           </Text>
         )}
       </FormControl>
@@ -104,8 +160,16 @@ const VitalsForm = ({ formData, handleChange }) => {
           onChange={handleChange}
         />
         {formData.sp02 && (
-          <Text color="red.500">
-            {getWarningMessage(formData.sp02, thresholds.sp02.min, thresholds.sp02.max)}
+          <Text
+            fontSize={{ base: "12px", md: "14px" }}
+            fontStyle="italic"
+            color="red.500"
+          >
+            {getWarningMessage(
+              formData.sp02,
+              thresholds.sp02.min,
+              thresholds.sp02.max
+            )}
           </Text>
         )}
       </FormControl>
@@ -118,8 +182,16 @@ const VitalsForm = ({ formData, handleChange }) => {
           onChange={handleChange}
         />
         {formData.respiration && (
-          <Text color="red.500">
-            {getWarningMessage(formData.respiration, thresholds.respiration.min, thresholds.respiration.max)}
+          <Text
+            fontSize={{ base: "12px", md: "14px" }}
+            fontStyle="italic"
+            color="red.500"
+          >
+            {getWarningMessage(
+              formData.respiration,
+              thresholds.respiration.min,
+              thresholds.respiration.max
+            )}
           </Text>
         )}
       </FormControl>
