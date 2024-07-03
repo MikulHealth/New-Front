@@ -10,23 +10,19 @@ import {
   useToast,
   Button,
   extendTheme,
-  Checkbox,
-  Flex,
-  Textarea,
-  Box,
-  Text,
-  Input,
   FormControl,
   FormLabel,
   Select,
-  VStack,
-  HStack,
-  IconButton,
+  Textarea,
+  Checkbox,
+  Input,
 } from "@chakra-ui/react";
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import VitalsForm from "./VitalSignsForm";
+import MedicationForm from "./MedicationForm";
+import ActivitiesForm from "./ActivitiesForm";
+import ReviewForm from "./ReviewForm";
+import PostSubmissionInstructionsModal from "./PostSubmissionInstructionsModal ";
 
 const customTheme = extendTheme({
   components: {
@@ -43,18 +39,6 @@ const customTheme = extendTheme({
     heading: "Gill Sans MT, sans-serif",
   },
 });
-
-const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
-  <Button
-    onClick={onClick}
-    ref={ref}
-    width="full"
-    bg="gray.200"
-    _hover={{ bg: "gray.300" }}
-  >
-    {value || "Select Time"}
-  </Button>
-));
 
 const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [step, setStep] = useState(1);
@@ -85,6 +69,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   });
   const [vitalsOutOfRange, setVitalsOutOfRange] = useState({});
   const [acknowledgedOutOfRange, setAcknowledgedOutOfRange] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [instructions, setInstructions] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
@@ -96,7 +82,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     try {
       const response = await axios.get(
         "https://backend-c1pz.onrender.com/v1/appointment/active",
-        //  "http://localhost:8080/v1/appointment/active",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -214,8 +199,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const validateVitalSigns = () => {
-    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } =
-      formData;
+    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } = formData;
 
     if (
       isNaN(temperature) ||
@@ -236,14 +220,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const checkVitalSigns = () => {
-    const {
-      temperature,
-      bloodPressure,
-      pulse,
-      bloodSugar,
-      sp02,
-      respiration,
-    } = formData;
+    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } = formData;
 
     const thresholds = {
       temperature: { min: 36, max: 37.5 },
@@ -281,7 +258,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
 
     setVitalsOutOfRange(outOfRange);
 
-    if (Object.keys(outOfRange).length > 0) {
+    if (Object.keys(outOfRange).length > 0 && !acknowledgedOutOfRange) {
       toast({
         title: "Vital Signs Alert",
         description: "Some vital signs are out of range. Please review.",
@@ -342,7 +319,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        //  "http://localhost:8080/v1/appointment/send-report",
         "https://backend-c1pz.onrender.com/v1/appointment/send-report",
         data,
         {
@@ -361,6 +337,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           isClosable: true,
           position: "top-right",
         });
+        displayPostSubmissionInstructions();
         onClose();
       } else {
         toast({
@@ -384,520 +361,173 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     }
   };
 
+  const displayPostSubmissionInstructions = () => {
+    const instructions = [];
+
+    if (vitalsOutOfRange.temperature) {
+      if (formData.temperature < 36) {
+        instructions.push("Temperature is too low. Ensure the patient is kept warm and monitor closely. If the low temperature persists, contact your supervisor or call the doctor.");
+      } else if (formData.temperature > 37.5) {
+        instructions.push("Temperature is too high. Consider administering an antipyretic and encourage hydration. If the high temperature persists, contact your supervisor or call the doctor.");
+      }
+    }
+    if (vitalsOutOfRange.bloodPressure) {
+      const [systolic, diastolic] = formData.bloodPressure.split("/").map(Number);
+      if (systolic < 90) {
+        instructions.push("Systolic blood pressure is too low. Ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, contact your supervisor or call the doctor.");
+      } else if (systolic > 140) {
+        instructions.push("Systolic blood pressure is too high. Consider administering antihypertensive medication as prescribed. If the high blood pressure persists, contact your supervisor or call the doctor.");
+      }
+      if (diastolic < 60) {
+        instructions.push("Diastolic blood pressure is too low. Ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, contact your supervisor or call the doctor.");
+      } else if (diastolic > 90) {
+        instructions.push("Diastolic blood pressure is too high. Consider administering antihypertensive medication as prescribed. If the high blood pressure persists, contact your supervisor or call the doctor.");
+      }
+    }
+    if (vitalsOutOfRange.pulse) {
+      if (formData.pulse < 60) {
+        instructions.push("Pulse is too low (bradycardia). Assess for symptoms of dizziness or fatigue. If the low pulse persists, contact your supervisor or call the doctor.");
+      } else if (formData.pulse > 100) {
+        instructions.push("Pulse is too high (tachycardia). Assess for pain, fever, or anxiety and treat accordingly. If the high pulse persists, contact your supervisor or call the doctor.");
+      }
+    }
+    if (vitalsOutOfRange.bloodSugar) {
+      if (formData.bloodSugar < 70) {
+        instructions.push("Blood sugar is too low (hypoglycemia). Provide a quick source of sugar, such as juice or glucose tablets. If the low blood sugar persists, contact your supervisor or call the doctor.");
+      } else if (formData.bloodSugar > 140) {
+        instructions.push("Blood sugar is too high (hyperglycemia). Administer insulin as prescribed and encourage hydration. If the high blood sugar persists, contact your supervisor or call the doctor.");
+      }
+    }
+    if (vitalsOutOfRange.sp02) {
+      if (formData.sp02 < 95) {
+        instructions.push("SpO2 is too low. Ensure the patient is receiving adequate oxygen and check for any obstruction in the airway. If the low SpO2 persists, contact your supervisor or call the doctor.");
+      }
+    }
+    if (vitalsOutOfRange.respiration) {
+      if (formData.respiration < 12) {
+        instructions.push("Respiration rate is too low (bradypnea). Assess for signs of respiratory depression. If the low respiration rate persists, contact your supervisor or call the doctor.");
+      } else if (formData.respiration > 20) {
+        instructions.push("Respiration rate is too high (tachypnea). Assess for underlying causes such as infection or anxiety. If the high respiration rate persists, contact your supervisor or call the doctor.");
+      }
+    }
+
+    if (instructions.length > 0) {
+      setInstructions(instructions);
+      setModalOpen(true);
+    }
+  };
+
   return (
-    <Drawer
-      theme={customTheme}
-      isOpen={isOpen}
-      placement="right"
-      onClose={onClose}
-      size="lg"
-    >
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerCloseButton />
-        <DrawerHeader fontFamily="heading" color="#A210C6">
-          Patient report
-        </DrawerHeader>
-        <DrawerBody>
-          {step === 1 && (
-            <>
-              <FormControl isRequired mb="4">
-                <FormLabel
-                  fontSize={{ base: "18px", md: "20px" }}
-                  fontFamily="body"
-                  fontWeight="bold"
-                >
-                  Select Patient
-                </FormLabel>
-                <Select
-                  placeholder="Select patient"
-                  value={selectedPatient}
-                  onChange={(e) => {
-                    setSelectedPatient(e.target.value);
-                    setPatientId(e.target.value);
-                  }}
-                >
-                  {Array.isArray(patients) &&
-                    patients
-                      .filter(
-                        (patient) =>
-                          patient.customerAppointment &&
-                          patient.customerAppointment.appointmentActive
-                      )
-                      .map((patient) => (
-                        <option
-                          key={patient.customerAppointment.id}
-                          value={patient.customerAppointment.id}
-                        >
-                          {patient.customerAppointment.recipientFirstname}{" "}
-                          {patient.customerAppointment.recipientLastname}
+    <>
+      <Drawer theme={customTheme} isOpen={isOpen} placement="right" onClose={onClose} size="lg">
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader fontFamily="heading" color="#A210C6">Patient Report</DrawerHeader>
+          <DrawerBody>
+            {step === 1 && (
+              <>
+                <FormControl isRequired mb="4">
+                  <FormLabel fontSize={{ base: "18px", md: "20px" }} fontWeight="bold">Select Patient</FormLabel>
+                  <Select
+                    placeholder="Select patient"
+                    value={selectedPatient}
+                    onChange={(e) => {
+                      setSelectedPatient(e.target.value);
+                      setPatientId(e.target.value);
+                    }}
+                  >
+                    {Array.isArray(patients) && patients
+                      .filter(patient => patient.customerAppointment?.appointmentActive)
+                      .map(patient => (
+                        <option key={patient.customerAppointment.id} value={patient.customerAppointment.id}>
+                          {patient.customerAppointment.recipientFirstname} {patient.customerAppointment.recipientLastname}
                         </option>
                       ))}
-                </Select>
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <Text
-                  fontSize={{ base: "18px", md: "20px" }}
-                  mb="5px"
-                  fontFamily="body"
-                  fontWeight="bold"
-                >
-                  Vitals Signs
-                </Text>
-                <FormLabel fontFamily="body">Temperature</FormLabel>
-                <Input
-                  name="temperature"
-                  placeholder="Temperature"
-                  value={formData.temperature}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Blood pressure</FormLabel>
-                <Input
-                  name="bloodPressure"
-                  placeholder="Blood pressure"
-                  value={formData.bloodPressure}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Pulse</FormLabel>
-                <Input
-                  name="pulse"
-                  placeholder="Pulse"
-                  value={formData.pulse}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Blood sugar</FormLabel>
-                <Input
-                  name="bloodSugar"
-                  placeholder="Blood sugar"
-                  value={formData.bloodSugar}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">SpO2</FormLabel>
-                <Input
-                  name="sp02"
-                  placeholder="SpO2"
-                  value={formData.sp02}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Respiration</FormLabel>
-                <Input
-                  name="respiration"
-                  placeholder="Respiration"
-                  value={formData.respiration}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Mood</FormLabel>
-                <Select
-                  name="mood"
-                  placeholder="Select Mood"
-                  value={formData.mood}
-                  onChange={handleChange}
-                >
-                  <option value="Happy">Happy</option>
-                  <option value="Sad">Sad</option>
-                  <option value="Anxious">Anxious</option>
-                  <option value="Calm">Calm</option>
-                  <option value="Angry">Angry</option>
-                </Select>
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Emotional State</FormLabel>
-                <Select
-                  name="emotionalState"
-                  placeholder="Select Emotional State"
-                  value={formData.emotionalState}
-                  onChange={handleChange}
-                >
-                  <option value="Stable">Stable</option>
-                  <option value="Unstable">Unstable</option>
-                  <option value="Depressed">Depressed</option>
-                  <option value="Elevated">Elevated</option>
-                </Select>
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Physical State</FormLabel>
-                <Select
-                  name="physicalState"
-                  placeholder="Select Physical State"
-                  value={formData.physicalState}
-                  onChange={handleChange}
-                >
-                  <option value="Good">Good</option>
-                  <option value="Fair">Fair</option>
-                  <option value="Poor">Poor</option>
-                </Select>
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel fontFamily="body">Pain Level</FormLabel>
-                <Select
-                  name="painLevel"
-                  placeholder="Select Pain Level"
-                  value={formData.painLevel}
-                  onChange={handleChange}
-                >
-                  <option value="None">None</option>
-                  <option value="Mild">Mild</option>
-                  <option value="Moderate">Moderate</option>
-                  <option value="Severe">Severe</option>
-                  <option value="Very Severe">Very Severe</option>
-                </Select>
-              </FormControl>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <FormControl isRequired mb="4">
-                <FormLabel
-                  fontFamily="body"
-                  fontSize={{ base: "18px", md: "20px" }}
-                  fontWeight="bold"
-                >
-                  Medications
-                </FormLabel>
-                <VStack spacing={3}>
-                  {medications.map((medication, index) => (
-                    <Box key={index} w="100%">
-                      <HStack spacing={2}>
-                        <Input
-                          placeholder="Name"
-                          value={medication.name}
-                          onChange={(e) =>
-                            handleMedicationChange(
-                              index,
-                              "name",
-                              e.target.value
-                            )
-                          }
-                        />
-                        <Input
-                          placeholder="Dosage"
-                          value={medication.dosage}
-                          onChange={(e) =>
-                            handleMedicationChange(
-                              index,
-                              "dosage",
-                              e.target.value
-                            )
-                          }
-                        />
-                        <Input
-                          placeholder="Route"
-                          value={medication.route}
-                          onChange={(e) =>
-                            handleMedicationChange(
-                              index,
-                              "route",
-                              e.target.value
-                            )
-                          }
-                        />
-                        <Box width="100%">
-                          <DatePicker
-                            selected={medication.time}
-                            onChange={(time) =>
-                              handleMedicationTimeChange(index, time)
-                            }
-                            showTimeSelect
-                            showTimeSelectOnly
-                            timeIntervals={15}
-                            timeCaption="Time"
-                            dateFormat="h:mm aa"
-                            customInput={<CustomInput />}
-                          />
-                        </Box>
-                        <IconButton
-                          icon={<DeleteIcon />}
-                          onClick={() => removeMedication(index)}
-                        />
-                      </HStack>
-                    </Box>
-                  ))}
-                  <Button
-                    leftIcon={<AddIcon />}
-                    onClick={addMedication}
-                    bg="blue.400"
-                    color="white"
-                    fontFamily="body"
-                  >
-                    Add Medication
-                  </Button>
-                </VStack>
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel
-                  fontFamily="body"
-                  fontSize={{ base: "18px", md: "20px" }}
-                  fontWeight="bold"
-                >
-                  Activities of Daily Living
-                </FormLabel>
-                <VStack align="start">
+                  </Select>
+                </FormControl>
+                <VitalsForm formData={formData} handleChange={handleChange} />
+              </>
+            )}
+            {step === 2 && (
+              <>
+                <FormControl isRequired mb="4">
+                  <FormLabel fontSize={{ base: "18px", md: "20px" }} fontWeight="bold">Medications</FormLabel>
+                  <MedicationForm
+                    medications={medications}
+                    handleMedicationChange={handleMedicationChange}
+                    handleMedicationTimeChange={handleMedicationTimeChange}
+                    addMedication={addMedication}
+                    removeMedication={removeMedication}
+                  />
+                </FormControl>
+                <ActivitiesForm activities={activities} handleCheckboxChange={handleCheckboxChange} />
+              </>
+            )}
+            {step === 3 && (
+              <>
+                <FormControl isRequired mb="4">
+                  <FormLabel fontWeight="bold" fontSize={{ base: "18px", md: "20px" }}>Observation/Comments</FormLabel>
+                  <Textarea name="comments" placeholder="Comments" value={formData.comments} onChange={handleChange} />
+                </FormControl>
+                <FormControl isRequired mb="4">
+                  <FormLabel fontWeight="bold" fontSize={{ base: "18px", md: "20px" }}>Recommendations/Requests</FormLabel>
+                  <Textarea name="recommendations" placeholder="Recommendations" value={formData.recommendations} onChange={handleChange} />
+                </FormControl>
+                <FormControl mb="4">
+                  <FormLabel fontWeight="bold" fontSize={{ base: "18px", md: "20px" }}>Picture Evidence (Optional)</FormLabel>
+                  <Input type="file" name="picture" onChange={handleFileChange} />
+                </FormControl>
+                <FormControl isRequired mb="4">
                   <Checkbox
-                    name="Tub bath/shower assistance"
-                    onChange={handleCheckboxChange}
+                    name="confirmation"
+                    isChecked={formData.confirmation}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, confirmation: e.target.checked }))}
                   >
-                    Tub bath/shower assistance
+                    I confirm that the information provided is accurate and complete
                   </Checkbox>
-                  <Checkbox
-                    name="Bed bath/sink bath"
-                    onChange={handleCheckboxChange}
-                  >
-                    Bed bath/sink bath
-                  </Checkbox>
-                  <Checkbox name="Shampoo hair" onChange={handleCheckboxChange}>
-                    Shampoo hair
-                  </Checkbox>
-                  <Checkbox name="Shave hair" onChange={handleCheckboxChange}>
-                    Shave hair
-                  </Checkbox>
-                  <Checkbox name="Mouth care" onChange={handleCheckboxChange}>
-                    Mouth care
-                  </Checkbox>
-                  <Checkbox
-                    name="Dress assistance"
-                    onChange={handleCheckboxChange}
-                  >
-                    Dress assistance
-                  </Checkbox>
-                  <Checkbox name="Body massage" onChange={handleCheckboxChange}>
-                    Body massage
-                  </Checkbox>
-                  <Checkbox
-                    name="Wound care/dressing"
-                    onChange={handleCheckboxChange}
-                  >
-                    Wound care/dressing
-                  </Checkbox>
-                  <Checkbox
-                    name="Catheter care"
-                    onChange={handleCheckboxChange}
-                  >
-                    Catheter care
-                  </Checkbox>
-                  <Checkbox name="Ostomy care" onChange={handleCheckboxChange}>
-                    Ostomy care
-                  </Checkbox>
-                  <Checkbox name="Feed client" onChange={handleCheckboxChange}>
-                    Feed client
-                  </Checkbox>
-                  <Checkbox
-                    name="Served urinal or bed pan"
-                    onChange={handleCheckboxChange}
-                  >
-                    Served urinal or bed pan
-                  </Checkbox>
-                  <Checkbox
-                    name="Assisted to toilet or commode"
-                    onChange={handleCheckboxChange}
-                  >
-                    Assisted to toilet or commode
-                  </Checkbox>
-                  <Checkbox
-                    name="Diaper change"
-                    onChange={handleCheckboxChange}
-                  >
-                    Diaper change
-                  </Checkbox>
-                  <Checkbox
-                    name="Assistance with transfer to bed, chair or wheelchair"
-                    onChange={handleCheckboxChange}
-                  >
-                    Assistance with transfer to bed, chair or wheelchair
-                  </Checkbox>
-                </VStack>
-              </FormControl>
-            </>
-          )}
-
-          {step === 3 && (
-            <>
-              <FormControl isRequired mb="4">
-                <FormLabel
-                  fontFamily="body"
-                  fontWeight="bold"
-                  fontSize={{ base: "18px", md: "20px" }}
-                >
-                  Obeservation/Comments
-                </FormLabel>
-                <Textarea
-                  name="comments"
-                  placeholder="Comments"
-                  value={formData.comments}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <FormLabel
-                  fontFamily="body"
-                  fontWeight="bold"
-                  fontSize={{ base: "18px", md: "20px" }}
-                >
-                  Recommendations/Requests
-                </FormLabel>
-                <Textarea
-                  name="recommendations"
-                  placeholder="Recommendations"
-                  value={formData.recommendations}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <FormControl mb="4">
-                <FormLabel
-                  fontFamily="body"
-                  fontWeight="bold"
-                  fontSize={{ base: "18px", md: "20px" }}
-                >
-                  Picture Evidence (Optional)
-                </FormLabel>
-                <Input type="file" name="picture" onChange={handleFileChange} />
-              </FormControl>
-              <FormControl isRequired mb="4">
-                <Checkbox
-                  name="confirmation"
-                  isChecked={formData.confirmation}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      confirmation: e.target.checked,
-                    }))
-                  }
-                >
-                  I confirm that the information provided is accurate and
-                  complete
-                </Checkbox>
-              </FormControl>
-            </>
-          )}
-
-          {step === 4 && (
-            <VStack spacing={4} align="start" w="100%">
-              <Text fontSize="xl" fontWeight="bold">
-                Confirmation
-              </Text>
-              <Text color="#A210C6" fontStyle="italic" fontFamily="body">
-                Proof read to confirm that the report is complete and accurate.
-              </Text>
-              {Object.keys(vitalsOutOfRange).length > 0 && (
-                <Text color="red.500" fontWeight="bold">
-                  Some vital signs are out of range. Please confirm they are correct before submitting.
-                </Text>
+                </FormControl>
+              </>
+            )}
+            {step === 4 && (
+              <ReviewForm
+                formData={formData}
+                medications={medications}
+                activities={activities}
+                vitalsOutOfRange={vitalsOutOfRange}
+                setStep={setStep}
+                handleSubmit={handleSubmit}
+                acknowledgedOutOfRange={acknowledgedOutOfRange}
+                setAcknowledgedOutOfRange={setAcknowledgedOutOfRange}
+              />
+            )}
+          </DrawerBody>
+          {step < 4 && (
+            <DrawerFooter>
+              {step > 1 && (
+                <Button variant="outline" mr={3} onClick={() => setStep(step - 1)}>
+                  Previous
+                </Button>
               )}
-              <Text color={vitalsOutOfRange.temperature ? "red.500" : "black"}>
-                Temperature: {formData.temperature}°C
-              </Text>
-              <Text color={vitalsOutOfRange.bloodPressure ? "red.500" : "black"}>
-                Blood Pressure: {formData.bloodPressure}
-              </Text>
-              <Text color={vitalsOutOfRange.pulse ? "red.500" : "black"}>
-                Pulse: {formData.pulse} bpm
-              </Text>
-              <Text color={vitalsOutOfRange.bloodSugar ? "red.500" : "black"}>
-                Blood Sugar: {formData.bloodSugar}
-              </Text>
-              <Text color={vitalsOutOfRange.sp02 ? "red.500" : "black"}>
-                SpO2: {formData.sp02}%
-              </Text>
-              <Text color={vitalsOutOfRange.respiration ? "red.500" : "black"}>
-                Respiration: {formData.respiration} c/m
-              </Text>
-              <Text>Mood: {formData.mood}</Text>
-              <Text>Emotional State: {formData.emotionalState}</Text>
-              <Text>Physical State: {formData.physicalState}</Text>
-              <Text>Spiritual State: {formData.spiritualState}</Text>
-              <Text>Pain Level: {formData.painLevel}</Text>
-              <Text fontWeight="bold">Medications:</Text>
-              <VStack align="start" spacing={1}>
-                {medications.map((medication, index) => (
-                  <Text key={index}>{`Name: ${medication.name}, Dosage: ${
-                    medication.dosage
-                  }, Route: ${
-                    medication.route
-                  }, Time: ${medication.time.toLocaleString()}`}</Text>
-                ))}
-              </VStack>
-              <Text fontWeight="bold">Activities:</Text>
-              <VStack align="start" spacing={1}>
-                {activities.map((activity, index) => (
-                  <Text key={index}>{activity}</Text>
-                ))}
-              </VStack>
-              <Text>Comments: {formData.comments}</Text>
-              <Text>Recommendations: {formData.recommendations}</Text>
-              <Flex justifyContent="space-between" w="100%">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setAcknowledgedOutOfRange(false);
-                    setStep(3);
-                  }}
-                  fontFamily="body"
-                  bg="gray.500"
-                  color="white"
-                >
-                  Back
+              {step < 3 ? (
+                <Button bg="#A210C6" color="white" onClick={() => setStep(step + 1)}>
+                  Next
                 </Button>
-                <Button
-                  bg="#A210C6"
-                  color="white"
-                  onClick={handleSubmit}
-                  isDisabled={!formData.confirmation}
-                  fontFamily="body"
-                >
-                  Confirm and Submit
+              ) : (
+                <Button bg="#A210C6" color="white" onClick={() => setStep(4)} isDisabled={!formData.confirmation}>
+                  Review and Confirm
                 </Button>
-              </Flex>
-            </VStack>
+              )}
+            </DrawerFooter>
           )}
-        </DrawerBody>
-        {step < 4 && (
-          <DrawerFooter>
-            {step > 1 && (
-              <Button
-                fontFamily="body"
-                variant="outline"
-                mr={3}
-                onClick={() => setStep(step - 1)}
-              >
-                Previous
-              </Button>
-            )}
-            {step < 3 ? (
-              <Button
-                bg="#A210C6"
-                color="white"
-                onClick={() => setStep(step + 1)}
-                fontFamily="body"
-              >
-                Next
-              </Button>
-            ) : (
-              <Button
-                bg="#A210C6"
-                color="white"
-                onClick={() => setStep(4)}
-                isDisabled={!formData.confirmation}
-                fontFamily="body"
-              >
-                Review and Confirm
-              </Button>
-            )}
-          </DrawerFooter>
-        )}
-      </DrawerContent>
-    </Drawer>
+        </DrawerContent>
+      </Drawer>
+      <PostSubmissionInstructionsModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        instructions={instructions}
+      />
+    </>
   );
 };
 
