@@ -6,14 +6,16 @@ import {
   VStack,
   Avatar,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  ListItem,
+  UnorderedList,
+  DrawerHeader,
+  DrawerCloseButton,
+  DrawerBody,
+  DrawerFooter,
   extendTheme,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { generateNursingCarePlan } from "./generateNursingCarePlan";
 import PatientReportDrawer from "./PatientReportDrawer";
@@ -34,14 +36,10 @@ const customTheme = extendTheme({
   },
 });
 
-const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
+const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
   const [carePlan, setCarePlan] = useState([]);
   const [isViewingCarePlan, setIsViewingCarePlan] = useState(false);
-  const {
-    isOpen: isDrawerOpen,
-    onOpen: onDrawerOpen,
-    onClose: onDrawerClose,
-  } = useDisclosure();
+  const [isViewingReportUpload, setIsViewingReportUpload] = useState(false);
 
   const handleViewCarePlan = () => {
     const plan = generateNursingCarePlan(
@@ -53,6 +51,11 @@ const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
 
   const handleBackToDetails = () => {
     setIsViewingCarePlan(false);
+    setIsViewingReportUpload(false);
+  };
+
+  const handleViewReportUpload = () => {
+    setIsViewingReportUpload(true);
   };
 
   const formatDateTime = (dateString) => {
@@ -62,19 +65,24 @@ const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
 
   return (
     <>
-      <Modal
+      <Drawer
         theme={customTheme}
         isOpen={isOpen}
         onClose={onClose}
-        size={{ base: "sm", md: "2xl" }}
+        size="lg"
+        // size={{ base: "sm", md: "xl" }}
       >
-        <ModalOverlay />
-        <ModalContent borderRadius="20px" border="3px solid #A210C6">
-          <ModalHeader fontFamily="heading" color="#A210C6" textAlign="center">
-            {isViewingCarePlan ? "Recommended Care Plan" : "Patient Details"}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader fontFamily="heading" color="#A210C6" textAlign="center">
+            {isViewingCarePlan
+              ? "Recommended Care Plan"
+              : isViewingReportUpload
+              ? "Upload Report"
+              : "Patient Details"}
+          </DrawerHeader>
+          <DrawerCloseButton onClick={onClose} />
+          <DrawerBody>
             {isViewingCarePlan ? (
               <Flex
                 direction="column"
@@ -82,6 +90,21 @@ const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
                 justify="center"
                 textAlign="center"
               >
+                <Text fontFamily="body" textAlign="left" mb="4">
+                  This detailed care plan is designed to assist you in providing
+                  the best possible care for our patient. It is divided into two
+                  parts:<br/>
+                  <Text as="span" fontWeight="bold">
+                    - Universal Precautions and Standard Medical Interventions,
+                  </Text>{" "}
+                  and<br/>
+                  <Text as="span" fontWeight="bold">
+                    - Specific care plans tailored to the patient's needs.
+                  </Text><br/>
+                  Please read through each section carefully and follow the plan
+                  diligently. You can always revisit this care plan for
+                  reference and reminders.
+                </Text>
                 <VStack
                   fontFamily="body"
                   textAlign="left"
@@ -89,6 +112,70 @@ const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
                   spacing={3}
                   mt="2"
                 >
+                  <Box>
+                    <Text fontWeight="bold" mb="2">
+                      Universal Precautions and Standard Medical Interventions:
+                    </Text>
+                    <UnorderedList fontFamily="body" spacing={2}>
+                      <ListItem>
+                        Wash hands thoroughly before and after patient contact.
+                      </ListItem>
+                      <ListItem>
+                        Wear gloves when handling bodily fluids or open wounds.
+                      </ListItem>
+                      <ListItem>
+                        Use masks and eye protection when necessary.
+                      </ListItem>
+                      <ListItem>
+                        Dispose of needles and other sharp objects in proper
+                        containers.
+                      </ListItem>
+                      <ListItem>
+                        Sanitize surfaces and equipment regularly.
+                      </ListItem>
+                      <ListItem>
+                        Follow proper procedures for administering medications.
+                      </ListItem>
+                      <ListItem>
+                        Monitor patient vital signs regularly.
+                      </ListItem>
+                      <ListItem>Maintain patient hygiene and comfort.</ListItem>
+                      <ListItem>
+                        Provide emotional support and reassurance.
+                      </ListItem>
+                      <ListItem>
+                        Document all care and observations accurately.
+                      </ListItem>
+                      <ListItem>
+                        Ensure proper ventilation in the patient's room.
+                      </ListItem>
+                      <ListItem>
+                        Maintain a clean and clutter-free environment.
+                      </ListItem>
+                      <ListItem>
+                        Use proper lifting techniques to prevent caregiver
+                        injury.
+                      </ListItem>
+                      <ListItem>
+                        Communicate regularly with family members and other
+                        healthcare providers.
+                      </ListItem>
+                      <ListItem>
+                        Stay updated on the patient's care plan and any changes
+                        in their condition.
+                      </ListItem>
+                      <ListItem>
+                        Use personal protective equipment (PPE) appropriately.
+                      </ListItem>
+                      <ListItem>
+                        Ensure proper waste disposal according to medical
+                        guidelines.
+                      </ListItem>
+                    </UnorderedList>
+                  </Box>
+                  <Text fontWeight="bold">
+                      Specific Interventions:
+                    </Text>
                   {carePlan.map((item, index) => (
                     <Text key={index}>
                       <Text as="span" fontWeight="bold">
@@ -101,7 +188,7 @@ const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
                     </Text>
                   ))}
                 </VStack>
-                <Button
+                {/* <Button
                   mt="4"
                   color="white"
                   bg="#A210C6"
@@ -110,8 +197,13 @@ const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
                   fontFamily="body"
                 >
                   Back to Patient Details
-                </Button>
+                </Button> */}
               </Flex>
+            ) : isViewingReportUpload ? (
+              <PatientReportDrawer
+                isOpen={true}
+                onClose={handleBackToDetails}
+              />
             ) : (
               <Flex
                 direction="column"
@@ -232,36 +324,49 @@ const PatientDetailsModal = ({ patient, isOpen, onClose }) => {
                     </Text>
                   </Flex>
                 </Box>
-
-                <Flex mt="4" justifyContent="space-between" mb="20px" w="full">
-                  <Button
-                    color="white"
-                    bg="#A210C6"
-                    borderRadius="50px"
-                    onClick={handleViewCarePlan}
-                    fontFamily="body"
-                  >
-                    Care Plan
-                  </Button>
-                  <Button
-                    color="white"
-                    bg="#A210C6"
-                    borderRadius="50px"
-                    onClick={onDrawerOpen}
-                    fontFamily="body"
-                  >
-                    Upload Report
-                  </Button>
-                </Flex>
               </Flex>
             )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
-      <PatientReportDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} />
+          </DrawerBody>
+          <DrawerFooter>
+            {!isViewingCarePlan && !isViewingReportUpload && (
+              <Flex w="full" justifyContent="space-between">
+                <Button
+                  color="white"
+                  bg="#A210C6"
+                  borderRadius="50px"
+                  onClick={handleViewCarePlan}
+                  fontFamily="body"
+                >
+                  Care Plan
+                </Button>
+                <Button
+                  color="white"
+                  bg="#A210C6"
+                  borderRadius="50px"
+                  onClick={handleViewReportUpload}
+                  fontFamily="body"
+                >
+                  Upload Report
+                </Button>
+              </Flex>
+            )}
+            {isViewingCarePlan && (
+              <Button
+                color="white"
+                bg="#A210C6"
+                borderRadius="50px"
+                onClick={handleBackToDetails}
+                fontFamily="body"
+                // w="full"
+              >
+                Back to Patient Details
+              </Button>
+            )}
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 };
 
-export default PatientDetailsModal;
+export default PatientDetailsDrawer;

@@ -412,10 +412,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
 
   const renderDocumentationContent = () => (
     <>
-      {/* <DrawerHeader textAlign="center" color="#A210C6" fontFamily="heading">
-        How to Submit Patient Report
-      </DrawerHeader> */}
-      <DrawerBody>
+      <DrawerBody overflowY="auto">
         <VStack fontFamily="body" align="start" spacing={4}>
           <Text>Follow these steps to submit the patient report:</Text>
           <UnorderedList spacing={3}>
@@ -506,7 +503,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           <DrawerHeader fontFamily="heading" color="#A210C6">
             {showDocumentation ? "How to Submit Report" : "Patient Report"}
           </DrawerHeader>
-          <DrawerBody>
+          <DrawerBody overflowY="auto">
             {showDocumentation ? (
               renderDocumentationContent()
             ) : (
