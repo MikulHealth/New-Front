@@ -142,11 +142,11 @@ export const generateRecommendations = (
   if (vitalsOutOfRange.temperature) {
     if (formData.temperature < 36) {
       recommendations.push(
-        `${patientFirstName}'s temperature was a bit low. ${medicFirstName} has been advised to ensure they are kept warm and monitor closely. If the low temperature persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s temperature was a bit low. ${medicFirstName} has been advised to ensure they are kept warm and monitor closely. If the low temperature persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     } else if (formData.temperature > 37.5) {
       recommendations.push(
-        `${patientFirstName}'s temperature was a bit high. ${medicFirstName} has been advised to consider administering an antipyretic and encourage hydration. If the high temperature persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s temperature was a bit high. ${medicFirstName} has been advised to consider administering an antipyretic and encourage hydration. If the high temperature persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     }
   }
@@ -154,49 +154,49 @@ export const generateRecommendations = (
     const [systolic, diastolic] = formData.bloodPressure.split("/").map(Number);
     if (systolic < 90) {
       recommendations.push(
-        `${patientFirstName}'s systolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s systolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     } else if (systolic > 140) {
       recommendations.push(
-        `${patientFirstName}'s systolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s systolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     }
     if (diastolic < 60) {
       recommendations.push(
-        `${patientFirstName}'s diastolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s diastolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     } else if (diastolic > 90) {
       recommendations.push(
-        `${patientFirstName}'s diastolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s diastolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     }
   }
   if (vitalsOutOfRange.pulse) {
     if (formData.pulse < 60) {
       recommendations.push(
-        `${patientFirstName}'s pulse was a bit low (bradycardia). ${medicFirstName} has been advised to assess for symptoms of dizziness or fatigue. If the low pulse persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s pulse was a bit low (bradycardia). ${medicFirstName} has been advised to assess for symptoms of dizziness or fatigue. If the low pulse persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     } else if (formData.pulse > 100) {
       recommendations.push(
-        `${patientFirstName}'s pulse was a bit high (tachycardia). ${medicFirstName} has been advised to assess for pain, fever, or anxiety and treat accordingly. If the high pulse persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s pulse was a bit high (tachycardia). ${medicFirstName} has been advised to assess for pain, fever, or anxiety and treat accordingly. If the high pulse persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     }
   }
   if (vitalsOutOfRange.bloodSugar) {
     if (formData.bloodSugar < 70) {
       recommendations.push(
-        `${patientFirstName}'s blood sugar level was low (hypoglycemia). ${medicFirstName} has been advised to provide a quick source of sugar, such as juice or glucose tablets. If the low blood sugar persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s blood sugar level was low (hypoglycemia). ${medicFirstName} has been advised to provide a quick source of sugar, such as juice or glucose tablets. If the low blood sugar persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     } else if (formData.bloodSugar > 140) {
       recommendations.push(
-        `${patientFirstName}'s blood sugar level was high (hyperglycemia). ${medicFirstName} has been advised to administer insulin as prescribed and encourage hydration. If the high blood sugar persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s blood sugar level was high (hyperglycemia). ${medicFirstName} has been advised to administer insulin as prescribed and encourage hydration. If the high blood sugar persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     }
   }
   if (vitalsOutOfRange.sp02) {
     if (formData.sp02 < 95) {
       recommendations.push(
-        `${patientFirstName}'s SpO2 level was low. ${medicFirstName} has been advised to ensure they are receiving adequate oxygen and check for any obstruction in the airway. If the low SpO2 persists, ${medicFirstName} will contact the supervisor or call the doctor.`
+        `${patientFirstName}'s SpO2 level was low. ${medicFirstName} has been advised to ensure they are receiving adequate oxygen and check for any obstruction in the airway. If the low SpO2 persists, ${medicFirstName} will contact your supervisor or call the doctor.`
       );
     }
   }

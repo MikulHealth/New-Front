@@ -6,19 +6,11 @@ import {
   VStack,
   Badge,
   Avatar,
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  extendTheme,
-  ChakraProvider,
-  useDisclosure,
   Image,
   Divider,
   Link,
+  ChakraProvider,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import MedicSideBar from "../authLayouts/MedicSideBar";
@@ -28,6 +20,8 @@ import LoadingSpinner from "../../utils/Spiner";
 import PatientReportDrawer from "../sections/PatientReportDrawer";
 import Check from "../../assets/Check.svg";
 import RequestAppointmentModal from "../sections/RequestAppModal";
+import PatientDetailsModal from "../sections/PatientDetailsModal";
+import { extendTheme } from "@chakra-ui/react";
 
 const customTheme = extendTheme({
   components: {
@@ -66,7 +60,6 @@ const PatientsPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/get-active-patient",
           "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
           {
             headers: {
@@ -104,10 +97,10 @@ const PatientsPage = () => {
     onOpen();
   };
 
-  const formatDateTime = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.toLocaleDateString()}`;
-  };
+  // const formatDateTime = (dateString) => {
+  //   const date = new Date(dateString);
+  //   return `${date.toLocaleDateString()}`;
+  // };
 
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
@@ -152,10 +145,7 @@ const PatientsPage = () => {
                       fontStyle="italic"
                     >
                       No patient seen yet, click{" "}
-                      <Link
-                        onClick={handleOpenAppointmentModal}
-                        color="#A210C6"
-                      >
+                      <Link onClick={handleOpenAppointmentModal} color="#A210C6">
                         "request appointment to begin"
                       </Link>{" "}
                       to begin.
@@ -228,195 +218,12 @@ const PatientsPage = () => {
                   )}
 
                   {selectedPatient && (
-                    <Modal
+                    <PatientDetailsModal
+                      patient={selectedPatient}
                       isOpen={isModalOpen}
                       onClose={closeModal}
-                      size={{ base: "sm", md: "2xl" }}
-                    >
-                      <ModalOverlay />
-                      <ModalContent
-                        borderRadius="20px"
-                        border="3px solid #A210C6"
-                      >
-                        <ModalHeader
-                          fontFamily="heading"
-                          color="#A210C6"
-                          textAlign="center"
-                        >
-                          Patient Details
-                        </ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                          <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                            textAlign="center"
-                          >
-                            <Avatar
-                              name={`${selectedPatient.customerAppointment.recipientFirstname} ${selectedPatient.customerAppointment.recipientLastname}`}
-                              src={
-                                selectedPatient.customerAppointment.picturePath
-                              }
-                              bg="gray.500"
-                              color="white"
-                              w={{ base: "100px", md: "100px" }}
-                              h={{ base: "100px", md: "100px" }}
-                              border="3px solid #057B1F"
-                            />
-                            <Box fontFamily="body" textAlign="left" w="full">
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" fontSize="lg" mt="2">
-                                  Name:
-                                </Text>
-                                <Text ml="5px" fontSize="lg" mt="2">
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .recipientFirstname
-                                  }{" "}
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .recipientLastname
-                                  }
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Location:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .currentLocation
-                                  }
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  City/Town:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .recipientTown
-                                  }
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Phone number:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .recipientPhoneNumber
-                                  }
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Gender:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .recipientGender
-                                  }
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Date of Birth:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {formatDateTime(
-                                    selectedPatient.customerAppointment
-                                      .recipientDOB
-                                  )}
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Service Plan:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .servicePlan
-                                  }
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Shift:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  {selectedPatient.customerAppointment.shift}
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Amount Payable:
-                                </Text>
-                                <Text ml="5px" mt="2">
-                                  N{" "}
-                                  {parseFloat(
-                                    selectedPatient.customerAppointment
-                                      .costOfService
-                                  ).toLocaleString()}
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Medical history:
-                                </Text>
-                                <Text
-                                  maxW={{ base: "50px", md: "450px" }}
-                                  ml="5px"
-                                  mt="2"
-                                >
-                                  {
-                                    selectedPatient.customerAppointment
-                                      .recipientHealthHistory
-                                  }
-                                </Text>
-                              </Flex>
-                              <Flex wrap="wrap">
-                                <Text fontWeight="bold" mt="2">
-                                  Special Needs:
-                                </Text>
-                                <Text
-                                  marginLeft="10px"
-                                   mt="2"
-                                  color="black"
-                                  maxW="600px"
-                                  maxH="1000px"
-                                >
-                                  {selectedPatient?.customerAppointment?.specialNeeds &&
-                                  selectedPatient?.customerAppointment?.specialNeeds.length > 0
-                                    ? selectedPatient.customerAppointment.specialNeeds.join(
-                                        ", "
-                                      )
-                                    : "Not available"}
-                                </Text>
-                              </Flex>
-                            </Box>
-
-                            <Button
-                              mb="20px"
-                              mt="4"
-                              color="white"
-                              bg="#A210C6"
-                              borderRadius="50px"
-                              onClick={openReportDrawer}
-                              fontFamily="body"
-                            >
-                              Upload report
-                            </Button>
-                          </Flex>
-                        </ModalBody>
-                      </ModalContent>
-                    </Modal>
+                      openReportDrawer={openReportDrawer}
+                    />
                   )}
                 </>
               )}
@@ -426,10 +233,7 @@ const PatientsPage = () => {
         </VStack>
       </Flex>
       <PatientReportDrawer isOpen={isOpen} onClose={onClose} />
-      <RequestAppointmentModal
-        isOpen={showAppointmentModal}
-        onClose={handleCloseAppointmentModal}
-      />
+      <RequestAppointmentModal isOpen={showAppointmentModal} onClose={handleCloseAppointmentModal} />
     </ChakraProvider>
   );
 };

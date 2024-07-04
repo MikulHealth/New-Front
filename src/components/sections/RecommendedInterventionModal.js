@@ -41,7 +41,7 @@ const RecommendedInterventionModal = ({ isOpen, onClose, instructions }) => {
       <ModalOverlay />
       <ModalContent borderRadius="25px 25px 25px 0px">
         <ModalHeader textAlign="center" color="#A210C6" fontFamily="heading">
-          Recommended Interventions
+          Recommended Intervention
         </ModalHeader>
         <ModalBody fontFamily="body">
           <VStack spacing={4} align="start">

@@ -15,6 +15,11 @@ import {
   Textarea,
   Checkbox,
   Input,
+  Flex,
+  Text,
+  VStack,
+  ListItem,
+  UnorderedList,
 } from "@chakra-ui/react";
 import axios from "axios";
 import VitalsForm from "./VitalSignsForm";
@@ -22,7 +27,6 @@ import MedicationForm from "./MedicationForm";
 import ActivitiesForm from "./ActivitiesForm";
 import ReviewForm from "./ReviewForm";
 import PostSubmissionInstructionsModal from "./PostSubmissionInstructionsModal ";
-import ReportSubmissionDocumentationModal from "./ReportSubmissionDocumentationModal";
 import { displayPostSubmissionInstructions } from "./instructions";
 import PatientSelector from "./PatientSelector";
 
@@ -73,7 +77,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [acknowledgedOutOfRange, setAcknowledgedOutOfRange] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [instructions, setInstructions] = useState([]);
-  const [docModalOpen, setDocModalOpen] = useState(false);
+  const [showDocumentation, setShowDocumentation] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -406,6 +410,87 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     }
   };
 
+  const renderDocumentationContent = () => (
+    <>
+      {/* <DrawerHeader textAlign="center" color="#A210C6" fontFamily="heading">
+        How to Submit Patient Report
+      </DrawerHeader> */}
+      <DrawerBody>
+        <VStack fontFamily="body" align="start" spacing={4}>
+          <Text>Follow these steps to submit the patient report:</Text>
+          <UnorderedList spacing={3}>
+            <ListItem>
+              <Text fontWeight="bold">Select Patient:</Text>
+              <Text>
+                The system would automatically select your patient for whom you
+                are submitting the report from the dropdown menu.
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Vitals Signs:</Text>
+              <Text>
+                Enter the patient's vital signs including temperature, blood
+                pressure, pulse, blood sugar, SpO2, and respiration. If a vital
+                sign is not available, enter "nil".
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Mood and States:</Text>
+              <Text>
+                Select the patient's mood, emotional state, physical state, and
+                pain level from the dropdown options.
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Medications:</Text>
+              <Text>
+                Add all medications the patient is currently taking, including
+                the name, dosage, route, and time of administration.
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Activities of Daily Living:</Text>
+              <Text>
+                Check all activities you assisted the patient with, such as
+                bathing, dressing, and feeding.
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Observations/Comments:</Text>
+              <Text>
+                Write any observations or comments about the patient's condition
+                or behavior.
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Recommendations/Requests:</Text>
+              <Text>
+                Provide any recommendations or requests for the patient's care.
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Picture Evidence (Optional):</Text>
+              <Text>Upload any picture evidence if necessary.</Text>
+            </ListItem>
+            <ListItem>
+              <Text fontWeight="bold">Confirmation:</Text>
+              <Text>
+                Check the confirmation box to confirm that all information
+                provided is accurate and complete.
+              </Text>
+            </ListItem>
+          </UnorderedList>
+          <Text>
+            Reports should be made at least once a day at the end of the day
+            (shift) for healthy patients, and twice a day (morning and evening)
+            for those who are ill. For critically ill patients, reports should
+            be made as needed (PRN).
+          </Text>
+        </VStack>
+      </DrawerBody>
+    </>
+  );
+
   return (
     <>
       <Drawer
@@ -419,124 +504,135 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader fontFamily="heading" color="#A210C6">
-            Patient Report
+            {showDocumentation ? "How to Submit Report" : "Patient Report"}
           </DrawerHeader>
           <DrawerBody>
-            <Button
-              justifySelf="left"
-              colorScheme="blue"
-              mb={4}
-              onClick={() => setDocModalOpen(true)}
-            >
-              How to Send Report
-            </Button>
-            {step === 1 && (
+            {showDocumentation ? (
+              renderDocumentationContent()
+            ) : (
               <>
-                <PatientSelector
-                  patients={patients}
-                  selectedPatient={selectedPatient}
-                  setSelectedPatient={selectedPatient}
-                />
-                <VitalsForm formData={formData} handleChange={handleChange} />
-              </>
-            )}
-            {step === 2 && (
-              <>
-                <FormControl isRequired mb="4">
-                  <FormLabel
-                    fontSize={{ base: "18px", md: "20px" }}
-                    fontWeight="bold"
+                <Flex justify="flex-end">
+                  <Button
+                    justifySelf="flex-end"
+                    colorScheme="blue"
+                    mb={4}
+                    onClick={() => setShowDocumentation(!showDocumentation)}
                   >
-                    Medications
-                  </FormLabel>
-                  <MedicationForm
+                    How to Submit Report
+                  </Button>
+                </Flex>
+                {step === 1 && (
+                  <>
+                    <PatientSelector
+                      patients={patients}
+                      selectedPatient={selectedPatient}
+                      setSelectedPatient={setSelectedPatient}
+                    />
+                    <VitalsForm
+                      formData={formData}
+                      handleChange={handleChange}
+                    />
+                  </>
+                )}
+                {step === 2 && (
+                  <>
+                    <FormControl isRequired mb="4">
+                      <FormLabel
+                        fontSize={{ base: "18px", md: "20px" }}
+                        fontWeight="bold"
+                      >
+                        Medications
+                      </FormLabel>
+                      <MedicationForm
+                        medications={medications}
+                        handleMedicationChange={handleMedicationChange}
+                        handleMedicationTimeChange={handleMedicationTimeChange}
+                        addMedication={addMedication}
+                        removeMedication={removeMedication}
+                      />
+                    </FormControl>
+                    <ActivitiesForm
+                      activities={activities}
+                      handleCheckboxChange={handleCheckboxChange}
+                    />
+                  </>
+                )}
+                {step === 3 && (
+                  <>
+                    <FormControl isRequired mb="4">
+                      <FormLabel
+                        fontWeight="bold"
+                        fontSize={{ base: "18px", md: "20px" }}
+                      >
+                        Drug Reaction/Observations
+                      </FormLabel>
+                      <Textarea
+                        name="comments"
+                        placeholder="Comments"
+                        value={formData.comments}
+                        onChange={handleChange}
+                      />
+                    </FormControl>
+                    <FormControl isRequired mb="4">
+                      <FormLabel
+                        fontWeight="bold"
+                        fontSize={{ base: "18px", md: "20px" }}
+                      >
+                        Recommendations/Requests
+                      </FormLabel>
+                      <Textarea
+                        name="recommendations"
+                        placeholder="Recommendations"
+                        value={formData.recommendations}
+                        onChange={handleChange}
+                      />
+                    </FormControl>
+                    <FormControl mb="4">
+                      <FormLabel
+                        fontWeight="bold"
+                        fontSize={{ base: "18px", md: "20px" }}
+                      >
+                        Picture Evidence (Optional)
+                      </FormLabel>
+                      <Input
+                        type="file"
+                        name="picture"
+                        onChange={handleFileChange}
+                      />
+                    </FormControl>
+                    <FormControl isRequired mb="4">
+                      <Checkbox
+                        name="confirmation"
+                        isChecked={formData.confirmation}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            confirmation: e.target.checked,
+                          }))
+                        }
+                      >
+                        I confirm that the information provided is accurate and
+                        complete
+                      </Checkbox>
+                    </FormControl>
+                  </>
+                )}
+                {step === 4 && (
+                  <ReviewForm
+                    formData={formData}
                     medications={medications}
-                    handleMedicationChange={handleMedicationChange}
-                    handleMedicationTimeChange={handleMedicationTimeChange}
-                    addMedication={addMedication}
-                    removeMedication={removeMedication}
+                    activities={activities}
+                    vitalsOutOfRange={vitalsOutOfRange}
+                    setStep={setStep}
+                    handleSubmit={handleSubmit}
+                    acknowledgedOutOfRange={acknowledgedOutOfRange}
+                    setAcknowledgedOutOfRange={setAcknowledgedOutOfRange}
                   />
-                </FormControl>
-                <ActivitiesForm
-                  activities={activities}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
+                )}
               </>
-            )}
-            {step === 3 && (
-              <>
-                <FormControl isRequired mb="4">
-                  <FormLabel
-                    fontWeight="bold"
-                    fontSize={{ base: "18px", md: "20px" }}
-                  >
-                    Drug Reaction/Observations
-                  </FormLabel>
-                  <Textarea
-                    name="comments"
-                    placeholder="Comments"
-                    value={formData.comments}
-                    onChange={handleChange}
-                  />
-                </FormControl>
-                <FormControl isRequired mb="4">
-                  <FormLabel
-                    fontWeight="bold"
-                    fontSize={{ base: "18px", md: "20px" }}
-                  >
-                    Recommendations/Requests
-                  </FormLabel>
-                  <Textarea
-                    name="recommendations"
-                    placeholder="Recommendations"
-                    value={formData.recommendations}
-                    onChange={handleChange}
-                  />
-                </FormControl>
-                <FormControl mb="4">
-                  <FormLabel
-                    fontWeight="bold"
-                    fontSize={{ base: "18px", md: "20px" }}
-                  >
-                    Picture Evidence (Optional)
-                  </FormLabel>
-                  <Input
-                    type="file"
-                    name="picture"
-                    onChange={handleFileChange}
-                  />
-                </FormControl>
-                <FormControl isRequired mb="4">
-                  <Checkbox
-                    name="confirmation"
-                    isChecked={formData.confirmation}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        confirmation: e.target.checked,
-                      }))
-                    }
-                  >
-                    I confirm that the information provided is accurate and
-                    complete
-                  </Checkbox>
-                </FormControl>
-              </>
-            )}
-            {step === 4 && (
-              <ReviewForm
-                formData={formData}
-                medications={medications}
-                activities={activities}
-                vitalsOutOfRange={vitalsOutOfRange}
-                setStep={setStep}
-                handleSubmit={handleSubmit}
-                acknowledgedOutOfRange={acknowledgedOutOfRange}
-                setAcknowledgedOutOfRange={setAcknowledgedOutOfRange}
-              />
             )}
           </DrawerBody>
-          {step < 4 && (
+          {step < 4 && !showDocumentation && (
             <DrawerFooter>
               {step > 1 && (
                 <Button
@@ -567,16 +663,23 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
               )}
             </DrawerFooter>
           )}
+          {showDocumentation && (
+            <DrawerFooter>
+              <Button
+                color="white"
+                bg="#A210C6"
+                onClick={() => setShowDocumentation(false)}
+              >
+                Back
+              </Button>
+            </DrawerFooter>
+          )}
         </DrawerContent>
       </Drawer>
       <PostSubmissionInstructionsModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         instructions={instructions}
-      />
-      <ReportSubmissionDocumentationModal
-        isOpen={docModalOpen}
-        onClose={() => setDocModalOpen(false)}
       />
     </>
   );

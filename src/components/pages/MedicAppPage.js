@@ -214,7 +214,7 @@ const MedicAppPage = () => {
               overflow={{ base: "hidden", md: "hidden" }}
               
             >
-              <VStack ml={{ md: "-180px" }} w="full" {...swipeHandlers}>
+              <VStack ml={{ md: "-100px" }} w="full" {...swipeHandlers}>
                 <Tabs
                   index={index}
                   onChange={setIndex}
