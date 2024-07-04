@@ -70,7 +70,6 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
         isOpen={isOpen}
         onClose={onClose}
         size="lg"
-        // size={{ base: "sm", md: "xl" }}
       >
         <DrawerOverlay />
         <DrawerContent>
