@@ -7,35 +7,20 @@ import {
   DrawerHeader,
   DrawerCloseButton,
   DrawerBody,
-  Button,
-  List,
-  ListItem,
-  Flex,
-  Text,
-  Box,
-  Image,
-  VStack,
   useBreakpointValue,
+  Flex,
   Spinner,
-  InputGroup,
-  InputRightElement,
-  IconButton,
-  Modal,
-  ModalOverlay,
-  ModalFooter,
-  Input,
+  Text,
   useToast,
   extendTheme,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalCloseButton,
 } from "@chakra-ui/react";
-import { DownloadIcon, SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import { jsPDF } from "jspdf";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import ReportList from "./ReportList";
+import ReportDetails from "./ReportDetails";
+import PasswordModal from "./PasswordModal";
+import RecommendedInterventionModal from "./RecommendedInterventionModal";
+import { generateRecommendations } from "./instructions";
+import { generatePDF } from "./pdfUtils";
 
 const customTheme = extendTheme({
   components: {
@@ -61,6 +46,8 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
   const [searchDate, setSearchDate] = useState(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [passwordInput, setPassword] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [instructions, setInstructions] = useState([]);
   const { user } = useSelector((state) => state.userReducer);
   const toast = useToast();
   const drawerSize = useBreakpointValue({ base: "full", md: "lg" });
@@ -119,7 +106,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
 
       if (response.ok) {
         closePasswordModal();
-        generatePDF(selectedReport);
+        generatePDF(selectedReport, setIsDownloading, toast);
       } else {
         toast({
           title: "Verification Failed",
@@ -203,193 +190,50 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
     }
   }, [searchDate, searchReports]);
 
-  const formatDateTime = (dateString) => {
-    const date = new Date(dateString);
-    return `${date.toLocaleDateString()}, ${date.toLocaleTimeString()}`;
-  };
-
-  const formatMedicationTime = (medication) => {
-    const parts = medication.split(",");
-    const timePart = parts.find((part) => part.startsWith("Time:"));
-    const time = timePart
-      ? new Date(timePart.replace("Time:", ""))
-      : new Date(NaN);
-    return `${parts[0]}, ${parts[1]}, ${parts[2]}, ${
-      !isNaN(time.getTime())
-        ? `Time:${time.toLocaleString()}`
-        : "Time:Invalid Date"
-    }`;
-  };
-
-  const generatePDF = async (report) => {
-    setIsDownloading(true);
-    try {
-      const doc = new jsPDF();
-      doc.setFontSize(20);
-      doc.setFont("helvetica", "bold");
-
-      const title = `${report.recipientFullName} MH Report`;
-      doc.text(title, 10, 20);
-
-      doc.setFontSize(12);
-
-      const addText = (label, text, offsetY) => {
-        doc.setFont("helvetica", "bold");
-        const splitLabel = doc.splitTextToSize(`${label}: `, 180);
-        doc.text(splitLabel, 10, offsetY);
-        const labelHeight = splitLabel.length * 10;
-
-        doc.setFont("helvetica", "normal");
-        const splitText = doc.splitTextToSize(text, 180);
-        doc.text(
-          splitText,
-          10 + doc.getTextDimensions(splitLabel[0]).w,
-          offsetY
+  const handleViewRecommendations = () => {
+    const vitalsOutOfRange = {
+      temperature:
+        selectedReport.temperature < 36 || selectedReport.temperature > 37.5,
+      bloodPressure: (() => {
+        const [systolic, diastolic] = selectedReport.bloodPressure
+          .split("/")
+          .map(Number);
+        return (
+          systolic < 90 || systolic > 140 || diastolic < 60 || diastolic > 90
         );
-        const textHeight = splitText.length * 10;
+      })(),
+      pulse: selectedReport.pulse < 60 || selectedReport.pulse > 100,
+      bloodSugar:
+        selectedReport.bloodSugar < 70 || selectedReport.bloodSugar > 140,
+      sp02: selectedReport.sp02 < 95,
+      respiration:
+        selectedReport.respiration < 12 || selectedReport.respiration > 20,
+    };
 
-        const totalHeight = Math.max(labelHeight, textHeight);
-        if (offsetY + totalHeight > 280) {
-          doc.addPage();
-          offsetY = 10;
-        }
+    const formData = {
+      temperature: selectedReport.temperature,
+      bloodPressure: selectedReport.bloodPressure,
+      pulse: selectedReport.pulse,
+      bloodSugar: selectedReport.bloodSugar,
+      sp02: selectedReport.sp02,
+      respiration: selectedReport.respiration,
+      mood: selectedReport.mood,
+      emotionalState: selectedReport.emotionalState,
+      physicalState: selectedReport.physicalState,
+      painLevel: selectedReport.painLevel,
+    };
 
-        return offsetY + totalHeight;
-      };
-
-      let offsetY = 30;
-      offsetY = addText("Beneficiary name ", report.recipientFullName, offsetY);
-      offsetY = addText("Service Plan ", report.servicePlan, offsetY);
-      offsetY = addText(
-        "Report date and time ",
-        formatDateTime(report.createdAt),
-        offsetY
-      );
-      offsetY = addText("Temperature ", `${report.temperature}°C`, offsetY);
-      offsetY = addText("Blood Pressure ", report.bloodPressure, offsetY);
-      offsetY = addText("Pulse ", `${report.pulse} bpm`, offsetY);
-      offsetY = addText("Blood Sugar ", report.bloodSugar, offsetY);
-      offsetY = addText("SpO2 ", `${report.sp02}%`, offsetY);
-      offsetY = addText("Respiration ", `${report.respiration} c/m`, offsetY);
-
-      offsetY = addText("Mood ", report.mood, offsetY);
-      offsetY = addText("Emotional State ", report.emotionalState, offsetY);
-      offsetY = addText("Physical State ", report.physicalState, offsetY);
-      offsetY = addText("Pain Level ", report.painLevel, offsetY);
-
-      offsetY = addText("Medications ", "", offsetY);
-      report.medications.forEach((medication) => {
-        offsetY = addText("", formatMedicationTime(medication), offsetY);
-      });
-
-      offsetY = addText("Activities ", "", offsetY);
-      report.activities.forEach((activity) => {
-        offsetY = addText("", activity, offsetY);
-      });
-
-      offsetY = addText("Comments ", report.comments, offsetY);
-      offsetY = addText("Recommendations ", report.recommendations, offsetY);
-      offsetY = addText("Reported by ", report.medicFullName, offsetY);
-
-      if (report.picturePath) {
-        if (offsetY + 160 > 280) {
-          doc.addPage();
-          offsetY = 10;
-        }
-        doc.addImage(report.picturePath, "JPEG", 10, offsetY, 180, 160);
-      }
-
-      doc.save(
-        `${report.recipientFullName}_${formatDateTime(
-          report.createdAt
-        )}_MH_Medical_Report.pdf`
-      );
-      toast({
-        title: "Download Complete",
-        description: "Report downloaded successfully.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "An error occurred while generating the PDF.",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-        position: "top-right",
-      });
-    } finally {
-      setIsDownloading(false);
-    }
+    const recommendations = generateRecommendations(
+      formData,
+      vitalsOutOfRange,
+      selectedReport.recipientFullName,
+      selectedReport.medicFullName
+    );
+    setInstructions(recommendations);
+    setModalOpen(true);
   };
 
-  const openPasswordModal = () => setIsPasswordModalOpen(true);
   const closePasswordModal = () => setIsPasswordModalOpen(false);
-
-  // const getMoodEmoji = (mood) => {
-  //   switch (mood) {
-  //     case "Happy":
-  //       return "😊";
-  //     case "Sad":
-  //       return "😢";
-  //     case "Anxious":
-  //       return "😟";
-  //     case "Calm":
-  //       return "😌";
-  //     case "Angry":
-  //       return "😠";
-  //     default:
-  //       return "😶";
-  //   }
-  // };
-
-  // const getEmotionalStateEmoji = (emotionalState) => {
-  //   switch (emotionalState) {
-  //     case "Stable":
-  //       return "😌";
-  //     case "Unstable":
-  //       return "😵";
-  //     case "Depressed":
-  //       return "😞";
-  //     case "Elevated":
-  //       return "😃";
-  //     default:
-  //       return "😶";
-  //   }
-  // };
-
-  // const getPhysicalStateEmoji = (physicalState) => {
-  //   switch (physicalState) {
-  //     case "Good":
-  //       return "💪";
-  //     case "Fair":
-  //       return "🤔";
-  //     case "Poor":
-  //       return "🤕";
-  //     default:
-  //       return "😶";
-  //   }
-  // };
-
-  // const getPainLevelEmoji = (painLevel) => {
-  //   switch (painLevel) {
-  //     case "None":
-  //       return "😀";
-  //     case "Mild":
-  //       return "🙂";
-  //     case "Moderate":
-  //       return "😐";
-  //     case "Severe":
-  //       return "😖";
-  //     case "Very Severe":
-  //       return "😫";
-  //     default:
-  //       return "😶";
-  //   }
-  // };
 
   return (
     <Drawer
@@ -416,231 +260,40 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
           ) : reports.length === 0 ? (
             <Text fontFamily="body">You have no medical report yet.</Text>
           ) : !selectedReport ? (
-            <List mb="10px" spacing={3} color="#A210C6">
-              <InputGroup borderRadius="10px" mb="10px" border="4px solid gray">
-                <DatePicker
-                  selected={searchDate}
-                  onChange={(date) => setSearchDate(date)}
-                  dateFormat="yyyy-MM-dd"
-                  placeholderText="Search report by date"
-                  customInput={
-                    <Input
-                      placeholder="Search report by date"
-                      value={
-                        searchDate ? searchDate.toISOString().split("T")[0] : ""
-                      }
-                      border="none"
-                    />
-                  }
-                />
-                <InputRightElement>
-                  {searchDate ? (
-                    <IconButton
-                      icon={<CloseIcon />}
-                      onClick={() => {
-                        setSearchDate(null);
-                        fetchReports();
-                      }}
-                    />
-                  ) : (
-                    <IconButton
-                      icon={<SearchIcon />}
-                      onClick={() => searchReports(searchDate)}
-                    />
-                  )}
-                </InputRightElement>
-              </InputGroup>
-              {reports.map((report) => (
-                <ListItem
-                  border="1px solid #A210C6"
-                  p="10px"
-                  borderRadius="5px"
-                  key={report.id}
-                  cursor="pointer"
-                  onClick={() => setSelectedReport(report)}
-                >
-                  <Text fontFamily="body" fontWeight="bold">
-                    Report for: {report.recipientFullName} on{" "}
-                    {formatDateTime(report.createdAt)}
-                  </Text>
-                  <Text fontWeight="body" fontStyle="italic">
-                    Submitted by: {report.medicFullName}
-                  </Text>
-                </ListItem>
-              ))}
-            </List>
+            <ReportList
+              reports={reports}
+              searchDate={searchDate}
+              setSearchDate={setSearchDate}
+              setSelectedReport={setSelectedReport}
+              fetchReports={fetchReports}
+              searchReports={searchReports}
+            />
           ) : (
-            <VStack mb="50px" spacing={4} align="start" w="100%">
-              <Flex justifyContent="space-between" w="100%">
-                <Button
-                  colorScheme="blue"
-                  onClick={() => setSelectedReport(null)}
-                >
-                  Back
-                </Button>
-                <Button
-                  mb="10px"
-                  bg="green.500"
-                  color="white"
-                  leftIcon={<DownloadIcon />}
-                  onClick={openPasswordModal}
-                  isLoading={isDownloading}
-                  loadingText="Downloading..."
-                >
-                  PDF
-                </Button>
-              </Flex>
-              <Flex
-                justifyContent="space-between"
-                flexDirection={{ base: "column", md: "row" }}
-                w="100%"
-                fontFamily="body"
-              >
-                <Flex mb={{ base: 1, md: 0 }}>
-                  <Text fontWeight="bold">Beneficiary name:</Text>
-                  <Text ml={2}>{selectedReport.recipientFullName}</Text>
-                </Flex>
-
-                <Flex mb={{ base: 1, md: 0 }}>
-                  <Text ml={{ base: 0, md: "10px" }} fontWeight="bold">
-                    Service Plan:
-                  </Text>
-                  <Text ml="10px">{selectedReport.servicePlan}</Text>
-                </Flex>
-              </Flex>
-              <Flex fontFamily="body">
-                <Text fontWeight="bold">Report date and time:</Text>
-                <Text ml="10px">
-                  {formatDateTime(selectedReport.createdAt)}
-                </Text>
-              </Flex>
-              <Box fontFamily="body">
-                <Text fontWeight="bold">Vital Signs:</Text>
-                <Text>Temperature: {selectedReport.temperature}°C</Text>
-                <Text>Blood Pressure: {selectedReport.bloodPressure}</Text>
-                <Text>Pulse: {selectedReport.pulse} bpm</Text>
-                <Text>Blood Sugar: {selectedReport.bloodSugar}</Text>
-                <Text>SpO2: {selectedReport.sp02}%</Text>
-                <Text>Respiration: {selectedReport.respiration} c/m</Text>
-                <Flex mt="5px">
-                  <Text fontWeight="bold">Mood:</Text>
-                  <Text ml="5px">
-                    {selectedReport.mood}
-                    {/* {getMoodEmoji(selectedReport.mood)} {selectedReport.mood} */}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text fontWeight="bold">Emotional State: </Text>
-                  <Text ml="5px">
-                    {selectedReport.emotionalState}
-                    {/* {getEmotionalStateEmoji(selectedReport.emotionalState)}{" "}
-                    {selectedReport.emotionalState} */}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text fontWeight="bold">Physical State: </Text>
-                  <Text ml="5px">
-                    {selectedReport.physicalState}
-                    {/* {getPhysicalStateEmoji(selectedReport.physicalState)}{" "}
-                    {selectedReport.physicalState} */}
-                  </Text>
-                </Flex>
-                <Flex>
-                  <Text fontWeight="bold">Pain Level: </Text>
-                  <Text ml="5px">
-                    {selectedReport.painLevel}
-                    {/* {getPainLevelEmoji(selectedReport.painLevel)}{" "}
-                    {selectedReport.painLevel} */}
-                  </Text>
-                </Flex>
-                <Text mt="5px" fontWeight="bold">
-                  Medications:
-                </Text>
-                <VStack align="start" spacing={1}>
-                  {selectedReport.medications.map((medication, index) => (
-                    <Text key={index}>{formatMedicationTime(medication)}</Text>
-                  ))}
-                </VStack>
-                <Text mt="5px" fontWeight="bold" maxWidth="100%">
-                  Activities:
-                </Text>
-                <VStack align="start" spacing={1}>
-                  {selectedReport.activities.map((activity, index) => (
-                    <Text key={index}>{activity}</Text>
-                  ))}
-                </VStack>
-                <Text mt="5px" fontWeight="bold" maxWidth="100%">
-                  Comments/Observation:
-                </Text>
-                <Text maxWidth="100%">{selectedReport.comments}</Text>
-                <Text mt="5px" fontWeight="bold" maxWidth="100%">
-                  Recommendations/Requests:
-                </Text>
-                <Text maxWidth="100%">{selectedReport.recommendations}</Text>
-                <Flex mt="5px">
-                  <Text fontStyle="italic" fontWeight="bold">
-                    Submitted by:
-                  </Text>
-                  <Text ml="10px" fontStyle="italic">
-                    {selectedReport.medicFullName}
-                  </Text>
-                </Flex>
-
-                {selectedReport.picturePath && (
-                  <Image src={selectedReport.picturePath} alt="Medical Image" />
-                )}
-              </Box>
-            </VStack>
+            <ReportDetails
+              selectedReport={selectedReport}
+              setSelectedReport={setSelectedReport}
+              openPasswordModal={() => setIsPasswordModalOpen(true)}
+              handleViewRecommendations={handleViewRecommendations}
+              isDownloading={isDownloading}
+            />
           )}
         </DrawerBody>
       </DrawerContent>
 
-      <Modal
-        size={{ base: "sm", md: "md" }}
+      <RecommendedInterventionModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        instructions={instructions}
+      />
+
+      <PasswordModal
         isOpen={isPasswordModalOpen}
         onClose={closePasswordModal}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader fontFamily="heading" color="#A210C6">
-            Enter Password
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text fontWeight="body" mb={4}>
-              Mikul health wants to make sure it's really you trying to download
-              the medical report.
-            </Text>
-
-            <Input
-              placeholder="Password"
-              type="password"
-              value={passwordInput}
-              onChange={(e) => setPassword(e.target.value)}
-              mb={3}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              bg="#A210C6"
-              color="white"
-              mr={3}
-              onClick={handlePasswordSubmit}
-              fontFamily="body"
-            >
-              Submit
-            </Button>
-            <Button
-              fontFamily="body"
-              bg="gray.500"
-              color="white"
-              onClick={closePasswordModal}
-            >
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        passwordInput={passwordInput}
+        setPassword={setPassword}
+        handlePasswordSubmit={handlePasswordSubmit}
+        isLoading={isLoading}
+      />
     </Drawer>
   );
 }

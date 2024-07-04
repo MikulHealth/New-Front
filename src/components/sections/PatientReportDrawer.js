@@ -12,7 +12,6 @@ import {
   extendTheme,
   FormControl,
   FormLabel,
-  Select,
   Textarea,
   Checkbox,
   Input,
@@ -23,6 +22,9 @@ import MedicationForm from "./MedicationForm";
 import ActivitiesForm from "./ActivitiesForm";
 import ReviewForm from "./ReviewForm";
 import PostSubmissionInstructionsModal from "./PostSubmissionInstructionsModal ";
+import ReportSubmissionDocumentationModal from "./ReportSubmissionDocumentationModal";
+import { displayPostSubmissionInstructions } from "./instructions";
+import PatientSelector from "./PatientSelector";
 
 const customTheme = extendTheme({
   components: {
@@ -71,6 +73,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [acknowledgedOutOfRange, setAcknowledgedOutOfRange] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [instructions, setInstructions] = useState([]);
+  const [docModalOpen, setDocModalOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -199,20 +202,26 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const validateVitalSigns = () => {
-    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } = formData;
+    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } =
+      formData;
+
+    const isValid = (value) => !isNaN(value) || value.toLowerCase() === "nil";
 
     if (
-      isNaN(temperature) ||
-      isNaN(pulse) ||
-      isNaN(bloodSugar) ||
-      isNaN(sp02) ||
-      isNaN(respiration)
+      !isValid(temperature) ||
+      !isValid(pulse) ||
+      !isValid(bloodSugar) ||
+      !isValid(sp02) ||
+      !isValid(respiration)
     ) {
       return false;
     }
 
     const [systolic, diastolic] = bloodPressure.split("/").map(Number);
-    if (isNaN(systolic) || isNaN(diastolic)) {
+    if (
+      bloodPressure.toLowerCase() !== "nil" &&
+      (isNaN(systolic) || isNaN(diastolic))
+    ) {
       return false;
     }
 
@@ -220,11 +229,15 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   };
 
   const checkVitalSigns = () => {
-    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } = formData;
+    const { temperature, bloodPressure, pulse, bloodSugar, sp02, respiration } =
+      formData;
 
     const thresholds = {
       temperature: { min: 36, max: 37.5 },
-      bloodPressure: { systolic: { min: 90, max: 140 }, diastolic: { min: 60, max: 90 } },
+      bloodPressure: {
+        systolic: { min: 90, max: 140 },
+        diastolic: { min: 60, max: 90 },
+      },
       pulse: { min: 60, max: 100 },
       bloodSugar: { min: 70, max: 140 },
       sp02: { min: 95, max: 100 },
@@ -234,25 +247,51 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     const [systolic, diastolic] = bloodPressure.split("/").map(Number);
 
     const outOfRange = {};
-    if (temperature < thresholds.temperature.min || temperature > thresholds.temperature.max) {
+    if (
+      temperature.toLowerCase() !== "nil" &&
+      (temperature < thresholds.temperature.min ||
+        temperature > thresholds.temperature.max)
+    ) {
       outOfRange.temperature = true;
     }
-    if (systolic < thresholds.bloodPressure.systolic.min || systolic > thresholds.bloodPressure.systolic.max) {
+    if (
+      bloodPressure.toLowerCase() !== "nil" &&
+      (systolic < thresholds.bloodPressure.systolic.min ||
+        systolic > thresholds.bloodPressure.systolic.max)
+    ) {
       outOfRange.bloodPressure = true;
     }
-    if (diastolic < thresholds.bloodPressure.diastolic.min || diastolic > thresholds.bloodPressure.diastolic.max) {
+    if (
+      bloodPressure.toLowerCase() !== "nil" &&
+      (diastolic < thresholds.bloodPressure.diastolic.min ||
+        diastolic > thresholds.bloodPressure.diastolic.max)
+    ) {
       outOfRange.bloodPressure = true;
     }
-    if (pulse < thresholds.pulse.min || pulse > thresholds.pulse.max) {
+    if (
+      pulse.toLowerCase() !== "nil" &&
+      (pulse < thresholds.pulse.min || pulse > thresholds.pulse.max)
+    ) {
       outOfRange.pulse = true;
     }
-    if (bloodSugar < thresholds.bloodSugar.min || bloodSugar > thresholds.bloodSugar.max) {
+    if (
+      bloodSugar.toLowerCase() !== "nil" &&
+      (bloodSugar < thresholds.bloodSugar.min ||
+        bloodSugar > thresholds.bloodSugar.max)
+    ) {
       outOfRange.bloodSugar = true;
     }
-    if (sp02 < thresholds.sp02.min || sp02 > thresholds.sp02.max) {
+    if (
+      sp02.toLowerCase() !== "nil" &&
+      (sp02 < thresholds.sp02.min || sp02 > thresholds.sp02.max)
+    ) {
       outOfRange.sp02 = true;
     }
-    if (respiration < thresholds.respiration.min || respiration > thresholds.respiration.max) {
+    if (
+      respiration.toLowerCase() !== "nil" &&
+      (respiration < thresholds.respiration.min ||
+        respiration > thresholds.respiration.max)
+    ) {
       outOfRange.respiration = true;
     }
 
@@ -289,7 +328,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     if (!validateVitalSigns()) {
       toast({
         title: "Invalid Vital Signs",
-        description: "Please enter valid vital signs.",
+        description: "Please enter valid vital signs or 'nil'.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -337,7 +376,13 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           isClosable: true,
           position: "top-right",
         });
-        displayPostSubmissionInstructions();
+        displayPostSubmissionInstructions(
+          formData,
+          vitalsOutOfRange,
+          setInstructions,
+          setModalOpen
+        );
+
         onClose();
       } else {
         toast({
@@ -361,98 +406,49 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     }
   };
 
-  const displayPostSubmissionInstructions = () => {
-    const instructions = [];
-
-    if (vitalsOutOfRange.temperature) {
-      if (formData.temperature < 36) {
-        instructions.push("Temperature is too low. Ensure the patient is kept warm and monitor closely. If the low temperature persists, contact your supervisor or call the doctor.");
-      } else if (formData.temperature > 37.5) {
-        instructions.push("Temperature is too high. Consider administering an antipyretic and encourage hydration. If the high temperature persists, contact your supervisor or call the doctor.");
-      }
-    }
-    if (vitalsOutOfRange.bloodPressure) {
-      const [systolic, diastolic] = formData.bloodPressure.split("/").map(Number);
-      if (systolic < 90) {
-        instructions.push("Systolic blood pressure is too low. Ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, contact your supervisor or call the doctor.");
-      } else if (systolic > 140) {
-        instructions.push("Systolic blood pressure is too high. Consider administering antihypertensive medication as prescribed. If the high blood pressure persists, contact your supervisor or call the doctor.");
-      }
-      if (diastolic < 60) {
-        instructions.push("Diastolic blood pressure is too low. Ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, contact your supervisor or call the doctor.");
-      } else if (diastolic > 90) {
-        instructions.push("Diastolic blood pressure is too high. Consider administering antihypertensive medication as prescribed. If the high blood pressure persists, contact your supervisor or call the doctor.");
-      }
-    }
-    if (vitalsOutOfRange.pulse) {
-      if (formData.pulse < 60) {
-        instructions.push("Pulse is too low (bradycardia). Assess for symptoms of dizziness or fatigue. If the low pulse persists, contact your supervisor or call the doctor.");
-      } else if (formData.pulse > 100) {
-        instructions.push("Pulse is too high (tachycardia). Assess for pain, fever, or anxiety and treat accordingly. If the high pulse persists, contact your supervisor or call the doctor.");
-      }
-    }
-    if (vitalsOutOfRange.bloodSugar) {
-      if (formData.bloodSugar < 70) {
-        instructions.push("Blood sugar is too low (hypoglycemia). Provide a quick source of sugar, such as juice or glucose tablets. If the low blood sugar persists, contact your supervisor or call the doctor.");
-      } else if (formData.bloodSugar > 140) {
-        instructions.push("Blood sugar is too high (hyperglycemia). Administer insulin as prescribed and encourage hydration. If the high blood sugar persists, contact your supervisor or call the doctor.");
-      }
-    }
-    if (vitalsOutOfRange.sp02) {
-      if (formData.sp02 < 95) {
-        instructions.push("SpO2 is too low. Ensure the patient is receiving adequate oxygen and check for any obstruction in the airway. If the low SpO2 persists, contact your supervisor or call the doctor.");
-      }
-    }
-    if (vitalsOutOfRange.respiration) {
-      if (formData.respiration < 12) {
-        instructions.push("Respiration rate is too low (bradypnea). Assess for signs of respiratory depression. If the low respiration rate persists, contact your supervisor or call the doctor.");
-      } else if (formData.respiration > 20) {
-        instructions.push("Respiration rate is too high (tachypnea). Assess for underlying causes such as infection or anxiety. If the high respiration rate persists, contact your supervisor or call the doctor.");
-      }
-    }
-
-    if (instructions.length > 0) {
-      setInstructions(instructions);
-      setModalOpen(true);
-    }
-  };
-
   return (
     <>
-      <Drawer theme={customTheme} isOpen={isOpen} placement="right" onClose={onClose} size="lg">
+      <Drawer
+        theme={customTheme}
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        size="lg"
+      >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader fontFamily="heading" color="#A210C6">Patient Report</DrawerHeader>
+          <DrawerHeader fontFamily="heading" color="#A210C6">
+            Patient Report
+          </DrawerHeader>
           <DrawerBody>
+            <Button
+              justifySelf="left"
+              colorScheme="blue"
+              mb={4}
+              onClick={() => setDocModalOpen(true)}
+            >
+              How to Send Report
+            </Button>
             {step === 1 && (
               <>
-                <FormControl isRequired mb="4">
-                  <FormLabel fontSize={{ base: "18px", md: "20px" }} fontWeight="bold">Select Patient</FormLabel>
-                  <Select
-                    placeholder="Select patient"
-                    value={selectedPatient}
-                    onChange={(e) => {
-                      setSelectedPatient(e.target.value);
-                      setPatientId(e.target.value);
-                    }}
-                  >
-                    {Array.isArray(patients) && patients
-                      .filter(patient => patient.customerAppointment?.appointmentActive)
-                      .map(patient => (
-                        <option key={patient.customerAppointment.id} value={patient.customerAppointment.id}>
-                          {patient.customerAppointment.recipientFirstname} {patient.customerAppointment.recipientLastname}
-                        </option>
-                      ))}
-                  </Select>
-                </FormControl>
+                <PatientSelector
+                  patients={patients}
+                  selectedPatient={selectedPatient}
+                  setSelectedPatient={selectedPatient}
+                />
                 <VitalsForm formData={formData} handleChange={handleChange} />
               </>
             )}
             {step === 2 && (
               <>
                 <FormControl isRequired mb="4">
-                  <FormLabel fontSize={{ base: "18px", md: "20px" }} fontWeight="bold">Medications</FormLabel>
+                  <FormLabel
+                    fontSize={{ base: "18px", md: "20px" }}
+                    fontWeight="bold"
+                  >
+                    Medications
+                  </FormLabel>
                   <MedicationForm
                     medications={medications}
                     handleMedicationChange={handleMedicationChange}
@@ -461,30 +457,68 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                     removeMedication={removeMedication}
                   />
                 </FormControl>
-                <ActivitiesForm activities={activities} handleCheckboxChange={handleCheckboxChange} />
+                <ActivitiesForm
+                  activities={activities}
+                  handleCheckboxChange={handleCheckboxChange}
+                />
               </>
             )}
             {step === 3 && (
               <>
                 <FormControl isRequired mb="4">
-                  <FormLabel fontWeight="bold" fontSize={{ base: "18px", md: "20px" }}>Observation/Comments</FormLabel>
-                  <Textarea name="comments" placeholder="Comments" value={formData.comments} onChange={handleChange} />
+                  <FormLabel
+                    fontWeight="bold"
+                    fontSize={{ base: "18px", md: "20px" }}
+                  >
+                    Drug Reaction/Observations
+                  </FormLabel>
+                  <Textarea
+                    name="comments"
+                    placeholder="Comments"
+                    value={formData.comments}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl isRequired mb="4">
-                  <FormLabel fontWeight="bold" fontSize={{ base: "18px", md: "20px" }}>Recommendations/Requests</FormLabel>
-                  <Textarea name="recommendations" placeholder="Recommendations" value={formData.recommendations} onChange={handleChange} />
+                  <FormLabel
+                    fontWeight="bold"
+                    fontSize={{ base: "18px", md: "20px" }}
+                  >
+                    Recommendations/Requests
+                  </FormLabel>
+                  <Textarea
+                    name="recommendations"
+                    placeholder="Recommendations"
+                    value={formData.recommendations}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl mb="4">
-                  <FormLabel fontWeight="bold" fontSize={{ base: "18px", md: "20px" }}>Picture Evidence (Optional)</FormLabel>
-                  <Input type="file" name="picture" onChange={handleFileChange} />
+                  <FormLabel
+                    fontWeight="bold"
+                    fontSize={{ base: "18px", md: "20px" }}
+                  >
+                    Picture Evidence (Optional)
+                  </FormLabel>
+                  <Input
+                    type="file"
+                    name="picture"
+                    onChange={handleFileChange}
+                  />
                 </FormControl>
                 <FormControl isRequired mb="4">
                   <Checkbox
                     name="confirmation"
                     isChecked={formData.confirmation}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, confirmation: e.target.checked }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        confirmation: e.target.checked,
+                      }))
+                    }
                   >
-                    I confirm that the information provided is accurate and complete
+                    I confirm that the information provided is accurate and
+                    complete
                   </Checkbox>
                 </FormControl>
               </>
@@ -505,16 +539,29 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           {step < 4 && (
             <DrawerFooter>
               {step > 1 && (
-                <Button variant="outline" mr={3} onClick={() => setStep(step - 1)}>
+                <Button
+                  variant="outline"
+                  mr={3}
+                  onClick={() => setStep(step - 1)}
+                >
                   Previous
                 </Button>
               )}
               {step < 3 ? (
-                <Button bg="#A210C6" color="white" onClick={() => setStep(step + 1)}>
+                <Button
+                  bg="#A210C6"
+                  color="white"
+                  onClick={() => setStep(step + 1)}
+                >
                   Next
                 </Button>
               ) : (
-                <Button bg="#A210C6" color="white" onClick={() => setStep(4)} isDisabled={!formData.confirmation}>
+                <Button
+                  bg="#A210C6"
+                  color="white"
+                  onClick={() => setStep(4)}
+                  isDisabled={!formData.confirmation}
+                >
                   Review and Confirm
                 </Button>
               )}
@@ -526,6 +573,10 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         instructions={instructions}
+      />
+      <ReportSubmissionDocumentationModal
+        isOpen={docModalOpen}
+        onClose={() => setDocModalOpen(false)}
       />
     </>
   );
