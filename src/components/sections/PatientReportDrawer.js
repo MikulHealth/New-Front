@@ -26,7 +26,7 @@ import VitalsForm from "./VitalSignsForm";
 import MedicationForm from "./MedicationForm";
 import ActivitiesForm from "./ActivitiesForm";
 import ReviewForm from "./ReviewForm";
-import PostSubmissionInstructionsModal from "./PostSubmissionInstructionsModal ";
+import PostSubmissionInstructionsDrawer from "./PostSubmissionInstructionsModal ";
 import { displayPostSubmissionInstructions } from "./instructions";
 import PatientSelector from "./PatientSelector";
 
@@ -75,7 +75,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   });
   const [vitalsOutOfRange, setVitalsOutOfRange] = useState({});
   const [acknowledgedOutOfRange, setAcknowledgedOutOfRange] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [instructions, setInstructions] = useState([]);
   const [showDocumentation, setShowDocumentation] = useState(false);
 
@@ -384,7 +384,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           formData,
           vitalsOutOfRange,
           setInstructions,
-          setModalOpen
+          setDrawerOpen
         );
 
         onClose();
@@ -673,9 +673,9 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           )}
         </DrawerContent>
       </Drawer>
-      <PostSubmissionInstructionsModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+      <PostSubmissionInstructionsDrawer
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
         instructions={instructions}
       />
     </>

@@ -1,14 +1,15 @@
 import React from "react";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
   Button,
   extendTheme,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 
 const customTheme = extendTheme({
@@ -27,34 +28,36 @@ const customTheme = extendTheme({
   },
 });
 
-const PostSubmissionInstructionsModal = ({ isOpen, onClose, instructions }) => {
+const PostSubmissionInstructionsDrawer = ({ isOpen, onClose, instructions }) => {
   return (
-    <Modal
+    <Drawer
       theme={customTheme}
       isOpen={isOpen}
       onClose={onClose}
       size={{ base: "sm", md: "lg" }}
     >
-      <ModalOverlay />
-      <ModalContent borderRadius="25px 25px 25px 0px">
-        <ModalHeader textAlign="center" color="#A210C6" fontFamily="heading">
-          Post Submission Instructions
-        </ModalHeader>
-        <ModalBody fontFamily="body">
-          {instructions.map((instruction, index) => (
-            <Text key={index} mb="2">
-              {instruction}
-            </Text>
-          ))}
-        </ModalBody>
-        <ModalFooter>
+      <DrawerOverlay />
+      <DrawerContent >
+        <DrawerHeader textAlign="center" color="#A210C6" fontFamily="heading">
+          Follow up Instructions
+        </DrawerHeader>
+        <DrawerBody fontFamily="body">
+          <VStack spacing={4} align="start">
+            {instructions.map((instruction, index) => (
+              <Text key={index} mb="2">
+                {instruction}
+              </Text>
+            ))}
+          </VStack>
+        </DrawerBody>
+        <DrawerFooter>
           <Button bg="#A210C6" color="white" onClick={onClose}>
             Okay
           </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
-export default PostSubmissionInstructionsModal;
+export default PostSubmissionInstructionsDrawer;
