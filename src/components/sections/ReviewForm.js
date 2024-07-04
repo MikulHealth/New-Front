@@ -1,15 +1,27 @@
 import React from "react";
 import { VStack, Text, Flex, Button } from "@chakra-ui/react";
 
-const ReviewForm = ({ formData, medications, activities, vitalsOutOfRange, setStep, handleSubmit, acknowledgedOutOfRange, setAcknowledgedOutOfRange }) => (
+const ReviewForm = ({
+  formData,
+  medications,
+  activities,
+  vitalsOutOfRange,
+  setStep,
+  handleSubmit,
+  acknowledgedOutOfRange,
+  setAcknowledgedOutOfRange,
+}) => (
   <VStack spacing={4} align="start" w="100%">
-    <Text fontSize="xl" fontWeight="bold">Confirmation</Text>
+    <Text fontSize="xl" fontWeight="bold">
+      Confirmation
+    </Text>
     <Text color="#A210C6" fontStyle="italic">
       Proof read to confirm that the report is complete and accurate.
     </Text>
     {Object.keys(vitalsOutOfRange).length > 0 && (
       <Text color="red.500" fontWeight="bold">
-        Some vital signs are out of range. Please confirm they are correct before submitting.
+        Some vital signs are out of range. Please confirm they are correct
+        before submitting.
       </Text>
     )}
     <Text color={vitalsOutOfRange.temperature ? "red.500" : "black"}>
@@ -30,15 +42,25 @@ const ReviewForm = ({ formData, medications, activities, vitalsOutOfRange, setSt
     <Text color={vitalsOutOfRange.respiration ? "red.500" : "black"}>
       Respiration: {formData.respiration} c/m
     </Text>
-    <Text>Mood: {formData.mood}</Text>
     <Text>Emotional State: {formData.emotionalState}</Text>
     <Text>Physical State: {formData.physicalState}</Text>
     <Text>Spiritual State: {formData.spiritualState}</Text>
     <Text>Pain Level: {formData.painLevel}</Text>
+    <Text>Pain Location: {formData.painLocation}</Text>
+    <Text>Skin Integrity: {formData.skinIntegrity}</Text>
+    <Text>Appetite: {formData.appetite}</Text>
+    <Text>Fluid Intake: {formData.fluidIntake}</Text>
+    <Text>Urinary Elimination: {formData.urinaryElimination}</Text>
+    <Text>Bowel Elimination: {formData.bowelElimination}</Text>
+    <Text>Sleep Quality: {formData.sleepQuality}</Text>
     <Text fontWeight="bold">Medications:</Text>
     <VStack align="start" spacing={1}>
       {medications.map((medication, index) => (
-        <Text key={index}>{`Name: ${medication.name}, Dosage: ${medication.dosage}, Route: ${medication.route}, Time: ${medication.time.toLocaleString()}`}</Text>
+        <Text key={index}>{`Name: ${medication.name}, Dosage: ${
+          medication.dosage
+        }, Route: ${
+          medication.route
+        }, Time: ${medication.time.toLocaleString()}`}</Text>
       ))}
     </VStack>
     <Text fontWeight="bold">Activities:</Text>

@@ -196,32 +196,22 @@ const VitalsForm = ({ formData, handleChange }) => {
         )}
       </FormControl>
       <FormControl isRequired>
-        <FormLabel>Mood</FormLabel>
+        <FormLabel>Emotional State</FormLabel>
         <Select
-          name="mood"
-          placeholder="Select Mood"
-          value={formData.mood}
+          name="emotionalState"
+          placeholder="Select emotional state"
+          value={formData.emotionalState}
           onChange={handleChange}
         >
           <option value="Happy">Happy</option>
           <option value="Sad">Sad</option>
           <option value="Anxious">Anxious</option>
+          <option value="Restless">Restless</option>
           <option value="Calm">Calm</option>
-          <option value="Angry">Angry</option>
-        </Select>
-      </FormControl>
-      <FormControl isRequired>
-        <FormLabel>Emotional State</FormLabel>
-        <Select
-          name="emotionalState"
-          placeholder="Select Emotional State"
-          value={formData.emotionalState}
-          onChange={handleChange}
-        >
-          <option value="Stable">Stable</option>
-          <option value="Unstable">Unstable</option>
-          <option value="Depressed">Depressed</option>
           <option value="Elevated">Elevated</option>
+          <option value="Angry">Angry</option>
+          <option value="Aggressive">Aggressive</option>
+          <option value="Depressed">Depressed</option>
         </Select>
       </FormControl>
       <FormControl isRequired>
@@ -250,6 +240,104 @@ const VitalsForm = ({ formData, handleChange }) => {
           <option value="Moderate">Moderate</option>
           <option value="Severe">Severe</option>
           <option value="Very Severe">Very Severe</option>
+        </Select>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Pain Location</FormLabel>
+        <Select
+          name="painLocation"
+          placeholder="Select Pain Location"
+          value={formData.painLocation}
+          onChange={handleChange}
+        >
+          <option value="None">None</option>
+          <option value="Head">Head</option>
+          <option value="Chest">Chest</option>
+          <option value="Abdomen">Abdomen</option>
+          <option value="Back">Back</option>
+          <option value="Legs">Legs</option>
+          <option value="Arms">Arms</option>
+          <option value="Neck">Neck</option>
+          <option value="Shoulders">Shoulders</option>
+        </Select>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Skin Integrity</FormLabel>
+        <Select
+          name="skinIntegrity"
+          placeholder="Select Skin Integrity"
+          value={formData.skinIntegrity}
+          onChange={handleChange}
+        >
+          <option value="Intact">Intact</option>
+          <option value="Broken">Broken</option>
+          <option value="Ulcerated">Ulcerated</option>
+          <option value="Infected">Infected</option>
+        </Select>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Appetite</FormLabel>
+        <Select
+          name="appetite"
+          placeholder="Select Appetite"
+          value={formData.appetite}
+          onChange={handleChange}
+        >
+          <option value="Good">Good</option>
+          <option value="Fair">Fair</option>
+          <option value="Poor">Poor</option>
+        </Select>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Fluid Intake</FormLabel>
+        <Select
+          name="fluidIntake"
+          placeholder="Select Fluid Intake"
+          value={formData.fluidIntake}
+          onChange={handleChange}
+        >
+          <option value="Adequate">Adequate</option>
+          <option value="Fair">Fair</option>
+          <option value="Inadequate">Inadequate</option>
+        </Select>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Urinary Elimination</FormLabel>
+        <Select
+          name="urinaryElimination"
+          placeholder="Select Urinary Elimination"
+          value={formData.urinaryElimination}
+          onChange={handleChange}
+        >
+          <option value="Normal">Normal</option>
+          <option value="Incontinence">Incontinence</option>
+          <option value="Retention">Retention</option>
+        </Select>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Bowel Elimination</FormLabel>
+        <Select
+          name="bowelElimination"
+          placeholder="Select Bowel Elimination"
+          value={formData.bowelElimination}
+          onChange={handleChange}
+        >
+          <option value="Regular">Regular</option>
+          <option value="Constipation">Constipation</option>
+          <option value="Diarrhea">Diarrhea</option>
+        </Select>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Sleep Quality</FormLabel>
+        <Select
+          name="sleepQuality"
+          placeholder="Select Sleep Quality"
+          value={formData.sleepQuality}
+          onChange={handleChange}
+        >
+          <option value="Good">Good</option>
+          <option value="Fair">Fair</option>
+          <option value="Poor">Poor</option>
         </Select>
       </FormControl>
     </VStack>

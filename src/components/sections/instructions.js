@@ -78,19 +78,6 @@ export const displayPostSubmissionInstructions = (
       );
     }
   }
-  if (formData.mood === "Sad") {
-    instructions.push(
-      "The patient is feeling sad. Provide emotional support and consider arranging for counseling. Monitor for any signs of worsening mood."
-    );
-  } else if (formData.mood === "Anxious") {
-    instructions.push(
-      "The patient is feeling anxious. Provide reassurance, encourage relaxation techniques, and monitor for any signs of severe anxiety."
-    );
-  } else if (formData.mood === "Angry") {
-    instructions.push(
-      "The patient is feeling angry. Address any potential causes of frustration, provide a calm environment, and monitor for any signs of aggression."
-    );
-  }
   if (formData.emotionalState === "Unstable") {
     instructions.push(
       "The emotional state is unstable. Provide support, consider arranging for a mental health evaluation, and monitor closely."
@@ -121,6 +108,49 @@ export const displayPostSubmissionInstructions = (
       "The pain level is severe. Provide strong pain relief medication as prescribed, consider non-pharmacological interventions, and monitor closely."
     );
   }
+  if (formData.painLocation) {
+    instructions.push(
+      `The patient is experiencing pain in the ${formData.painLocation}. Provide appropriate pain relief and monitor for any changes.`
+    );
+  }
+  if (formData.skinIntegrity !== "Intact") {
+    instructions.push(
+      `The patient's skin integrity is ${formData.skinIntegrity}. Ensure proper wound care and monitor for any signs of infection.`
+    );
+  }
+  if (formData.appetite === "Poor") {
+    instructions.push(
+      "The patient's appetite is poor. Encourage small, frequent meals and monitor nutritional intake."
+    );
+  }
+  if (formData.fluidIntake === "Inadequate") {
+    instructions.push(
+      "The patient's fluid intake is inadequate. Encourage regular fluid intake and monitor for signs of dehydration."
+    );
+  }
+  if (formData.urinaryElimination === "Incontinence") {
+    instructions.push(
+      "The patient is experiencing urinary incontinence. Ensure regular toileting, monitor skin integrity, and provide appropriate incontinence products."
+    );
+  } else if (formData.urinaryElimination === "Retention") {
+    instructions.push(
+      "The patient is experiencing urinary retention. Monitor for signs of discomfort or infection and ensure adequate fluid intake. Contact the supervisor or doctor if the condition persists."
+    );
+  }
+  if (formData.bowelElimination === "Constipation") {
+    instructions.push(
+      "The patient is experiencing constipation. Encourage high-fiber foods, adequate fluid intake, and consider administering a stool softener or laxative as prescribed."
+    );
+  } else if (formData.bowelElimination === "Diarrhea") {
+    instructions.push(
+      "The patient is experiencing diarrhea. Ensure adequate hydration, monitor for signs of dehydration, and provide appropriate dietary adjustments."
+    );
+  }
+  if (formData.sleepQuality === "Poor") {
+    instructions.push(
+      "The patient's sleep quality is poor. Encourage a regular sleep routine and consider any factors that might be affecting sleep."
+    );
+  }
 
   if (instructions.length > 0) {
     setInstructions(instructions);
@@ -142,11 +172,11 @@ export const generateRecommendations = (
   if (vitalsOutOfRange.temperature) {
     if (formData.temperature < 36) {
       recommendations.push(
-        `${patientFirstName}'s temperature was a bit low. ${medicFirstName} has been advised to ensure they are kept warm and monitor closely. If the low temperature persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s temperature was a bit low. ${medicFirstName} has been advised to ensure they are kept warm and monitor closely. If the low temperature persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     } else if (formData.temperature > 37.5) {
       recommendations.push(
-        `${patientFirstName}'s temperature was a bit high. ${medicFirstName} has been advised to consider administering an antipyretic and encourage hydration. If the high temperature persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s temperature was a bit high. ${medicFirstName} has been advised to consider administering an antipyretic and encourage hydration. If the high temperature persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     }
   }
@@ -154,49 +184,49 @@ export const generateRecommendations = (
     const [systolic, diastolic] = formData.bloodPressure.split("/").map(Number);
     if (systolic < 90) {
       recommendations.push(
-        `${patientFirstName}'s systolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s systolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     } else if (systolic > 140) {
       recommendations.push(
-        `${patientFirstName}'s systolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s systolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     }
     if (diastolic < 60) {
       recommendations.push(
-        `${patientFirstName}'s diastolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s diastolic blood pressure was low. ${medicFirstName} has been advised to ensure adequate fluid intake and monitor for signs of shock. If the low blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     } else if (diastolic > 90) {
       recommendations.push(
-        `${patientFirstName}'s diastolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s diastolic blood pressure was high. ${medicFirstName} has been advised to consider administering antihypertensive medication as prescribed. If the high blood pressure persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     }
   }
   if (vitalsOutOfRange.pulse) {
     if (formData.pulse < 60) {
       recommendations.push(
-        `${patientFirstName}'s pulse was a bit low (bradycardia). ${medicFirstName} has been advised to assess for symptoms of dizziness or fatigue. If the low pulse persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s pulse was a bit low (bradycardia). ${medicFirstName} has been advised to assess for symptoms of dizziness or fatigue. If the low pulse persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     } else if (formData.pulse > 100) {
       recommendations.push(
-        `${patientFirstName}'s pulse was a bit high (tachycardia). ${medicFirstName} has been advised to assess for pain, fever, or anxiety and treat accordingly. If the high pulse persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s pulse was a bit high (tachycardia). ${medicFirstName} has been advised to assess for pain, fever, or anxiety and treat accordingly. If the high pulse persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     }
   }
   if (vitalsOutOfRange.bloodSugar) {
     if (formData.bloodSugar < 70) {
       recommendations.push(
-        `${patientFirstName}'s blood sugar level was low (hypoglycemia). ${medicFirstName} has been advised to provide a quick source of sugar, such as juice or glucose tablets. If the low blood sugar persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s blood sugar level was low (hypoglycemia). ${medicFirstName} has been advised to provide a quick source of sugar, such as juice or glucose tablets. If the low blood sugar persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     } else if (formData.bloodSugar > 140) {
       recommendations.push(
-        `${patientFirstName}'s blood sugar level was high (hyperglycemia). ${medicFirstName} has been advised to administer insulin as prescribed and encourage hydration. If the high blood sugar persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s blood sugar level was high (hyperglycemia). ${medicFirstName} has been advised to administer insulin as prescribed and encourage hydration. If the high blood sugar persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     }
   }
   if (vitalsOutOfRange.sp02) {
     if (formData.sp02 < 95) {
       recommendations.push(
-        `${patientFirstName}'s SpO2 level was low. ${medicFirstName} has been advised to ensure they are receiving adequate oxygen and check for any obstruction in the airway. If the low SpO2 persists, ${medicFirstName} will contact your supervisor or call the doctor.`
+        `${patientFirstName}'s SpO2 level was low. ${medicFirstName} has been advised to ensure they are receiving adequate oxygen and check for any obstruction in the airway. If the low SpO2 persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     }
   }
@@ -210,19 +240,6 @@ export const generateRecommendations = (
         `${patientFirstName}'s respiration rate was high (tachypnea). ${medicFirstName} has been advised to assess for underlying causes such as infection or anxiety. If the high respiration rate persists, ${medicFirstName} will contact the supervisor or call the doctor.`
       );
     }
-  }
-  if (formData.mood === "Sad") {
-    recommendations.push(
-      `${patientFirstName} was feeling sad. ${medicFirstName} has been advised to provide emotional support and consider arranging for counseling. ${medicFirstName} will monitor for any signs of worsening mood.`
-    );
-  } else if (formData.mood === "Anxious") {
-    recommendations.push(
-      `${patientFirstName} was feeling anxious. ${medicFirstName} has been advised to provide reassurance, encourage relaxation techniques, and monitor for any signs of severe anxiety.`
-    );
-  } else if (formData.mood === "Angry") {
-    recommendations.push(
-      `${patientFirstName} was feeling angry. ${medicFirstName} has been advised to address any potential causes of frustration, provide a calm environment, and monitor for any signs of aggression.`
-    );
   }
   if (formData.emotionalState === "Unstable") {
     recommendations.push(
@@ -254,9 +271,52 @@ export const generateRecommendations = (
       `${patientFirstName}'s pain level was severe. ${medicFirstName} has been advised to provide strong pain relief medication as prescribed, consider non-pharmacological interventions, and monitor closely.`
     );
   }
+  if (formData.painLocation) {
+    recommendations.push(
+      `${patientFirstName} was experiencing pain in the ${formData.painLocation}. ${medicFirstName} has been advised to provide appropriate pain relief and monitor for any changes.`
+    );
+  }
+  if (formData.skinIntegrity !== "Intact") {
+    recommendations.push(
+      `${patientFirstName}'s skin integrity was ${formData.skinIntegrity}. ${medicFirstName} has been advised to ensure proper wound care and monitor for any signs of infection.`
+    );
+  }
+  if (formData.appetite === "Poor") {
+    recommendations.push(
+      `${patientFirstName}'s appetite was poor. ${medicFirstName} has been advised to encourage small, frequent meals and monitor nutritional intake.`
+    );
+  }
+  if (formData.fluidIntake === "Inadequate") {
+    recommendations.push(
+      `${patientFirstName}'s fluid intake was inadequate. ${medicFirstName} has been advised to encourage regular fluid intake and monitor for signs of dehydration.`
+    );
+  }
+  if (formData.urinaryElimination === "Incontinence") {
+    recommendations.push(
+      `${patientFirstName} was experiencing urinary incontinence. ${medicFirstName} has been advised to ensure regular toileting, monitor skin integrity, and provide appropriate incontinence products.`
+    );
+  } else if (formData.urinaryElimination === "Retention") {
+    recommendations.push(
+      `${patientFirstName} was experiencing urinary retention. ${medicFirstName} has been advised to monitor for signs of discomfort or infection and ensure adequate fluid intake. ${medicFirstName} will contact the supervisor or doctor if the condition persists.`
+    );
+  }
+  if (formData.bowelElimination === "Constipation") {
+    recommendations.push(
+      `${patientFirstName} was experiencing constipation. ${medicFirstName} has been advised to encourage high-fiber foods, adequate fluid intake, and consider administering a stool softener or laxative as prescribed.`
+    );
+  } else if (formData.bowelElimination === "Diarrhea") {
+    recommendations.push(
+      `${patientFirstName} was experiencing diarrhea. ${medicFirstName} has been advised to ensure adequate hydration, monitor for signs of dehydration, and provide appropriate dietary adjustments.`
+    );
+  }
+  if (formData.sleepQuality === "Poor") {
+    recommendations.push(
+      `${patientFirstName}'s sleep quality was poor. ${medicFirstName} has been advised to encourage a regular sleep routine and consider any factors that might be affecting sleep.`
+    );
+  }
 
   recommendations.push(
-    `Please rest assured that ${medicFirstName}, the medic, is taking the right steps to ensure ${patientFirstName}'s well-being. However, feel free to call ${medicFirstName} to follow up if you have any concerns.`
+    `Please rest assured that ${medicFirstName}, the caregiver, is taking the right steps to ensure ${patientFirstName}'s well-being. However, feel free to call ${medicFirstName} to follow up if you have any concerns.`
   );
 
   return recommendations;

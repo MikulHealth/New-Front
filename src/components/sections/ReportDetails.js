@@ -78,10 +78,7 @@ const ReportDetails = ({
         <Text>Blood Sugar: {selectedReport.bloodSugar}</Text>
         <Text>SpO2: {selectedReport.sp02}%</Text>
         <Text>Respiration: {selectedReport.respiration} c/m</Text>
-        <Flex mt="5px">
-          <Text fontWeight="bold">Mood:</Text>
-          <Text ml="5px">{selectedReport.mood}</Text>
-        </Flex>
+       
         <Flex>
           <Text fontWeight="bold">Emotional State: </Text>
           <Text ml="5px">{selectedReport.emotionalState}</Text>
@@ -93,6 +90,34 @@ const ReportDetails = ({
         <Flex>
           <Text fontWeight="bold">Pain Level: </Text>
           <Text ml="5px">{selectedReport.painLevel}</Text>
+        </Flex>
+        <Flex>
+          <Text fontWeight="bold">Pain Location: </Text>
+          <Text ml="5px">{selectedReport.painLocation}</Text>
+        </Flex>
+        <Flex>
+          <Text fontWeight="bold">Skin Integrity: </Text>
+          <Text ml="5px">{selectedReport.skinIntegrity}</Text>
+        </Flex>
+        <Flex>
+          <Text fontWeight="bold">Appetite: </Text>
+          <Text ml="5px">{selectedReport.appetite}</Text>
+        </Flex>
+        <Flex>
+          <Text fontWeight="bold">Fluid Intake: </Text>
+          <Text ml="5px">{selectedReport.fluidIntake}</Text>
+        </Flex>
+        <Flex>
+          <Text fontWeight="bold">Urinary Elimination: </Text>
+          <Text ml="5px">{selectedReport.urinaryElimination}</Text>
+        </Flex>
+        <Flex>
+          <Text fontWeight="bold">Bowel Elimination: </Text>
+          <Text ml="5px">{selectedReport.bowelElimination}</Text>
+        </Flex>
+        <Flex>
+          <Text fontWeight="bold">Sleep Quality: </Text>
+          <Text ml="5px">{selectedReport.sleepQuality}</Text>
         </Flex>
         <Text mt="5px" fontWeight="bold">
           Medications:

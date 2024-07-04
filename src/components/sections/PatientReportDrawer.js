@@ -16,19 +16,16 @@ import {
   Checkbox,
   Input,
   Flex,
-  Text,
-  VStack,
-  ListItem,
-  UnorderedList,
 } from "@chakra-ui/react";
 import axios from "axios";
 import VitalsForm from "./VitalSignsForm";
 import MedicationForm from "./MedicationForm";
 import ActivitiesForm from "./ActivitiesForm";
 import ReviewForm from "./ReviewForm";
-import PostSubmissionInstructionsDrawer from "./PostSubmissionInstructionsModal ";
+import PostSubmissionInstructionsDrawer from "./PostSubmissionInstructionsDrawer";
 import { displayPostSubmissionInstructions } from "./instructions";
 import PatientSelector from "./PatientSelector";
+import RenderDocumentationContent from "./RenderDocumentationContent "; 
 
 const customTheme = extendTheme({
   components: {
@@ -63,11 +60,17 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     bloodSugar: "",
     sp02: "",
     respiration: "",
-    mood: "",
     emotionalState: "",
     physicalState: "",
     spiritualState: "",
     painLevel: "",
+    painLocation: "",
+    skinIntegrity: "",
+    appetite: "",
+    fluidIntake: "",
+    urinaryElimination: "",
+    bowelElimination: "",
+    sleepQuality: "",
     comments: "",
     recommendations: "",
     picture: null,
@@ -145,35 +148,81 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       "bloodSugar",
       "sp02",
       "respiration",
-      "mood",
       "emotionalState",
       "physicalState",
       "painLevel",
+      "painLocation",
+      "skinIntegrity",
+      "appetite",
+      "fluidIntake",
+      "urinaryElimination",
+      "bowelElimination",
+      "sleepQuality",
       "comments",
       "recommendations",
     ];
 
-    for (let field of requiredFields) {
-      if (!formData[field]) {
-        return false;
-      }
+    const missingFields = requiredFields.filter(field => !formData[field]);
+
+    if (missingFields.length > 0) {
+      toast({
+        title: "Incomplete Form",
+        description: `Please fill in all required fields: ${missingFields.join(', ')}.`,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      return false;
     }
 
     if (!selectedPatient) {
+      toast({
+        title: "Incomplete Form",
+        description: "Please select a patient.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
       return false;
     }
 
     for (let med of medications) {
       if (!med.name || !med.dosage || !med.route || !med.time) {
+        toast({
+          title: "Incomplete Form",
+          description: "Please fill in all medication details.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
         return false;
       }
     }
 
     if (activities.length === 0) {
+      toast({
+        title: "Incomplete Form",
+        description: "Please select at least one activity.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
       return false;
     }
 
     if (!formData.confirmation) {
+      toast({
+        title: "Incomplete Form",
+        description: "Please confirm that the information provided is accurate and complete.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
       return false;
     }
 
@@ -318,14 +367,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
 
   const handleSubmit = async () => {
     if (!isFormComplete()) {
-      toast({
-        title: "Incomplete Form",
-        description: "Please fill in all required fields.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
       return;
     }
 
@@ -410,84 +451,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     }
   };
 
-  const renderDocumentationContent = () => (
-    <>
-      <DrawerBody overflowY="auto">
-        <VStack fontFamily="body" align="start" spacing={4}>
-          <Text>Follow these steps to submit the patient report:</Text>
-          <UnorderedList spacing={3}>
-            <ListItem>
-              <Text fontWeight="bold">Select Patient:</Text>
-              <Text>
-                The system would automatically select your patient for whom you
-                are submitting the report from the dropdown menu.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Vitals Signs:</Text>
-              <Text>
-                Enter the patient's vital signs including temperature, blood
-                pressure, pulse, blood sugar, SpO2, and respiration. If a vital
-                sign is not available, enter "nil".
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Mood and States:</Text>
-              <Text>
-                Select the patient's mood, emotional state, physical state, and
-                pain level from the dropdown options.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Medications:</Text>
-              <Text>
-                Add all medications the patient is currently taking, including
-                the name, dosage, route, and time of administration.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Activities of Daily Living:</Text>
-              <Text>
-                Check all activities you assisted the patient with, such as
-                bathing, dressing, and feeding.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Observations/Comments:</Text>
-              <Text>
-                Write any observations or comments about the patient's condition
-                or behavior.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Recommendations/Requests:</Text>
-              <Text>
-                Provide any recommendations or requests for the patient's care.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Picture Evidence (Optional):</Text>
-              <Text>Upload any picture evidence if necessary.</Text>
-            </ListItem>
-            <ListItem>
-              <Text fontWeight="bold">Confirmation:</Text>
-              <Text>
-                Check the confirmation box to confirm that all information
-                provided is accurate and complete.
-              </Text>
-            </ListItem>
-          </UnorderedList>
-          <Text>
-            Reports should be made at least once a day at the end of the day
-            (shift) for healthy patients, and twice a day (morning and evening)
-            for those who are ill. For critically ill patients, reports should
-            be made as needed (PRN).
-          </Text>
-        </VStack>
-      </DrawerBody>
-    </>
-  );
-
   return (
     <>
       <Drawer
@@ -505,13 +468,13 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           </DrawerHeader>
           <DrawerBody overflowY="auto">
             {showDocumentation ? (
-              renderDocumentationContent()
+              <RenderDocumentationContent /> 
             ) : (
               <>
                 <Flex justify="flex-end">
                   <Button
                     justifySelf="flex-end"
-                    colorScheme="blue"
+                    colorScheme="teal"
                     mb={4}
                     onClick={() => setShowDocumentation(!showDocumentation)}
                   >

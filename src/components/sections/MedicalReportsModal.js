@@ -217,12 +217,18 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
       bloodSugar: selectedReport.bloodSugar,
       sp02: selectedReport.sp02,
       respiration: selectedReport.respiration,
-      mood: selectedReport.mood,
       emotionalState: selectedReport.emotionalState,
       physicalState: selectedReport.physicalState,
       painLevel: selectedReport.painLevel,
+      painLocation: selectedReport.painLocation,
+      skinIntegrity: selectedReport.skinIntegrity,
+      appetite: selectedReport.appetite,
+      fluidIntake: selectedReport.fluidIntake,
+      urinaryElimination: selectedReport.urinaryElimination,
+      bowelElimination: selectedReport.bowelElimination,
+      sleepQuality: selectedReport.sleepQuality,
     };
-
+    
     const recommendations = generateRecommendations(
       formData,
       vitalsOutOfRange,
