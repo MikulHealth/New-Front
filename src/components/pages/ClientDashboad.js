@@ -342,16 +342,12 @@ const ClientDash = () => {
                   <Box
                     style={{
                       boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
-                      transition: "transform 0.3s ease-in-out",
                     }}
                     bg="#DCFFEB"
                     h={{ base: "125px", md: "150px" }}
                     mt={{ base: "4", md: "0" }}
                     w={{ base: "180px", md: "340px" }}
                     borderRadius="10px"
-                    _hover={{
-                      transform: "translateY(-10px)",
-                    }}
                   >
                     <Box
                       pt={{ base: "10px", md: "" }}
@@ -398,10 +394,14 @@ const ClientDash = () => {
                         marginTop: "15px",
                         fontStyle: "italic",
                         cursor: "pointer",
+                        transition: "transform 0.3s ease-in-out",
                       }}
                       color="#27AE60"
                       onClick={handleOpenAppointmentModal}
-                      _hover={{ color: "#A210C6" }}
+                      _hover={{
+                        color: "#A210C6",
+                        transform: "translateY(-10px)",
+                      }}
                     >
                       Book now
                     </Text>
@@ -410,10 +410,6 @@ const ClientDash = () => {
                   <Box
                     style={{
                       boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
-                      transition: "transform 0.3s ease-in-out",
-                    }}
-                    _hover={{
-                      transform: "translateY(-10px)",
                     }}
                     bg="#E7F6FF"
                     h={{ base: "125px", md: "150px" }}
@@ -465,9 +461,13 @@ const ClientDash = () => {
                         marginTop: "10px",
                         fontStyle: "italic",
                         cursor: "pointer",
+                        transition: "transform 0.3s ease-in-out",
                       }}
                       color="#2295F2"
-                      _hover={{ color: "#A210C6" }}
+                      _hover={{
+                        color: "#A210C6",
+                        transform: "translateY(-10px)",
+                      }}
                     >
                       View all
                     </Text>
@@ -477,10 +477,6 @@ const ClientDash = () => {
                   <Box
                     style={{
                       boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
-                      transition: "transform 0.3s ease-in-out",
-                    }}
-                    _hover={{
-                      transform: "translateY(-10px)",
                     }}
                     bg="#CCF0FE"
                     h={{ base: "125px", md: "150px" }}
@@ -532,9 +528,13 @@ const ClientDash = () => {
                           marginTop: "10px",
                           fontStyle: "italic",
                           cursor: "pointer",
+                          transition: "transform 0.3s ease-in-out",
                         }}
                         color="#2295F2"
-                        _hover={{ color: "#A210C6" }}
+                        _hover={{
+                          color: "#A210C6",
+                          transform: "translateY(-10px)",
+                        }}
                       >
                         View services
                       </Text>
@@ -543,10 +543,6 @@ const ClientDash = () => {
                   <Box
                     style={{
                       boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
-                      transition: "transform 0.3s ease-in-out",
-                    }}
-                    _hover={{
-                      transform: "translateY(-10px)",
                     }}
                     bg="#F1ECFE"
                     h={{ base: "125px", md: "150px" }}
@@ -600,9 +596,13 @@ const ClientDash = () => {
                           marginTop: "10px",
                           fontStyle: "italic",
                           cursor: "pointer",
+                          transition: "transform 0.3s ease-in-out",
                         }}
                         color="#753FF6"
-                        _hover={{ color: "#A210C6" }}
+                        _hover={{
+                          color: "#A210C6",
+                          transform: "translateY(-10px)",
+                        }}
                       >
                         Customize service
                       </Text>
@@ -612,10 +612,6 @@ const ClientDash = () => {
                 <Box
                   style={{
                     boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)",
-                    transition: "transform 0.3s ease-in-out",
-                  }}
-                  _hover={{
-                    transform: "translateY(-10px)",
                   }}
                   bg="#F1ECFE"
                   h={{ base: "125px", md: "150px" }}
@@ -669,9 +665,13 @@ const ClientDash = () => {
                       marginTop: "15px",
                       fontStyle: "italic",
                       cursor: "pointer",
+                      transition: "transform 0.3s ease-in-out",
                     }}
                     color="#753FF6"
-                    _hover={{ color: "#A210C6" }}
+                    _hover={{
+                      color: "#A210C6",
+                      transform: "translateY(-10px)",
+                    }}
                   >
                     View reports
                   </Text>

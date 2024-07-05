@@ -44,8 +44,7 @@ const ReviewForm = ({
     </Text>
     <Text>Emotional State: {formData.emotionalState}</Text>
     <Text>Physical State: {formData.physicalState}</Text>
-    <Text>Spiritual State: {formData.spiritualState}</Text>
-    <Text>Pain Level: {formData.painLevel}</Text>
+     <Text>Pain Level: {formData.painLevel}</Text>
     <Text>Pain Location: {formData.painLocation}</Text>
     <Text>Skin Integrity: {formData.skinIntegrity}</Text>
     <Text>Appetite: {formData.appetite}</Text>

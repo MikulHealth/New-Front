@@ -18,7 +18,6 @@ import {
   extendTheme,
 } from "@chakra-ui/react";
 import { generateNursingCarePlan } from "./generateNursingCarePlan";
-import PatientReportDrawer from "./PatientReportDrawer";
 
 const customTheme = extendTheme({
   components: {
@@ -39,7 +38,6 @@ const customTheme = extendTheme({
 const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
   const [carePlan, setCarePlan] = useState([]);
   const [isViewingCarePlan, setIsViewingCarePlan] = useState(false);
-  const [isViewingReportUpload, setIsViewingReportUpload] = useState(false);
 
   const handleViewCarePlan = () => {
     const plan = generateNursingCarePlan(
@@ -51,11 +49,6 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
 
   const handleBackToDetails = () => {
     setIsViewingCarePlan(false);
-    setIsViewingReportUpload(false);
-  };
-
-  const handleViewReportUpload = () => {
-    setIsViewingReportUpload(true);
   };
 
   const formatDateTime = (dateString) => {
@@ -74,11 +67,7 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader fontFamily="heading" color="#A210C6" textAlign="center">
-            {isViewingCarePlan
-              ? "Recommended Care Plan"
-              : isViewingReportUpload
-              ? "Upload Report"
-              : "Patient Details"}
+            {isViewingCarePlan ? "Recommended Care Plan" : "Patient Details"}
           </DrawerHeader>
           <DrawerCloseButton onClick={onClose} />
           <DrawerBody>
@@ -187,22 +176,7 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
                     </Text>
                   ))}
                 </VStack>
-                {/* <Button
-                  mt="4"
-                  color="white"
-                  bg="#A210C6"
-                  borderRadius="50px"
-                  onClick={handleBackToDetails}
-                  fontFamily="body"
-                >
-                  Back to Patient Details
-                </Button> */}
               </Flex>
-            ) : isViewingReportUpload ? (
-              <PatientReportDrawer
-                isOpen={true}
-                onClose={handleBackToDetails}
-              />
             ) : (
               <Flex
                 direction="column"
@@ -327,27 +301,17 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
             )}
           </DrawerBody>
           <DrawerFooter>
-            {!isViewingCarePlan && !isViewingReportUpload && (
-              <Flex w="full" justifyContent="space-between">
-                <Button
-                  color="white"
-                  bg="#A210C6"
-                  borderRadius="50px"
-                  onClick={handleViewCarePlan}
-                  fontFamily="body"
-                >
-                  Care Plan
-                </Button>
-                <Button
-                  color="white"
-                  bg="#A210C6"
-                  borderRadius="50px"
-                  onClick={handleViewReportUpload}
-                  fontFamily="body"
-                >
-                  Upload Report
-                </Button>
-              </Flex>
+            {!isViewingCarePlan && (
+              <Button
+                color="white"
+                bg="#A210C6"
+                borderRadius="50px"
+                onClick={handleViewCarePlan}
+                fontFamily="body"
+                w="full"
+              >
+                Recommended Care Plan
+              </Button>
             )}
             {isViewingCarePlan && (
               <Button
@@ -356,7 +320,6 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
                 borderRadius="50px"
                 onClick={handleBackToDetails}
                 fontFamily="body"
-                // w="full"
               >
                 Back to Patient Details
               </Button>
