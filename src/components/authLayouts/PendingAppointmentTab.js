@@ -458,7 +458,8 @@ export default function PendingApp() {
                     City/Town:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment.recipientTown || "Not available"}
+                    {selectedAppointment?.customerAppointment.recipientTown ||
+                      "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -467,8 +468,8 @@ export default function PendingApp() {
                     Preferred Caregiver Gender:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment.preferredMedicGender ||
-                      "Not available"}
+                    {selectedAppointment?.customerAppointment
+                      .preferredMedicGender || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -477,7 +478,8 @@ export default function PendingApp() {
                     Preferred Cargiver Language:
                   </Text>
                   <Text marginLeft="20px" color="black">
-                    {selectedAppointment?.customerAppointment.preferredLanguage || "Not available"}
+                    {selectedAppointment?.customerAppointment
+                      .preferredLanguage || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -590,8 +592,8 @@ export default function PendingApp() {
                     maxW="600px"
                     maxH="1000px"
                   >
-                    {selectedAppointment?.customerAppointment.recipientHealthHistory ||
-                      "Not available"}
+                    {selectedAppointment?.customerAppointment
+                      .recipientHealthHistory || "Not available"}
                   </Text>
                 </Flex>
                 <Divider my={4} borderColor="gray.500" />
@@ -608,8 +610,11 @@ export default function PendingApp() {
                     maxH="1000px"
                   >
                     {selectedAppointment?.customerAppointment.specialNeeds &&
-                    selectedAppointment?.customerAppointment.specialNeeds.length > 0
-                      ? selectedAppointment?.customerAppointment.specialNeeds.join(", ")
+                    selectedAppointment?.customerAppointment.specialNeeds
+                      .length > 0
+                      ? selectedAppointment?.customerAppointment.specialNeeds.join(
+                          ", "
+                        )
                       : "Not available"}
                   </Text>
                 </Flex>
@@ -618,26 +623,38 @@ export default function PendingApp() {
             </DrawerBody>
             <DrawerFooter justifyContent="space-between">
               <Button
-                bg="#A210C6"
+                bg="gray.500"
                 color="white"
                 _hover={{ color: "" }}
-                leftIcon={<EditIcon />}
-                onClick={handleEditAppointment}
-              >
-                Edit
-              </Button>
-              <Button
-                bg="#E1ACAE"
-                color="red.500"
-                _hover={{ color: "" }}
-                onClick={() =>
-                  handleCancelAppointment(
-                    selectedAppointment?.customerAppointment.id
-                  )
-                }
+                onClick={closeDetailsDrawer}
               >
                 Cancel
               </Button>
+
+              <Box>
+                <Button
+                  bg="#A210C6"
+                  color="white"
+                  _hover={{ color: "" }}
+                  leftIcon={<EditIcon />}
+                  onClick={handleEditAppointment}
+                >
+                  Edit
+                </Button>
+                <Button
+                ml="10px"
+                  bg="#E1ACAE"
+                  color="red.500"
+                  _hover={{ color: "" }}
+                  onClick={() =>
+                    handleCancelAppointment(
+                      selectedAppointment?.customerAppointment.id
+                    )
+                  }
+                >
+                  Delete
+                </Button>
+              </Box>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
