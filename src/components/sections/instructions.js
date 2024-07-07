@@ -108,11 +108,11 @@ export const displayPostSubmissionInstructions = (
       "The pain level is severe. Provide strong pain relief medication as prescribed, consider non-pharmacological interventions, and monitor closely."
     );
   }
-  if (formData.painLocation) {
+  if (formData.painLocation && formData.painLocation.toLowerCase() !== "none") {
     instructions.push(
       `The patient is experiencing pain in the ${formData.painLocation}. Provide appropriate pain relief and monitor for any changes.`
     );
-  }
+  }  
   if (formData.skinIntegrity !== "Intact") {
     instructions.push(
       `The patient's skin integrity is ${formData.skinIntegrity}. Ensure proper wound care and monitor for any signs of infection.`
@@ -271,7 +271,7 @@ export const generateRecommendations = (
       `${patientFirstName}'s pain level was severe. ${medicFirstName} has been advised to provide strong pain relief medication as prescribed, consider non-pharmacological interventions, and monitor closely.`
     );
   }
-  if (formData.painLocation) {
+  if (formData.painLocation && formData.painLocation.toLowerCase() !== "none") {
     recommendations.push(
       `${patientFirstName} was experiencing pain in the ${formData.painLocation}. ${medicFirstName} has been advised to provide appropriate pain relief and monitor for any changes.`
     );

@@ -88,7 +88,6 @@ const ClientDash = () => {
         };
 
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/pendingAppointments",
           "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
           config
         );
@@ -154,8 +153,7 @@ const ClientDash = () => {
       } catch (error) {}
     };
 
-    // Fetch matched appointments initially
-    setTimeout(fetchMatchedAppointments, 5000);
+    fetchMatchedAppointments();
 
     const intervalId = setInterval(fetchMatchedAppointments, 15 * 60 * 1000);
 
@@ -232,7 +230,6 @@ const ClientDash = () => {
           />
         ) : (
           <Flex
-            // overflow={{base: "scroll", md: ""}}
             mt={{ base: "0", md: "30px" }}
             mb={{ base: "150px", md: "0" }}
             flexDirection={{ base: "column", md: "row" }}
@@ -250,7 +247,6 @@ const ClientDash = () => {
                 bg="#A210C6"
                 borderRadius="20px"
               >
-                {" "}
                 <Flex>
                   <Box marginLeft="20px" paddingTop="5px">
                     <Text
@@ -269,17 +265,8 @@ const ClientDash = () => {
                         fontSize={{ base: "18px", md: "22px" }}
                         textAlign="left"
                       >
-                        {/* ₦{formatBalance(balance)} */}₦
-                        {formatAmount(balance)}.00
+                        ₦{formatAmount(balance)}.00
                       </Text>
-                      {/* <Text
-                        ml="5px"
-                        mt={{ base: "8px", md: "12px" }}
-                        fontSize="12px"
-                        color="white"
-                      >
-                        balance
-                      </Text> */}
                     </Flex>
                   </Box>
                   <VStack>
@@ -295,7 +282,6 @@ const ClientDash = () => {
                       fontFamily="body"
                       onClick={handleOpenWalletModal}
                       bg="white"
-                      // leftIcon={<ExternalLinkIcon />}
                     >
                       Open wallet
                     </Button>
@@ -375,7 +361,6 @@ const ClientDash = () => {
                           Book appointment
                         </Text>
                         <Text
-                          // display={{ base: "none", lg: "block" }}
                           textAlign="left"
                           fontSize={{ base: "10px", md: "14px" }}
                           fontFamily="body"
@@ -447,7 +432,7 @@ const ClientDash = () => {
                           fontFamily="body"
                           fontSize={{ base: "10px", md: "14px" }}
                         >
-                          Your firends and family as Beneficiaries
+                          Your friends and family as Beneficiaries
                         </Text>
                       </Box>
                     </Box>
@@ -550,7 +535,6 @@ const ClientDash = () => {
                     w={{ base: "180px", md: "340px" }}
                     marginLeft="10px"
                     borderRadius="10px"
-                    // marginLeft="10px"
                   >
                     <Box
                       display={{ base: "block", md: "flex" }}
@@ -579,7 +563,6 @@ const ClientDash = () => {
                         <Text
                           textAlign="left"
                           fontSize={{ base: "10px", md: "14px" }}
-                          // mt={{ base: "-15px", md: "0px" }}
                           fontFamily="body"
                         >
                           Choose a service you want, how and when you want it

@@ -19,6 +19,7 @@ import {
   FormLabel,
   InputGroup,
   InputRightElement,
+  InputLeftAddon,
   Input,
   Button,
   Flex,
@@ -194,8 +195,25 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     return adjustedDate.toISOString().split("T")[0];
   };
 
+  const getValidNigerianPhoneNumber = (phoneNumber) => {
+    const pattern = /^(\d{10})$/;
+    if (pattern.test(phoneNumber)) {
+      return "0" + phoneNumber;
+    }
+    return null;
+  };
+
   const handleFormSubmit = async () => {
     setLoading(true);
+
+    const validPhoneNumber = getValidNigerianPhoneNumber(formFields.recipientPhoneNumber);
+    console.log("number " + validPhoneNumber);
+
+    if (!validPhoneNumber) {
+      toast.warning("Please enter a valid Nigerian phone number");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
@@ -211,10 +229,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
         ...formFields,
         startDate: formatDateWithDayAdjustment(formFields.startDate),
         recipientDOB: formatDateWithDayAdjustment(formFields.recipientDOB),
+        recipientPhoneNumber: validPhoneNumber,
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
         priority,
-        specialNeeds, // Include specialNeeds in the request
+        specialNeeds, 
       };
       const requestBody = JSON.stringify(formDataWithDates);
       const response = await axios.post(apiUrl, requestBody, { headers });
@@ -335,6 +354,15 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
 
   const handleSwitchChange = async () => {
     setLoading(true);
+
+    const validPhoneNumber = getValidNigerianPhoneNumber(formFields.recipientPhoneNumber);
+    console.log("number " + validPhoneNumber);
+
+    if (!validPhoneNumber) {
+      toast.warning("Please enter a valid Nigerian phone number");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       const apiUrl =
@@ -350,6 +378,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
       const formDataWithDates = {
         ...formFields,
         recipientDOB: formatDateWithDayAdjustment(formFields.recipientDOB),
+        recipientPhoneNumber: validPhoneNumber,
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
       };
@@ -442,7 +471,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                   >
                     <Input
                       name="recipientLastname"
-                      ml={{ md: "-35px" }}
+                      ml={{ md: "-40px" }}
                       placeholder="last name"
                       value={formFields.recipientLastname}
                       onChange={handleInputChange}
@@ -516,13 +545,14 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       Contact Number{" "}
                     </FormLabel>
                     <InputGroup>
+                    <InputLeftAddon children="+234" />
                       <Input
                         name="recipientPhoneNumber"
                         type="tel"
                         placeholder="recipient phone number"
                         value={formFields.recipientPhoneNumber}
                         onChange={handleInputChange}
-                        w={{ base: "300px", md: "270px" }}
+                        w={{ base: "230px", md: "475px" }}
                       />
                       <InputRightElement pointerEvents="none">
                         <FaPhoneAlt color="gray.300" />
@@ -540,7 +570,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                     <Select
                       name="relationship"
                       placeholder="Select the appropriate relationship type"
-                      w={{ base: "300px", md: "270px" }}
+                      w={{ base: "300px", md: "540px" }}
                       onChange={handleInputChange}
                     >
                       <option value="Mum">Mum</option>

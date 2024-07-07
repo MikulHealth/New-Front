@@ -13,11 +13,15 @@
     "animate.css": "^4.1.1",
     "aos": "^2.3.4",
     "axios": "^1.6.8",
+    "buffer": "^6.0.3",
+    "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.0.14",
     "json2csv": "^6.0.0-alpha.2",
     "jspdf": "^2.5.1",
     "nuxt": "^3.11.2",
+    "process": "^0.11.10",
     "react": "^18.2.0",
     "react-countup": "^6.5.3",
     "react-datepicker": "^6.4.0",
@@ -62,6 +66,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1"
+    "crypto-browserify": "^3.12.0",
+    "gh-pages": "^6.1.1",
+    "stream-browserify": "^3.0.0"
   }
 }
