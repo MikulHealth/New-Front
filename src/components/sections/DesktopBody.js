@@ -13,6 +13,7 @@ const DesktopCards = () => {
 
   const { user } = useSelector((state) => state.userReducer);
   const balance = user?.walletBalance;
+  const noOfPatients = user?.noOfPatients;
 
   const formatAmount = (amount) => {
     const num = Number(amount);
@@ -122,7 +123,7 @@ const DesktopCards = () => {
                 color="#212427"
               >
                 {" "}
-                0
+               {noOfPatients}
               </Text>
             </Box>
           </Box>

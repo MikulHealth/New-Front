@@ -65,7 +65,6 @@
 //     console.error("SECRET_KEY is not defined");
 //   }
 
-
 //   if (!SECRET_KEY || SECRET_KEY.length !== 64 || keyBytes.sigBytes !== 32) {
 //     console.error("Secret key must be 32 bytes long for AES-256 encryption.");
 //     // throw new Error("Invalid secret key length");
@@ -688,7 +687,6 @@
 
 // export default PatientReportDrawer;
 
-
 import React, { useState, useEffect } from "react";
 import {
   Drawer,
@@ -716,7 +714,8 @@ import ReviewForm from "./ReviewForm";
 import PostSubmissionInstructionsDrawer from "./PostSubmissionInstructionsDrawer";
 import { displayPostSubmissionInstructions } from "./instructions";
 import PatientSelector from "./PatientSelector";
-import RenderDocumentationContent from "./RenderDocumentationContent "; 
+import RenderDocumentationContent from "./RenderDocumentationContent ";
+import LoadingSpinner from "../../utils/Spiner";
 
 const customTheme = extendTheme({
   components: {
@@ -740,6 +739,9 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [selectedPatient, setSelectedPatient] = useState("");
   const [activities, setActivities] = useState([]);
   const [patientId, setPatientId] = useState();
+
+  const [image] = useState();
+  const [imageLoading, setImageLoading] = useState(false);
   const toast = useToast();
   const [medications, setMedications] = useState([
     { name: "", dosage: "", route: "", time: new Date() },
@@ -764,7 +766,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     sleepQuality: "",
     comments: "",
     recommendations: "",
-    picture: null,
+    image: null,
     confirmation: false,
   });
   const [vitalsOutOfRange, setVitalsOutOfRange] = useState({});
@@ -772,7 +774,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [instructions, setInstructions] = useState([]);
   const [showDocumentation, setShowDocumentation] = useState(false);
-
   useEffect(() => {
     if (isOpen) {
       fetchPatients();
@@ -815,11 +816,45 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      picture: e.target.files[0],
-    }));
+  const postImage = async (image, formData, setFormData) => {
+    setImageLoading(true);
+    if (image === undefined) {
+      // toast.error("Please select an image")
+      return;
+    }
+    console.log(image);
+    if (image.type === "image/jpeg" || image.type === "image/png") {
+      const data = new FormData();
+      data.append("file", image);
+      data.append("upload_preset", "profileImage");
+      data.append("cloud_name", "dmfewrwla");
+
+      try {
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
+          {
+            method: "post",
+            body: data,
+          }
+        );
+
+        const imageData = await response.json();
+
+        setFormData({
+          ...formData,
+          image: imageData.url.toString(),
+        });
+        setImageLoading(false);
+        console.log(imageData.url.toString());
+      } catch (err) {
+        console.log(err);
+        setImageLoading(false);
+      }
+    } else {
+      // toast.error("Please select an image");
+
+      return;
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -853,9 +888,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       "recommendations",
     ];
 
-    const missingFields = requiredFields.filter(field => !formData[field]);
+    const missingFields = requiredFields.filter((field) => !formData[field]);
 
-   
     if (missingFields.length > 0) {
       toast({
         title: "Incomplete Form",
@@ -911,7 +945,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     if (!formData.confirmation) {
       toast({
         title: "Incomplete Form",
-        description: "Please confirm that the information provided is accurate and complete.",
+        description:
+          "Please confirm that the information provided is accurate and complete.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -1081,7 +1116,6 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       return;
     }
 
-   
     const serializedMedications = medications.map(
       (med) =>
         `Name:${med.name},Dosage:${med.dosage},Route:${
@@ -1096,10 +1130,12 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
       medications: serializedMedications,
     };
 
+    await postImage(image, formData, setFormData);
+    // setLoading(true);
     try {
       const response = await axios.post(
-        "https://backend-c1pz.onrender.com/v1/appointment/send-report",
-        // "http://localhost:8080/v1/appointment/send-report",
+        // "https://backend-c1pz.onrender.com/v1/appointment/send-report",
+        "http://localhost:8080/v1/appointment/send-report",
         data,
         {
           headers: {
@@ -1164,7 +1200,7 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
           </DrawerHeader>
           <DrawerBody overflowY="auto">
             {showDocumentation ? (
-              <RenderDocumentationContent /> 
+              <RenderDocumentationContent />
             ) : (
               <>
                 <Flex justify="flex-end">
@@ -1252,9 +1288,13 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                       </FormLabel>
                       <Input
                         type="file"
-                        name="picture"
-                        onChange={handleFileChange}
+                        name="image"
+                        accept="image/*"
+                        onChange={(e) => {
+                          postImage(e.target.files[0], formData, setFormData);
+                        }}
                       />
+                       {imageLoading && <LoadingSpinner size={20} />}
                     </FormControl>
                     <FormControl isRequired mb="4">
                       <Checkbox
@@ -1342,4 +1382,3 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
 };
 
 export default PatientReportDrawer;
-
