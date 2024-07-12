@@ -391,8 +391,8 @@ const LandingPage = () => {
               />
               {cvLoading && <LoadingSpinner size={20} />}
               <FormLabel marginTop="20px">
-                Upload valid licence of certificate for Certfied Nurse
-                Assistants (only PNG, JPG and PDF files are accepted)
+                Upload valid licence/ certificate for Certfied Nurse
+                Assistant or any relevant certificate to your training (only PNG, JPG and PDF files are accepted)
               </FormLabel>
               <Input
                 name="license"

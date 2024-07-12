@@ -168,7 +168,7 @@ const LandingPage = () => {
     validateInput("dob", formData.dob);
 
     if (Object.keys(validationErrors).length > 0) {
-      toast.warning("Please ensure all the fields are filled");
+      toast.warning("Please ensure all the fields has the right input");
       return;
     }
 

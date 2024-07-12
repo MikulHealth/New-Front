@@ -157,7 +157,7 @@ const LandingPage = () => {
 
     // Check if there are any validation errors
     if (Object.keys(validationErrors).length > 0) {
-      toast.warning("Please ensure all the fields are filled");
+      toast.warning("Please ensure all the fields has the right input");
       return;
     }
 
