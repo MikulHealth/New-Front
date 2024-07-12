@@ -14,7 +14,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 import { extendTheme } from "@chakra-ui/react";
-import LoadingSpinner from "../../utils/Spiner";
 
 const customTheme = extendTheme({
   components: {
@@ -48,8 +47,6 @@ const VerifyMedicForm = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
-  const [ninCopy] = useState();
-  const [NINLoading, setNINLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -60,8 +57,6 @@ const VerifyMedicForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    await postNINCopy(ninCopy, formData, setFormData);
     setLoading(true);
 
       try {
@@ -79,7 +74,7 @@ const VerifyMedicForm = () => {
       console.log(response);
       toast({
         title: "Successful",
-        description: response.data.message,
+        // description: response.data.message,
         status: "success",
         duration: 5000,
         isClosable: true,
@@ -102,47 +97,6 @@ const VerifyMedicForm = () => {
     }
   };
 
-
-  const postNINCopy = async (image, formData, setFormData) => {
-    setNINLoading(true);
-    if (image === undefined) {
-      // toast.error("Please select an image")
-      return;
-    }
-    console.log(image);
-    if (image.type === "image/jpeg" || image.type === "image/png") {
-      const data = new FormData();
-      data.append("file", image);
-      data.append("upload_preset", "profileImage");
-      data.append("cloud_name", "dmfewrwla");
-
-      try {
-        const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
-          {
-            method: "post",
-            body: data,
-          }
-        );
-
-        const imageData = await response.json();
-
-        setFormData({
-          ...formData,
-          image: imageData.url.toString(),
-        });
-        setNINLoading(false);
-        console.log(imageData.url.toString());
-      } catch (err) {
-        console.log(err);
-        setNINLoading(false);
-      }
-    } else {
-      // toast.error("Please select an image");
-
-      return;
-    }
-  };
 
   return (
     <ChakraProvider theme={customTheme}>
@@ -229,21 +183,6 @@ const VerifyMedicForm = () => {
                 onChange={handleInputChange}
                 marginBottom="20px"
               />
-              <FormLabel>
-                NIN Copy (only PNG, JPG and PDF files are accepted)
-              </FormLabel>
-              <Input
-                name="ninCopy"
-                placeholder="Nin copy"
-                type="file"
-                accept="image/*,application/pdf"
-                marginBottom="20px"
-                onChange={(e) => {
-                  postNINCopy(e.target.files[0], formData, setFormData);
-                }}
-              />
-              {NINLoading && <LoadingSpinner size={20} />}
-
               <FormLabel>Your Home Address</FormLabel>
               <Input
                 name="medicHomeAddress"

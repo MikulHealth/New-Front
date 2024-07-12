@@ -17,6 +17,7 @@ import {
   Select,
   Flex,
   Stack,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -54,18 +55,12 @@ const LandingPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
-  const [cvCopy] = useState();
-  const [license] = useState();
+  const [cvCopy, setCvCopy] = useState();
+  const [license, setLicense] = useState();
   const [cvLoading, setCvLoading] = useState(false);
   const [licenseLoading, setLicenseLoading] = useState(false);
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
   const toast = useToast();
 
   const majorLanguages = [
@@ -77,14 +72,63 @@ const LandingPage = () => {
     "Other",
   ];
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    validateInput(name, value);
+  };
+
+  const validateInput = (name, value) => {
+    let errors = { ...validationErrors };
+    switch (name) {
+      case "yearsOfExp":
+        if (!/^\d+$/.test(value) || parseInt(value, 10) < 0) {
+          errors[name] = "Please enter a valid number of years.";
+        } else {
+          delete errors[name];
+        }
+        break;
+      case "medicType":
+      case "specialization":
+      case "preferredLanguage":
+        if (!value) {
+          errors[name] = `${name.replace(/([A-Z])/g, " $1")} is required.`;
+        } else {
+          delete errors[name];
+        }
+        break;
+      default:
+        break;
+    }
+    setValidationErrors(errors);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validate all fields before submission
+    for (let field in formData) {
+      validateInput(field, formData[field]);
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      toast({
+        title: "Validation Error",
+        description: "Please fix the errors in the form before submitting.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    setLoading(true);
     await postCv(cvCopy, formData, setFormData);
     await postLicense(license, formData, setFormData);
-    setLoading(true);
+
     try {
       const response = await axios.post(
-        // "http://localhost:8080/v1/angel/registerMedic",
         "https://backend-c1pz.onrender.com/v1/angel/registerMedic",
         formData,
         {
@@ -94,20 +138,21 @@ const LandingPage = () => {
         }
       );
 
-      // Handle response as needed
-      console.log(response);
-      toast({
-        title: "Successful",
-        description: response.data.message,
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
-
-      setTimeout(() => {
-        navigate("/verify-medic");
-      }, 5000);
-      // Redirect or perform other actions based on the response
+      if (response.data.success) {
+        toast({
+          title: "Successful",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setTimeout(() => {
+          navigate("/verify-medic");
+        }, 5000);
+      } else {
+        setLoading(false);
+        console.error("Error registering");
+        toast.error(response.data.message);
+      }
     } catch (error) {
       toast({
         title: "Failed",
@@ -117,7 +162,6 @@ const LandingPage = () => {
         isClosable: true,
       });
     } finally {
-      // Set loading back to false regardless of success or failure
       setLoading(false);
     }
   };
@@ -129,10 +173,8 @@ const LandingPage = () => {
   const postLicense = async (license, formData, setFormData) => {
     setLicenseLoading(true);
     if (license === undefined) {
-      // toast.error("Please select an image")
       return;
     }
-    console.log(license);
     if (
       license.type === "image/jpeg" ||
       license.type === "image/png" ||
@@ -159,14 +201,11 @@ const LandingPage = () => {
           license: imageData.url.toString(),
         });
         setLicenseLoading(false);
-        console.log(imageData.url.toString());
       } catch (err) {
         console.log(err);
         setLicenseLoading(false);
       }
     } else {
-      // toast.error("Please select an image");
-
       return;
     }
   };
@@ -174,10 +213,8 @@ const LandingPage = () => {
   const postCv = async (cvCopy, formData, setFormData) => {
     setCvLoading(true);
     if (cvCopy === undefined) {
-      // toast.error("Please select an image")
       return;
     }
-    console.log(cvCopy);
     if (
       cvCopy.type === "image/jpeg" ||
       cvCopy.type === "image/png" ||
@@ -187,7 +224,7 @@ const LandingPage = () => {
       data.append("file", cvCopy);
       data.append("upload_preset", "medicCv");
       data.append("cloud_name", "dmfewrwla");
-      // setLoading(true);
+
       try {
         const response = await fetch(
           "https://api.cloudinary.com/v1_1/dmfewrwla/image/upload",
@@ -204,14 +241,11 @@ const LandingPage = () => {
           cvCopy: imageData.url.toString(),
         });
         setCvLoading(false);
-        console.log(imageData.url.toString());
       } catch (err) {
         console.log(err);
         setCvLoading(false);
       }
     } else {
-      // toast.error("Please select an image");
-
       return;
     }
   };
@@ -250,7 +284,7 @@ const LandingPage = () => {
             Get started as medic
           </Text>
           <form onSubmit={handleSubmit}>
-            <FormControl isRequired>
+            <FormControl isRequired isInvalid={validationErrors.medicType}>
               <Stack
                 direction={{ base: "column", md: "row" }}
                 spacing={4}
@@ -265,8 +299,18 @@ const LandingPage = () => {
                   >
                     <option value="Registered Nurse">Registered Nurse</option>
                     <option value="Physiotherapist">Physiotherapist</option>
-                    <option value="Assistant Nurse">Nurse Assistant</option>
+                    <option value="Assistant Nurse">
+                      Certified Nurse Assistant
+                    </option>
+                    <option value="Professional Nanny">
+                      Professional Nanny
+                    </option>
                   </Select>
+                  {validationErrors.medicType && (
+                    <FormErrorMessage>
+                      <Text as="i">{validationErrors.medicType}</Text>
+                    </FormErrorMessage>
+                  )}
                 </Box>
                 <Box flex="1">
                   <FormLabel>Specialization</FormLabel>
@@ -282,18 +326,24 @@ const LandingPage = () => {
                     <option value="General Nurse">General Nurse</option>
                     <option value="Other">Other</option>
                   </Select>
+                  {validationErrors.specialization && (
+                    <FormErrorMessage>
+                      <Text as="i">{validationErrors.specialization}</Text>
+                    </FormErrorMessage>
+                  )}
                 </Box>
               </Stack>
-
-              <Box spacing={4} marginTop="20px" flex="1">
+              <Box
+                spacing={4}
+                marginTop="20px"
+                flex="1"
+                isInvalid={validationErrors.preferredLanguage}
+              >
                 <FormLabel>Native Language</FormLabel>
                 <Select
                   isRequired
                   name="preferredLanguage"
                   placeholder="select language"
-                  // w={{ base: "300px", md: "270px" }}
-                  // w={{ base: "300px", md: "450px" }}
-                  // fontSize={{ base: "14px", md: "16px" }}
                   value={formData.preferredLanguage}
                   onChange={handleInputChange}
                 >
@@ -303,56 +353,31 @@ const LandingPage = () => {
                     </option>
                   ))}
                 </Select>
+                {validationErrors.preferredLanguage && (
+                  <FormErrorMessage>
+                    <Text as="i">{validationErrors.preferredLanguage}</Text>
+                  </FormErrorMessage>
+                )}
               </Box>
-              <Box spacing={4} marginTop="20px" flex="1">
+              <Box
+                spacing={4}
+                marginTop="20px"
+                flex="1"
+                isInvalid={validationErrors.yearsOfExp}
+              >
                 <FormLabel>Years of experience</FormLabel>
-
                 <Input
                   name="yearsOfExp"
-                  placeholder="How many years of experince do you have"
+                  type="number"
+                  placeholder="How many years of experience do you have"
                   onChange={handleInputChange}
                 />
+                {validationErrors.yearsOfExp && (
+                  <FormErrorMessage>
+                    <Text as="i">{validationErrors.yearsOfExp}</Text>
+                  </FormErrorMessage>
+                )}
               </Box>
-              <Stack
-                direction={{ base: "column", md: "row" }}
-                spacing={4}
-                marginTop="20px"
-              >
-                <Box flex="1">
-                  <FormLabel>Bank Name</FormLabel>
-                  <Select
-                    name="bankName"
-                    placeholder="Your Bank name"
-                    onChange={handleInputChange}
-                  >
-                    <option value="Access Bank">Access Bank</option>
-                    <option value="Bankly">Bankly</option>
-                    <option value="Zeneith Bank">Zeneith Bank</option>
-                  </Select>
-                </Box>
-                <Box flex="1">
-                  <FormLabel>Account Number</FormLabel>
-                  <Input
-                    name="accountNumber"
-                    placeholder="Account number"
-                    onChange={handleInputChange}
-                  />
-                </Box>
-              </Stack>
-              <Stack
-                direction={{ base: "column", md: "row" }}
-                spacing={4}
-                marginTop="20px"
-              >
-                <Box flex="1">
-                  <FormLabel>Account Name</FormLabel>
-                  <Input
-                    name="accountName"
-                    placeholder="Account Name"
-                    onChange={handleInputChange}
-                  />
-                </Box>
-              </Stack>
               <FormLabel marginTop="20px">
                 Upload CV (only PNG, JPG and PDF files are accepted)
               </FormLabel>
@@ -360,17 +385,20 @@ const LandingPage = () => {
                 name="cvCopy"
                 type="file"
                 onChange={(e) => {
+                  setCvCopy(e.target.files[0]);
                   postCv(e.target.files[0], formData, setFormData);
                 }}
               />
               {cvLoading && <LoadingSpinner size={20} />}
               <FormLabel marginTop="20px">
-                Upload valid licence (only PNG, JPG and PDF files are accepted)
+                Upload valid licence of certificate for Certfied Nurse
+                Assistants (only PNG, JPG and PDF files are accepted)
               </FormLabel>
               <Input
                 name="license"
                 type="file"
                 onChange={(e) => {
+                  setLicense(e.target.files[0]);
                   postLicense(e.target.files[0], formData, setFormData);
                 }}
               />
@@ -382,13 +410,12 @@ const LandingPage = () => {
                 marginTop="20px"
                 color="white"
                 isLoading={loading}
-                loadingText="Submiting..."
+                loadingText="Submitting..."
               >
                 {loading ? "Loading..." : "Submit"}
               </Button>
             </FormControl>
           </form>
-          {/* </VStack> */}
         </Box>
       </Flex>
     </ChakraProvider>
