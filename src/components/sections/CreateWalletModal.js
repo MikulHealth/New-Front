@@ -163,11 +163,13 @@ const WalletModal = ({ isOpen, onClose }) => {
 
       if (role === "NEW_USER") {
         // apiUrl = "http://localhost:8080/v1/api/wallets/add-customer-bank";
-        apiUrl = "https://backend-c1pz.onrender.com/v1/api/wallets/add-customer-bank";
+        apiUrl =
+          "https://backend-c1pz.onrender.com/v1/api/wallets/add-customer-bank";
         dashboardUrl = "/client-dashboard";
       } else if (role === "NEW_MEDIC") {
         // apiUrl = "http://localhost:8080/v1/api/wallets/add-medic-bank";
-        apiUrl = "https://backend-c1pz.onrender.com/v1/api/wallets/add-medic-bank";
+        apiUrl =
+          "https://backend-c1pz.onrender.com/v1/api/wallets/add-medic-bank";
         dashboardUrl = "/medic-dashboard";
       }
 
@@ -179,14 +181,16 @@ const WalletModal = ({ isOpen, onClose }) => {
 
       if (response.status === 200 && response.data.success) {
         toast({
-          title: "Success",
-          description: "Bank details added successfully",
+          //   title: "Success",
+          description: "Wallet created successfully",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
         onClose();
-        navigate(dashboardUrl);
+        setTimeout(() => {
+          navigate(dashboardUrl);
+        }, 5000);
       } else {
         throw new Error(response.data.message || "Failed to add bank details");
       }
