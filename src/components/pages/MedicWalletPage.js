@@ -668,7 +668,7 @@ const MedicWalletPage = () => {
                     onClick={walletCreated ? handleOpenFundWalletModal : onOpen}
                     bg="white"
                   >
-                    {walletCreated ? 'Withdraw' : 'Create Wallet'}
+                    {walletCreated ? "Withdraw" : "Create Wallet"}
                   </Button>
                 </VStack>
               </Flex>
@@ -681,14 +681,24 @@ const MedicWalletPage = () => {
                     marginBottom={{ base: "50px", md: "50px" }}
                     color="white"
                   >
-                    <Text textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
+                    <Text
+                      textAlign="left"
+                      fontSize={{ base: "10px", md: "16px" }}
+                    >
                       Wallet ID:
                     </Text>
                     <Flex>
-                      <Text textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
+                      <Text
+                        textAlign="left"
+                        fontSize={{ base: "10px", md: "16px" }}
+                      >
                         Wema Bank
                       </Text>
-                      <Text ml="10px" textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
+                      <Text
+                        ml="10px"
+                        textAlign="left"
+                        fontSize={{ base: "10px", md: "16px" }}
+                      >
                         {accountNumber}
                       </Text>
                       <IconButton
@@ -724,6 +734,16 @@ const MedicWalletPage = () => {
                 </Flex>
               )}
             </Box>
+            <Text
+              mb={{ base: "10px", md: "25px" }}
+              mt="20px"
+              textAlign="left"
+              fontFamily="heading"
+              fontWeight="bold"
+              fontSize={{ base: "16px", md: "22px" }}
+            >
+              Recent activity
+            </Text>
 
             <Flex
               w={{ base: "90vw", md: "90%" }}
@@ -739,7 +759,7 @@ const MedicWalletPage = () => {
                       fontSize={{ base: "12px", md: "16px" }}
                       color="#A210C6"
                       fontWeight="bold"
-                      ml={{ base: "35px", md: "0" }}
+                      // ml={{ base: "35px", md: "0" }}
                     >
                       All
                     </Tab>

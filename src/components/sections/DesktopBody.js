@@ -21,7 +21,7 @@ const DesktopCards = () => {
     isOpen: isWalletModalOpen,
     onOpen: onWalletModalOpen,
     onClose: onWalletModalClose,
-  } = useDisclosure(); // Manage WalletModal state
+  } = useDisclosure(); 
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.userReducer);
@@ -40,6 +40,11 @@ const DesktopCards = () => {
   const openPatientsPage = () => {
     navigate("/patients");
   };
+
+  const openWallet = () => {
+    navigate("/medic-wallet");
+  };
+
 
   return (
     <Box>
@@ -85,6 +90,7 @@ const DesktopCards = () => {
                   mt={{ base: "5px", md: "20px" }}
                   fontFamily="heading"
                   fontWeight="bold"
+                  onClick={openWallet}
                   color="#212427"
                 >
                   ₦{formatAmount(balance)}

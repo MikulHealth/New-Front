@@ -100,7 +100,7 @@ export default function TransactionTab() {
             fontSize={{ base: "10px", md: "16px" }}
             ml={{ base: "10px", md: "35px" }}
           >
-            No transaction yet. 
+            You have no transaction yet. 
           </Text>
         ) : (
           <Box>

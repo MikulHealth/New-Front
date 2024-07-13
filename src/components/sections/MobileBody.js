@@ -40,6 +40,11 @@ const SummaryCards = () => {
     navigate("/patients");
   };
 
+  const openWallet = () => {
+    navigate("/medic-wallet");
+  };
+
+
   return (
     <Box display={{ base: "block", md: "none" }} marginTop="10px">
       <Box>
@@ -83,6 +88,7 @@ const SummaryCards = () => {
                   mt={{ base: "5px", md: "20px" }}
                   fontFamily="heading"
                   fontWeight="bold"
+                  onClick={openWallet}
                   color="#212427"
                 >
                   ₦{formatAmount(balance)}

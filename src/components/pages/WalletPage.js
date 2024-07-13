@@ -9,7 +9,7 @@ import AllTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
 import DebitTransactionTabs from "../../components/authLayouts/DebitTransaction";
 import CreditTransactionTabs from "../../components/authLayouts/CreditTransaction";
 import SearchTransactionModal from "../sections/SearchTransationByDate";
-import WalletModal from '../sections/CreateWalletModal';
+import WalletModal from "../sections/CreateWalletModal";
 import {
   ChakraProvider,
   VStack,
@@ -85,11 +85,9 @@ const FundWalletModal = ({
         borderRadius="25px 25px 25px 0px"
         justifyContent="center"
       >
-        <ModalHeader fontFamily="heading" >
-          Fund Wallet
-        </ModalHeader>
+        <ModalHeader fontFamily="heading">Fund Wallet</ModalHeader>
         <ModalCloseButton />
-        <ModalBody >
+        <ModalBody>
           <Box
             color="white"
             bg="#A210C6"
@@ -115,7 +113,10 @@ const FundWalletModal = ({
                 alt="Bank Transfer"
               />
               <Box ml="10px" p="10px">
-                <Text  fontSize={{ base: "16px", md: "18px" }} fontFamily="heading">
+                <Text
+                  fontSize={{ base: "16px", md: "18px" }}
+                  fontFamily="heading"
+                >
                   Via Bank Transfer
                 </Text>
                 <Text fontSize={{ base: "10px", md: "12px" }} fontFamily="body">
@@ -158,7 +159,10 @@ const FundWalletModal = ({
                 alt="Online Payment"
               />
               <Box ml="10px" p="10px">
-                <Text fontSize={{ base: "16px", md: "18px" }} fontFamily="heading">
+                <Text
+                  fontSize={{ base: "16px", md: "18px" }}
+                  fontFamily="heading"
+                >
                   Online Payment
                 </Text>
                 <Text fontSize={{ base: "10px", md: "12px" }} fontFamily="body">
@@ -175,7 +179,7 @@ const FundWalletModal = ({
                 style={{
                   cursor: "pointer",
                 }} */}
-                {/* // _hover={{ color: "#A210C6" }} */}
+              {/* // _hover={{ color: "#A210C6" }} */}
               {/* /> */}
             </Flex>
           </Box>
@@ -189,15 +193,13 @@ const BankTransferModal = ({ isOpen, onClose, bankDetails }) => {
   const { hasCopied, onCopy } = useClipboard(bankDetails.accountNumber);
 
   return (
-    <Modal theme={customTheme}  isOpen={isOpen} onClose={onClose}>
+    <Modal theme={customTheme} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader  fontFamily="heading">
-          Bank Transfer
-        </ModalHeader>
+        <ModalHeader fontFamily="heading">Bank Transfer</ModalHeader>
         <ModalCloseButton />
         <ModalBody fontFamily="body">
-          <Text  mt="-10px">
+          <Text mt="-10px">
             This is your Mikul Health account number. Please refresh this page
             after making a transfer to this account number either via your bank
             app or bank USSD code
@@ -367,8 +369,8 @@ const WalletPage = () => {
   const [showFundWalletModal, setShowFundWalletModal] = useState(false);
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
-  const [showWalletModal, setShowWalletModal] = useState(false); 
-  const accountNumber = '0124536789';
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const accountNumber = "0124536789";
   const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
@@ -376,7 +378,7 @@ const WalletPage = () => {
   const walletTotalCredit = user?.walletTotalCredit;
   const walletTotalDebit = user?.walletTotalDebit;
   const settingsContainerStyle = {
-    animation: 'slideInUp 0.9s ease-in-out',
+    animation: "slideInUp 0.9s ease-in-out",
   };
 
   const [showSearchTransactionsModal, setShowSearchTransactionsModal] =
@@ -429,7 +431,7 @@ const WalletPage = () => {
   const handleCloseWalletModal = () => {
     setShowWalletModal(false);
   };
-  
+
   const formatAmount = (amount) => {
     const num = Number(amount);
     return num.toLocaleString(undefined, {
@@ -444,16 +446,16 @@ const WalletPage = () => {
       <VStack
         style={settingsContainerStyle}
         position="fixed"
-        ml={{ md: '230px' }}
-        w={{ base: '100%', md: '80%' }}
-        h={{ base: '100%', md: '100%' }}
+        ml={{ md: "230px" }}
+        w={{ base: "100%", md: "80%" }}
+        h={{ base: "100%", md: "100%" }}
       >
         <NavBar />
         {loading ? (
           <Skeleton
             justifyContent="center"
-            w={{ base: '375px', md: '70vw' }}
-            h={{ base: '189px', md: '40vh' }}
+            w={{ base: "375px", md: "70vw" }}
+            h={{ base: "189px", md: "40vh" }}
             startColor="#E552FF"
             endColor="#870DA5"
             fadeDuration={0.6}
@@ -466,22 +468,22 @@ const WalletPage = () => {
               border="1px solid gray"
               borderRadius="md"
               padding="3px"
-              w={{ base: '88vw', md: '908px' }}
-              h={{ base: '7vw', md: '5vh' }}
-              ml={{ base: '8px', md: '15px' }}
-              mb={{ base: '5px', md: '10px' }}
+              w={{ base: "88vw", md: "908px" }}
+              h={{ base: "7vw", md: "5vh" }}
+              ml={{ base: "8px", md: "15px" }}
+              mb={{ base: "5px", md: "10px" }}
             >
-              <Flex ml={{ md: '10px' }}>
+              <Flex ml={{ md: "10px" }}>
                 <SearchIcon boxSize={4} marginRight="10px" marginTop="5px" />
                 <Text
-                  fontSize={{ base: '10px', md: '14px' }}
+                  fontSize={{ base: "10px", md: "14px" }}
                   fontFamily="body"
-                  mt={{ md: '3px' }}
+                  mt={{ md: "3px" }}
                   style={{
-                    fontStyle: 'italic',
-                    cursor: 'pointer',
+                    fontStyle: "italic",
+                    cursor: "pointer",
                   }}
-                  _hover={{ color: '#A210C6' }}
+                  _hover={{ color: "#A210C6" }}
                   onClick={handleOpenSearchTransactionsModal}
                 >
                   Search transaction by date
@@ -490,18 +492,18 @@ const WalletPage = () => {
             </Flex>
             <Box
               textAlign="center"
-              w={{ base: '375px', md: '910px' }}
-              h={{ base: '150px', md: '200px' }}
-              mt={{ base: '10px', md: '0' }}
-              mb={{ base: '10px', md: '30' }}
-              paddingBottom={{ base: '20px', md: '' }}
+              w={{ base: "375px", md: "910px" }}
+              h={{ base: "150px", md: "200px" }}
+              mt={{ base: "10px", md: "0" }}
+              mb={{ base: "10px", md: "30" }}
+              paddingBottom={{ base: "20px", md: "" }}
               bg="#A210C6"
               borderRadius="20px"
             >
-              <Flex w={{ base: '90vw', md: '80vw' }}>
+              <Flex w={{ base: "90vw", md: "80vw" }}>
                 <Box
-                  ml={{ base: '20px', md: '40px' }}
-                  pt={{ base: 'px', md: '8px' }}
+                  ml={{ base: "20px", md: "40px" }}
+                  pt={{ base: "px", md: "8px" }}
                 >
                   <Text
                     fontSize="16px"
@@ -515,57 +517,58 @@ const WalletPage = () => {
                     <Text
                       marginTop="2px"
                       color="white"
-                      fontSize={{ base: '18px', md: '22px' }}
+                      fontSize={{ base: "18px", md: "22px" }}
                       textAlign="left"
                     >
-                      ₦{user.walletCreated ? formatAmount(balance) : '__.__'}
+                      ₦{user.walletCreated ? formatAmount(balance) : "__.__"}
                     </Text>
                   </Flex>
                 </Box>
-                <VStack pt={{ base: '5px', md: '15px' }}>
+                <VStack pt={{ base: "5px", md: "15px" }}>
                   <Button
-                    padding={{ base: '5px', md: '0' }}
-                    ml={{ base: '75px', md: '500px' }}
-                    w={{ base: '100px', md: '35%' }}
-                    h={{ base: '30px', md: '50%' }}
-                    fontSize={{ base: '12px', md: '16px' }}
+                    padding={{ base: "5px", md: "0" }}
+                    ml={{ base: "75px", md: "500px" }}
+                    w={{ base: "100px", md: "35%" }}
+                    h={{ base: "30px", md: "50%" }}
+                    fontSize={{ base: "12px", md: "16px" }}
                     borderRadius="15px"
                     color="#A210C6"
                     marginTop="20px"
-                    onClick={user.walletCreated ? handleOpenFundWalletModal : handleOpenWalletModal}
+                    onClick={
+                      user.walletCreated
+                        ? handleOpenFundWalletModal
+                        : handleOpenWalletModal
+                    }
                     bg="white"
                   >
-                    {user.walletCreated ? 'Fund wallet' : 'Create wallet'}
+                    {user.walletCreated ? "Fund wallet" : "Create wallet"}
                   </Button>
                 </VStack>
               </Flex>
               <Flex
-                ml={{ base: '20px', md: '40px' }}
-                mt={{ base: '30px', md: '50px' }}
+                ml={{ base: "20px", md: "40px" }}
+                mt={{ base: "30px", md: "50px" }}
               >
-                <Box
-                  marginBottom={{ base: '50px', md: '50px' }}
-                  color="white"
-                >
+                <Box marginBottom={{ base: "50px", md: "50px" }} color="white">
                   <Text
                     textAlign="left"
-                    fontSize={{ base: '10px', md: '16px' }}
+                    fontSize={{ base: "10px", md: "16px" }}
                   >
                     Wallet ID:
                   </Text>
                   <Flex>
                     <Text
                       textAlign="left"
-                      fontSize={{ base: '10px', md: '16px' }}
+                      fontSize={{ base: "10px", md: "16px" }}
                     >
-                      {user.walletCreated ? 'Wema Bank' : ''}
+                      {user.walletCreated ? "Wema Bank" : ""}
                     </Text>
                     <Text
                       ml="10px"
                       textAlign="left"
-                      fontSize={{ base: '10px', md: '16px' }}
+                      fontSize={{ base: "10px", md: "16px" }}
                     >
-                      {user.walletCreated ? accountNumber : ''}
+                      {user.walletCreated ? accountNumber : ""}
                     </Text>
                     {user.walletCreated && (
                       <IconButton
@@ -582,7 +585,7 @@ const WalletPage = () => {
                   </Flex>
                 </Box>
                 {user.walletCreated && (
-                  <Flex marginLeft={{ base: '15px', md: '400px' }}>
+                  <Flex marginLeft={{ base: "50px", md: "400px" }}>
                     <Box color="white">
                       <Text textAlign="left" fontSize="10px">
                         Total funded
@@ -603,28 +606,37 @@ const WalletPage = () => {
                 )}
               </Flex>
             </Box>
-
+            <Text
+              mb={{ base: "10px", md: "25px" }}
+              mt="20px"
+              textAlign="left"
+             fontFamily="heading"
+              fontWeight="bold"
+              fontSize={{ base: "16px", md: "22px" }}
+            >
+              Recent activity
+            </Text>
             <Flex
-              w={{ base: '90vw', md: '90%' }}
-              ml={{ base: '0', md: '-100px' }}
-              mt={{ base: '-10px', md: '-30px' }}
+              w={{ base: "90vw", md: "90%" }}
+              ml={{ base: "0", md: "-100px" }}
+              mt={{ base: "-10px", md: "-30px" }}
               justifyContent="center"
               className="transaction-tabs"
             >
-              <VStack ml={{ base: '0', md: '0px' }} w="90%">
-                <Tabs colorScheme="purple.100" mt={{ base: '' }}>
+              <VStack ml={{ base: "0", md: "0px" }} w="90%">
+                <Tabs colorScheme="purple.100" mt={{ base: "" }}>
                   <TabList justifyContent="space-between">
                     <Tab
-                      fontSize={{ base: '12px', md: '16px' }}
+                      fontSize={{ base: "12px", md: "16px" }}
                       color="#A210C6"
                       fontWeight="bold"
-                      ml={{ base: '35px', md: '0' }}
+                      ml={{ base: "px", md: "0" }}
                     >
                       All
                     </Tab>
 
                     <Tab
-                      fontSize={{ base: '12px', md: '16px' }}
+                      fontSize={{ base: "12px", md: "16px" }}
                       color="green.500"
                       fontWeight="bold"
                     >
@@ -632,17 +644,17 @@ const WalletPage = () => {
                     </Tab>
 
                     <Tab
-                      fontSize={{ base: '12px', md: '16px' }}
+                      fontSize={{ base: "12px", md: "16px" }}
                       color="red.500"
                       fontWeight="bold"
-                      mr={{ base: '30px', md: '0' }}
+                      mr={{ base: "30px", md: "0" }}
                     >
                       Debit
                     </Tab>
                   </TabList>
                   <TabPanels
-                    ml={{ base: '-25px', md: '0px' }}
-                    overflow={{ base: 'scroll' }}
+                    ml={{ base: "-25px", md: "0px" }}
+                    overflow={{ base: "scroll" }}
                   >
                     <TabPanel>
                       <AllTransactionTabs />
@@ -672,9 +684,9 @@ const WalletPage = () => {
         isOpen={showBankTransferModal}
         onClose={handleCloseBankTransferModal}
         bankDetails={{
-          bankName: 'XYZ Bank',
-          accountName: 'Michael Joshua',
-          accountNumber: '0123456789',
+          bankName: "XYZ Bank",
+          accountName: "Michael Joshua",
+          accountNumber: "0123456789",
         }}
       />
 

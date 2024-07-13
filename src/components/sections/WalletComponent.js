@@ -173,7 +173,7 @@ const WalletComponent = ({ user, accountNumber, hasCopied, onCopy }) => {
         {walletCreated && (
           <Box
             mt={{ base: "0px", md: "85px" }}
-            ml={{ base: "-95px", md: "-265px" }}
+            ml={{ md: "-265px" }}
           >
             <Text fontWeight="bold" textAlign="left">
               Wallet ID:
