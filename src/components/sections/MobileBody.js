@@ -1,33 +1,44 @@
 import React from "react";
-import { Box, Flex, Image, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Image,
+  Text,
+  Button,
+  useDisclosure,
+} from "@chakra-ui/react";
 import WalletIcon from "../../assets/MedicWallet.svg";
 import Patients from "../../assets/MedicPatients.svg";
 import Report from "../../assets/MedicReport.svg";
 import PatientReportDrawer from "./PatientReportDrawer";
+import WalletModal from "../sections/CreateWalletModal";
 import { useNavigate } from "react-router-dom";
-
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const SummaryCards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const navigate = useNavigate();  
+  const {
+    isOpen: isWalletModalOpen,
+    onOpen: onWalletModalOpen,
+    onClose: onWalletModalClose,
+  } = useDisclosure();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
+  const walletCreated = user?.walletCreated;
   const balance = user?.walletBalance;
-  const  noOfPatients = user?.noOfPatients;
+  const noOfPatients = user?.noOfPatients;
 
   const formatAmount = (amount) => {
     const num = Number(amount);
-    return num.toLocaleString();
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
-
 
   const openPatientsPage = () => {
     navigate("/patients");
-  }
-
-  const openWalletPage = () => {
-    navigate("/medic-wallet");
-  }
+  };
 
   return (
     <Box display={{ base: "block", md: "none" }} marginTop="10px">
@@ -36,18 +47,17 @@ const SummaryCards = () => {
           <Box
             style={{
               transition: "transform 0.3s ease-in-out",
+              cursor: "pointer",
             }}
             bg="#CFF4D7"
             h={{ base: "125px", md: "186px" }}
-            onClick={openWalletPage}
-            // mt={{ base: "10px", md: "0" }}
             w={{ base: "180px", md: "300px" }}
             borderRadius="5px"
             _hover={{
               transform: "translateY(-10px)",
             }}
           >
-            <Box>
+            <Box p="10px">
               <Flex>
                 <Image
                   src={WalletIcon}
@@ -58,7 +68,7 @@ const SummaryCards = () => {
                 />
                 <Text
                   ml={{ base: "5px", md: "5px" }}
-                  mt={{ base: "5px", md: "30px" }}
+                  mt={{ base: "10px", md: "30px" }}
                   fontSize={{ base: "10px", md: "16px" }}
                   fontFamily="body"
                   color="#676568"
@@ -66,28 +76,46 @@ const SummaryCards = () => {
                   Wallet
                 </Text>
               </Flex>
-              <Text
-                fontSize={{ base: "18px", md: "24px" }}
-                ml={{ base: "5px", md: "-120px" }}
-                mt={{ base: "5px", md: "20px" }}
-                fontFamily="heading"
-                fontWeight="bold"
-                color="#212427"
-              >
-                {" "}
-                ₦{formatAmount(balance)}
-              </Text>
+              {walletCreated ? (
+                <Text
+                  fontSize={{ base: "18px", md: "24px" }}
+                  ml={{ base: "5px", md: "-120px" }}
+                  mt={{ base: "5px", md: "20px" }}
+                  fontFamily="heading"
+                  fontWeight="bold"
+                  color="#212427"
+                >
+                  ₦{formatAmount(balance)}
+                </Text>
+              ) : (
+                <Button
+                  mt={{ base: "5px", md: "20px" }}
+                  ml={{ base: "5px", md: "5px" }}
+                  onClick={onWalletModalOpen}
+                  color="#A210C6"
+                  fontWeight="bold"
+                >
+                  Create Wallet
+                </Button>
+              )}
             </Box>
           </Box>
 
           <Box
+            p="10px"
             bg="#FCF6E8"
             h={{ base: "125px", md: "186px" }}
-            // mt={{ base: "15px", md: "0" }}
             w={{ base: "180px", md: "300px" }}
             ml={{ base: "5px" }}
             borderRadius="5px"
             onClick={openPatientsPage}
+            style={{
+              transition: "transform 0.3s ease-in-out",
+              cursor: "pointer",
+            }}
+            _hover={{
+              transform: "translateY(-10px)",
+            }}
           >
             <Box>
               <Flex>
@@ -100,7 +128,7 @@ const SummaryCards = () => {
                 />
                 <Text
                   ml={{ base: "5px", md: "5px" }}
-                  mt={{ base: "5px", md: "30px" }}
+                  mt={{ base: "10px", md: "30px" }}
                   fontSize={{ base: "10px", md: "16px" }}
                   fontFamily="body"
                   color="#676568"
@@ -116,7 +144,6 @@ const SummaryCards = () => {
                 fontWeight="bold"
                 color="#212427"
               >
-                {" "}
                 {noOfPatients}
               </Text>
             </Box>
@@ -125,8 +152,10 @@ const SummaryCards = () => {
 
         <Flex mt={{ base: "", md: "20px" }}>
           <Box
+            p="10px"
             style={{
               transition: "transform 0.3s ease-in-out",
+              cursor: "pointer",
             }}
             _hover={{
               transform: "translateY(-10px)",
@@ -137,7 +166,6 @@ const SummaryCards = () => {
             w={{ base: "180px", md: "300px" }}
             borderRadius="5px"
             onClick={onOpen}
-            cursor="pointer"
           >
             <Box>
               <Flex>
@@ -150,7 +178,7 @@ const SummaryCards = () => {
                 />
                 <Text
                   ml={{ base: "5px", md: "5px" }}
-                  mt={{ base: "5px", md: "30px" }}
+                  mt={{ base: "10px", md: "30px" }}
                   fontSize={{ base: "10px", md: "16px" }}
                   fontFamily="body"
                   color="#212427"
@@ -187,6 +215,7 @@ const SummaryCards = () => {
         </Flex>
       </Box>
       <PatientReportDrawer isOpen={isOpen} onClose={onClose} />
+      <WalletModal isOpen={isWalletModalOpen} onClose={onWalletModalClose} />
     </Box>
   );
 };

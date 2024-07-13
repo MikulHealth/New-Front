@@ -9,6 +9,7 @@ import {
   ModalCloseButton,
   Button,
   extendTheme,
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -16,6 +17,8 @@ import {
   InputGroup,
   InputRightElement,
   Icon,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -23,6 +26,7 @@ import { MdLocationOn } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import WalletModal from "./CreateWalletModal";
 
 const customTheme = extendTheme({
   components: {
@@ -47,8 +51,14 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
   const [currentLocation, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.userReducer);
+  const {
+    isOpen: isWalletModalOpen,
+    onOpen: onOpenWalletModal,
+    onClose: onCloseWalletModal,
+  } = useDisclosure();
   const specialization = user?.medicType;
   const medicId = user?.userId;
+  const walletCreated = user?.walletCreated;
 
   const townsInLagos = [
     "Ikeja",
@@ -98,7 +108,6 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      // const apiUrl = "http://localhost:8080/v1/appointment/request";
       const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/request";
 
       const headers = {
@@ -145,105 +154,128 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
         size={{ base: "sm", md: "md" }}
       >
         <ModalOverlay />
-        <ModalContent borderRadius="20px">
+        <ModalContent justifyContent="center" borderRadius="20px">
           <ModalHeader fontFamily="heading" color="#A210C6">
-            Request Appointment
+            {walletCreated ? "Request Appointment" : "Create Wallet"}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl isRequired>
-              <FormLabel fontFamily="body">Choose Appointment Type</FormLabel>
-              <InputGroup>
-                <Select
-                  placeholder="Select appointment type"
-                  value={appointmentType}
-                  onChange={(e) => setAppointmentType(e.target.value)}
-                >
-                  <option value="Elderly care">Elderly care</option>
-                  <option value="Recovery care">Recovery care</option>
-                  <option value="Short home visit">Short home visit</option>
-                  <option value="Postpartum care">Postpartum care</option>
-                  <option value="Nanny services">Nanny services</option>
-                </Select>
-                <InputRightElement pointerEvents="none">
-                  <ChevronDownIcon color="gray.300" />
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <FormControl isRequired mt="4">
-              <FormLabel fontFamily="body">Choose Shift</FormLabel>
-              <InputGroup>
-                <Select
-                  placeholder="Select shift"
-                  value={shift}
-                  onChange={(e) => setShift(e.target.value)}
-                >
-                  <option value="Day Shift(8hrs)">Day Shift(8hrs)</option>
-                  <option value="Night Shift(12hrs)">
-                    Night Shift (12hrs)
-                  </option>
-                  <option value="Live-in(24hrs)">Live-in (24hrs)</option>
-                  <option value="Any">Any of the above</option>
-                </Select>
-                <InputRightElement pointerEvents="none">
-                  <ChevronDownIcon color="gray.300" />
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <FormControl isRequired mt="4">
-              <FormLabel fontFamily="body">City/Town</FormLabel>
-              <InputGroup>
-                <Select
-                  isRequired
-                  // name="Select preferred town"
-                  placeholder="Select preferred town"
-                  // w={{ base: "300px", md: "270px" }}
-                  fontSize={{ base: "14px", md: "16px" }}
-                  value={preferredTown}
-                  onChange={(e) => setPreferredTown(e.target.value)}
-                >
-                  {townsInLagos.map((town) => (
-                    <option key={town} value={town}>
-                      {town}
-                    </option>
-                  ))}
-                </Select>
-                <InputRightElement pointerEvents="none">
-                  <Icon as={MdLocationOn} color="gray.300" />
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <FormControl isRequired mt="4">
-              <FormLabel fontFamily="body">Location</FormLabel>
-              <InputGroup>
-                <Input
-                  placeholder="Select preferred location"
-                  value={currentLocation}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
-                <InputRightElement pointerEvents="none">
-                  <Icon as={MdLocationOn} color="gray.300" />
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
+            {walletCreated ? (
+              <>
+                <FormControl isRequired>
+                  <FormLabel fontFamily="body">
+                    Choose Appointment Type
+                  </FormLabel>
+                  <InputGroup>
+                    <Select
+                      placeholder="Select appointment type"
+                      value={appointmentType}
+                      onChange={(e) => setAppointmentType(e.target.value)}
+                    >
+                      <option value="Elderly care">Elderly care</option>
+                      <option value="Recovery care">Recovery care</option>
+                      <option value="Short home visit">Short home visit</option>
+                      <option value="Postpartum care">Postpartum care</option>
+                      <option value="Nanny services">Nanny services</option>
+                    </Select>
+                    <InputRightElement pointerEvents="none">
+                      <ChevronDownIcon color="gray.300" />
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+                <FormControl isRequired mt="4">
+                  <FormLabel fontFamily="body">Choose Shift</FormLabel>
+                  <InputGroup>
+                    <Select
+                      placeholder="Select shift"
+                      value={shift}
+                      onChange={(e) => setShift(e.target.value)}
+                    >
+                      <option value="Day Shift(8hrs)">Day Shift(8hrs)</option>
+                      <option value="Night Shift(12hrs)">
+                        Night Shift (12hrs)
+                      </option>
+                      <option value="Live-in(24hrs)">Live-in (24hrs)</option>
+                      <option value="Any">Any of the above</option>
+                    </Select>
+                    <InputRightElement pointerEvents="none">
+                      <ChevronDownIcon color="gray.300" />
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+                <FormControl isRequired mt="4">
+                  <FormLabel fontFamily="body">City/Town</FormLabel>
+                  <InputGroup>
+                    <Select
+                      isRequired
+                      placeholder="Select preferred town"
+                      fontSize={{ base: "14px", md: "16px" }}
+                      value={preferredTown}
+                      onChange={(e) => setPreferredTown(e.target.value)}
+                    >
+                      {townsInLagos.map((town) => (
+                        <option key={town} value={town}>
+                          {town}
+                        </option>
+                      ))}
+                    </Select>
+                    <InputRightElement pointerEvents="none">
+                      <Icon as={MdLocationOn} color="gray.300" />
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+                <FormControl isRequired mt="4">
+                  <FormLabel fontFamily="body">Location</FormLabel>
+                  <InputGroup>
+                    <Input
+                      placeholder="Select preferred location"
+                      value={currentLocation}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                    <InputRightElement pointerEvents="none">
+                      <Icon as={MdLocationOn} color="gray.300" />
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+              </>
+            ) : (
+              <>
+                <Text fontSize="sm" color="gray.500" mb={4}>
+                  Please create a wallet before you can start earning.
+                </Text>
+                <Flex justifyContent="flex-end" mt={4}>
+                  <Button
+                    mb="20px"
+                    bg="#A210C6"
+                    color="white"
+                    onClick={onOpenWalletModal}
+                  >
+                    Create Wallet
+                  </Button>
+                </Flex>
+              </>
+            )}
           </ModalBody>
-          <ModalFooter justifyContent="center">
-            <Button
-              isLoading={loading}
-              loadingText="Loading..."
-              bg="#A210C6"
-              fontFamily="body"
-              color="white"
-              w={{ base: "auto", md: "200px" }}
-              borderRadius="100px"
-              mr={3}
-              onClick={handleSubmit}
-            >
-              {loading ? "Loading..." : "Request"}
-            </Button>
-          </ModalFooter>
+          {walletCreated && (
+            <ModalFooter justifyContent="center">
+              <Button
+                isLoading={loading}
+                loadingText="Loading..."
+                bg="#A210C6"
+                fontFamily="body"
+                color="white"
+                w={{ base: "auto", md: "200px" }}
+                borderRadius="100px"
+                mr={3}
+                onClick={handleSubmit}
+              >
+                {loading ? "Loading..." : "Request"}
+              </Button>
+            </ModalFooter>
+          )}
         </ModalContent>
       </Modal>
+      <WalletModal isOpen={isWalletModalOpen} onClose={onCloseWalletModal} />
     </>
   );
 };

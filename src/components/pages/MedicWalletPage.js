@@ -15,6 +15,7 @@ import AllTransactionTabs from "../../components/authLayouts/AllTransactionTabs"
 import DebitTransactionTabs from "../../components/authLayouts/DebitTransaction";
 import CreditTransactionTabs from "../../components/authLayouts/CreditTransaction";
 import SearchTransactionModal from "../sections/SearchTransationByDate";
+import WalletModal from "../sections/CreateWalletModal";
 import {
   ChakraProvider,
   VStack,
@@ -27,6 +28,7 @@ import {
   Box,
   Text,
   Flex,
+  useDisclosure,
   FormControl,
   FormLabel,
   Modal,
@@ -168,7 +170,6 @@ const ChooseBankModal = ({
           const response = await axios.get(
             // `http://localhost:8080/v1/api/wallets/${user?.userId}/banks`
             `https://backend-c1pz.onrender.com/v1/api/wallets/${user?.userId}/banks`
-            
           );
           const fetchedBanks = Array.isArray(response.data.data)
             ? response.data.data
@@ -449,15 +450,13 @@ const MedicWalletPage = () => {
   const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
+  const walletCreated = user?.walletCreated;
   const balance = user?.walletBalance;
   const walletTotalCredit = user?.walletTotalCredit;
   const walletTotalDebit = user?.walletTotalDebit;
-  const settingsContainerStyle = {
-    animation: "slideInUp 0.9s ease-in-out",
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleOpenConfirmationModal = () => {
-    // setShowWithdrawModal(false);
     setShowConfirmationModal(true);
   };
 
@@ -531,11 +530,6 @@ const MedicWalletPage = () => {
     const medicId = user?.userId;
     const method = "WALLET";
 
-    // const apiUrl = `http://localhost:8080/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(
-    //   medicId
-    // )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
-    //   method
-    // )}`;
     const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(
       medicId
     )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
@@ -574,14 +568,17 @@ const MedicWalletPage = () => {
 
   const formatAmount = (amount) => {
     const num = Number(amount);
-    return num.toLocaleString("en-US");
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   return (
     <ChakraProvider theme={customTheme}>
       <LeftSideBar />
       <VStack
-        style={settingsContainerStyle}
+        style={{ animation: "slideInUp 0.9s ease-in-out" }}
         position="fixed"
         ml={{ md: "230px" }}
         w={{ base: "100%", md: "80%" }}
@@ -616,10 +613,7 @@ const MedicWalletPage = () => {
                   fontSize={{ base: "10px", md: "14px" }}
                   fontFamily="body"
                   mt={{ md: "3px" }}
-                  style={{
-                    fontStyle: "italic",
-                    cursor: "pointer",
-                  }}
+                  style={{ fontStyle: "italic", cursor: "pointer" }}
                   _hover={{ color: "#A210C6" }}
                   onClick={handleOpenSearchTransactionsModal}
                 >
@@ -657,7 +651,7 @@ const MedicWalletPage = () => {
                       fontSize={{ base: "18px", md: "22px" }}
                       textAlign="left"
                     >
-                      ₦ {formatAmount(balance)}.00
+                      ₦ {formatAmount(balance)}
                     </Text>
                   </Flex>
                 </Box>
@@ -671,69 +665,64 @@ const MedicWalletPage = () => {
                     borderRadius="15px"
                     color="#A210C6"
                     marginTop="20px"
-                    onClick={handleOpenFundWalletModal}
+                    onClick={walletCreated ? handleOpenFundWalletModal : onOpen}
                     bg="white"
                   >
-                    Withdraw
+                    {walletCreated ? 'Withdraw' : 'Create Wallet'}
                   </Button>
                 </VStack>
               </Flex>
-              <Flex
-                ml={{ base: "20px", md: "40px" }}
-                mt={{ base: "30px", md: "50px" }}
-              >
-                <Box marginBottom={{ base: "50px", md: "50px" }} color="white">
-                  <Text
-                    textAlign="left"
-                    fontSize={{ base: "10px", md: "16px" }}
+              {walletCreated && (
+                <Flex
+                  ml={{ base: "20px", md: "40px" }}
+                  mt={{ base: "30px", md: "50px" }}
+                >
+                  <Box
+                    marginBottom={{ base: "50px", md: "50px" }}
+                    color="white"
                   >
-                    Wallet ID:
-                  </Text>
-                  <Flex>
-                    <Text
-                      textAlign="left"
-                      fontSize={{ base: "10px", md: "16px" }}
-                    >
-                      Wema Bank
+                    <Text textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
+                      Wallet ID:
                     </Text>
-                    <Text
-                      ml="10px"
-                      textAlign="left"
-                      fontSize={{ base: "10px", md: "16px" }}
-                    >
-                      {accountNumber}
-                    </Text>
-                    <IconButton
-                      icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-                      onClick={onCopy}
-                      mt="-5px"
-                      size="sm"
-                      aria-label="Copy account number"
-                      color="white"
-                      bg={hasCopied ? "#A210C6" : "#A210C6"}
-                      _hover={{ bg: "transparent" }}
-                    />
+                    <Flex>
+                      <Text textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
+                        Wema Bank
+                      </Text>
+                      <Text ml="10px" textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
+                        {accountNumber}
+                      </Text>
+                      <IconButton
+                        icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                        onClick={onCopy}
+                        mt="-5px"
+                        size="sm"
+                        aria-label="Copy account number"
+                        color="white"
+                        bg={hasCopied ? "#A210C6" : "#A210C6"}
+                        _hover={{ bg: "transparent" }}
+                      />
+                    </Flex>
+                  </Box>
+                  <Flex marginLeft={{ base: "15px", md: "400px" }}>
+                    <Box color="white">
+                      <Text textAlign="left" fontSize="10px">
+                        Total Made
+                      </Text>
+                      <Text textAlign="left" color="white" fontSize="10px">
+                        ₦ {formatAmount(walletTotalCredit)}.00
+                      </Text>
+                    </Box>
+                    <Box color="white" marginLeft="10px">
+                      <Text textAlign="left" fontSize="10px">
+                        Total Withdraw
+                      </Text>
+                      <Text textAlign="left" color="white" fontSize="10px">
+                        ₦ {formatAmount(walletTotalDebit)}.00
+                      </Text>
+                    </Box>
                   </Flex>
-                </Box>
-                <Flex marginLeft={{ base: "15px", md: "400px" }}>
-                  <Box color="white">
-                    <Text textAlign="left" fontSize="10px">
-                      Total Made
-                    </Text>
-                    <Text textAlign="left" color="white" fontSize="10px">
-                      ₦ {formatAmount(walletTotalCredit)}.00
-                    </Text>
-                  </Box>
-                  <Box color="white" marginLeft="10px">
-                    <Text textAlign="left" fontSize="10px">
-                      Total Withdraw
-                    </Text>
-                    <Text textAlign="left" color="white" fontSize="10px">
-                      ₦ {formatAmount(walletTotalDebit)}.00
-                    </Text>
-                  </Box>
                 </Flex>
-              </Flex>
+              )}
             </Box>
 
             <Flex
@@ -842,6 +831,7 @@ const MedicWalletPage = () => {
         isOpen={showSearchTransactionsModal}
         onClose={handleCloseSearchTransactionsModal}
       />
+      <WalletModal isOpen={isOpen} onClose={onClose} />
     </ChakraProvider>
   );
 };

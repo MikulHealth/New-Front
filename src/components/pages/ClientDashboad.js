@@ -60,7 +60,6 @@ const ClientDash = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userReducer);
-  const balance = user?.walletBalance;
   const noPendingAppointments = user?.numberOfPendingAppointments;
   const activeAppointments = user?.numberOfActiveAppointments;
   const completedAppointments = user?.numberOfCompletedAppointments;
@@ -204,7 +203,7 @@ const ClientDash = () => {
           >
             <Box>
               <WalletComponent
-                balance={balance}
+                user={user}
                 accountNumber="0124536789"
                 handleOpenWalletModal={handleOpenWalletModal}
                 hasCopied={hasCopied}
