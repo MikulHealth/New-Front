@@ -78,6 +78,7 @@ const PaymentConfirmationPage = () => {
 
   const handlePaymentSuccess = (response) => {
     verifyPayment();
+    // navigate("/client-dashboard");
   };
 
   const handlePaymentFailure = (error) => {

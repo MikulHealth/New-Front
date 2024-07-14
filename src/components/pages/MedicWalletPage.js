@@ -213,16 +213,7 @@ const ChooseBankModal = ({
             <Skeleton height="20px" my="10px" />
           ) : banks.length === 0 ? (
             <Box textAlign="center">
-              <Text>No banks found.</Text>
-              <Button
-                colorScheme="ghost"
-                color="#A210C6"
-                mt="10px"
-                leftIcon={<AddIcon />}
-                onClick={onOpenAddBankModal}
-              >
-                Add bank account
-              </Button>
+              <Text mt="20px">No bank found.</Text>
             </Box>
           ) : (
             banks.map((bank) => (
@@ -261,7 +252,6 @@ const ChooseBankModal = ({
     </Modal>
   );
 };
-
 const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   const { user } = useSelector((state) => state.userReducer);
   const [bankList, setBankList] = useState([]);
@@ -274,62 +264,64 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   const userId = user?.userId;
 
   useEffect(() => {
-    const devBankList = () => {
-      return [
-        { name: "Access Bank", code: "044" },
-        { name: "Citibank", code: "023" },
-        { name: "Diamond Bank", code: "063" },
-        { name: "Ecobank Nigeria", code: "050" },
-        { name: "Fidelity Bank Nigeria", code: "070" },
-        { name: "First Bank of Nigeria", code: "011" },
-        { name: "First City Monument Bank", code: "214" },
-        { name: "Guaranty Trust Bank", code: "058" },
-        { name: "Heritage Bank Plc", code: "030" },
-        { name: "Keystone Bank Limited", code: "082" },
-        { name: "Polaris Bank", code: "076" },
-        { name: "Providus Bank Plc", code: "101" },
-        { name: "Stanbic IBTC Bank Nigeria Limited", code: "221" },
-        { name: "Standard Chartered Bank", code: "068" },
-        { name: "Sterling Bank", code: "232" },
-        { name: "Union Bank of Nigeria", code: "032" },
-        { name: "United Bank for Africa", code: "033" },
-        { name: "Unity Bank Plc", code: "215" },
-        { name: "Wema Bank", code: "035" },
-        { name: "Zenith Bank", code: "057" },
-      ];
-    };
-
-    // Uncomment this for production bank list API call
-    // const fetchBanks = async () => {
-    //   try {
-    //     const secretKey = process.env.PVB_SECRET_KEY;
-    //     const url = `${process.env.PVB_BASE_URL}/api/v1/transfer/bank-list`;
-    //
-    //     const response = await axios.get(url, {
-    //       headers: {
-    //         Authorization: `Bearer ${secretKey}`,
-    //       },
-    //     });
-    //
-    //     if (response.data.status) {
-    //       setBankList(response.data.data);
-    //     } else {
-    //       throw new Error("Failed to fetch bank list");
-    //     }
-    //   } catch (error) {
-    //     toast({
-    //       title: "Error",
-    //       description: error.message,
-    //       status: "error",
-    //       duration: 5000,
-    //       isClosable: true,
-    //     });
-    //   }
+    // const devBankList = () => {
+    //   return [
+    //     { name: "Access Bank", code: "044" },
+    //     { name: "Citibank", code: "023" },
+    //     { name: "Diamond Bank", code: "063" },
+    //     { name: "Ecobank Nigeria", code: "050" },
+    //     { name: "Fidelity Bank Nigeria", code: "070" },
+    //     { name: "First Bank of Nigeria", code: "011" },
+    //     { name: "First City Monument Bank", code: "214" },
+    //     { name: "Guaranty Trust Bank", code: "058" },
+    //     { name: "Heritage Bank Plc", code: "030" },
+    //     { name: "Keystone Bank Limited", code: "082" },
+    //     { name: "Polaris Bank", code: "076" },
+    //     { name: "Providus Bank Plc", code: "101" },
+    //     { name: "Stanbic IBTC Bank Nigeria Limited", code: "221" },
+    //     { name: "Standard Chartered Bank", code: "068" },
+    //     { name: "Sterling Bank", code: "232" },
+    //     { name: "Union Bank of Nigeria", code: "032" },
+    //     { name: "United Bank for Africa", code: "033" },
+    //     { name: "Unity Bank Plc", code: "215" },
+    //     { name: "Wema Bank", code: "035" },
+    //     { name: "Zenith Bank", code: "057" },
+    //   ];
     // };
 
+    // Uncomment this for production bank list API call
+    const fetchBanks = async () => {
+      try {
+        // const secretKey = process.env.PVB_SECRET_KEY;
+        const secretKey = "process.env.PAYSTACK_SECRET_KEY";
+        // const url = `${process.env.PVB_BASE_URL}/api/v1/transfer/bank-list`;
+        const link ="https://api.paystack.co/bank";
+
+        const response = await axios.get(link, {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+          },
+        });
+
+        if (response.data.status) {
+          setBankList(response.data.data);
+        } else {
+          throw new Error("Failed to fetch bank list");
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    };
+
     if (isOpen) {
-      setBankList(devBankList()); // Use the development bank list for now
-      // fetchBanks(); // Uncomment this line to use the API call in production
+      // setBankList(devBankList()); // Use the development bank list for now
+      fetchBanks(); // Uncomment this line to use the API call in production
     }
   }, [isOpen, toast]);
 
@@ -417,7 +409,6 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
     </Modal>
   );
 };
-
 
 const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
   const [inputAmount, setInputAmount] = useState("");
