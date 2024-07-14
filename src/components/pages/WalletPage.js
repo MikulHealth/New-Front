@@ -10,6 +10,7 @@ import DebitTransactionTabs from "../../components/authLayouts/DebitTransaction"
 import CreditTransactionTabs from "../../components/authLayouts/CreditTransaction";
 import SearchTransactionModal from "../sections/SearchTransationByDate";
 import WalletModal from "../sections/CreateWalletModal";
+import WalletBox from "../sections/WalletBox";
 import {
   ChakraProvider,
   VStack,
@@ -39,7 +40,6 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import Transfer from "../../assets/TransferPayment.svg";
-import Online from "../../assets/WhiteOnlineIcon.svg";
 // import RightArrow from "../../assets/WhiteArrow.svg";
 import NavBar from "../authLayouts/NavBar";
 import MobileFooter from "../authLayouts/MobileFooter";
@@ -89,6 +89,7 @@ const FundWalletModal = ({
         <ModalCloseButton />
         <ModalBody>
           <Box
+            mb="20px"
             color="white"
             bg="#A210C6"
             // mx="8px"
@@ -147,17 +148,17 @@ const FundWalletModal = ({
             style={{
               cursor: "pointer",
             }}
-            // _hover={{ color: "#A210C6" }}
+            _hover={{ color: "#A210C6" }}
           >
             <Flex>
-              <Image
+              {/* <Image
                 ml="15px"
                 mt="15px"
                 w={{ base: "30px", md: "30px" }}
                 h={{ base: "30px", md: "30px" }}
                 src={Online}
                 alt="Online Payment"
-              />
+              /> */}
               <Box ml="10px" p="10px">
                 <Text
                   fontSize={{ base: "16px", md: "18px" }}
@@ -178,9 +179,9 @@ const FundWalletModal = ({
                 alt="Proceed"
                 style={{
                   cursor: "pointer",
-                }} */}
-              {/* // _hover={{ color: "#A210C6" }} */}
-              {/* /> */}
+                }} 
+           _hover={{ color: "#A210C6" }} 
+           />  */}
             </Flex>
           </Box>
         </ModalBody>
@@ -280,7 +281,11 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      // const apiUrl = `http://localhost:8080/v1/api/wallets/deposit?customerId=${encodeURIComponent(customerId)}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(method)}`;
+      // const apiUrl = `http://localhost:8080/v1/api/wallets/deposit?customerId=${encodeURIComponent(
+      //   customerId
+      // )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
+      //   method
+      // )}`;
       const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/deposit?customerId=${encodeURIComponent(
         customerId
       )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
@@ -299,7 +304,7 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
         toast.success("Wallet funded successfully");
         setAmount("");
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("client-/dashboard");
         }, 5000);
       } else {
         setLoading(false);
@@ -374,9 +379,6 @@ const WalletPage = () => {
   const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
-  const balance = user?.walletBalance;
-  const walletTotalCredit = user?.walletTotalCredit;
-  const walletTotalDebit = user?.walletTotalDebit;
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
   };
@@ -432,14 +434,6 @@ const WalletPage = () => {
     setShowWalletModal(false);
   };
 
-  const formatAmount = (amount) => {
-    const num = Number(amount);
-    return num.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
-
   return (
     <ChakraProvider theme={customTheme}>
       <LeftSideBar />
@@ -479,10 +473,7 @@ const WalletPage = () => {
                   fontSize={{ base: "10px", md: "14px" }}
                   fontFamily="body"
                   mt={{ md: "3px" }}
-                  style={{
-                    fontStyle: "italic",
-                    cursor: "pointer",
-                  }}
+                  style={{ fontStyle: "italic", cursor: "pointer" }}
                   _hover={{ color: "#A210C6" }}
                   onClick={handleOpenSearchTransactionsModal}
                 >
@@ -490,147 +481,39 @@ const WalletPage = () => {
                 </Text>
               </Flex>
             </Flex>
-            <Box
-              textAlign="center"
-              w={{ base: "375px", md: "910px" }}
-              h={{ base: "150px", md: "200px" }}
-              mt={{ base: "10px", md: "0" }}
-              mb={{ base: "10px", md: "30" }}
-              paddingBottom={{ base: "20px", md: "" }}
-              bg="#A210C6"
-              borderRadius="20px"
-            >
-              <Flex w={{ base: "90vw", md: "80vw" }}>
-                <Box
-                  ml={{ base: "20px", md: "40px" }}
-                  pt={{ base: "px", md: "8px" }}
-                >
-                  <Text
-                    fontSize="16px"
-                    fontFamily="body"
-                    color="white"
-                    marginTop="20px"
-                  >
-                    Mikul Health Wallet
-                  </Text>
-                  <Flex>
-                    <Text
-                      marginTop="2px"
-                      color="white"
-                      fontSize={{ base: "18px", md: "22px" }}
-                      textAlign="left"
-                    >
-                      ₦{user.walletCreated ? formatAmount(balance) : "__.__"}
-                    </Text>
-                  </Flex>
-                </Box>
-                <VStack pt={{ base: "5px", md: "15px" }}>
-                  <Button
-                    padding={{ base: "5px", md: "0" }}
-                    ml={{ base: "75px", md: "500px" }}
-                    w={{ base: "100px", md: "35%" }}
-                    h={{ base: "30px", md: "50%" }}
-                    fontSize={{ base: "12px", md: "16px" }}
-                    borderRadius="15px"
-                    color="#A210C6"
-                    marginTop="20px"
-                    onClick={
-                      user.walletCreated
-                        ? handleOpenFundWalletModal
-                        : handleOpenWalletModal
-                    }
-                    bg="white"
-                  >
-                    {user.walletCreated ? "Fund wallet" : "Create wallet"}
-                  </Button>
-                </VStack>
-              </Flex>
-              <Flex
-                ml={{ base: "20px", md: "40px" }}
-                mt={{ base: "30px", md: "50px" }}
-              >
-                <Box marginBottom={{ base: "50px", md: "50px" }} color="white">
-                  <Text
-                    textAlign="left"
-                    fontSize={{ base: "10px", md: "16px" }}
-                  >
-                    Wallet ID:
-                  </Text>
-                  <Flex>
-                    <Text
-                      textAlign="left"
-                      fontSize={{ base: "10px", md: "16px" }}
-                    >
-                      {user.walletCreated ? "Wema Bank" : ""}
-                    </Text>
-                    <Text
-                      ml="10px"
-                      textAlign="left"
-                      fontSize={{ base: "10px", md: "16px" }}
-                    >
-                      {user.walletCreated ? accountNumber : ""}
-                    </Text>
-                    {user.walletCreated && (
-                      <IconButton
-                        icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-                        onClick={onCopy}
-                        mt="-5px"
-                        size="sm"
-                        aria-label="Copy account number"
-                        color="white"
-                        bg={hasCopied ? "#A210C6" : "#A210C6"}
-                        _hover={{ bg: "transparent" }}
-                      />
-                    )}
-                  </Flex>
-                </Box>
-                {user.walletCreated && (
-                  <Flex marginLeft={{ base: "50px", md: "400px" }}>
-                    <Box color="white">
-                      <Text textAlign="left" fontSize="10px">
-                        Total funded
-                      </Text>
-                      <Text textAlign="left" color="white" fontSize="10px">
-                        ₦{formatAmount(walletTotalCredit)}.00
-                      </Text>
-                    </Box>
-                    <Box color="white" marginLeft="10px">
-                      <Text textAlign="left" fontSize="10px">
-                        Total spent
-                      </Text>
-                      <Text textAlign="left" color="white" fontSize="10px">
-                        ₦{formatAmount(walletTotalDebit)}.00
-                      </Text>
-                    </Box>
-                  </Flex>
-                )}
-              </Flex>
-            </Box>
+            <WalletBox
+              user={user}
+              accountNumber={accountNumber}
+              hasCopied={hasCopied}
+              onCopy={onCopy}
+              handleOpenFundWalletModal={handleOpenFundWalletModal}
+              handleOpenWalletModal={handleOpenWalletModal}
+            />
             <Text
               mb={{ base: "10px", md: "25px" }}
               mt="20px"
               textAlign="left"
-             fontFamily="heading"
+              fontFamily="heading"
               fontWeight="bold"
               fontSize={{ base: "16px", md: "22px" }}
             >
-              Recent activity
+              Recent transactions
             </Text>
             <Flex
               w={{ base: "90vw", md: "90%" }}
-              ml={{ base: "0", md: "-100px" }}
+              ml={{ base: "0", md: "-110px" }}
               mt={{ base: "-10px", md: "-30px" }}
               justifyContent="center"
               className="transaction-tabs"
             >
               <VStack ml={{ base: "0", md: "0px" }} w="90%">
                 <Tabs colorScheme="purple.100" mt={{ base: "" }}>
-                  <TabList justifyContent="space-between">
+                  <TabList>
                     <Tab
                       fontSize={{ base: "12px", md: "16px" }}
                       color="#A210C6"
                       fontWeight="bold"
-                      ml={{ base: "px", md: "0" }}
+                      ml={{ base: "35px", md: "0" }}
                     >
                       All
                     </Tab>
@@ -689,21 +572,15 @@ const WalletPage = () => {
           accountNumber: "0123456789",
         }}
       />
-
       <OnlinePaymentModal
         isOpen={showOnlinePaymentModal}
         onClose={handleCloseOnlinePaymentModal}
       />
-
       <SearchTransactionModal
         isOpen={showSearchTransactionsModal}
         onClose={handleCloseSearchTransactionsModal}
       />
-
-      <WalletModal // Add WalletModal
-        isOpen={showWalletModal}
-        onClose={handleCloseWalletModal}
-      />
+      <WalletModal isOpen={showWalletModal} onClose={handleCloseWalletModal} />
     </ChakraProvider>
   );
 };

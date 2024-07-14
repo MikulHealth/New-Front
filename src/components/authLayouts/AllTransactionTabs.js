@@ -127,7 +127,7 @@ export default function TransactionTab() {
             </Flex>
             <Box
               mb={{ base: "50", md: "50px" }}
-              w={{ base: "100vw", md: "560px" }}
+              w={{ base: "100vw", md: "600px" }}
               ml={{ base: "20px", md: "-16px" }}
               // overflow="scroll"
               justifyContent="space-between"
@@ -137,7 +137,7 @@ export default function TransactionTab() {
             >
               {transactions.map((transaction) => (
                 <Box
-                  w={{ base: "90vw", md: "550px" }}
+                  w={{ base: "90vw", md: "550px", lg:"550px" }}
                   p={4}
                   borderBottom="1px solid #e2e8f0"
                   // ml={{ base: "10px" }}

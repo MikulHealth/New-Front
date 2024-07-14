@@ -23,6 +23,9 @@ import {
   Button,
   Skeleton,
   useClipboard,
+  Select,
+  useToast,
+  Spinner,
   Image,
   IconButton,
   Box,
@@ -261,16 +264,98 @@ const ChooseBankModal = ({
 
 const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   const { user } = useSelector((state) => state.userReducer);
-  const [bankName, setBankName] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
+  const [bankList, setBankList] = useState([]);
+  const [selectedBank, setSelectedBank] = useState("");
   const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountNumberWarning, setAccountNumberWarning] = useState("");
+  const toast = useToast();
+
+  const userId = user?.userId;
+
+  useEffect(() => {
+    const devBankList = () => {
+      return [
+        { name: "Access Bank", code: "044" },
+        { name: "Citibank", code: "023" },
+        { name: "Diamond Bank", code: "063" },
+        { name: "Ecobank Nigeria", code: "050" },
+        { name: "Fidelity Bank Nigeria", code: "070" },
+        { name: "First Bank of Nigeria", code: "011" },
+        { name: "First City Monument Bank", code: "214" },
+        { name: "Guaranty Trust Bank", code: "058" },
+        { name: "Heritage Bank Plc", code: "030" },
+        { name: "Keystone Bank Limited", code: "082" },
+        { name: "Polaris Bank", code: "076" },
+        { name: "Providus Bank Plc", code: "101" },
+        { name: "Stanbic IBTC Bank Nigeria Limited", code: "221" },
+        { name: "Standard Chartered Bank", code: "068" },
+        { name: "Sterling Bank", code: "232" },
+        { name: "Union Bank of Nigeria", code: "032" },
+        { name: "United Bank for Africa", code: "033" },
+        { name: "Unity Bank Plc", code: "215" },
+        { name: "Wema Bank", code: "035" },
+        { name: "Zenith Bank", code: "057" },
+      ];
+    };
+
+    // Uncomment this for production bank list API call
+    // const fetchBanks = async () => {
+    //   try {
+    //     const secretKey = process.env.PVB_SECRET_KEY;
+    //     const url = `${process.env.PVB_BASE_URL}/api/v1/transfer/bank-list`;
+    //
+    //     const response = await axios.get(url, {
+    //       headers: {
+    //         Authorization: `Bearer ${secretKey}`,
+    //       },
+    //     });
+    //
+    //     if (response.data.status) {
+    //       setBankList(response.data.data);
+    //     } else {
+    //       throw new Error("Failed to fetch bank list");
+    //     }
+    //   } catch (error) {
+    //     toast({
+    //       title: "Error",
+    //       description: error.message,
+    //       status: "error",
+    //       duration: 5000,
+    //       isClosable: true,
+    //     });
+    //   }
+    // };
+
+    if (isOpen) {
+      setBankList(devBankList()); // Use the development bank list for now
+      // fetchBanks(); // Uncomment this line to use the API call in production
+    }
+  }, [isOpen, toast]);
+
+  const handleAccountNumberChange = (e) => {
+    const value = e.target.value;
+    if (/^[0-9]{0,10}$/.test(value)) {
+      setAccountNumber(value);
+      if (value.length !== 10) {
+        setAccountNumberWarning("Account number must be exactly 10 digits");
+      } else {
+        setAccountNumberWarning("");
+      }
+    }
+  };
 
   const handleAddBank = () => {
+    const selectedBankDetails = bankList.find(
+      (bank) => bank.code === selectedBank
+    );
+
     const newBank = {
-      bankName,
+      userId,
+      bankName: selectedBankDetails ? selectedBankDetails.name : "",
       accountNumber,
       accountName,
-      userId: user?.userId,
+      bankCode: selectedBank,
     };
     onReviewBank(newBank);
   };
@@ -286,19 +371,30 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
         <ModalBody>
           <FormControl>
             <FormLabel>Bank Name</FormLabel>
-            <Input
-              value={bankName}
-              onChange={(e) => setBankName(e.target.value)}
-              placeholder="Enter bank name"
-            />
+            <Select
+              placeholder="Select bank"
+              value={selectedBank}
+              onChange={(e) => setSelectedBank(e.target.value)}
+            >
+              {bankList.map((bank) => (
+                <option key={bank.code} value={bank.code}>
+                  {bank.name}
+                </option>
+              ))}
+            </Select>
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Account Number</FormLabel>
             <Input
               value={accountNumber}
-              onChange={(e) => setAccountNumber(e.target.value)}
+              onChange={handleAccountNumberChange}
               placeholder="Enter account number"
             />
+            {accountNumberWarning && (
+              <Text fontSize="sm" color="red.500" fontStyle="italic">
+                {accountNumberWarning}
+              </Text>
+            )}
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>Account Name</FormLabel>
@@ -321,6 +417,7 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
     </Modal>
   );
 };
+
 
 const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
   const [inputAmount, setInputAmount] = useState("");
@@ -382,7 +479,7 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
             onClick={handleWithdrawClick}
             width={{ base: "full", md: "auto" }}
           >
-            Withdraw
+            Send
           </Button>
         </ModalBody>
       </ModalContent>
@@ -390,13 +487,24 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
   );
 };
 
-const ConfirmationModal = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  amount,
-  bankDetails,
-}) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, amount, bankDetails }) => {
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  const handleConfirm = async () => {
+    setIsConfirming(true);
+    await onConfirm();
+    setIsConfirming(false);
+  };
+
+  const formatAmount = (amount) => {
+    const num = Number(amount);
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
+
   return (
     <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -407,7 +515,7 @@ const ConfirmationModal = ({
         <ModalCloseButton />
         <ModalBody fontFamily="body" textAlign="left">
           <Text>
-            You are about to transfer ₦{amount} to {bankDetails?.accountName} ({" "}
+            You are about to transfer ₦{formatAmount(amount)} to {bankDetails?.accountName} ({" "}
             {bankDetails?.accountNumber} {bankDetails?.bankName}).
           </Text>
           <Text mt="10px">A ₦50 transaction charge applies.</Text>
@@ -418,6 +526,7 @@ const ConfirmationModal = ({
             variant="ghost"
             color="gray.500"
             onClick={onClose}
+            isDisabled={isConfirming}
           >
             Cancel
           </Button>
@@ -425,9 +534,10 @@ const ConfirmationModal = ({
             fontFamily="body"
             colorScheme="ghost"
             color="#A210C6"
-            onClick={onConfirm}
+            onClick={handleConfirm}
+            isDisabled={isConfirming}
           >
-            Confirm
+            {isConfirming ? <Spinner size="sm" /> : "Confirm"}
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -527,14 +637,20 @@ const MedicWalletPage = () => {
   const handleConfirmWithdrawal = async () => {
     setLoading(true);
 
-    const medicId = user?.userId;
-    const method = "WALLET";
+    const transferRequest = {
+      customerId: user?.userId,
+      amount: parseFloat(amount),
+      method: "WALLET", 
+      narration: "Transfer to bank",
+      currency: "NGN",
+      bankCode: selectedBankDetails?.bankCode,
+      accountNumber: selectedBankDetails?.accountNumber,
+      source: user?.walletId,
+      reference: "generated_reference" 
+    };
 
-    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/medic-withdraw?medicId=${encodeURIComponent(
-      medicId
-    )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
-      method
-    )}`;
+    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw`;
+    // const apiUrl = `http://localhost:8080/v1/api/wallets/withdraw`;
 
     try {
       const token = localStorage.getItem("token");
@@ -543,7 +659,7 @@ const MedicWalletPage = () => {
         Authorization: `Bearer ${token}`,
       };
 
-      const response = await axios.post(apiUrl, {}, { headers });
+      const response = await axios.post(apiUrl, transferRequest, { headers });
 
       if (response.data.success) {
         setLoading(false);
@@ -553,16 +669,26 @@ const MedicWalletPage = () => {
         }, 5000);
       } else {
         setLoading(false);
-        console.error("Transfer failed");
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown failure";
+        const errorMessage = response.data.message || "Unknown failure";
+      if (errorMessage === "Insufficient funds") {
+        toast.error("Insufficient funds. Please check your balance and try again.");
+      } else {
         toast.error(errorMessage);
       }
+    }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      toast.error("Error making transfer");
+      if (error.response && error.response.data && error.response.data.message) {
+        const errorMessage = error.response.data.message;
+        if (errorMessage === "Insufficient funds") {
+          toast.error("Insufficient funds. Please check your balance and try again.");
+        } else {
+          toast.error(errorMessage);
+        }
+      } else {
+        toast.error("Error making transfer");
+      }
     }
   };
 
@@ -668,7 +794,7 @@ const MedicWalletPage = () => {
                     onClick={walletCreated ? handleOpenFundWalletModal : onOpen}
                     bg="white"
                   >
-                    {walletCreated ? "Withdraw" : "Create Wallet"}
+                    {walletCreated ? "Send funds" : "Create Wallet"}
                   </Button>
                 </VStack>
               </Flex>
@@ -713,13 +839,13 @@ const MedicWalletPage = () => {
                       />
                     </Flex>
                   </Box>
-                  <Flex marginLeft={{ base: "15px", md: "400px" }}>
+                  <Flex marginLeft={{ base: "50px", md: "400px" }}>
                     <Box color="white">
                       <Text textAlign="left" fontSize="10px">
                         Total Made
                       </Text>
                       <Text textAlign="left" color="white" fontSize="10px">
-                        ₦ {formatAmount(walletTotalCredit)}.00
+                        ₦ {formatAmount(walletTotalCredit)}
                       </Text>
                     </Box>
                     <Box color="white" marginLeft="10px">
@@ -727,7 +853,7 @@ const MedicWalletPage = () => {
                         Total Withdraw
                       </Text>
                       <Text textAlign="left" color="white" fontSize="10px">
-                        ₦ {formatAmount(walletTotalDebit)}.00
+                        ₦ {formatAmount(walletTotalDebit)}
                       </Text>
                     </Box>
                   </Flex>
