@@ -252,6 +252,7 @@ const ChooseBankModal = ({
     </Modal>
   );
 };
+
 const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   const { user } = useSelector((state) => state.userReducer);
   const [bankList, setBankList] = useState([]);
@@ -259,43 +260,17 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [accountNumberWarning, setAccountNumberWarning] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const toast = useToast();
 
   const userId = user?.userId;
 
   useEffect(() => {
-    // const devBankList = () => {
-    //   return [
-    //     { name: "Access Bank", code: "044" },
-    //     { name: "Citibank", code: "023" },
-    //     { name: "Diamond Bank", code: "063" },
-    //     { name: "Ecobank Nigeria", code: "050" },
-    //     { name: "Fidelity Bank Nigeria", code: "070" },
-    //     { name: "First Bank of Nigeria", code: "011" },
-    //     { name: "First City Monument Bank", code: "214" },
-    //     { name: "Guaranty Trust Bank", code: "058" },
-    //     { name: "Heritage Bank Plc", code: "030" },
-    //     { name: "Keystone Bank Limited", code: "082" },
-    //     { name: "Polaris Bank", code: "076" },
-    //     { name: "Providus Bank Plc", code: "101" },
-    //     { name: "Stanbic IBTC Bank Nigeria Limited", code: "221" },
-    //     { name: "Standard Chartered Bank", code: "068" },
-    //     { name: "Sterling Bank", code: "232" },
-    //     { name: "Union Bank of Nigeria", code: "032" },
-    //     { name: "United Bank for Africa", code: "033" },
-    //     { name: "Unity Bank Plc", code: "215" },
-    //     { name: "Wema Bank", code: "035" },
-    //     { name: "Zenith Bank", code: "057" },
-    //   ];
-    // };
-
-    // Uncomment this for production bank list API call
     const fetchBanks = async () => {
       try {
-        // const secretKey = process.env.PVB_SECRET_KEY;
         const secretKey = "process.env.PAYSTACK_SECRET_KEY";
-        // const url = `${process.env.PVB_BASE_URL}/api/v1/transfer/bank-list`;
-        const link ="https://api.paystack.co/bank";
+        const link = "https://api.paystack.co/bank";
 
         const response = await axios.get(link, {
           headers: {
@@ -320,10 +295,55 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
     };
 
     if (isOpen) {
-      // setBankList(devBankList()); // Use the development bank list for now
-      fetchBanks(); // Uncomment this line to use the API call in production
+      fetchBanks();
     }
   }, [isOpen, toast]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const fetchAccountName = async () => {
+      if (accountNumber.length === 10 && selectedBank) {
+        setIsFetching(true);
+        try {
+          const response = await axios.post(
+            // "http://localhost:8080/v1/payment/bankName",
+            "https://backend-c1pz.onrender.com/v1/payment/bankName",
+            {
+              accountNumber,
+              bankCode: selectedBank,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.data.account_name) {
+            setAccountName(response.data.account_name);
+            setHasError(false);
+          } else {
+            setAccountName(
+              "Account name not found, please double check the number"
+            );
+            setHasError(true);
+          }
+          setIsFetching(false);
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: error.message,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          setIsFetching(false);
+        }
+      }
+    };
+
+    fetchAccountName();
+  }, [accountNumber, selectedBank, toast, user.token]);
 
   const handleAccountNumberChange = (e) => {
     const value = e.target.value;
@@ -388,22 +408,35 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
               </Text>
             )}
           </FormControl>
-          <FormControl mt={4}>
-            <FormLabel>Account Name</FormLabel>
-            <Input
-              value={accountName}
-              onChange={(e) => setAccountName(e.target.value)}
-              placeholder="Enter account name"
-            />
-          </FormControl>
+          {isFetching ? (
+            <Spinner size="sm" mt={4} />
+          ) : (
+            accountName && (
+              <Text
+                mt={4}
+                fontSize="sm"
+                color={hasError ? "red.500" : "green.500"}
+              >
+                {accountName}
+              </Text>
+            )
+          )}
         </ModalBody>
         <ModalFooter>
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>
-          <Button bg="#A210C6" color="white" onClick={handleAddBank} ml={3}>
-            Save
-          </Button>
+          {!hasError && accountName && (
+            <Button
+              bg="#A210C6"
+              color="white"
+              onClick={handleAddBank}
+              ml={3}
+              disabled={isFetching}
+            >
+              Save
+            </Button>
+          )}
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -478,7 +511,13 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
   );
 };
 
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, amount, bankDetails }) => {
+const ConfirmationModal = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  amount,
+  bankDetails,
+}) => {
   const [isConfirming, setIsConfirming] = useState(false);
 
   const handleConfirm = async () => {
@@ -495,7 +534,6 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, amount, bankDetails }) 
     });
   };
 
-
   return (
     <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -506,8 +544,9 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, amount, bankDetails }) 
         <ModalCloseButton />
         <ModalBody fontFamily="body" textAlign="left">
           <Text>
-            You are about to transfer ₦{formatAmount(amount)} to {bankDetails?.accountName} ({" "}
-            {bankDetails?.accountNumber} {bankDetails?.bankName}).
+            You are about to transfer ₦{formatAmount(amount)} to{" "}
+            {bankDetails?.accountName} ( {bankDetails?.accountNumber}{" "}
+            {bankDetails?.bankName}).
           </Text>
           <Text mt="10px">A ₦50 transaction charge applies.</Text>
         </ModalBody>
@@ -631,13 +670,13 @@ const MedicWalletPage = () => {
     const transferRequest = {
       customerId: user?.userId,
       amount: parseFloat(amount),
-      method: "WALLET", 
+      method: "WALLET",
       narration: "Transfer to bank",
       currency: "NGN",
       bankCode: selectedBankDetails?.bankCode,
       accountNumber: selectedBankDetails?.accountNumber,
       source: user?.walletId,
-      reference: "generated_reference" 
+      reference: "generated_reference",
     };
 
     const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw`;
@@ -661,19 +700,27 @@ const MedicWalletPage = () => {
       } else {
         setLoading(false);
         const errorMessage = response.data.message || "Unknown failure";
-      if (errorMessage === "Insufficient funds") {
-        toast.error("Insufficient funds. Please check your balance and try again.");
-      } else {
-        toast.error(errorMessage);
+        if (errorMessage === "Insufficient funds") {
+          toast.error(
+            "Insufficient funds. Please check your balance and try again."
+          );
+        } else {
+          toast.error(errorMessage);
+        }
       }
-    }
     } catch (error) {
       setLoading(false);
       console.error("An error occurred:", error);
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         const errorMessage = error.response.data.message;
         if (errorMessage === "Insufficient funds") {
-          toast.error("Insufficient funds. Please check your balance and try again.");
+          toast.error(
+            "Insufficient funds. Please check your balance and try again."
+          );
         } else {
           toast.error(errorMessage);
         }
