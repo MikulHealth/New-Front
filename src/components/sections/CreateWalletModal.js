@@ -255,7 +255,7 @@ const WalletModal = ({ isOpen, onClose }) => {
       const role = user?.setOfRole?.[0];
       let apiUrl = "";
       let dashboardUrl = "";
-
+      const token = localStorage.getItem("token");
       if (role === "NEW_USER") {
         // apiUrl = "http://localhost:8080/v1/api/wallets/add-customer-bank";
         apiUrl =
@@ -271,6 +271,7 @@ const WalletModal = ({ isOpen, onClose }) => {
       const response = await axios.post(apiUrl, payload, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
