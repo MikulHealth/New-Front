@@ -114,7 +114,7 @@ const WalletModal = ({ isOpen, onClose }) => {
     };
 
     fetchAccountName();
-  }, [accountNumber, selectedBank, toast, user.token]);
+  }, [accountNumber, selectedBank, toast]);
 
   const handleBvnChange = (e) => {
     const value = e.target.value;
