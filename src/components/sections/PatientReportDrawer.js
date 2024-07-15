@@ -1134,8 +1134,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
     // setLoading(true);
     try {
       const response = await axios.post(
-        // "https://backend-c1pz.onrender.com/v1/appointment/send-report",
-        "http://localhost:8080/v1/appointment/send-report",
+        "https://backend-c1pz.onrender.com/v1/appointment/send-report",
+        // "http://localhost:8080/v1/appointment/send-report",
         data,
         {
           headers: {
