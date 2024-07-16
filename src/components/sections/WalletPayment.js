@@ -52,8 +52,8 @@ const WalletPaymentPage = () => {
       reference,
     };
 
-    // const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/payment`;
-    const apiUrl = `http://localhost:8080/v1/api/wallets/payment`;
+    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/payment`;
+    // const apiUrl = `http://localhost:8080/v1/api/wallets/payment`;
 
     try {
       const token = localStorage.getItem("token");
