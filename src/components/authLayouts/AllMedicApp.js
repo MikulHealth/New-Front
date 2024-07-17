@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Text,
@@ -45,7 +46,7 @@ const AllMedicAppTab = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/all",
+          `${baseUrl}/appointment/all`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -59,7 +60,6 @@ const AllMedicAppTab = () => {
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
           setAppointments(sortedAppointments);
-          // setAppointments(response.data.data);
         } else {
           setLoading(false);
           console.error("Failed to fetch appointments:", response.data.message);
@@ -97,7 +97,7 @@ const AllMedicAppTab = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        `https://backend-c1pz.onrender.com/v1/appointment/cancel-request/${requestId}`,
+        `${baseUrl}/appointment/cancel-request/${requestId}`,
         {},
         {
           headers: {

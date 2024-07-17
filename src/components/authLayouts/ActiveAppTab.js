@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { VStack, Box, Text } from "@chakra-ui/react";
 import { AppointmentList, AppointmentDetails, MedicDetailsDrawer } from "./AppointmentsComponents";
+import { baseUrl } from "../../apiCalls/config";
 
 export default function ActiveApp() {
   const [pendingAppointments, setPendingAppointments] = useState([]);
@@ -27,7 +28,7 @@ export default function ActiveApp() {
       };
 
       const response = await axios.get(
-        "https://backend-c1pz.onrender.com/v1/appointment/matchedAppointments",
+        `${baseUrl}/appointment/matchedAppointments`,
         config
       );
 

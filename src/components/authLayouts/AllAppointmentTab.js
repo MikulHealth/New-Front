@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { VStack, Box, useToast, Text } from "@chakra-ui/react";
 import PaymentModal from "../sections/PaymentMethod";
 import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
+import { baseUrl } from "../../apiCalls/config";
 import {
   AppointmentList,
   AppointmentDetails,
@@ -40,8 +41,7 @@ export default function AppointmentTab() {
       };
 
       const response = await axios.get(
-        "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
-        // "http://localhost:8080/v1/appointment/allAppointments",
+        `${baseUrl}/appointment/allAppointments`,
         config
       );
 
@@ -67,7 +67,7 @@ export default function AppointmentTab() {
   const handleConfirmation = async () => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
+      const apiUrl = `${baseUrl}/appointment/cancelAppointment/${cancellingAppointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",

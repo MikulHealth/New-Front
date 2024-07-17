@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import logo from "../../assets/Logo.svg";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Button,
@@ -53,8 +54,7 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        // "http://localhost:8080/v1/angel/forgotPassword",
-        "https://backend-c1pz.onrender.com/v1/angel/forgotPassword",
+        `${baseUrl}/angel/forgotPassword`,
         JSON.stringify({ emailAddress }),
         { headers: { "Content-Type": "application/json" } }
       );

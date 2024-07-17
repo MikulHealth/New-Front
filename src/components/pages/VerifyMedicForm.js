@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 import { extendTheme } from "@chakra-ui/react";
+import { baseUrl } from "../../apiCalls/config";
 
 const customTheme = extendTheme({
   components: {
@@ -61,8 +62,7 @@ const VerifyMedicForm = () => {
 
       try {
         const response = await axios.post(
-            // "http://localhost:8080/v1/angel/medicIdentity",
-            "https://backend-c1pz.onrender.com/v1/angel/medicIdentity",
+           `${baseUrl}/angel/medicIdentity`,
           formData,
           {
             headers: {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MdLocationOn } from "react-icons/md";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Drawer,
   DrawerOverlay,
@@ -49,8 +50,7 @@ const EditPendingMediRequest = ({ isOpen, onClose, appointmentDetails }) => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        // `http://localhost:8080/v1/appointment/edit-request/${id}`,
-        `https://backend-c1pz.onrender.com/v1/appointment/edit-request/${id}`,
+       `${baseUrl}/appointment/edit-request/${id}`,
         requestData,
         {
           headers: {

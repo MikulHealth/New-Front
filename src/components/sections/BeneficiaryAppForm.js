@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import PaymentModal from "./PaymentMethod";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Drawer,
   DrawerOverlay,
@@ -219,7 +220,7 @@ const BookBeneficiaryAppointmentModal = ({
     try {
       const token = localStorage.getItem("token");
       const apiUrl = 
-      "https://backend-c1pz.onrender.com/v1/appointment/save";
+     `${baseUrl}/appointment/save`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -233,7 +234,7 @@ const BookBeneficiaryAppointmentModal = ({
         startDate: formatDateWithDayAdjustment(formPages.startDate),
         customerPhoneNumber: user.phoneNumber,
         priority,
-        specialNeeds, // Include specialNeeds in the request
+        specialNeeds,
       };
 
       const requestBody = JSON.stringify(formDataWithDates);
@@ -282,7 +283,7 @@ const BookBeneficiaryAppointmentModal = ({
         };
 
         const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
+       `${baseUrl}/appointment/all-customized-services`,
           config
         );
 

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback  } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetCurrentUser } from "../../apiCalls/UserApis";
 import { useDispatch, useSelector } from "react-redux";
 import { SetUser } from "../../redux/userSlice";
 import axios from "axios";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Flex,
@@ -29,7 +30,6 @@ import {
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const customTheme = extendTheme({
   components: {
@@ -91,13 +91,16 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const calculateCost = useCallback(() => {
     let costPerDay = 0;
     if (!medicSpecialization || !shift || !duration) {
-      return "N/A"; 
+      return "N/A";
     }
-  
+
     if (shift === "Night Shift (12hrs)") {
       if (medicSpecialization === "Nurse Assistant") {
         costPerDay = 8000;
-      } else if (medicSpecialization === "Registered Nurse" || medicSpecialization === "Registered Nurse/Midwife") {
+      } else if (
+        medicSpecialization === "Registered Nurse" ||
+        medicSpecialization === "Registered Nurse/Midwife"
+      ) {
         costPerDay = 15000;
       }
     } else if (shift === "Day Shift (8hrs)") {
@@ -113,26 +116,24 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         costPerDay = 18000;
       }
     }
-  
+
     const numDays = parseInt(duration);
     if (isNaN(numDays)) {
       toast.error("Invalid duration for cost calculation");
       return "N/A";
     }
-  
+
     const totalCost = costPerDay * numDays;
     return totalCost;
   }, [medicSpecialization, shift, duration]);
-  
+
   useEffect(() => {
     const calculatedCost = calculateCost();
     setCostOfService(calculatedCost);
   }, [calculateCost]);
 
-  
   const formattedCost = (cost) => {
-    const formattedCost =
-      "₦ " + cost.toLocaleString("en-NG");
+    const formattedCost = "₦ " + cost.toLocaleString("en-NG");
     return formattedCost;
   };
 
@@ -145,14 +146,13 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
           const response = await GetCurrentUser();
 
           if (response.success) {
-             dispatch(SetUser(response.data));
+            dispatch(SetUser(response.data));
           } else {
             console.error("API request failed:", response.error);
           }
         } catch (error) {
           console.error("Error in GetCurrentUser API:", error);
         } finally {
-          
         }
       } else {
         navigate("/login");
@@ -180,7 +180,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   console.log("Response from Custom-plan", user?.phoneNumber);
   const handleSubmit = () => {
     const token = localStorage.getItem("token");
- const requestBody = {
+    const requestBody = {
       selectedServices: selectedServices,
       frequency: frequency,
       duration: duration,
@@ -190,19 +190,14 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
       name: name,
     };
     axios
-      .post(
-        // "http://localhost:8080/v1/appointment/save-customized-service",
-        "https://backend-c1pz.onrender.com/v1/appointment/save-customized-service",
-        requestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .post(`${baseUrl}/appointment/save-customized-service`, requestBody, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
-          if (response.data.success) {
+        if (response.data.success) {
           toast.success("Customized Plan Saved");
           handleConfirmationModalClose();
           onClose();
@@ -214,14 +209,13 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         }
       })
       .catch((error) => {
-         toast.error("Customized Plan Saved");
-          });
+        toast.error("Customized Plan Saved");
+      });
   };
 
   return (
     <>
       <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size="lg">
-      
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
@@ -263,14 +257,14 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
                   onChange={(e) => setShift(e.target.value)}
                 >
                   <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
-                  <option value="Night shift (12hrs)">Night Shift (12hrs)</option>
+                  <option value="Night shift (12hrs)">
+                    Night Shift (12hrs)
+                  </option>
                   <option value="Live-in (24hrs)">Live-in (24hrs)</option>
                 </Select>
               </FormControl>
               <FormControl mb={4}>
-                <FormLabel fontWeight="bold">
-                  Duration in number(s): 
-                </FormLabel>
+                <FormLabel fontWeight="bold">Duration in number(s):</FormLabel>
                 <Input
                   placeholder="How many days?"
                   value={duration}
@@ -328,16 +322,16 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         size="lg"
       >
         <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
@@ -369,7 +363,9 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
             </Flex>
             <Flex>
               <Text fontWeight="bold">Cost of Service:</Text>
-              <Text marginLeft="5px">{formattedCost(costOfService)}.00</Text>{" "}
+              <Text marginLeft="5px">
+                {formattedCost(costOfService)}.00
+              </Text>{" "}
             </Flex>
             <Flex>
               <Text fontWeight="bold">Name of service:</Text>

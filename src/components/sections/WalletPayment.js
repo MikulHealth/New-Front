@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Text,
@@ -52,8 +53,7 @@ const WalletPaymentPage = () => {
       reference,
     };
 
-    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/payment`;
-    // const apiUrl = `http://localhost:8080/v1/api/wallets/payment`;
+    const apiUrl = `${baseUrl}/api/wallets/payment`;
 
     try {
       const token = localStorage.getItem("token");

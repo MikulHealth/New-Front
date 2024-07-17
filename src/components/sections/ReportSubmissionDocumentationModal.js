@@ -17,8 +17,8 @@ const ReportSubmissionDocumentationContent = () => (
           <ListItem>
             <Text fontWeight="bold">Select Patient:</Text>
             <Text>
-              The system would automatically select your active patient for whom you are submitting the report from
-              the dropdown menu.
+              The system would automatically select your active patient for whom
+              you are submitting the report from the dropdown menu.
             </Text>
           </ListItem>
           <ListItem>
@@ -32,15 +32,15 @@ const ReportSubmissionDocumentationContent = () => (
           <ListItem>
             <Text fontWeight="bold">Mood and States:</Text>
             <Text>
-              Select the patient's mood, emotional state, physical state,
-              and pain level from the dropdown options.
+              Select the patient's mood, emotional state, physical state, and
+              pain level from the dropdown options.
             </Text>
           </ListItem>
           <ListItem>
             <Text fontWeight="bold">Medications:</Text>
             <Text>
-              Add all medications the patient is currently taking, including
-              the name, dosage, route, and time of administration.
+              Add all medications the patient is currently taking, including the
+              name, dosage, route, and time of administration.
             </Text>
           </ListItem>
           <ListItem>
@@ -53,15 +53,14 @@ const ReportSubmissionDocumentationContent = () => (
           <ListItem>
             <Text fontWeight="bold">Observations/Comments:</Text>
             <Text>
-              Write any observations or comments about the patient's
-              condition or behavior.
+              Write any observations or comments about the patient's condition
+              or behavior.
             </Text>
           </ListItem>
           <ListItem>
             <Text fontWeight="bold">Recommendations/Requests:</Text>
             <Text>
-              Provide any recommendations or requests for the patient's
-              care.
+              Provide any recommendations or requests for the patient's care.
             </Text>
           </ListItem>
           <ListItem>
@@ -78,9 +77,9 @@ const ReportSubmissionDocumentationContent = () => (
         </UnorderedList>
         <Text>
           Reports should be made at least once a day at the end of the day
-          (shift) for healthy patients, and twice a day (morning and
-          evening) for those who are ill. For critically ill patients,
-          reports should be made as needed (PRN).
+          (shift) for healthy patients, and twice a day (morning and evening)
+          for those who are ill. For critically ill patients, reports should be
+          made as needed (PRN).
         </Text>
       </VStack>
     </DrawerBody>

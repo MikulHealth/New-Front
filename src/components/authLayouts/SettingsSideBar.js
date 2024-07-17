@@ -36,7 +36,6 @@ const customTheme = extendTheme({
 
 export default function SettingsSideBar() {
   const location = useLocation();
-  // const [setshowProfileMobile] = useState(false);
   const isActive = (pathname) => {
     return location.pathname === pathname;
   };
@@ -44,14 +43,6 @@ export default function SettingsSideBar() {
   const activeStyle = {
     color: "#A210C6",
   };
-
-  // const handleCloseProleMobile = () => {
-  //   setshowProfileMobile(false);
-  // };
-
-  // const handleOpenProleMobile = () => {
-  //   setshowProfileMobile(true);
-  // };
 
   return (
     <ChakraProvider theme={customTheme}>

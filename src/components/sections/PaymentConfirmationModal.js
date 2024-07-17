@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   // useToast,
@@ -47,8 +48,7 @@ const PaymentConfirmationPage = () => {
   const { user } = useSelector((state) => state.userReducer);
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
-  const amountInKobo = parseInt(costOfService * 100); 
-
+  const amountInKobo = parseInt(costOfService * 100);
 
   const [paymentData, setPaymentData] = useState({
     email: user?.email || "",
@@ -70,7 +70,6 @@ const PaymentConfirmationPage = () => {
     });
   };
 
-  
   const formattedCost = (cost) => {
     const num = Number(cost);
     return num.toLocaleString("en-US");
@@ -90,8 +89,7 @@ const PaymentConfirmationPage = () => {
     try {
       const token = localStorage.getItem("token");
       console.log("ID is " + appointmentId);
-      // const apiUrl = `http://localhost:8080/v1/payment/verify/${appointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/payment/verify/${appointmentId}`;
+      const apiUrl = `${baseUrl}/payment/verify/${appointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -112,7 +110,7 @@ const PaymentConfirmationPage = () => {
         });
         toast.success("Payment verified");
         setTimeout(() => {
-          navigate("/client-dashboard")
+          navigate("/client-dashboard");
         }, 5000);
         // window.location.reload();
       } else {
@@ -138,7 +136,14 @@ const PaymentConfirmationPage = () => {
   const paymentFormWidth = isLargerThan768 ? "50%" : "90%";
 
   return (
-    <Box theme={customTheme} height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
+    <Box
+      theme={customTheme}
+      height="100vh"
+      bg="#510863"
+      textAlign="center"
+      color="white"
+      p={4}
+    >
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -150,29 +155,40 @@ const PaymentConfirmationPage = () => {
         draggable
         pauseOnHover
       />
-      <Box margin={{base: "10px", md: "10px"}}>
+      <Box margin={{ base: "10px", md: "10px" }}>
         <Image src={logo} alt="Logo" w="100px" h="30px" />
       </Box>
       <Box color="white" mx="auto" w={paymentFormWidth}>
-        <Text fontFamily="heading" fontSize={{base: "20px", md: "24px"}} fontWeight="bold" mb={4}>
+        <Text
+          fontFamily="heading"
+          fontSize={{ base: "20px", md: "24px" }}
+          fontWeight="bold"
+          mb={4}
+        >
           Confirm Payment
         </Text>
         <form onSubmit={handlePayment}>
-          <Box fontSize={{base: "16px", md: "18px"}} color="black" p={4} bg="white" borderRadius="xl">
-            <Text fontFamily="body"  mb={4}>
+          <Box
+            fontSize={{ base: "16px", md: "18px" }}
+            color="black"
+            p={4}
+            bg="white"
+            borderRadius="xl"
+          >
+            <Text fontFamily="body" mb={4}>
               Hi {user?.firstName}, kindly pay the sum of{" "}
               <Text
-              fontFamily="body"
+                fontFamily="body"
                 as="span"
                 textDecoration="underline"
                 fontWeight="bold"
                 color="#510863"
               >
-                 ₦{formattedCost(costOfService)}
+                ₦{formattedCost(costOfService)}
               </Text>{" "}
               to proceed with your booking for{" "}
               <Text
-               fontFamily="body"
+                fontFamily="body"
                 as="span"
                 textDecoration="underline"
                 fontWeight="bold"
@@ -183,7 +199,7 @@ const PaymentConfirmationPage = () => {
               care. You would be matched with a caregiver within 48hrs upon a
               successful payment.
             </Text>
-            <FormControl  fontFamily="body" alignItems="center" isRequired>
+            <FormControl fontFamily="body" alignItems="center" isRequired>
               <FormLabel>Full Name</FormLabel>
               <Input
                 type="text"
@@ -211,7 +227,10 @@ const PaymentConfirmationPage = () => {
                 onChange={handleInputChange}
                 mb={4}
               />
-              <Flex justifyContent="center" display={{ base: "flex", md: "block" }}>
+              <Flex
+                justifyContent="center"
+                display={{ base: "flex", md: "block" }}
+              >
                 <Button
                   _hover={{ color: "" }}
                   bg="green.400"

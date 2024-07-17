@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Text, VStack, Flex, Spinner, Badge } from "@chakra-ui/react";
+import { baseUrl } from "../../apiCalls/config";
 
 const CompletedMedicAppTab = () => {
   const [appointments, setAppointments] = useState([]);
@@ -12,8 +13,7 @@ const CompletedMedicAppTab = () => {
         try {
           const token = localStorage.getItem("token");
           const response = await axios.get(
-            // "http://localhost:8080/v1/appointment/completed",
-            "https://backend-c1pz.onrender.com/v1/appointment/completed",
+            `${baseUrl}/appointment/completed`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -27,7 +27,6 @@ const CompletedMedicAppTab = () => {
               (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
             );
             setAppointments(sortedAppointments);
-            // setAppointments(response.data.data);
           } else {
             setLoading(false);
             console.error(

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import "react-datepicker/dist/react-datepicker.css";
-
+import { baseUrl } from "../../apiCalls/config";
 import BookAppointmentModal from "../sections/BookAppointment";
 import axios from "axios";
 import { CheckIcon, AddIcon, DeleteIcon } from "@chakra-ui/icons";
@@ -26,14 +24,10 @@ import {
   Flex,
   extendTheme,
 } from "@chakra-ui/react";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import LoadingSpinner from "../../utils/Spiner";
-// import HelppIcon from "../../assets/HelppIcon.svg";
 import CustomizeServiceModal from "../sections/CustomizeServiceModal";
-
 import NavBar from "../authLayouts/NavBar";
 import LeftSideBar from "../authLayouts/LeftSideBar";
 import MobileFooter from "../authLayouts/MobileFooter";
@@ -89,9 +83,7 @@ const CustomizeServicePage = () => {
   const handleConfirmation = async () => {
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/deleteService/${deleteServiceId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/deleteService/${deleteServiceId}`;
-      // "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
+      const apiUrl = `${baseUrl}/appointment/deleteService/${deleteServiceId}`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -112,15 +104,6 @@ const CustomizeServicePage = () => {
       setConfirmationModalOpen(false);
     }
   };
-
-  // const formatDate = (dateString) => {
-  //   const options = { year: "numeric", month: "long", day: "numeric" };
-  //   const formattedDate = new Date(dateString).toLocaleDateString(
-  //     undefined,
-  //     options
-  //   );
-  //   return formattedDate;
-  // };
 
   const handleDeleteService = (serviceId) => {
     setDeleteServiceId(serviceId);
@@ -152,8 +135,7 @@ const CustomizeServicePage = () => {
       };
 
       const response = await axios.get(
-        // "http://localhost:8080/v1/appointment/all-customized-services",
-        "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
+        `${baseUrl}/appointment/all-customized-services`,
         config
       );
 

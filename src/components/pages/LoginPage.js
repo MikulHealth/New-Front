@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 import GetStartedModal from "../unAuthLayouts/GetStarted";
+
 import {
   Box,
   Button,

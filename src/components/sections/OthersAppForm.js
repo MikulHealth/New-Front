@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BookingInstructions from "./BookingInstructions";
+import { baseUrl } from "../../apiCalls/config";
 // import { Link } from "react-router-dom";
 import { FaPhoneAlt } from "react-icons/fa";
 import PaymentModal from "./PaymentMethod";
@@ -216,7 +217,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/save";
+      const apiUrl = `${baseUrl}/appointment/save`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -333,7 +334,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
+          `${baseUrl}/appointment/all-customized-services`,
           config
         );
 
@@ -366,7 +367,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
       const apiUrl =
-        "https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary";
+        `${baseUrl}/appointment/addNewBeneficiary`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

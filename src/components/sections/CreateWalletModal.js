@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../apiCalls/config";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const [bvn, setBvn] = useState("");
@@ -76,8 +77,7 @@ const WalletModal = ({ isOpen, onClose }) => {
         setIsFetching(true);
         try {
           const response = await axios.post(
-            // "http://localhost:8080/v1/payment/bankName",
-            "https://backend-c1pz.onrender.com/v1/payment/bankName",
+            `${baseUrl}/payment/bankName`,
             {
               accountNumber,
               bankCode: selectedBank,
@@ -140,80 +140,6 @@ const WalletModal = ({ isOpen, onClose }) => {
     }
   };
 
-  // const handleSubmit = async () => {
-  //   if (bvn.length !== 11) {
-  //     toast({
-  //       title: "Error",
-  //       description: "BVN must be exactly 11 digits",
-  //       status: "error",
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-  //     return;
-  //   }
-  //   if (accountNumber.length !== 10) {
-  //     toast({
-  //       title: "Error",
-  //       description: "Account number must be exactly 10 digits",
-  //       status: "error",
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-  //     return;
-  //   }
-
-  //   const payload = {
-  //     customerCode: userId,
-  //     country: "NG",
-  //     type: "bank_account",
-  //     accountNumber,
-  //     bvn,
-  //     bankCode: selectedBank,
-  //     firstName: user?.firstName,
-  //     lastName: user?.lastName,
-  //   };
-
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:8080/v1/payment/identify",
-  //       payload,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.data.status) {
-  //       toast({
-  //         description: "Customer Identification in progress",
-  //         status: "success",
-  //         duration: 5000,
-  //         isClosable: true,
-  //       });
-  //       onClose();
-  //       setTimeout(() => {
-  //         navigate("/client-dashboard");
-  //       }, 5000);
-  //     } else {
-  //       throw new Error(response.data.message || "Identification failed");
-  //     }
-  //   } catch (error) {
-  //     toast({
-  //       title: "Error",
-  //       description: error.message || "Identification failed",
-  //       status: "error",
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-  //     setHasError(true);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const handleSubmit = async () => {
     console.log("user id:", userId);
     if (bvn.length !== 11) {
@@ -257,14 +183,13 @@ const WalletModal = ({ isOpen, onClose }) => {
       let dashboardUrl = "";
       const token = localStorage.getItem("token");
       if (role === "NEW_USER") {
-        // apiUrl = "http://localhost:8080/v1/api/wallets/add-customer-bank";
         apiUrl =
-          "https://backend-c1pz.onrender.com/v1/api/wallets/add-customer-bank";
+         `${baseUrl}/api/wallets/add-customer-bank`;
         dashboardUrl = "/client-dashboard";
+        
       } else if (role === "NEW_MEDIC") {
-        // apiUrl = "http://localhost:8080/v1/api/wallets/add-medic-bank";
         apiUrl =
-          "https://backend-c1pz.onrender.com/v1/api/wallets/add-medic-bank";
+          `${baseUrl}/api/wallets/add-medic-bank`;
         dashboardUrl = "/medic-dashboard";
       }
 
@@ -277,8 +202,8 @@ const WalletModal = ({ isOpen, onClose }) => {
 
       if (response.status === 200 && response.data.success) {
         toast({
-          //   title: "Success",
-          description: "Wallet created successfully",
+          title: "Success",
+          description: "Your wallet creation is being processed and will be ready in a few minutes",
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -286,7 +211,9 @@ const WalletModal = ({ isOpen, onClose }) => {
         onClose();
         setTimeout(() => {
           navigate(dashboardUrl);
-        }, 5000);
+          window.location.reload();
+        }, 4000);
+        
       } else {
         throw new Error(response.data.message || "Failed to add bank details");
       }

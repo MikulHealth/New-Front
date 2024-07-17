@@ -30,8 +30,7 @@ export default function CancelledApp() {
       };
 
       const response = await axios.get(
-        // "http://localhost:8080/v1/appointment/canceledAppointments",
-        "https://backend-c1pz.onrender.com/v1/appointment/canceledAppointments",
+        `${baseUrl}/appointment/canceledAppointments`,
         config
       );
 

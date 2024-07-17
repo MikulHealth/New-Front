@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
+import { baseUrl } from "../../apiCalls/config";
 import {
   VStack,
   Text,
@@ -53,57 +54,6 @@ const EditAppointmentModal = ({ isOpen, onClose, appointmentId, onSave }) => {
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const cancelRef = React.useRef();
   const toast = useToast();
-
-//   useEffect(() => {
-//     const fetchAppointmentDetails = async () => {
-//       try {
-//         const token = localStorage.getItem("token");
-  
-//         const response = await axios.get(
-//           `http://localhost:8080/v1/appointment/findAppointmentDetails/${appointmentId}`,
-//           {
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//             },
-//           }
-//         );
-  
-//         if (response.data.success) {
-//           const appointmentDetails = response.data.data;
-//           setFormData({
-//             recipientFirstname: appointmentDetails.recipientFirstname,
-//             recipientLastname: appointmentDetails.recipientLastname,
-//             recipientPhoneNumber: appointmentDetails.recipientPhoneNumber,
-//             recipientGender: appointmentDetails.recipientGender || "",
-//             DOB: appointmentDetails.DOB || "",
-//             currentLocation: appointmentDetails.currentLocation || "",
-//             shift: appointmentDetails.shift || "",
-//             recipientDoctor: appointmentDetails.recipientDoctor || "",
-//             recipientDoctorNumber:
-//               appointmentDetails.recipientDoctorNumber || "",
-//             recipientHospital: appointmentDetails.recipientHospital || "",
-//             recipientHealthHistory:
-//               appointmentDetails.recipientHealthHistory || "",
-//             servicePlan: appointmentDetails.servicePlan || "",
-//             costOfService: appointmentDetails.costOfService || "",
-//             startDate: appointmentDetails.startDate || "",
-//             endDate: appointmentDetails.endDate || "",
-//             medicalReport: appointmentDetails.medicalReport || "",
-//           });
-//         } else {
-//           console.error("Error fetching appointment details");
-//         }
-//       } catch (error) {
-//         console.error("Error fetching appointment details:", error);
-//       }
-//     };
-  
-//     if (isOpen) {
-//       fetchAppointmentDetails();
-//     }
-//   }, [appointmentId, isOpen]);
-  
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -142,8 +92,7 @@ const EditAppointmentModal = ({ isOpen, onClose, appointmentId, onSave }) => {
   
       // Get the initial appointment details from the server
       const initialResponse = await axios.get(
-        // `http://localhost:8080/v1/appointment/findAppointmentDetails/${appointmentId}`,
-        `https://backend-c1pz.onrender.com/v1/appointment/findAppointmentDetails/${appointmentId}`,
+      `${baseUrl}/appointment/findAppointmentDetails/${appointmentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -170,8 +119,7 @@ const EditAppointmentModal = ({ isOpen, onClose, appointmentId, onSave }) => {
   
       // Send only the changed fields to the server
       const response = await axios.post(
-        // `http://localhost:8080/v1/appointment/editAppointmentDetails/${appointmentId}`,
-        `https://backend-c1pz.onrender.com/v1/appointment/editAppointmentDetails/${appointmentId}`,
+       `${baseUrl}/appointment/editAppointmentDetails/${appointmentId}`,
         changedFields,
         {
           headers: {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { baseUrl } from "./config"; 
 
 
 export const GetCurrentUser = async () => {
@@ -15,8 +16,7 @@ export const GetCurrentUser = async () => {
       },
     };
     const response = await axios.get(
-        // "http://localhost:8080/v1/angel/getCurrentUser",
-      "https://backend-c1pz.onrender.com/v1/angel/getCurrentUser",
+      `${baseUrl}/angel/getCurrentUser`,
       config
     );
     return response.data;
@@ -45,8 +45,7 @@ export const GetCurrentMedic = async () => {
       },
     };
     const response = await axios.get(
-        // "http://localhost:8080/v1/angel/getCurrentMedic",
-      "https://backend-c1pz.onrender.com/v1/angel/getCurrentMedic",
+      `${baseUrl}/angel/getCurrentMedic`,
       config
     );
     return response.data;
@@ -70,8 +69,7 @@ export const UpdateCustomer = async (
       },
     };
     const response = await axios.put(
-      // "http://localhost:8080/v1/angel/updateCustomer",
-      "https://backend-c1pz.onrender.com/v1/angel/updateCustomer",
+      `${baseUrl}/angel/updateCustomer`,
       editedUser,
       config
     );

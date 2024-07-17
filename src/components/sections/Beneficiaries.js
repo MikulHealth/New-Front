@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { baseUrl } from "../../apiCalls/config";
 import {
   VStack,
   Text,
@@ -79,8 +80,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/findAllBeneficiaries",
-          "https://backend-c1pz.onrender.com/v1/appointment/findAllBeneficiaries",
+          `${baseUrl}/appointment/findAllBeneficiaries`,
           config
         );
 
@@ -138,8 +138,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
       };
 
       const response = await axios.delete(
-        // `http://localhost:8080/v1/appointment/removeBeneficiary/${selectedBeneficiaryId}`,
-        `https://backend-c1pz.onrender.com/v1/appointment/removeBeneficiary/${selectedBeneficiaryId}`,
+        `${baseUrl}/appointment/removeBeneficiary/${selectedBeneficiaryId}`,
 
         config
       );

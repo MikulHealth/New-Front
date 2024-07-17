@@ -16,6 +16,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { baseUrl } from "../../apiCalls/config";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -52,11 +53,9 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          // `http://localhost:8080/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
-          //   selectedDate
-          // )}`,
+   
 
-           `https://backend-c1pz.onrender.com/v1/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
+        `${baseUrl}/appointment/customerAppointmentsByDate?date=${formatDateToUTC(
             selectedDate
           )}`,
           config
@@ -88,9 +87,7 @@ const SearchAppointmentsModal = ({ isOpen, onClose }) => {
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findAppointmentDetails/${appointmentId}`;
-      // const apiUrl = `http://localhost:8080/v1/appointment/findAppointmentDetails/${appointmentId}`;
-
+      const apiUrl = `${baseUrl}/appointment/findAppointmentDetails/${appointmentId}`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

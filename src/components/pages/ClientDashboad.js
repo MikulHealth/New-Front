@@ -4,6 +4,7 @@ import { GetCurrentUser } from "../../apiCalls/UserApis";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SetUser } from "../../redux/userSlice";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Flex,
@@ -22,7 +23,6 @@ import MobileFooter from "../authLayouts/MobileFooter";
 import WalletComponent from "../sections/WalletComponent";
 import DashboardButtons from "../sections/DashboardButtons";
 import AppointmentsSidebar from "../sections/AppointmentsSidebar";
-// import Help from "../authLayouts/Help";
 import BeneficiariesModal from "../sections/Beneficiaries";
 import BookAppointmentModal from "../sections/BookAppointment";
 import MatchedAppointmentsModal from "../sections/MatchedAppointmentsModal";
@@ -78,7 +78,7 @@ const ClientDash = () => {
         };
 
         const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
+          `${baseUrl}/appointment/pendingAppointments`,
           config
         );
 
@@ -109,8 +109,7 @@ const ClientDash = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          "https://backend-c1pz.onrender.com/v1/appointment/match-appointment",
-          // "http://localhost:8080/v1/appointment/match-appointment",
+          `${baseUrl}/appointment/match-appointment`,
           {
             method: "GET",
             headers: {

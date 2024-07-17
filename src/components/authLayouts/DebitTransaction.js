@@ -5,6 +5,7 @@ import { VStack, useToast, Box, Text, Flex, Image } from "@chakra-ui/react";
 import CreditIcon from "../../assets/CreditIcon.svg";
 import DebitIcon from "../../assets/DebitIcon.svg";
 import { useSelector } from "react-redux";
+import { baseUrl } from "../../apiCalls/config";
 
 export default function TransactionTab() {
   const toast = useToast();
@@ -24,8 +25,7 @@ export default function TransactionTab() {
         };
 
         const response = await axios.get(
-          `https://backend-c1pz.onrender.com/v1/api/wallets/${customerId}/debits`,
-          //             // `http://localhost:8080/v1/api/wallets/${customerId}/credits`,
+          `${baseUrl}/api/wallets/${customerId}/debits`,
           config
         );
 

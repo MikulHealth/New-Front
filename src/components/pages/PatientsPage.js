@@ -22,6 +22,7 @@ import Check from "../../assets/Check.svg";
 import RequestAppointmentModal from "../sections/RequestAppModal";
 import PatientDetailsModal from "../sections/PatientDetailsModal";
 import { extendTheme } from "@chakra-ui/react";
+import { baseUrl } from "../../apiCalls/config";
 
 const customTheme = extendTheme({
   components: {
@@ -60,7 +61,7 @@ const PatientsPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/get-active-patient",
+          `${baseUrl}/appointment/get-active-patient`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

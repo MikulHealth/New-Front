@@ -27,6 +27,7 @@ import SummaryCards from "../sections/MobileBody";
 import DesktopCards from "../sections/DesktopBody";
 import RequestAppointmentModal from "../sections/RequestAppModal";
 import MatchedMedicAppointmentsModal from "../sections/MatchedMedicAppointmentsModal ";
+import { baseUrl } from "../../apiCalls/config";
 
 const customTheme = extendTheme({
   components: {
@@ -101,8 +102,7 @@ const MedicDashboard = () => {
         try {
           const token = localStorage.getItem("token");
           const response = await axios.get(
-            // `http://localhost:8080/v1/appointment/find-patient`,
-            "https://backend-c1pz.onrender.com/v1/appointment/find-patient",
+            `${baseUrl}/appointment/find-patient`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../utils/Spiner";
 import axios from "axios";
 import { CloseIcon } from "@chakra-ui/icons";
+import { baseUrl } from "../../apiCalls/config";
 import {
   VStack,
   Drawer,
@@ -41,8 +42,7 @@ export default function CompletedApp() {
       };
 
       const response = await axios.get(
-        // "http://localhost:8080/v1/appointment/findCompletedAppointments",
-        "https://backend-c1pz.onrender.com/v1/appointment/findCompletedAppointments",
+        `${baseUrl}/appointment/findCompletedAppointments`,
         config
       );
 

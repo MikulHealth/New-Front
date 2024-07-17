@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Drawer,
   DrawerOverlay,
@@ -57,7 +58,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        "https://backend-c1pz.onrender.com/v1/appointment/fetch-reports",
+       `${baseUrl}/appointment/fetch-reports`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -140,7 +141,7 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
         newDate.setDate(newDate.getDate() + 1);
         const formattedDate = new Date(newDate).toISOString().split("T")[0];
         const response = await axios.get(
-          `https://backend-c1pz.onrender.com/v1/appointment/search-report?date=${formattedDate}`,
+          `${baseUrl}/appointment/search-report?date=${formattedDate}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

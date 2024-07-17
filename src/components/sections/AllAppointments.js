@@ -20,6 +20,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { baseUrl } from "../../apiCalls/config";
 
 const AppointmentModal = ({ isOpen, onClose }) => {
   const [appointments, setAppointments] = useState([]);
@@ -38,8 +39,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/allAppointments",
-          "https://backend-c1pz.onrender.com/v1/appointment/allAppointments",
+        `${baseUrl}/appointment/allAppointments`,
           config
         );
 
@@ -84,8 +84,7 @@ const AppointmentModal = ({ isOpen, onClose }) => {
   const fetchAndDisplayAppointmentDetails = async (appointmentId) => {
     try {
       const token = localStorage.getItem("token");
-      // const apiUrl = `http://localhost:8080/v1/appointment/findAppointmentDetails/${appointmentId}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/findAppointmentDetails/${appointmentId}`;
+      const apiUrl = `${baseUrl}/appointment/findAppointmentDetails/${appointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",

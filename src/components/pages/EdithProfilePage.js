@@ -254,7 +254,7 @@ const EdithProfilePage = () => {
         setLoading(false);
         toast.success("Update Successfull");
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/client-dashboard");
         }, 5000);
       } else {
         console.error("Failed to update user details:", response.error);

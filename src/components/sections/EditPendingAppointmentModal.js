@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import CalenderIcon from "../../assets/CalenderIcon.svg";
 import DatePicker from "react-datepicker";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Drawer,
   DrawerOverlay,
@@ -83,8 +84,7 @@ const EditPendingAppointment = ({
       const requestBody = formDataWithDates;
 
       const response = await axios.post(
-        // `http://localhost:8080/v1/appointment/editAppointmentDetails/${formData.id}`,
-        `https://backend-c1pz.onrender.com/v1/appointment/editAppointmentDetails/${formData.id}`,
+       `${baseUrl}/appointment/editAppointmentDetails/${formData.id}`,
         requestBody,
         {
           headers: {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Modal,
   ModalOverlay,
@@ -108,7 +109,7 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const apiUrl = "https://backend-c1pz.onrender.com/v1/appointment/request";
+      const apiUrl = `${baseUrl}/appointment/request`;
 
       const headers = {
         "Content-Type": "application/json",

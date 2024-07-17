@@ -19,6 +19,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../apiCalls/config";
 
 const SearchTransactionModal = ({ isOpen, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -46,8 +47,7 @@ const SearchTransactionModal = ({ isOpen, onClose }) => {
           },
         };
         const formattedDate = formatDateToISO(selectedDate);
-        const url = `https://backend-c1pz.onrender.com/v1/api/wallets/${id}/transactions/by-date?date=${formattedDate}`;
-        // const url = `http://localhost:8080/v1/api/wallets/${id}/transactions/by-date?date=${formattedDate}`;
+        const url = `${baseUrl}/api/wallets/${id}/transactions/by-date?date=${formattedDate}`;
 
         const response = await axios.get(url, config);
 

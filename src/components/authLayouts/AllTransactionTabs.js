@@ -4,19 +4,16 @@ import LoadingSpinner from "../../utils/Spiner";
 import { VStack, useToast, Box, Text, Flex, Image } from "@chakra-ui/react";
 import CreditIcon from "../../assets/CreditIcon.svg";
 import DebitIcon from "../../assets/DebitIcon.svg";
-// import { useSelector } from "react-redux";
+import { baseUrl } from "../../apiCalls/config";
 
 export default function TransactionTab() {
   const toast = useToast();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const { user } = useSelector((state) => state.userReducer);
-  // const id = user?.userId;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const customerId = id;
         const config = {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -24,8 +21,7 @@ export default function TransactionTab() {
         };
 
         const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/api/wallets/transactions",
-                      // "http://localhost:8080/v1/api/wallets/transactions",
+          `${baseUrl}/api/wallets/transactions`,
           config
         );
 

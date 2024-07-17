@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Modal,
   ModalOverlay,
@@ -24,8 +25,7 @@ const ReviewBankModal = ({ isOpen, onClose, bankDetails, onSave }) => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-    //   const response = await axios.post("http://localhost:8080/v1/api/wallets/add-bank", bankDetails);
-      const response = await axios.post("https://backend-c1pz.onrender.com/v1/api/wallets/add-bank", bankDetails);
+      const response = await axios.post(`${baseUrl}/api/wallets/add-bank`, bankDetails);
     if (response.data.success) {
         setIsLoading(false);
          toast({

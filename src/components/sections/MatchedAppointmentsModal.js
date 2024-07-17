@@ -18,6 +18,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
+import { baseUrl } from "../../apiCalls/config";
 
 const customTheme = extendTheme({
   components: {
@@ -45,9 +46,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const apiUrl =
-        // `http://localhost:8080/v1/appointment/accept`;
-        `https://backend-c1pz.onrender.com/v1/appointment/accept`;
+      const apiUrl = `${baseUrl}/appointment/accept`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

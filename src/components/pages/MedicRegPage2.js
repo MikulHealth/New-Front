@@ -3,6 +3,7 @@ import axios from "axios";
 import logo from "../../assets/Logo.svg";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Button,
@@ -129,7 +130,7 @@ const LandingPage = () => {
 
     try {
       const response = await axios.post(
-        "https://backend-c1pz.onrender.com/v1/angel/registerMedic",
+        `${baseUrl}/angel/registerMedic`,
         formData,
         {
           headers: {

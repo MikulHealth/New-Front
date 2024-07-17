@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 // import CalenderIcon from "../../assets/CalenderIcon.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../apiCalls/config";
 
 
 const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
@@ -90,8 +91,7 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
       };
 
       const response = await axios.post(
-        // "http://localhost:8080/v1/appointment/addNewBeneficiary",
-        "https://backend-c1pz.onrender.com/v1/appointment/addNewBeneficiary",
+        `${baseUrl}/appointment/addNewBeneficiary`,
         dataToSend,
         config
       );

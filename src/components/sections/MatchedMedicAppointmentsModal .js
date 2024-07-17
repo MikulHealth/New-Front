@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Modal,
   ModalOverlay,
@@ -112,8 +113,7 @@ const MatchedMedicAppointmentsModal = ({
       };
 
       const response = await axios.post(
-        // `http://localhost:8080/v1/appointment/accept-appointment`,
-        "https://backend-c1pz.onrender.com/v1/appointment/accept-appointment",
+        `${baseUrl}/appointment/accept-appointment`,
         acceptData,
         {
           headers: {

@@ -3,6 +3,7 @@ import LoadingSpinner from "../../utils/Spiner";
 import axios from "axios";
 import { EditIcon, CheckIcon, CloseIcon, WarningIcon } from "@chakra-ui/icons";
 import EditPendingAppointmentModal from "../sections/EditPendingAppointmentModal";
+import { baseUrl } from "../../apiCalls/config";
 import {
   VStack,
   Drawer,
@@ -88,7 +89,7 @@ export default function PendingApp() {
       };
 
       const response = await axios.get(
-        "https://backend-c1pz.onrender.com/v1/appointment/pendingAppointments",
+        `${baseUrl}/appointment/pendingAppointments`,
         config
       );
 
@@ -133,7 +134,7 @@ export default function PendingApp() {
   const handleConfirmation = async () => {
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/appointment/cancelAppointment/${cancellingAppointmentId}`;
+      const apiUrl = `${baseUrl}/appointment/cancelAppointment/${cancellingAppointmentId}`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -642,7 +643,7 @@ export default function PendingApp() {
                   Edit
                 </Button>
                 <Button
-                ml="10px"
+                  ml="10px"
                   bg="#E1ACAE"
                   color="red.500"
                   _hover={{ color: "" }}

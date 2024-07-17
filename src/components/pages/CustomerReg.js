@@ -11,6 +11,7 @@ import "../../styles/pages/LandingPage.css";
 import TermsModal from "../sections/TermsModal";
 import RegistrationForm from "../sections/RegistrationForm";
 import logo from "../../assets/Logo.svg";
+import { baseUrl } from "../../apiCalls/config";
 
 const customTheme = extendTheme({
   components: {
@@ -190,7 +191,7 @@ const LandingPage = () => {
     try {
       const updatedFormData = { ...formData, phoneNumber: validPhoneNumber };
       const response = await axios.post(
-        "https://backend-c1pz.onrender.com/v1/angel/join",
+        `${baseUrl}/angel/join`,
         updatedFormData,
         { headers: { "Content-Type": "application/json" } }
       );

@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PaymentModal from "./PaymentMethod";
 import BookingInstructions from "./BookingInstructions";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Drawer,
   DrawerOverlay,
@@ -92,7 +93,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [priority, setPriority] = useState("");
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
-  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] =
+    useState(false);
 
   const [formFields, setFormFields] = useState({
     startDate: null,
@@ -189,7 +191,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         };
 
         const response = await axios.get(
-          "https://backend-c1pz.onrender.com/v1/appointment/all-customized-services",
+          `${baseUrl}/appointment/all-customized-services`,
           config
         );
 
@@ -214,9 +216,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     try {
       const token = localStorage.getItem("token");
 
-      const apiUrl =
-        //  http://localhost:8080/v1/appointment/save;
-        "https://backend-c1pz.onrender.com/v1/appointment/save";
+      const apiUrl = `${baseUrl}/appointment/save`;
 
       const headers = {
         "Content-Type": "application/json",
@@ -266,7 +266,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         setPaymentData({
           costOfService: response.data.data.costOfService,
           appointmentId: response.data.data.id,
-          beneficiary: `${response.data.data.recipientFirstname}` `${response.data.data.recipientLastname}`,
+          beneficiary: `${response.data.data.recipientFirstname}``${response.data.data.recipientLastname}`,
         });
 
         setTimeout(() => {

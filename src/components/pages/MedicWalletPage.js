@@ -16,6 +16,7 @@ import DebitTransactionTabs from "../../components/authLayouts/DebitTransaction"
 import CreditTransactionTabs from "../../components/authLayouts/CreditTransaction";
 import SearchTransactionModal from "../sections/SearchTransationByDate";
 import WalletModal from "../sections/CreateWalletModal";
+import { baseUrl } from "../../apiCalls/config";
 import {
   ChakraProvider,
   VStack,
@@ -171,8 +172,7 @@ const ChooseBankModal = ({
       const fetchBanks = async () => {
         try {
           const response = await axios.get(
-            // `http://localhost:8080/v1/api/wallets/${user?.userId}/banks`
-            `https://backend-c1pz.onrender.com/v1/api/wallets/${user?.userId}/banks`
+           `${baseUrl}/api/wallets/${user?.userId}/banks`
           );
           const fetchedBanks = Array.isArray(response.data.data)
             ? response.data.data
@@ -306,8 +306,7 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
         setIsFetching(true);
         try {
           const response = await axios.post(
-            // "http://localhost:8080/v1/payment/bankName",
-            "https://backend-c1pz.onrender.com/v1/payment/bankName",
+          `${baseUrl}/payment/bankName`,
             {
               accountNumber,
               bankCode: selectedBank,
@@ -679,8 +678,7 @@ const MedicWalletPage = () => {
       reference: "generated_reference",
     };
 
-    const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/withdraw`;
-    // const apiUrl = `http://localhost:8080/v1/api/wallets/withdraw`;
+    const apiUrl = `${baseUrl}/api/wallets/withdraw`;
 
     try {
       const token = localStorage.getItem("token");

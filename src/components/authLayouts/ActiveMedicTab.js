@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Text,
@@ -32,8 +33,7 @@ const ActiveMedicAppTab = () => {
         try {
           const token = localStorage.getItem("token");
           const response = await axios.get(
-            // "http://localhost:8080/v1/appointment/active",
-            "https://backend-c1pz.onrender.com/v1/appointment/active",
+            `${baseUrl}/appointment/active`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -47,7 +47,6 @@ const ActiveMedicAppTab = () => {
               (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
             );
             setAppointments(sortedAppointments);
-            // setAppointments(response.data.data);
           } else {
             setLoading(false);
             console.error(

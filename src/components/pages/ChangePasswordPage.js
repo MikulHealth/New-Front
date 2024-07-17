@@ -22,7 +22,7 @@ import {
 import { HiEye, HiEyeOff } from "react-icons/hi";
 import SettingsSideBar from "../authLayouts/SettingsSideBar";
 import MobileFooter from "../authLayouts/MobileFooter";
-
+import { baseUrl } from "../../apiCalls/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -131,8 +131,7 @@ const ChangePasswordPage = () => {
 
     try {
       const response = await fetch(
-        // "http://localhost:8080/v1/angel/change-password",
-        "https://backend-c1pz.onrender.com/v1/angel/change-password",
+        `${baseUrl}/angel/change-password`,
         {
           method: "POST",
           headers: {
@@ -163,10 +162,6 @@ const ChangePasswordPage = () => {
       toast.error("Network error");
     }
 
-    // Reset the form fields after saving changes
-    // setOldPassword("");
-    // setNewPassword("");
-    // setConfirmPassword("");
   };
 
   const settingsContainerStyle = {

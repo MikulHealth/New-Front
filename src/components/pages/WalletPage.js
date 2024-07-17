@@ -11,6 +11,7 @@ import CreditTransactionTabs from "../../components/authLayouts/CreditTransactio
 import SearchTransactionModal from "../sections/SearchTransationByDate";
 import WalletModal from "../sections/CreateWalletModal";
 import WalletBox from "../sections/WalletBox";
+import { baseUrl } from "../../apiCalls/config";
 import {
   ChakraProvider,
   VStack,
@@ -280,13 +281,7 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
 
     try {
       const token = localStorage.getItem("token");
-
-      // const apiUrl = `http://localhost:8080/v1/api/wallets/deposit?customerId=${encodeURIComponent(
-      //   customerId
-      // )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
-      //   method
-      // )}`;
-      const apiUrl = `https://backend-c1pz.onrender.com/v1/api/wallets/deposit?customerId=${encodeURIComponent(
+      const apiUrl = `${baseUrl}/api/wallets/deposit?customerId=${encodeURIComponent(
         customerId
       )}&amount=${encodeURIComponent(amount)}&method=${encodeURIComponent(
         method

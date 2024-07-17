@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   Text,
@@ -38,8 +39,7 @@ const PendingMedicAppTab = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          // "http://localhost:8080/v1/appointment/pending",
-          "https://backend-c1pz.onrender.com/v1/appointment/pending",
+          `${baseUrl}/appointment/pending`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -53,7 +53,6 @@ const PendingMedicAppTab = () => {
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
           setAppointments(sortedAppointments);
-          // setAppointments(response.data.data);
         } else {
           setLoading(false);
           console.error("Failed to fetch appointments:", response.data.message);
@@ -87,8 +86,7 @@ const PendingMedicAppTab = () => {
         const token = localStorage.getItem("token");
   
         const response = await axios.post(
-          // `http://localhost:8080/v1/appointment/cancel-request/${requestId}`,
-          `https://backend-c1pz.onrender.com/v1/appointment/cancel-request/${requestId}`,
+          `${baseUrl}/appointment/cancel-request/${requestId}`,
           {},
           {
             headers: {

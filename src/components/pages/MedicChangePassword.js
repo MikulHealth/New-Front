@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { WarningIcon } from "@chakra-ui/icons";
+import { baseUrl } from "../../apiCalls/config";
 import {
   ChakraProvider,
   VStack,
@@ -130,8 +131,7 @@ const MedicChangePasswordPage = () => {
 
     try {
       const response = await fetch(
-        // "http://localhost:8080/v1/angel/change-password",
-        "https://backend-c1pz.onrender.com/v1/angel/change-password",
+        `${baseUrl}/angel/change-password`,
         {
           method: "POST",
           headers: {
@@ -173,7 +173,7 @@ const MedicChangePasswordPage = () => {
   };
 
   const handleback = () => {
-    navigate("//medic-settings");
+    navigate("/medic-settings");
   };
 
   return (

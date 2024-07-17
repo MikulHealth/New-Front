@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
   ChakraProvider,
@@ -202,7 +203,7 @@ const LandingPage = () => {
     try {
       const updatedFormData = { ...formData, phoneNumber: validPhoneNumber };
       const response = await axios.post(
-        "https://backend-c1pz.onrender.com/v1/angel/registerMedicUser",
+     `${baseUrl}/angel/registerMedicUser`,
         updatedFormData,
         { headers: { "Content-Type": "application/json" } }
       );

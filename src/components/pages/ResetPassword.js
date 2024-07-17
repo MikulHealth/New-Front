@@ -20,6 +20,7 @@ import "aos/dist/aos.css";
 import logo from "../../assets/Logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../../apiCalls/config";
 
 const customTheme = extendTheme({
   components: {
@@ -64,8 +65,7 @@ const LandingPage = () => {
 
     try {
       const response = await axios.post(
-        // "http://localhost:8080/v1/angel/resetPassword",
-          "https://backend-c1pz.onrender.com/v1/angel/resetPassword",
+          `${baseUrl}/angel/resetPassword`,
         {
           newPassword: password,
           token: token  
