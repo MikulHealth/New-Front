@@ -4,6 +4,7 @@ import { CopyIcon, CheckIcon } from "@chakra-ui/icons";
 const WalletBox = ({
   user,
   accountNumber,
+  accountName,
   hasCopied,
   onCopy,
   handleOpenFundWalletModal,
@@ -105,7 +106,12 @@ const WalletBox = ({
 
       <Flex w={{ base: "90vw", md: "80vw" }} position="relative" zIndex={2}>
         <Box ml={{ base: "20px", md: "40px" }} pt={{ base: "px", md: "8px" }}>
-          <Text fontSize="16px" fontFamily="body" color="white" marginTop="20px">
+          <Text
+            fontSize="16px"
+            fontFamily="body"
+            color="white"
+            marginTop="20px"
+          >
             Mikul Health Wallet
           </Text>
           <Flex>
@@ -134,7 +140,7 @@ const WalletBox = ({
             }
             bg="white"
           >
-            {walletCreated ? "Fund wallet" : "Create wallet"}
+            {walletCreated ? "Fund Wallet" : "Create Wallet"}
           </Button>
         </VStack>
       </Flex>
@@ -144,34 +150,55 @@ const WalletBox = ({
         position="relative"
         zIndex={2}
       >
-        <Box fontWeight="bold" marginBottom={{ base: "50px", md: "50px" }} color="white">
+        <Box
+          fontWeight="bold"
+          marginBottom={{ base: "50px", md: "50px" }}
+          color="white"
+        >
           <Text textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
             Wallet ID:
           </Text>
           <Flex>
-            <Text textAlign="left" fontSize={{ base: "10px", md: "16px" }}>
-              {walletCreated ? "Wema Bank" : ""}
-            </Text>
-            <Text
-              ml="10px"
-              textAlign="left"
-              fontSize={{ base: "10px", md: "16px" }}
-            >
-              {walletCreated ? accountNumber : ""}
-            </Text>
-            {walletCreated && (
-              <IconButton
-                icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-                onClick={onCopy}
-                mt="-5px"
-                size="sm"
-                aria-label="Copy account number"
-                color="white"
-                bg={hasCopied ? "#A210C6" : "#A210C6"}
-                _hover={{ bg: "transparent" }}
-              />
-            )}
-          </Flex>
+              <Text
+                textAlign="left"
+                fontSize={{ base: "10px", md: "16px" }}
+                fontStyle={
+                  !walletCreated || !accountName || !accountNumber
+                    ? "italic"
+                    : "normal"
+                }
+              >
+                {walletCreated && accountName && accountNumber
+                  ? accountName
+                  : "Processing, please wait..."}
+              </Text>
+              <Text
+                ml="10px"
+                textAlign="left"
+                fontSize={{ base: "10px", md: "16px" }}
+                fontStyle={
+                  !walletCreated || !accountName || !accountNumber
+                    ? "italic"
+                    : "normal"
+                }
+              >
+                {walletCreated && accountName && accountNumber
+                  ? accountNumber
+                  : ""}
+              </Text>
+              {walletCreated && accountName && accountNumber && (
+                <IconButton
+                  icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                  onClick={onCopy}
+                  mt="-5px"
+                  size="sm"
+                  aria-label="Copy account number"
+                  color="white"
+                  bg={hasCopied ? "#A210C6" : "#A210C6"}
+                  _hover={{ bg: "transparent" }}
+                />
+              )}
+            </Flex>
         </Box>
         {walletCreated && (
           <Flex fontWeight="bold" marginLeft={{ base: "50px", md: "400px" }}>

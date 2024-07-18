@@ -299,7 +299,7 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
         toast.success("Wallet funded successfully");
         setAmount("");
         setTimeout(() => {
-          navigate("client-dashboard");
+          navigate("/client-dashboard");
         }, 5000);
       } else {
         setLoading(false);
@@ -370,10 +370,11 @@ const WalletPage = () => {
   const [showBankTransferModal, setShowBankTransferModal] = useState(false);
   const [showOnlinePaymentModal, setShowOnlinePaymentModal] = useState(false);
   const [showWalletModal, setShowWalletModal] = useState(false);
-  const accountNumber = "0124536789";
-  const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
+  const walletAccountNumber = user?.walletAccountNumber;
+  const { hasCopied, onCopy } = useClipboard(walletAccountNumber);
+  const walletBankName = user?.walletBankName;
   const settingsContainerStyle = {
     animation: "slideInUp 0.9s ease-in-out",
   };
@@ -478,7 +479,8 @@ const WalletPage = () => {
             </Flex>
             <WalletBox
               user={user}
-              accountNumber={accountNumber}
+              accountNumber={walletAccountNumber}
+              accountName={walletBankName}
               hasCopied={hasCopied}
               onCopy={onCopy}
               handleOpenFundWalletModal={handleOpenFundWalletModal}

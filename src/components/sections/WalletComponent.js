@@ -4,7 +4,13 @@ import { useState } from "react";
 import WalletModal from "../sections/CreateWalletModal";
 import { useNavigate } from "react-router-dom";
 
-const WalletComponent = ({ user, accountNumber, hasCopied, onCopy }) => {
+const WalletComponent = ({
+  user,
+  accountNumber,
+  hasCopied,
+  onCopy,
+  walletBankName,
+}) => {
   const { walletCreated, walletBalance } = user;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -158,7 +164,7 @@ const WalletComponent = ({ user, accountNumber, hasCopied, onCopy }) => {
             onClick={handleButtonClick}
             bg="white"
           >
-            {walletCreated ? "Fund wallet" : "Create wallet"}
+            {walletCreated ? "Fund Wallet" : "Create Wallet"}
           </Button>
         </VStack>
       </Flex>
@@ -173,7 +179,7 @@ const WalletComponent = ({ user, accountNumber, hasCopied, onCopy }) => {
         {walletCreated && (
           <Box
             mt={{ base: "0px", md: "85px" }}
-            ml={{ md: "-265px" }}
+            ml={{ base: "25px", md: "-255px" }}
           >
             <Text fontWeight="bold" textAlign="left">
               Wallet ID:
@@ -181,28 +187,43 @@ const WalletComponent = ({ user, accountNumber, hasCopied, onCopy }) => {
             <Flex>
               <Text
                 textAlign="left"
-                fontFamily="body"
-                fontSize={{ base: "12px", md: "16px" }}
+                fontSize={{ base: "10px", md: "16px" }}
+                fontStyle={
+                  !walletCreated || !walletBankName || !accountNumber
+                    ? "italic"
+                    : "normal"
+                }
               >
-                Wema Bank
+                {walletCreated && walletBankName && accountNumber
+                  ? walletBankName
+                  : "Processing, please wait..."}
               </Text>
               <Text
                 ml="10px"
                 textAlign="left"
-                fontSize={{ base: "12px", md: "16px" }}
+                fontSize={{ base: "10px", md: "16px" }}
+                fontStyle={
+                  !walletCreated || !walletBankName || !accountNumber
+                    ? "italic"
+                    : "normal"
+                }
               >
-                {accountNumber}
+                {walletCreated && walletBankName && accountNumber
+                  ? accountNumber
+                  : ""}
               </Text>
-              <IconButton
-                icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-                onClick={onCopy}
-                mt="-5px"
-                size="sm"
-                aria-label="Copy account number"
-                color="white"
-                bg={hasCopied ? "#A210C6" : "#A210C6"}
-                _hover={{ bg: "transparent" }}
-              />
+              {walletCreated && walletBankName && accountNumber && (
+                <IconButton
+                  icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                  onClick={onCopy}
+                  mt="-5px"
+                  size="sm"
+                  aria-label="Copy account number"
+                  color="white"
+                  bg={hasCopied ? "#A210C6" : "#A210C6"}
+                  _hover={{ bg: "transparent" }}
+                />
+              )}
             </Flex>
           </Box>
         )}

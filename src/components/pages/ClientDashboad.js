@@ -56,13 +56,16 @@ const ClientDash = () => {
   const [pendingAppointment, setPendingAppointment] = useState(null);
   const [matchedAppointments, setMatchedAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { hasCopied, onCopy } = useClipboard("0124536789");
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userReducer);
   const noPendingAppointments = user?.numberOfPendingAppointments;
   const activeAppointments = user?.numberOfActiveAppointments;
   const completedAppointments = user?.numberOfCompletedAppointments;
+  const walletAccountNumber = user?.walletAccountNumber;
+  const { hasCopied, onCopy } = useClipboard(walletAccountNumber);
+  const walletBankName = user?.walletBankName;
 
   useEffect(() => {
     AOS.init();
@@ -204,10 +207,11 @@ const ClientDash = () => {
             <Box>
               <WalletComponent
                 user={user}
-                accountNumber="0124536789"
+                accountNumber={walletAccountNumber}
                 handleOpenWalletModal={handleOpenWalletModal}
                 hasCopied={hasCopied}
                 onCopy={onCopy}
+                walletBankName={walletBankName}
               />
               <DashboardButtons
                 handleOpenAppointmentModal={handleOpenAppointmentModal}
