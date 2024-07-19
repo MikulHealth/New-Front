@@ -23,11 +23,13 @@ import { baseUrl } from "../../apiCalls/config";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const [bvn, setBvn] = useState("");
+  const [nin, setNin] = useState(""); // Add state for NIN
   const [bankList, setBankList] = useState([]);
   const [selectedBank, setSelectedBank] = useState("");
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [bvnWarning, setBvnWarning] = useState("");
+  const [ninWarning, setNinWarning] = useState(""); // Add warning for NIN
   const [accountNumberWarning, setAccountNumberWarning] = useState("");
   const [isFetching, setIsFetching] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -128,6 +130,18 @@ const WalletModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleNinChange = (e) => { // Add handler for NIN
+    const value = e.target.value;
+    if (/^[0-9]{0,11}$/.test(value)) {
+      setNin(value);
+      if (value.length !== 11) {
+        setNinWarning("NIN must be exactly 11 digits");
+      } else {
+        setNinWarning("");
+      }
+    }
+  };
+
   const handleAccountNumberChange = (e) => {
     const value = e.target.value;
     if (/^[0-9]{0,10}$/.test(value)) {
@@ -146,6 +160,16 @@ const WalletModal = ({ isOpen, onClose }) => {
       toast({
         title: "Error",
         description: "BVN must be exactly 11 digits",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    if (nin.length !== 11) {
+      toast({
+        title: "Error",
+        description: "NIN must be exactly 11 digits",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -173,6 +197,7 @@ const WalletModal = ({ isOpen, onClose }) => {
       accountNumber,
       accountName,
       bvn,
+      nin, // Add NIN to payload
       bankCode: selectedBank,
     };
 
@@ -207,6 +232,7 @@ const WalletModal = ({ isOpen, onClose }) => {
           status: "success",
           duration: 5000,
           isClosable: true,
+          position: "top-right",
         });
         onClose();
         setTimeout(() => {
@@ -224,6 +250,7 @@ const WalletModal = ({ isOpen, onClose }) => {
         status: "error",
         duration: 5000,
         isClosable: true,
+        position: "top-right",
       });
     } finally {
       setIsLoading(false);
@@ -241,8 +268,7 @@ const WalletModal = ({ isOpen, onClose }) => {
         <ModalCloseButton />
         <ModalBody>
           <Text fontSize="sm" color="gray.500" mb={4}>
-            We need your BVN to create a virtual wallet for secure and seamless
-            transactions.
+            We need your BVN and NIN to create a virtual wallet for secure and seamless transactions.
           </Text>
           <FormControl id="bvn" isRequired>
             <FormLabel>BVN</FormLabel>
@@ -255,6 +281,20 @@ const WalletModal = ({ isOpen, onClose }) => {
             {bvnWarning && (
               <Text fontSize="sm" color="red.500" fontStyle="italic">
                 {bvnWarning}
+              </Text>
+            )}
+          </FormControl>
+          <FormControl id="nin" isRequired mt={4}> {/* Add NIN input field */}
+            <FormLabel>NIN</FormLabel>
+            <Input
+              type="text"
+              value={nin}
+              onChange={handleNinChange}
+              title="NIN must be 11 digits"
+            />
+            {ninWarning && (
+              <Text fontSize="sm" color="red.500" fontStyle="italic">
+                {ninWarning}
               </Text>
             )}
           </FormControl>

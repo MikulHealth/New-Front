@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux";
 import React, { useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
@@ -13,13 +13,15 @@ import {
   useToast,
   Spinner,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Whitelogo.svg";
 import "react-toastify/dist/ReactToastify.css";
+import TransactionPinModal from "./TransactionPinModal";
 
 const WalletPaymentPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [pinModalOpen, setPinModalOpen] = useState(false);
+  const [pinVerified, setPinVerified] = useState(false);
   const { user } = useSelector((state) => state.userReducer);
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
@@ -31,6 +33,11 @@ const WalletPaymentPage = () => {
   };
 
   const handleWalletPayment = async () => {
+    if (!pinVerified) {
+      setPinModalOpen(true);
+      return;
+    }
+
     setLoading(true);
 
     const customerId = user?.userId;
@@ -67,11 +74,11 @@ const WalletPaymentPage = () => {
       if (response.data.success) {
         setLoading(false);
         toast({
-          // title: "Success",
           description: "Payment successful",
           status: "success",
           duration: 5000,
           isClosable: true,
+          position: "top-right",
         });
 
         setTimeout(() => {
@@ -79,9 +86,7 @@ const WalletPaymentPage = () => {
         }, 3000);
       } else {
         setLoading(false);
-        const errorMessage = response.data
-          ? response.data.message
-          : "Unknown error";
+        const errorMessage = response.data.message || "Unknown error";
         toast({
           title: "Error",
           description: errorMessage,
@@ -98,12 +103,75 @@ const WalletPaymentPage = () => {
         status: "error",
         duration: 5000,
         isClosable: true,
+        position: "top-right",
       });
     }
   };
 
   const handleCancel = () => {
     navigate("/client-dashboard");
+  };
+
+  const handlePinSubmit = async (pin) => {
+    try {
+      if (user?.transactionPinCreated) {
+        const response = await axios.post(
+          `${baseUrl}/api/wallets/transaction-pin/match`,
+          {
+            userId: user?.userId,
+            pin,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setPinVerified(true);
+          setPinModalOpen(false);
+          setTimeout(() => {
+            setPinModalOpen(false);
+          }, 2000);
+          handleWalletPayment();
+        } else {
+          throw new Error("Incorrect transaction pin");
+        }
+      } else {
+        const response = await axios.post(
+          `${baseUrl}/api/wallets/transaction-pin/create`,
+          {
+            userId: user?.userId,
+            pin,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setPinVerified(true);
+          setTimeout(() => {
+            setPinModalOpen(false);
+          }, 2000);
+          handleWalletPayment();
+        } else {
+          throw new Error("Incorrect transaction pin");
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
   };
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -165,6 +233,12 @@ const WalletPaymentPage = () => {
           </Flex>
         </Box>
       </Box>
+
+      <TransactionPinModal
+        isOpen={pinModalOpen}
+        onClose={() => setPinModalOpen(false)}
+        handleSubmit={handlePinSubmit}
+      />
     </Box>
   );
 };

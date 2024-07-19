@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import LeftSideBar from "../authLayouts/MedicSideBar";
 import { useSelector } from "react-redux";
+import TransactionPinModal from "../sections/TransactionPinModal";
 import {
   SearchIcon,
   CopyIcon,
@@ -444,69 +445,161 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
 
 const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
   const [inputAmount, setInputAmount] = useState("");
+  const [pinModalOpen, setPinModalOpen] = useState(false);
+  const [pinVerified, setPinVerified] = useState(false);
+  const { user } = useSelector((state) => state.userReducer);
+  const toast = useToast();
 
   const handleWithdrawClick = () => {
-    setAmount(inputAmount);
-    onOpenConfirmation();
+    if (!pinVerified) {
+      setPinModalOpen(true);
+    } else {
+      setAmount(inputAmount);
+      onOpenConfirmation();
+    }
+  };
+
+  const handlePinSubmit = async (pin) => {
+    const userId = user?.userId;
+
+    if (user?.transactionPinCreated) {
+      try {
+        const response = await axios.post(
+          `${baseUrl}/api/wallets/transaction-pin/match`,
+          {
+            userId,
+            pin,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setPinVerified(true);
+          setTimeout(() => {
+            setPinModalOpen(false);
+          }, 2000);
+          setAmount(inputAmount);
+          onOpenConfirmation();
+        } else {
+          toast({
+            title: "Error",
+            description: "Incorrect transaction pin",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "top-right",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Error verifying transaction pin",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+      }
+    } else {
+      try {
+        const response = await axios.post(
+          `${baseUrl}/api/wallets/transaction-pin/create`,
+          {
+            userId,
+            pin,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        if (response.data.success) {
+          setPinVerified(true);
+          setTimeout(() => {
+            setPinModalOpen(false);
+          }, 2000);
+          setAmount(inputAmount);
+          onOpenConfirmation();
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to create transaction pin",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Error creating transaction pin",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        size={{ base: "sm", md: "md" }}
-      />
-
-      <ModalOverlay />
-      <ModalContent
-        justifyContent="center"
-        alignItems="center"
-        textAlign="center"
-      >
-        <ModalHeader textAlign="left" color="#A210C6" fontFamily="heading">
-          Choose Amount
-        </ModalHeader>
-        <ModalCloseButton />
-        <ModalBody
-          flexDirection="column"
-          justifyContent="left"
-          alignItems="left"
-          p={{ base: 2, md: 4 }}
-        >
-          <FormControl mt="20px" fontFamily="body">
-            <FormLabel fontFamily="body" textAlign="left">
-              Input amount:
-            </FormLabel>
-            <Input
-              type="number"
-              value={inputAmount}
-              border="1px solid black"
-              placeholder="₦5000"
-              onChange={(e) => setInputAmount(e.target.value)}
+    <>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          size={{ base: "sm", md: "md" }}
+        />
+        <ModalOverlay />
+        <ModalContent justifyContent="center" alignItems="center" textAlign="center">
+          <ModalHeader textAlign="left" color="#A210C6" fontFamily="heading">
+            Choose Amount
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody flexDirection="column" justifyContent="left" alignItems="left" p={{ base: 2, md: 4 }}>
+            <FormControl mt="20px" fontFamily="body">
+              <FormLabel fontFamily="body" textAlign="left">
+                Input amount:
+              </FormLabel>
+              <Input
+                type="number"
+                value={inputAmount}
+                border="1px solid black"
+                placeholder="₦5000"
+                onChange={(e) => setInputAmount(e.target.value)}
+                width={{ base: "full", md: "auto" }}
+              />
+            </FormControl>
+            <Button
+              mt="10px"
+              mb="20px"
+              bg="#A210C6"
+              color="white"
+              onClick={handleWithdrawClick}
               width={{ base: "full", md: "auto" }}
-            />
-          </FormControl>
-          <Button
-            mt="10px"
-            mb="20px"
-            bg="#A210C6"
-            color="white"
-            onClick={handleWithdrawClick}
-            width={{ base: "full", md: "auto" }}
-          >
-            Send
-          </Button>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+            >
+              Send
+            </Button>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      <TransactionPinModal
+        isOpen={pinModalOpen}
+        onClose={() => setPinModalOpen(false)}
+        handleSubmit={handlePinSubmit}
+      />
+    </>
   );
 };
 
