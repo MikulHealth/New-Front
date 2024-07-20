@@ -31,12 +31,9 @@ export default function NavigationBar() {
       case "/contact":
         setPageTitle("Contact");
         break;
-      // case "/services":
-      //   setPageTitle("Services");
-      //   break;
-        case "/login":
-          setPageTitle("Login");
-          break;
+      case "/login":
+        setPageTitle("Login");
+        break;
       default:
         setPageTitle("Home");
         break;
@@ -55,7 +52,7 @@ export default function NavigationBar() {
     <header style={{ position: "sticky", top: 0, zIndex: 1000 }}>
       <Box
         w="100%"
-        bg="#A210C6"
+        bg="linear-gradient(80deg, #A210C6, #E552FF)"
         p={3}
         color="white"
         borderBottom="1px solid white"
@@ -63,9 +60,7 @@ export default function NavigationBar() {
         <HStack spacing={6} alignItems="center">
           <Box w="5px" />
           <a href="/">
-            <Image 
-            src={logo}
-             alt="Logo" w="100px" h="30px" />
+            <Image src={logo} alt="Logo" w="100px" h="30px" />
           </a>
 
           <IconButton
@@ -75,10 +70,10 @@ export default function NavigationBar() {
             display={{ base: "block", md: "none" }}
             onClick={onToggle}
             aria-label="Toggle Navigation"
-            ml="auto" 
+            ml="auto"
           />
           <HStack
-          fontSize={{ base: "lg", md: "xl" }}
+            fontSize={{ base: "lg", md: "xl" }}
             marginRight={{ base: "0px", md: "50px" }}
             spacing={6}
             display={{ base: "none", md: "flex" }}
@@ -91,21 +86,22 @@ export default function NavigationBar() {
             <NavLink to="/about" pageTitle={pageTitle}>
               About Us
             </NavLink>
-            {/* <NavLink to="/servicesSection" pageTitle={pageTitle}>
-              Services
-            </NavLink> */}
             <NavLink to="/contact" pageTitle={pageTitle}>
               Contact Us
             </NavLink>
-            <NavLink to="/Login" pageTitle={pageTitle}>
+            <NavLink to="/login" pageTitle={pageTitle}>
               Login
             </NavLink>
           </HStack>
 
           <Button
-          fontSize={{ base: "lg", md: "xl" }}
+            fontSize={{ base: "lg", md: "xl" }}
+            // bg="white"
+            // color="#A210C6"
             bg="white"
             color="#A210C6"
+            border="1px solid white"
+       
             onClick={handleOpenModal}
             display={{ base: "none", md: "block" }}
           >
@@ -114,9 +110,14 @@ export default function NavigationBar() {
         </HStack>
       </Box>
 
-      {/* Responsive Collapse Menu */}
       <Collapse in={isOpen} animateOpacity>
-        <Box fontSize={{ base: "lg", md: "xl" }} p={4} bg="#A210C6" color="white" textAlign="center">
+        <Box
+          fontSize={{ base: "lg", md: "xl" }}
+          p={4}
+          bg="linear-gradient(90deg, #A210C6, #FF0080)"
+          color="white"
+          textAlign="center"
+        >
           <VStack spacing={4}>
             <NavLink to="/" pageTitle={pageTitle}>
               Home
@@ -124,16 +125,20 @@ export default function NavigationBar() {
             <NavLink to="/about" pageTitle={pageTitle}>
               About Us
             </NavLink>
-            {/* <NavLink to="/servicesSection" pageTitle={pageTitle}>
-              Services
-            </NavLink> */}
             <NavLink to="/contact" pageTitle={pageTitle}>
               Contact Us
             </NavLink>
             <NavLink to="/login" pageTitle={pageTitle}>
               Login
             </NavLink>
-            <Button fontSize={{ base: "lg", md: "xl" }} bg="white" color="#A210C6" onClick={handleOpenModal}>
+            <Button
+              fontSize={{ base: "lg", md: "xl" }}
+              bg="white"
+              // color="#A210C6"
+              color="linear-gradient(90deg, #A210C6, #FF0080)"
+       
+              onClick={handleOpenModal}
+            >
               Get started
             </Button>
           </VStack>
@@ -145,7 +150,6 @@ export default function NavigationBar() {
   );
 }
 
-// NavLink Component
 const NavLink = ({ to, children, pageTitle }) => (
   <Link
     to={to}

@@ -168,7 +168,7 @@ const MedicDashboard = () => {
               h={{ base: "140px", md: "276px" }}
               mt={{ base: "4px", md: "0" }}
               mb={{ base: "5px", md: "30px" }}
-              bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               borderRadius="10px"
             >
               <Flex>

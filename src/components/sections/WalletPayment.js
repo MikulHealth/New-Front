@@ -26,6 +26,8 @@ const WalletPaymentPage = () => {
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
   const toast = useToast();
+  const openPinModal  = () => setPinModalOpen(true);
+  const closePinModal  = () => setPinModalOpen(false);
 
   const formattedCost = (cost) => {
     const num = Number(cost);
@@ -34,7 +36,7 @@ const WalletPaymentPage = () => {
 
   const handleWalletPayment = async () => {
     if (!pinVerified) {
-      setPinModalOpen(true);
+      openPinModal();
       return;
     }
 
@@ -130,10 +132,7 @@ const WalletPaymentPage = () => {
 
         if (response.data.success) {
           setPinVerified(true);
-          setPinModalOpen(false);
-          setTimeout(() => {
-            setPinModalOpen(false);
-          }, 2000);
+          closePinModal();
           handleWalletPayment();
         } else {
           throw new Error("Incorrect transaction pin");
@@ -154,9 +153,7 @@ const WalletPaymentPage = () => {
 
         if (response.data.success) {
           setPinVerified(true);
-          setTimeout(() => {
-            setPinModalOpen(false);
-          }, 2000);
+          closePinModal();
           handleWalletPayment();
         } else {
           throw new Error("Incorrect transaction pin");

@@ -62,7 +62,6 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       if (localStorage.getItem("token")) {
         try {
           const response = await GetCurrentUser();
-
           if (response.success) {
             dispatch(SetUser(response.data));
           } else {

@@ -9,7 +9,7 @@ const AppointmentsSidebar = ({
 }) => {
   return (
     <Box display={{ base: "none", md: "block" }} marginLeft="30px">
-      <Box color="white" borderRadius="10px" h="40vh" w="20vw" bg="#A210C6">
+      <Box color="white" borderRadius="10px" h="40vh" w="20vw" bg="linear-gradient(80deg, #A210C6, #E552FF)">
         <Box textAlign="center">
           <Text
             fontSize={{ base: "16", md: "20px" }}

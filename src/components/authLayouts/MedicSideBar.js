@@ -33,7 +33,7 @@ const MedicSideBar = () => {
           align="center"
           height="50px"
           width="170px"
-          background={isActive ? "#A210C6" : "transparent"}
+          background={isActive ? "linear-gradient(80deg, #A210C6, #E552FF)" : "transparent"}
           color={isActive ? "white" : "inherit"}
           paddingLeft="10px"
         >

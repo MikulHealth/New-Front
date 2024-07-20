@@ -200,7 +200,8 @@ const LandingPage = () => {
                 loadingText="Loading..."
                 onClick={handleLogin}
                 width="full"
-                bg="#A210C6"
+                // bg="#A210C6"
+                bg="linear-gradient(80deg, #A210C6, #E552FF)"
                 mt="20px"
                 color="white"
               >

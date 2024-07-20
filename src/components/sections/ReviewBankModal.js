@@ -25,33 +25,34 @@ const ReviewBankModal = ({ isOpen, onClose, bankDetails, onSave }) => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.post(`${baseUrl}/api/wallets/add-bank`, bankDetails);
-    if (response.data.success) {
+      const response = await axios.post(
+        `${baseUrl}/api/wallets/add-bank`,
+        bankDetails
+      );
+      if (response.data.success) {
         setIsLoading(false);
-         toast({
-        title: "Success",
-        description: "Bank details saved successfully",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+        toast({
+          title: "Success",
+          description: "Bank details saved successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
         onClose();
-      onSave(response.data);
+        onSave(response.data);
       } else {
         setIsLoading(false);
         console.error("Bank details failed to save");
         const errorMessage = response.data
           ? response.data.message
           : "Unknown failure";
-          toast({
-           
-            description: errorMessage,
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-          });
+        toast({
+          description: errorMessage,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       }
-     
     } catch (error) {
       setIsLoading(false);
       toast({
@@ -77,7 +78,7 @@ const ReviewBankModal = ({ isOpen, onClose, bankDetails, onSave }) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader fontSize={{base: "14px", md: "16px"}}>
+        <ModalHeader fontSize={{ base: "14px", md: "16px" }}>
           Please review and confirm your bank information
         </ModalHeader>
         <ModalBody>
@@ -110,8 +111,17 @@ const ReviewBankModal = ({ isOpen, onClose, bankDetails, onSave }) => {
           <Divider my={4} borderColor="gray.500" />
         </ModalBody>
         <ModalFooter>
-          <Button bg="#A210C6" color="white" onClick={handleSubmit} isLoading={isLoading}>
+          <Button
+            bg="#A210C6"
+            color="white"
+            onClick={handleSubmit}
+            isLoading={isLoading}
+          >
             {isLoading ? <Spinner size="sm" /> : "Submit"}
+          </Button>
+
+          <Button ml="15px" bg="gray.500" color="white" onClick={onClose}>
+            Back
           </Button>
         </ModalFooter>
       </ModalContent>

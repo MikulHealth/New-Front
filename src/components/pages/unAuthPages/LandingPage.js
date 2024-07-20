@@ -173,7 +173,9 @@ const LandingPage = () => {
             <Button
               mt={{ base: "30px", md: "50px" }}
               mb={{ base: "30px", md: "50px" }}
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
+      
               color="white"
               borderRadius="100px"
               onClick={onOpen}

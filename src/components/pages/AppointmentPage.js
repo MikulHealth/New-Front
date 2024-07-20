@@ -143,7 +143,8 @@ const AppointmentPage = () => {
               </Flex>
             </Box>
             <Flex
-              bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
+              
               w={{ base: "90vw", md: "910px" }}
               h={{ base: "17vh", md: "200px" }}
               mt={{ base: "5px", md: "15px" }}

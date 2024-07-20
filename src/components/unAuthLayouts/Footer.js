@@ -14,8 +14,9 @@ const Footer = ({ onFaqsClick }) => {
 
   return (
     <Box
-      bg="#A210C6"
-      color="white"
+      // bg="#A210C6"
+      bg="linear-gradient(80deg, #A210C6, #E552FF)"
+       color="white"
       px={{ base: "4", md: "8" }}
       py={{ base: "6", md: "10" }}
       textAlign={{ base: "center", md: "center" }}

@@ -79,6 +79,11 @@ const HeadsUpModal = ({ isOpen, onClose, onBankTransfer }) => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
 
+  const openBankList = () => {
+    onClose();
+    onBankTransfer();
+  };
+
   return (
     <Modal
       theme={customTheme}
@@ -147,7 +152,7 @@ const HeadsUpModal = ({ isOpen, onClose, onBankTransfer }) => {
             bg="#A210C6"
             color="white"
             borderRadius="50px"
-            onClick={onBankTransfer}
+            onClick={openBankList}
           >
             Continue
           </Button>
@@ -173,7 +178,7 @@ const ChooseBankModal = ({
       const fetchBanks = async () => {
         try {
           const response = await axios.get(
-           `${baseUrl}/api/wallets/${user?.userId}/banks`
+            `${baseUrl}/api/wallets/${user?.userId}/banks`
           );
           const fetchedBanks = Array.isArray(response.data.data)
             ? response.data.data
@@ -197,12 +202,7 @@ const ChooseBankModal = ({
   };
 
   return (
-    <Modal
-      size={{ base: "sm", md: "md" }}
-      theme={customTheme}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
@@ -217,29 +217,31 @@ const ChooseBankModal = ({
               <Text mt="20px">No bank found.</Text>
             </Box>
           ) : (
-            banks.map((bank) => (
-              <Box key={bank.id}>
-                <Flex
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleBankClick(bank)}
-                  justifyContent="space-between"
-                >
-                  <Box p="5px">
-                    <Text>{bank.bankName}</Text>
-                    <Text>{bank.accountName}</Text>
-                  </Box>
-                  <ChevronRightIcon w="30px" h="45px" mt="10px" />
-                </Flex>
-                <Divider my={4} borderColor="gray.500" />
-              </Box>
-            ))
+            <Box maxH="300px" overflowY="auto">
+              {banks.map((bank) => (
+                <Box key={bank.id}>
+                  <Flex
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleBankClick(bank)}
+                    justifyContent="space-between"
+                  >
+                    <Box p="5px">
+                      <Text>{bank.bankName}</Text>
+                      <Text>{bank.accountName}</Text>
+                    </Box>
+                    <ChevronRightIcon w="30px" h="45px" mt="10px" />
+                  </Flex>
+                  <Divider my={4} borderColor="gray.500" />
+                </Box>
+              ))}
+            </Box>
           )}
         </ModalBody>
         <ModalFooter>
           <Button
-            mt="40px"
+            mt="10px"
             mb="10px"
             colorScheme="ghost"
             color="#A210C6"
@@ -307,7 +309,7 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
         setIsFetching(true);
         try {
           const response = await axios.post(
-          `${baseUrl}/payment/bankName`,
+            `${baseUrl}/payment/bankName`,
             {
               accountNumber,
               bankCode: selectedBank,
@@ -423,9 +425,6 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
           )}
         </ModalBody>
         <ModalFooter>
-          <Button variant="ghost" onClick={onClose}>
-            Cancel
-          </Button>
           {!hasError && accountName && (
             <Button
               bg="#A210C6"
@@ -437,6 +436,9 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
               Save
             </Button>
           )}
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -561,12 +563,21 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
           size={{ base: "sm", md: "md" }}
         />
         <ModalOverlay />
-        <ModalContent justifyContent="center" alignItems="center" textAlign="center">
+        <ModalContent
+          justifyContent="center"
+          alignItems="center"
+          textAlign="center"
+        >
           <ModalHeader textAlign="left" color="#A210C6" fontFamily="heading">
             Choose Amount
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody flexDirection="column" justifyContent="left" alignItems="left" p={{ base: 2, md: 4 }}>
+          <ModalBody
+            flexDirection="column"
+            justifyContent="left"
+            alignItems="left"
+            p={{ base: 2, md: 4 }}
+          >
             <FormControl mt="20px" fontFamily="body">
               <FormLabel fontFamily="body" textAlign="left">
                 Input amount:
@@ -736,6 +747,7 @@ const MedicWalletPage = () => {
   };
 
   const handleOpenAddBankModal = () => {
+    handleCloseBankTransferModal();
     setShowAddBankModal(true);
   };
 
@@ -787,7 +799,7 @@ const MedicWalletPage = () => {
         toast.success("Transfer successful");
         setTimeout(() => {
           navigate("/medic-dashboard");
-        }, 5000);
+        }, 3000);
       } else {
         setLoading(false);
         const errorMessage = response.data.message || "Unknown failure";
@@ -883,7 +895,7 @@ const MedicWalletPage = () => {
               mt={{ base: "10px", md: "0" }}
               mb={{ base: "10px", md: "30" }}
               paddingBottom={{ base: "20px", md: "" }}
-              bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               borderRadius="20px"
             >
               <Flex w={{ base: "90vw", md: "80vw" }}>

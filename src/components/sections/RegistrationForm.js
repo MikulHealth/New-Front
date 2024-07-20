@@ -250,7 +250,9 @@ const RegistrationForm = ({
           mt="6"
           type="submit"
           w="full"
-          bg="#A210C6"
+          // bg="#A210C6"
+          bg="linear-gradient(80deg, #A210C6, #E552FF)"
+      
           color="white"
           isLoading={loading}
           fontFamily="body"

@@ -33,8 +33,9 @@ export default function ServicesSection() {
     <div>
       <Box
         borderRadius="10px"
-        bg="#A210C6"
-        px={{ base: "20px", md: "40px" }}
+        // bg="#A210C6"
+        bg="linear-gradient(80deg, #A210C6, #E552FF)"
+       px={{ base: "20px", md: "40px" }}
         py={{ base: "40px", md: "60px" }}
         // mt={{md: "20px"}}
       >

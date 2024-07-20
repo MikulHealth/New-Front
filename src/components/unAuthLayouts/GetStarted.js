@@ -19,9 +19,11 @@ export default function GetStartedModal({ isOpen, onClose }) {
       <ModalOverlay />
       <ModalContent
         marginTop="100px"
-        border="5px solid white"
+        border="1px solid white"
         alignItems="center"
-        bg="#510863"
+        // bg="#510863"
+        bg="linear-gradient(80deg, #A210C6, #E552FF)"
+      
         borderRadius="25px 25px 25px 0px"
         width={modalWidth}
       >
