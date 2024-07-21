@@ -399,7 +399,7 @@ const BookBeneficiaryAppointmentModal = ({
                 <Box>
                   <Flex flexWrap="wrap">
                     <Box ml={{ md: "40px" }}>
-                      <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
                         Service Plan{" "}
                       </FormLabel>
                       <Select
@@ -442,7 +442,7 @@ const BookBeneficiaryAppointmentModal = ({
                     </Box>
 
                     <Box marginLeft="5px">
-                      <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
                         Shift{" "}
                       </FormLabel>
                       <Select
@@ -460,7 +460,7 @@ const BookBeneficiaryAppointmentModal = ({
                   </Flex>
                   <Flex flexWrap="wrap" ml={{ md: "40px" }}>
                     <Box w={{ base: "300px", md: "270px" }}>
-                      <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
                         Start Date
                       </FormLabel>
                       <Flex
@@ -484,7 +484,7 @@ const BookBeneficiaryAppointmentModal = ({
                       </Flex>
                     </Box>
                     <Box ml={{ md: "5px" }}>
-                      <FormLabel fontFamily="body" fontWeight="bold" marginTop="20px">
+                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
                         Current Location{" "}
                       </FormLabel>
                       <Flex>
@@ -502,7 +502,7 @@ const BookBeneficiaryAppointmentModal = ({
 
                   <Flex flexWrap="wrap" ml={{ md: "40px" }}>
                     <Box w={{ base: "300px", md: "270px" }} marginTop="20px">
-                      <FormLabel fontFamily="body" fontWeight="bold">
+                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold">
                         City/Town{" "}
                       </FormLabel>
                       <Select
@@ -522,7 +522,7 @@ const BookBeneficiaryAppointmentModal = ({
                       </Select>
                     </Box>
                     <Box ml={{ md: "5px" }} marginTop="20px">
-                      <FormLabel fontWeight="bold" fontFamily="body">
+                      <FormLabel color="#00000080" fontWeight="bold" fontFamily="body">
                         Preferred Medic Gender{" "}
                       </FormLabel>
                       <Select
@@ -541,7 +541,7 @@ const BookBeneficiaryAppointmentModal = ({
                   </Flex>
 
                   <Box ml={{ base: "0px", md: "40px" }} marginTop="20px">
-                    <FormLabel fontWeight="bold" fontFamily="body">
+                    <FormLabel color="#00000080" fontWeight="bold" fontFamily="body">
                       Preferred Language{" "}
                     </FormLabel>
                     <Select
@@ -562,10 +562,10 @@ const BookBeneficiaryAppointmentModal = ({
                   </Box>
 
                   <Box ml={{ base: "0px", md: "40px" }} marginTop="20px">
-                    <FormLabel fontWeight="bold" fontFamily="body">
+                    <FormLabel color="#00000080" fontWeight="bold" fontFamily="body">
                       Health History
                     </FormLabel>
-                    <FormLabel fontSize="14px" fontFamily="body">
+                    <FormLabel color="#00000080" fontSize="14px" fontFamily="body">
                       (Is there anything you'd like us to know?)
                     </FormLabel>
                     <Textarea

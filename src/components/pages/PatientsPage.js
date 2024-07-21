@@ -146,7 +146,10 @@ const PatientsPage = () => {
                       fontStyle="italic"
                     >
                       No patient seen yet, click{" "}
-                      <Link onClick={handleOpenAppointmentModal} color="#A210C6">
+                      <Link
+                        onClick={handleOpenAppointmentModal}
+                        color="#A210C6"
+                      >
                         "request appointment to begin"
                       </Link>{" "}
                       to begin.
@@ -172,6 +175,13 @@ const PatientsPage = () => {
                             w={{ base: "16px", md: "16px" }}
                             h={{ base: "16px", md: "16px" }}
                           />
+                          <Text
+                            ml={{ base: "-20px", md: "-170px" }}
+                            maxW={{ base: "50px", md: "150px" }}
+                          >
+                            {patient.customerAppointment.policyNumber ||
+                              "Not available"}
+                          </Text>
                           <Flex
                             maxW={{ base: "60px", md: "170px" }}
                             color="#212427B2"
@@ -234,7 +244,10 @@ const PatientsPage = () => {
         </VStack>
       </Flex>
       <PatientReportDrawer isOpen={isOpen} onClose={onClose} />
-      <RequestAppointmentModal isOpen={showAppointmentModal} onClose={handleCloseAppointmentModal} />
+      <RequestAppointmentModal
+        isOpen={showAppointmentModal}
+        onClose={handleCloseAppointmentModal}
+      />
     </ChakraProvider>
   );
 };

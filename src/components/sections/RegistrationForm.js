@@ -34,7 +34,7 @@ const RegistrationForm = ({
 }) => {
   return (
     <form onSubmit={handleSubmit}>
-      <Stack spacing={4} marginTop="20px">
+      <Stack color="#00000080" spacing={4} marginTop="20px">
         <FormControl
           fontSize={{ base: "16px", md: "20px" }}
           fontFamily="body"

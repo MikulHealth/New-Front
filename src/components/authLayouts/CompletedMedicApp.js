@@ -12,14 +12,11 @@ const CompletedMedicAppTab = () => {
       if (localStorage.getItem("token")) {
         try {
           const token = localStorage.getItem("token");
-          const response = await axios.get(
-            `${baseUrl}/appointment/completed`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const response = await axios.get(`${baseUrl}/appointment/completed`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
           if (response.data.success) {
             setLoading(false);
@@ -94,10 +91,15 @@ const CompletedMedicAppTab = () => {
                     fontWeight="bold"
                     fontSize={{ base: "10px", md: "16px" }}
                   >
-                    Appointment type:
+                    Service Plan:
                   </Text>
-                  <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
-                    {appointment.customerAppointment.medicSpecialization}
+                  <Text
+                    maxW={{ base: "60px", md: "120px" }}
+                    wordWrap="break-word"
+                    ml="1"
+                    fontSize={{ base: "10px", md: "16px" }}
+                  >
+                    {appointment.customerAppointment.servicePlan}
                   </Text>
                 </Flex>
 
@@ -122,7 +124,9 @@ const CompletedMedicAppTab = () => {
                   color="white"
                   fontSize={{ base: "10px", md: "12px" }}
                 >
-                  Policy No.
+                  Policy No. <br></br>
+                  {appointment.customerAppointment?.policyNumber ||
+                    "Not available"}
                 </Badge>
               </Box>
             </Flex>

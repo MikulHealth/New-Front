@@ -119,9 +119,10 @@ const ActiveMedicAppTab = () => {
                     fontWeight="bold"
                     fontSize={{ base: "10px", md: "16px" }}
                   >
-                    Appointment type:
+                    Service Plan:
                   </Text>
-                  <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                  <Text  maxW={{ base: "60px", md: "120px" }}
+                      wordWrap="break-word" ml="1" fontSize={{ base: "10px", md: "16px" }}>
                     {appointment.customerAppointment.servicePlan}
                   </Text>
                 </Flex>
@@ -147,7 +148,9 @@ const ActiveMedicAppTab = () => {
                   color="white"
                   fontSize={{ base: "10px", md: "12px" }}
                 >
-                  Policy No.
+                  Policy No. <br></br>
+                  {appointment.customerAppointment?.policyNumber ||
+                    "Not available"}
                 </Badge>
                 <Text
                   fontSize={{ base: "10px", md: "16px" }}
@@ -200,6 +203,15 @@ const ActiveMedicAppTab = () => {
                       }
                     </Text>
                   </Flex>
+                  <Flex>
+                    <Text fontWeight="bold" fontSize="md">
+                      Policy No.:
+                    </Text>
+                    <Text ml="5px" fontSize="md">
+                      {selectedAppointment.customerAppointment.policyNumber || "Not available"}
+                    </Text>
+                  </Flex>
+
                   <Flex>
                     <Text fontWeight="bold" fontSize="md">
                       Location:

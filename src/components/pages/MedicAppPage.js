@@ -215,7 +215,7 @@ const MedicAppPage = () => {
               className="appointment-tabs"
               overflow={{ base: "hidden", md: "hidden" }}
             >
-              <VStack ml={{ md: "-100px" }} w="full" {...swipeHandlers}>
+              <VStack ml={{ md: "-100px" }} w="90%" {...swipeHandlers}>
                 <Tabs
                   index={index}
                   onChange={setIndex}

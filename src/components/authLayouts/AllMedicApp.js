@@ -45,14 +45,11 @@ const AllMedicAppTab = () => {
     if (localStorage.getItem("token")) {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `${baseUrl}/appointment/all`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get(`${baseUrl}/appointment/all`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.data.success) {
           setLoading(false);
@@ -158,15 +155,13 @@ const AllMedicAppTab = () => {
         spacing={4}
         align="stretch"
       >
-        <Text>
-          You have no appointment yet. Would you like to request one?
-        </Text>
+        <Text>You have no appointment yet. Would you like to request one?</Text>
       </VStack>
     );
   }
 
   return (
-    <VStack  spacing={4} align="stretch">
+    <VStack spacing={4} align="stretch">
       {appointments.map((appointment, index) => {
         let borderColor = "gray.200";
         if (appointment.active) {
@@ -186,7 +181,6 @@ const AllMedicAppTab = () => {
             borderRadius="lg"
             justify="space-between"
             align="center"
-            
             border={`1px solid ${borderColor}`}
             w="full"
           >
@@ -283,7 +277,12 @@ const AllMedicAppTab = () => {
                         >
                           Service plan:
                         </Text>
-                        <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                        <Text
+                          ml="1"
+                          maxW={{ base: "60px", md: "120px" }}
+                          wordWrap="break-word"
+                          fontSize={{ base: "10px", md: "16px" }}
+                        >
                           {appointment.customerAppointment.servicePlan}
                         </Text>
                       </Flex>
@@ -312,7 +311,7 @@ const AllMedicAppTab = () => {
                     appointment.active
                       ? "#057B1FC6"
                       : appointment.completed
-                      ? "#A210C6"
+                      ? "linear-gradient(80deg, #A210C6, #E552FF)"
                       : "black"
                   }
                   p={2}
@@ -320,7 +319,9 @@ const AllMedicAppTab = () => {
                   color="white"
                   fontSize={{ base: "10px", md: "12px" }}
                 >
-                  Policy No.
+                  Policy No. <br></br>{" "}
+                  {appointment.customerAppointment?.policyNumber ||
+                    "Not available"}
                 </Badge>
                 <Text
                   fontSize={{ base: "10px", md: "16px" }}
@@ -390,7 +391,12 @@ const AllMedicAppTab = () => {
                       <Text fontWeight="bold" fontSize="md">
                         Plan:
                       </Text>
-                      <Text ml="5px" fontSize="md">
+                      <Text
+                        maxW={{ base: "60px", md: "120px" }}
+                        wordWrap="break-word"
+                        ml="5px"
+                        fontSize="md"
+                      >
                         {selectedAppointment.customerAppointment.servicePlan}
                       </Text>
                     </Flex>

@@ -139,6 +139,7 @@ const LandingPage = () => {
               fontSize={{ base: "30px", md: "48px" }}
               fontWeight="bold"
               fontFamily="body"
+              
             >
               <span style={{ color: "#A210C6" }}>Healthcare</span> that you{" "}
               <br></br>

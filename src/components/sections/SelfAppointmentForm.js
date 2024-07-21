@@ -212,20 +212,20 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
 
   const handleFormSubmit = async () => {
     setLoading(true);
-
+  
     try {
       const token = localStorage.getItem("token");
-
+  
       const apiUrl = `${baseUrl}/appointment/save`;
-
+  
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-
+  
       const formatDateWithDayAdjustment = (selectedDate) =>
         formatDateToUTC(new Date(selectedDate));
-
+  
       const userFieldsForBookForSelf = {
         recipientFirstname: user?.firstName,
         recipientLastname: user?.lastName,
@@ -234,7 +234,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         recipientDOB: user?.dob,
         recipientImage: user?.image,
       };
-
+  
       const formDataWithDates = {
         ...formFields,
         startDate: formatDateWithDayAdjustment(selectedStartDate),
@@ -245,10 +245,10 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         specialNeeds, // Include specialNeeds in the request
         ...userFieldsForBookForSelf,
       };
-
+  
       const requestBody = JSON.stringify(formDataWithDates);
       const response = await axios.post(apiUrl, requestBody, { headers });
-
+  
       if (response.data.success) {
         setLoading(false);
         setFormFields({
@@ -266,9 +266,9 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         setPaymentData({
           costOfService: response.data.data.costOfService,
           appointmentId: response.data.data.id,
-          beneficiary: `${response.data.data.recipientFirstname}``${response.data.data.recipientLastname}`,
+          beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`, // corrected line
         });
-
+  
         setTimeout(() => {
           setIsPaymentModalOpen(true);
         }, 4000);
@@ -283,7 +283,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       toast.error("Error booking appointment");
     }
   };
-
+  
   const calculateServiceCost = () => {
     const { servicePlan, shift } = formFields;
 
@@ -367,8 +367,12 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     flexWrap="wrap"
                     marginTop="20px"
                   >
-                    <Box w={{ base: "300px", md: "270px" }}>
-                      <FormLabel fontFamily="body" fontWeight="bold">
+                    <Box  color="#00000080" w={{ base: "300px", md: "270px" }}>
+                      <FormLabel
+                        color="#00000080"
+                        fontFamily="body"
+                        fontWeight="bold"
+                      >
                         Service Plan{" "}
                       </FormLabel>
                       <Select
@@ -377,6 +381,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                         placeholder="preferred service plan"
                         w={{ base: "300px", md: "270px" }}
                         fontSize={{ base: "14px", md: "16px" }}
+                        // style={{ border: "1px solid #B49C9C" }}
                         value={formFields.servicePlan}
                         onChange={handleInputChange}
                       >
@@ -409,7 +414,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                         </optgroup>
                       </Select>
                     </Box>
-                    <Box fontFamily="body" ml={{ md: "5px" }}>
+                    <Box color="#00000080" fontFamily="body" ml={{ md: "5px" }}>
                       <FormLabel fontWeight="bold">Shift </FormLabel>
                       <Select
                         isRequired
@@ -428,16 +433,18 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     </Box>
                   </Flex>
 
-                  <Flex flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
+                  <Flex  color="#00000080" flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
                     <Box w={{ base: "300px", md: "270px" }}>
                       <FormLabel
                         fontFamily="body"
                         fontWeight="bold"
                         marginTop="20px"
+                        color="#00000080"
                       >
                         Start Date
                       </FormLabel>
                       <Flex
+                       color="#00000080"
                         h="6.5vh"
                         paddingTop="5px"
                         paddingLeft="15px"
@@ -458,11 +465,18 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                           placeholderText="preferred date to start"
                           className="form-control"
                           minDate={new Date()}
+                          style={{
+                            color: "#00000080",
+                          }}
                         />
                       </Flex>
                     </Box>
-                    <Box ml={{ md: "5px" }} marginTop="20px">
-                      <FormLabel fontWeight="bold" fontFamily="body">
+                    <Box  color="#00000080" ml={{ md: "5px" }} marginTop="20px">
+                      <FormLabel
+                        color="#00000080"
+                        fontWeight="bold"
+                        fontFamily="body"
+                      >
                         Preferred Medic Gender{" "}
                       </FormLabel>
                       <Select
@@ -480,9 +494,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     </Box>
                   </Flex>
 
-                  <Flex flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
+                  <Flex  color="#00000080" flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
                     <Box w={{ base: "300px", md: "270px" }} marginTop="20px">
-                      <FormLabel fontFamily="body" fontWeight="bold">
+                      <FormLabel
+                        color="#00000080"
+                        fontFamily="body"
+                        fontWeight="bold"
+                      >
                         City/Town{" "}
                       </FormLabel>
                       <Select
@@ -502,7 +520,11 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       </Select>
                     </Box>
                     <Box ml={{ md: "5px" }} marginTop="20px">
-                      <FormLabel fontWeight="bold" fontFamily="body">
+                      <FormLabel
+                        color="#00000080"
+                        fontWeight="bold"
+                        fontFamily="body"
+                      >
                         Location{" "}
                       </FormLabel>
                       <Flex>
@@ -519,8 +541,12 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     </Box>
                   </Flex>
 
-                  <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
-                    <FormLabel fontWeight="bold" fontFamily="body">
+                  <Box  color="#00000080" ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                    <FormLabel
+                      color="#00000080"
+                      fontWeight="bold"
+                      fontFamily="body"
+                    >
                       Preferred Language{" "}
                     </FormLabel>
                     <Select
@@ -540,11 +566,19 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     </Select>
                   </Box>
 
-                  <Box ml={{ base: "20px", md: "40px" }} marginTop="20px">
-                    <FormLabel fontWeight="bold" fontFamily="body">
+                  <Box  color="#00000080" ml={{ base: "20px", md: "40px" }} marginTop="20px">
+                    <FormLabel
+                      color="#00000080"
+                      fontWeight="bold"
+                      fontFamily="body"
+                    >
                       Health History
                     </FormLabel>
-                    <FormLabel fontSize="14px" fontFamily="body">
+                    <FormLabel
+                      color="#00000080"
+                      fontSize="14px"
+                      fontFamily="body"
+                    >
                       (Is there anything you'd like us to know?)
                     </FormLabel>
                     <Textarea

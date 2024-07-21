@@ -128,13 +128,13 @@ const SpecialNeedsForm = ({
       >
         Special Needs
       </Text>
-      <Text mb="10px" fontSize="md" color="gray.600">
+      <Text  color="#00000080" mb="10px" fontSize="md">
         Please carefully select the special needs that apply to the care
         recipient. Your accurate selections will help us provide the best
         possible care tailored to their needs.
       </Text>
       {Object.entries(specialNeedsCategories).map(([category, needs]) => (
-        <Box key={category} mb="20px">
+        <Box   color="#00000080" key={category} mb="20px">
           <FormLabel fontWeight="bold">{category}</FormLabel>
           <CheckboxGroup>
             <SimpleGrid columns={[1, 2]} spacing={2}>

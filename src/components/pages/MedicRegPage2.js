@@ -285,7 +285,7 @@ const LandingPage = () => {
             Get started as medic
           </Text>
           <form onSubmit={handleSubmit}>
-            <FormControl isRequired isInvalid={validationErrors.medicType}>
+            <FormControl color="#00000080" isRequired isInvalid={validationErrors.medicType}>
               <Stack
                 direction={{ base: "column", md: "row" }}
                 spacing={4}
@@ -407,7 +407,8 @@ const LandingPage = () => {
               <Button
                 type="submit"
                 w={{ base: "100%", md: "350px" }}
-                bg="#A210C6"
+                // bg="#A210C6"
+                  bg="linear-gradient(80deg, #A210C6, #E552FF)"
                 marginTop="20px"
                 color="white"
                 isLoading={loading}

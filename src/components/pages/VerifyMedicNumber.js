@@ -216,7 +216,8 @@ const LandingPage = () => {
           <Button
             w="250px"
             h="50px"
-            bg="#A210C6"
+            // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
             marginTop="20px"
             color="white"
             onClick={handleVerify} // Call handleVerify when the button is clicked

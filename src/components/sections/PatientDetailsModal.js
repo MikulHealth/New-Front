@@ -175,6 +175,7 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
               </Flex>
             ) : (
               <Flex
+              
                 direction="column"
                 align="center"
                 justify="center"
@@ -198,6 +199,15 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
                     <Text ml="5px" fontSize="lg" mt="2">
                       {patient.customerAppointment.recipientFirstname}{" "}
                       {patient.customerAppointment.recipientLastname}
+                    </Text>
+                  </Flex>
+                  <Flex wrap="wrap">
+                    <Text fontWeight="bold" fontSize="lg" mt="2">
+                      MH Policy No.:
+                    </Text>
+                    <Text ml="5px" fontSize="lg" mt="2">
+                      {patient.customerAppointment.policyNumber ||
+                        "Not available"}
                     </Text>
                   </Flex>
                   <Flex wrap="wrap">

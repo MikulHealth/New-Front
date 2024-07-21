@@ -133,6 +133,8 @@ const LandingPage = () => {
         />
 
         <Box
+        fontFamily="body"
+        color="#00000080"
           display={{ base: "block", md: "flex" }}
           paddingX={{ base: "1rem", md: "2rem" }}
           justifyContent="center"

@@ -172,7 +172,8 @@ const PendingMedicAppTab = () => {
                   >
                     Preferred service plan:
                   </Text>
-                  <Text ml="1" fontSize={{ base: "10px", md: "16px" }}>
+                  <Text  maxW={{ base: "60px", md: "120px" }}
+                      wordWrap="break-word" ml="1" fontSize={{ base: "10px", md: "16px" }}>
                     {appointment.appointmentType}
                   </Text>
                 </Flex>

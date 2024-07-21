@@ -298,7 +298,7 @@ const LandingPage = () => {
         draggable
         pauseOnHover
       />
-      <Flex overflow="scroll" align="center" justify="center" height="100vh">
+      <Flex color="#00000080" overflow="scroll" align="center" justify="center" height="100vh">
         <Box
           mb="300px"
           mt={{ base: "700px", md: "800px" }}

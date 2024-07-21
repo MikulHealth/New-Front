@@ -102,7 +102,8 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
 
-  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] =
+    useState(false);
 
   const [formFields, setFormFields] = useState({
     recipientFirstname: "",
@@ -122,7 +123,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     preferredMedicGender: "",
     preferredLanguage: "",
   });
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsBookingInstructionsOpen(true);
@@ -207,7 +208,9 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
   const handleFormSubmit = async () => {
     setLoading(true);
 
-    const validPhoneNumber = getValidNigerianPhoneNumber(formFields.recipientPhoneNumber);
+    const validPhoneNumber = getValidNigerianPhoneNumber(
+      formFields.recipientPhoneNumber
+    );
     console.log("number " + validPhoneNumber);
 
     if (!validPhoneNumber) {
@@ -234,7 +237,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
         priority,
-        specialNeeds, 
+        specialNeeds,
       };
       const requestBody = JSON.stringify(formDataWithDates);
       const response = await axios.post(apiUrl, requestBody, { headers });
@@ -356,7 +359,9 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
   const handleSwitchChange = async () => {
     setLoading(true);
 
-    const validPhoneNumber = getValidNigerianPhoneNumber(formFields.recipientPhoneNumber);
+    const validPhoneNumber = getValidNigerianPhoneNumber(
+      formFields.recipientPhoneNumber
+    );
     console.log("number " + validPhoneNumber);
 
     if (!validPhoneNumber) {
@@ -366,8 +371,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const apiUrl =
-        `${baseUrl}/appointment/addNewBeneficiary`;
+      const apiUrl = `${baseUrl}/appointment/addNewBeneficiary`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -431,7 +435,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
           <DrawerHeader color="#A210C6" fontFamily="heading">
             Book Appointment
           </DrawerHeader>
-         
+
           <DrawerBody>
             {showSpecialNeedsForm ? (
               <SpecialNeedsForm
@@ -441,14 +445,12 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                 handleBack={() => setShowSpecialNeedsForm(false)}
               />
             ) : (
-              <FormControl
-               
-                w={{ base: "100%", md: "100%" }}
-              >
+              <FormControl w={{ base: "100%", md: "100%" }}>
                 <FormLabel
                   ml={{ base: "20px", md: "30px" }}
                   fontWeight="bold"
                   fontFamily="heading"
+                  color="#00000080"
                 >
                   Enter Beneficiary details
                 </FormLabel>
@@ -472,7 +474,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                   >
                     <Input
                       name="recipientLastname"
-                      ml={{ md: "-40px" }}
+                      ml={{ md: "-35px" }}
                       placeholder="last name"
                       value={formFields.recipientLastname}
                       onChange={handleInputChange}
@@ -487,6 +489,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontFamily="body"
                       fontWeight="bold"
                       marginTop="20px"
+                      color="#00000080"
                     >
                       Gender{" "}
                     </FormLabel>
@@ -497,13 +500,18 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       h="6vh"
                       value={formFields.recipientGender}
                       onChange={handleInputChange}
+                      style={{  color:"#00000080" }}
                     >
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                     </Select>
                   </Box>
                   <Box fontFamily="body" ml={{ md: "5px" }}>
-                    <FormLabel fontWeight="bold" marginTop="20px">
+                    <FormLabel
+                      color="#00000080"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
                       Date of Birth
                     </FormLabel>
                     <Flex
@@ -542,11 +550,12 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontFamily="body"
                       fontWeight="bold"
                       marginTop="20px"
+                      color="#00000080"
                     >
                       Contact Number{" "}
                     </FormLabel>
                     <InputGroup>
-                    <InputLeftAddon children="+234" />
+                      <InputLeftAddon children="+234" />
                       <Input
                         name="recipientPhoneNumber"
                         type="tel"
@@ -556,7 +565,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                         w={{ base: "230px", md: "475px" }}
                       />
                       <InputRightElement pointerEvents="none">
-                        <FaPhoneAlt color="gray.300" />
+                        <FaPhoneAlt color="#00000080" />
                       </InputRightElement>
                     </InputGroup>
                   </Box>
@@ -565,10 +574,12 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontFamily="body"
                       fontWeight="bold"
                       marginTop="20px"
+                      color="#00000080"
                     >
                       Relationship with beneficiary{" "}
                     </FormLabel>
                     <Select
+                      style={{ color: "#00000080" }}
                       name="relationship"
                       placeholder="Select the appropriate relationship type"
                       w={{ base: "300px", md: "540px" }}
@@ -603,6 +614,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontFamily="body"
                       fontWeight="bold"
                       marginTop="20px"
+                      color="#00000080"
                     >
                       Service Plan{" "}
                     </FormLabel>
@@ -614,6 +626,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontSize={{ base: "14px", md: "16px" }}
                       value={formFields.servicePlan}
                       onChange={handleInputChange}
+                      style={{  color:"#00000080" }}
                     >
                       <optgroup label="Standard Plans">
                         <option value="Elderly care by a Licensed Nurse">
@@ -650,10 +663,12 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontFamily="body"
                       fontWeight="bold"
                       marginTop="20px"
+                      color="#00000080"
                     >
                       Shift{" "}
                     </FormLabel>
                     <Select
+                    style={{  color:"#00000080" }}
                       name="shift"
                       placeholder="select preferred shift"
                       w={{ base: "300px", md: "270px" }}
@@ -668,7 +683,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                 </Flex>
                 <Flex flexWrap="wrap" ml={{ base: "20px", md: "30px" }}>
                   <Box fontFamily="body" w={{ base: "300px", md: "270px" }}>
-                    <FormLabel fontWeight="bold" marginTop="20px">
+                    <FormLabel
+                      color="#00000080"
+                      fontWeight="bold"
+                      marginTop="20px"
+                    >
                       Start Date
                     </FormLabel>
 
@@ -698,6 +717,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontFamily="body"
                       fontWeight="bold"
                       marginTop="20px"
+                      color="#00000080"
                     >
                       Current Location{" "}
                     </FormLabel>
@@ -716,7 +736,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
 
                 <Flex flexWrap="wrap" ml={{ base: "20px", md: "30px" }}>
                   <Box w={{ base: "300px", md: "270px" }} marginTop="20px">
-                    <FormLabel fontFamily="body" fontWeight="bold">
+                    <FormLabel
+                      color="#00000080"
+                      fontFamily="body"
+                      fontWeight="bold"
+                    >
                       City/Town{" "}
                     </FormLabel>
                     <Select
@@ -727,6 +751,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontSize={{ base: "14px", md: "16px" }}
                       value={formFields.recipientTown}
                       onChange={handleInputChange}
+                      style={{  color:"#00000080" }}
                     >
                       {townsInLagos.map((town) => (
                         <option key={town} value={town}>
@@ -736,7 +761,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                     </Select>
                   </Box>
                   <Box ml={{ md: "5px" }} marginTop="20px">
-                    <FormLabel fontWeight="bold" fontFamily="body">
+                    <FormLabel
+                      color="#00000080"
+                      fontWeight="bold"
+                      fontFamily="body"
+                    >
                       Preferred Medic Gender{" "}
                     </FormLabel>
                     <Select
@@ -747,6 +776,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                       fontSize={{ base: "14px", md: "16px" }}
                       value={formFields.preferredMedicGender}
                       onChange={handleInputChange}
+                      style={{  color:"#00000080" }}
                     >
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -755,7 +785,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                 </Flex>
 
                 <Box ml={{ base: "20px", md: "30px" }} marginTop="20px">
-                  <FormLabel fontWeight="bold" fontFamily="body">
+                  <FormLabel
+                    color="#00000080"
+                    fontWeight="bold"
+                    fontFamily="body"
+                  >
                     Preferred Language{" "}
                   </FormLabel>
                   <Select
@@ -766,6 +800,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                     fontSize={{ base: "14px", md: "16px" }}
                     value={formFields.preferredLanguage}
                     onChange={handleInputChange}
+                    style={{  color:"#00000080" }}
                   >
                     {majorLanguages.map((language) => (
                       <option key={language} value={language}>
@@ -776,10 +811,18 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                 </Box>
 
                 <Box ml={{ base: "20px", md: "30px" }} marginTop="20px">
-                  <FormLabel fontWeight="bold" fontFamily="body">
+                  <FormLabel
+                    color="#00000080"
+                    fontWeight="bold"
+                    fontFamily="body"
+                  >
                     Health History
                   </FormLabel>
-                  <FormLabel fontSize="14px" fontFamily="body">
+                  <FormLabel
+                    color="#00000080"
+                    fontSize="14px"
+                    fontFamily="body"
+                  >
                     (Is there anything you'd like us to know?)
                   </FormLabel>
                   <Textarea
@@ -847,7 +890,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
         onClose={() => setIsPaymentModalOpen(false)}
         paymentData={paymentData}
       />
-       <BookingInstructions
+      <BookingInstructions
         isOpen={isBookingInstructionsOpen}
         onClose={() => setIsBookingInstructionsOpen(false)}
       />

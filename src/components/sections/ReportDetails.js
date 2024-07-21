@@ -172,7 +172,7 @@ const ReportDetails = ({
             </Text>
           </Flex>
         </Box>
-        <Button colorScheme="teal" onClick={handleViewRecommendations} w="100%">
+        <Button color="white" bg="linear-gradient(80deg, #A210C6, teal)" onClick={handleViewRecommendations} w="100%">
           View Recommended Interventions
         </Button>
       </VStack>

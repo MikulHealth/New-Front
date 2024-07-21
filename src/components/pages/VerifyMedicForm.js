@@ -132,7 +132,7 @@ const VerifyMedicForm = () => {
             Verify Your Identity
           </Text>
           <form onSubmit={handleSubmit}>
-            <FormControl isRequired marginTop="20px">
+            <FormControl color="#00000080" isRequired marginTop="20px">
               <Box display="flex" marginBottom="20px">
                 <Box flex="1" marginRight="10px">
                   <FormLabel>Guarantor's First Name</FormLabel>
@@ -193,7 +193,8 @@ const VerifyMedicForm = () => {
               <Button
                 type="submit"
                 w="100%"
-                bg="#A210C6"
+                // bg="#A210C6"
+                  bg="linear-gradient(80deg, #A210C6, #E552FF)"
                 color="white"
                 isLoading={loading}
                 loadingText="Submiting..."

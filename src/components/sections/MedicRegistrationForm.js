@@ -11,12 +11,27 @@ import {
   Select,
   Checkbox,
   Flex,
+  extendTheme,
   Stack,
+  Box,
   Text,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import LoadingSpinner from "../../utils/Spiner";
+
+const customTheme = extendTheme({
+  components: {
+    Link: {
+      baseStyle: { _focus: { boxShadow: "none" } },
+    },
+  },
+  fonts: {
+    body: "Montserrat, sans-serif",
+    heading: "Gill Sans MT, sans-serif",
+  },
+});
+
 
 const MedicRegistrationForm = ({
   formData,
@@ -34,9 +49,11 @@ const MedicRegistrationForm = ({
   postImage,
 }) => {
   return (
-    <form onSubmit={handleSubmit}>
+    <Box theme={customTheme}>
+ <form onSubmit={handleSubmit}>
       <Stack spacing={4} marginTop="20px">
         <FormControl
+        color="#00000080"
           fontSize={{ base: "16px", md: "20px" }}
           fontFamily="body"
           isRequired
@@ -282,6 +299,8 @@ const MedicRegistrationForm = ({
         </Button>
       </Stack>
     </form>
+    </Box>
+   
   );
 };
 

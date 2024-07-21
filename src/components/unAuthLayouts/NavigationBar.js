@@ -99,7 +99,7 @@ export default function NavigationBar() {
             // bg="white"
             // color="#A210C6"
             bg="white"
-            color="#A210C6"
+            // color="#A210C6"
             border="1px solid white"
        
             onClick={handleOpenModal}

@@ -274,6 +274,15 @@ export const AppointmentDetails = ({
             <Divider my={4} borderColor="gray.500" />
             <Flex marginTop="5px">
               <Text fontWeight="bold" color="black">
+                MH Policy No:
+              </Text>
+              <Text marginLeft="20px" color="black">
+                {appointment?.policyNumber || "Not available"}
+              </Text>
+            </Flex>
+            <Divider my={4} borderColor="gray.500" />
+            <Flex marginTop="5px">
+              <Text fontWeight="bold" color="black">
                 Phone Number:
               </Text>
               <Text marginLeft="20px" color="black">

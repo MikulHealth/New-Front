@@ -32,6 +32,7 @@ const customTheme = extendTheme({
 const BookingInstructions = ({ isOpen, onClose }) => {
   return (
     <Modal
+    
       theme={customTheme}
       size={{ base: "sm", md: "lg" }}
       isOpen={isOpen}
@@ -51,7 +52,7 @@ const BookingInstructions = ({ isOpen, onClose }) => {
         </ModalHeader>
         {/* <ModalCloseButton /> */}
         <ModalBody>
-          <Text fontFamily="body" mt="-30px" mb="20px">
+          <Text  color="#00000080" fontFamily="body" mt="-30px" mb="20px">
             <br />All services under our <strong>Service Plan</strong>{" "}
             are monthly subscriptions with 24-hour or 8-hour (day) shifts and
             expire after one month, except for short home visits and custom
