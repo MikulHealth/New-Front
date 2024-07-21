@@ -114,7 +114,7 @@ export default function NavigationBar() {
         <Box
           fontSize={{ base: "lg", md: "xl" }}
           p={4}
-          bg="linear-gradient(90deg, #A210C6, #FF0080)"
+          bg="linear-gradient(80deg, #A210C6, #E552FF)"
           color="white"
           textAlign="center"
         >
@@ -135,7 +135,7 @@ export default function NavigationBar() {
               fontSize={{ base: "lg", md: "xl" }}
               bg="white"
               // color="#A210C6"
-              color="linear-gradient(90deg, #A210C6, #FF0080)"
+              //  bg="linear-gradient(80deg, #A210C6, #E552FF)"
        
               onClick={handleOpenModal}
             >
