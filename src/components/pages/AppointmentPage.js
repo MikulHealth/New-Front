@@ -144,7 +144,7 @@ const AppointmentPage = () => {
             </Box>
             <Flex
               bg="linear-gradient(80deg, #A210C6, #E552FF)"
-              
+             ml={{base: "-5px"}}
               w={{ base: "90vw", md: "910px" }}
               h={{ base: "17vh", md: "200px" }}
               mt={{ base: "5px", md: "15px" }}
@@ -181,13 +181,14 @@ const AppointmentPage = () => {
                   bg="white"
                   color="#A210C6"
                   fontFamily="body"
-                  mt={{ base: "10px", md: "30px" }}
+                  mt={{ base: "15px", md: "30px" }}
                   _hover={{ color: "" }}
                   padding={{ base: "5px", md: "0" }}
                   w={{ base: "140px", md: "190px" }}
                   h={{ base: "25px", md: "40px" }}
                   fontSize={{ base: "12px", md: "16px" }}
                   borderRadius="15px"
+                  ml={{base: "-10px", md: "0px"}}
                   leftIcon={<CheckIcon />}
                 >
                   Book appointment

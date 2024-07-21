@@ -262,7 +262,8 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
               <Button
                 isLoading={loading}
                 loadingText="Loading..."
-                bg="#A210C6"
+                // bg="#A210C6"
+                 bgGradient="linear(to-r, #A210C6, #E552FF)"
                 fontFamily="body"
                 color="white"
                 w={{ base: "auto", md: "200px" }}

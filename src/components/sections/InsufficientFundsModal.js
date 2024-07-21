@@ -83,7 +83,8 @@ function InsufficientFundsModal({ isOpen, onClose, amountNeeded }) {
           <Button
             fontFamily="body"
             color="white"
-            bg="#A210C6"
+            // bg="#A210C6"
+             bg="linear-gradient(80deg, #A210C6, #E552FF)"
             mr={3}
             onClick={handleNavigate}
           >

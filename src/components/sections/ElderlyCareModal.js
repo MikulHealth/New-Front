@@ -133,7 +133,8 @@ const ElderlyCareModal = ({ isOpen, onClose }) => {
                   marginTop="10px"
                   borderRadius="100px"
                   fontSize="16px"
-                  bg="#A210C6"
+                  // bg="#A210C6"
+                  bg="linear-gradient(80deg, #A210C6, #E552FF)"
                   marginRight="20px"
                   leftIcon={<CheckIcon />}
                   color="white"
@@ -156,7 +157,8 @@ const ElderlyCareModal = ({ isOpen, onClose }) => {
                 transition: "transform 0.3s ease-in-out",
               }}
               borderRadius="10px"
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               ml={{ md: "30px" }}
               mt={{ base: "30px", md: "-10px" }}
               w={{ base: "100vw", md: "40vw" }}
@@ -315,7 +317,8 @@ const ElderlyCareModal = ({ isOpen, onClose }) => {
                   marginTop="10px"
                   borderRadius="100px"
                   fontSize="16px"
-                  bg="#A210C6"
+                  // bg="#A210C6"
+                  bg="linear-gradient(80deg, #A210C6, #E552FF)"
                   marginRight="20px"
                   leftIcon={<CheckIcon />}
                   color="white"
@@ -338,7 +341,8 @@ const ElderlyCareModal = ({ isOpen, onClose }) => {
                 transition: "transform 0.3s ease-in-out",
               }}
               borderRadius="10px"
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               ml={{ md: "30px" }}
               mt={{ base: "30px", md: "-10px" }}
               w={{ base: "100vw", md: "40vw" }}

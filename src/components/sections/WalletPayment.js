@@ -26,8 +26,8 @@ const WalletPaymentPage = () => {
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
   const toast = useToast();
-  const openPinModal  = () => setPinModalOpen(true);
-  const closePinModal  = () => setPinModalOpen(false);
+  const openPinModal = () => setPinModalOpen(true);
+  const closePinModal = () => setPinModalOpen(false);
 
   const formattedCost = (cost) => {
     const num = Number(cost);
@@ -175,7 +175,13 @@ const WalletPaymentPage = () => {
   const paymentFormWidth = isLargerThan768 ? "50%" : "90%";
 
   return (
-    <Box height="100vh" bg="#510863" textAlign="center" color="white" p={4}>
+    <Box
+      height="100vh"
+      bg="linear-gradient(80deg, #510863, #E552FF)"
+      textAlign="center"
+      color="white"
+      p={4}
+    >
       <Box mb={4}>
         <Image src={logo} alt="Logo" w="100px" h="30px" />
       </Box>

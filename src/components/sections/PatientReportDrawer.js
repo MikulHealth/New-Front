@@ -517,7 +517,9 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 <Flex justify="flex-end">
                   <Button
                     justifySelf="flex-end"
-                    colorScheme="teal"
+                    color="white"
+                    // colorScheme="teal"
+                     bgGradient="linear(to-r, #A210C6, teal)"
                     mb={4}
                     onClick={() => setShowDocumentation(!showDocumentation)}
                   >
@@ -652,7 +654,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
               )}
               {step < 3 ? (
                 <Button
-                  bg="#A210C6"
+                  // bg="#A210C6"
+                    bgGradient="linear(to-r, #A210C6, #E552FF)"
                   color="white"
                   onClick={() => setStep(step + 1)}
                 >
@@ -660,7 +663,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
                 </Button>
               ) : (
                 <Button
-                  bg="#A210C6"
+                  // bg="#A210C6"
+                    bgGradient="linear(to-r, #A210C6, #E552FF)"
                   color="white"
                   onClick={() => setStep(4)}
                   isDisabled={!formData.confirmation}
@@ -674,7 +678,8 @@ const PatientReportDrawer = ({ isOpen, onClose }) => {
             <DrawerFooter>
               <Button
                 color="white"
-                bg="#A210C6"
+                // bg="#A210C6"
+                  bgGradient="linear(to-r, #A210C6, #E552FF)"
                 onClick={() => setShowDocumentation(false)}
               >
                 Back

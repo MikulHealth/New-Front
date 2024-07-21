@@ -71,6 +71,7 @@ const LandingPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animation, setAnimation] = useState(rollIn);
   const prefersReducedMotion = usePrefersReducedMotion();
+  
 
   const responsivePadding = useBreakpointValue({
     base: "4",

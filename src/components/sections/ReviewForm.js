@@ -105,7 +105,8 @@ const ReviewForm = ({
           Back
         </Button>
         <Button
-          bg="#A210C6"
+          // bg="#A210C6"
+          bgGradient="linear(to-r, #A210C6, #E552FF)"
           color="white"
           onClick={onSubmit}
           isDisabled={!formData.confirmation}

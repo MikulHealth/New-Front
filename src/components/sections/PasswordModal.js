@@ -21,11 +21,7 @@ const PasswordModal = ({
   isLoading,
 }) => {
   return (
-    <Modal
-      size={{ base: "sm", md: "md" }}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontFamily="heading" color="#A210C6">
@@ -48,7 +44,8 @@ const PasswordModal = ({
         </ModalBody>
         <ModalFooter>
           <Button
-            bg="#A210C6"
+            // bg="#A210C6"
+            bg="linear-gradient(80deg, #A210C6, #E552FF)"
             color="white"
             mr={3}
             onClick={handlePasswordSubmit}

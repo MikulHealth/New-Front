@@ -23,6 +23,7 @@ const DashboardButtons = ({
           <Box
             style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
             bg="#DCFFEB"
+            // bg="linear-gradient(80deg, #DCFFEB, #27AE60)"
             h={{ base: "125px", md: "150px" }}
             mt={{ base: "4", md: "0" }}
             w={{ base: "180px", md: "340px" }}
@@ -73,7 +74,7 @@ const DashboardButtons = ({
                 cursor: "pointer",
                 transition: "transform 0.3s ease-in-out",
               }}
-              color="#27AE60"
+              color="#075C1A"
               onClick={handleOpenAppointmentModal}
               _hover={{ color: "#A210C6", transform: "translateY(-10px)" }}
             >
@@ -83,7 +84,8 @@ const DashboardButtons = ({
 
           <Box
             style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
-            bg="#F1ECFE"
+            bg="#CFF1F4"
+            // bg="linear-gradient(80deg, #CFF1F4, #0A656D)"
             h={{ base: "125px", md: "150px" }}
             mt={{ base: "4", md: "0" }}
             marginLeft="10px"
@@ -136,7 +138,7 @@ const DashboardButtons = ({
                 cursor: "pointer",
                 transition: "transform 0.3s ease-in-out",
               }}
-              color="#753FF6"
+              color="#0A656D"
               _hover={{ color: "#A210C6", transform: "translateY(-10px)" }}
             >
               View reports
@@ -146,7 +148,8 @@ const DashboardButtons = ({
         <Flex mt={{ base: "", md: "20px" }}>
           <Box
             style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
-            bg="#CCF0FE"
+            bg="#A7C5F2"
+            //  bg="linear-gradient(80deg, #CCF0FE, #2295F2)"
             h={{ base: "125px", md: "150px" }}
             mt={{ base: "3", md: "0" }}
             w={{ base: "180px", md: "340px" }}
@@ -194,7 +197,7 @@ const DashboardButtons = ({
                   cursor: "pointer",
                   transition: "transform 0.3s ease-in-out",
                 }}
-                color="#2295F2"
+                color="#1C5DBE"
                 _hover={{ color: "#A210C6", transform: "translateY(-10px)" }}
               >
                 View services
@@ -204,6 +207,7 @@ const DashboardButtons = ({
           <Box
             style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
             bg="#F1ECFE"
+            //  bg="linear-gradient(80deg, #F1ECFE, #753FF6)"
             h={{ base: "125px", md: "150px" }}
             mt={{ base: "4", md: "0" }}
             w={{ base: "180px", md: "340px" }}
@@ -252,7 +256,7 @@ const DashboardButtons = ({
                   cursor: "pointer",
                   transition: "transform 0.3s ease-in-out",
                 }}
-                color="#753FF6"
+                color="#6C0B84"
                 _hover={{ color: "#A210C6", transform: "translateY(-10px)" }}
               >
                 Customize service
@@ -263,6 +267,7 @@ const DashboardButtons = ({
         <Box
           style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
           bg="#E7F6FF"
+          //  bg="linear-gradient(80deg, #E7F6FF, #2295F2)"
           h={{ base: "125px", md: "150px" }}
           mt={{ base: "20px", md: "20px" }}
           mb={{ base: "-10px", md: "30px" }}

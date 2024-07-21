@@ -155,7 +155,8 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
         <ModalContent
           width={modalWidth}
           borderRadius="25px 25px 25px 0px"
-          bg="#A210C6"
+          // bg="#A210C6"
+          bg="linear-gradient(80deg, #A210C6, #E552FF)"
         >
           <ModalCloseButton color="white" />
           <ModalHeader

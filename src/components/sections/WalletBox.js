@@ -194,7 +194,7 @@ const WalletBox = ({
                   size="sm"
                   aria-label="Copy account number"
                   color="white"
-                  bg={hasCopied ? "#A210C6" : "#A210C6"}
+                  bg={hasCopied ? "#A210C6" : "transparent"}
                   _hover={{ bg: "transparent" }}
                 />
               )}

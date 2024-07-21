@@ -277,7 +277,8 @@ const AddBeneficiaryForm = ({ isOpen, onClose, openBeneficiariesModal }) => {
               // marginLeft="10px"
               align="center"
               color="white"
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               isLoading={loading}
               loadingText="Saving..."
               onClick={handleAddBeneficiary}

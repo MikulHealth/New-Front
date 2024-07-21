@@ -109,7 +109,8 @@ const PostpartumCareModal = ({ isOpen, onClose }) => {
                   marginTop="10px"
                   borderRadius="100px"
                   fontSize="16px"
-                  bg="#A210C6"
+                  // bg="#A210C6"
+                  bg="linear-gradient(80deg, #A210C6, #E552FF)"
                   marginRight="20px"
                   leftIcon={<CheckIcon />}
                   color="white"
@@ -134,7 +135,8 @@ const PostpartumCareModal = ({ isOpen, onClose }) => {
               ml={{ md: "30px" }}
               mt={{ base: "30px", md: "-20px" }}
               borderRadius="10px"
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               w={{ base: "100vw", md: "40vw" }}
               h={{ base: "56vh", md: "60vh" }}
               _hover={{

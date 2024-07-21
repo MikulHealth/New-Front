@@ -112,7 +112,8 @@ const RecoveryCareModal = ({ isOpen, onClose }) => {
                   marginTop="10px"
                   borderRadius="100px"
                   fontSize="16px"
-                  bg="#A210C6"
+                  // bg="#A210C6"
+                  bg="linear-gradient(80deg, #A210C6, #E552FF)"
                   marginRight="20px"
                   leftIcon={<CheckIcon />}
                   color="white"
@@ -139,7 +140,8 @@ const RecoveryCareModal = ({ isOpen, onClose }) => {
               mt={{ base: "30px", md: "-20px" }}
               w={{ base: "100vw", md: "40vw" }}
               h={{ base: "60vh", md: "60vh" }}
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               _hover={{
                 transform: "translateY(-10px)",
               }}

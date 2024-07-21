@@ -688,11 +688,12 @@ const MedicWalletPage = () => {
   const [amount, setAmount] = useState("");
   const [reviewBankDetails, setReviewBankDetails] = useState(null);
   const navigate = useNavigate();
-  const accountNumber = "0124536789";
+  const { user } = useSelector((state) => state.userReducer);
+  const accountNumber = user?.walletAccountNumber;
+  const accountName = user?.walletBankName;
   const [selectedBankDetails, setSelectedBankDetails] = useState(null);
   const { hasCopied, onCopy } = useClipboard(accountNumber);
   const [loading, setLoading] = useState(true);
-  const { user } = useSelector((state) => state.userReducer);
   const walletCreated = user?.walletCreated;
   const balance = user?.walletBalance;
   const walletTotalCredit = user?.walletTotalCredit;
@@ -945,6 +946,7 @@ const MedicWalletPage = () => {
                   mt={{ base: "30px", md: "50px" }}
                 >
                   <Box
+                    fontWeight="bold"
                     marginBottom={{ base: "50px", md: "50px" }}
                     color="white"
                   >
@@ -958,28 +960,45 @@ const MedicWalletPage = () => {
                       <Text
                         textAlign="left"
                         fontSize={{ base: "10px", md: "16px" }}
+                        fontStyle={
+                          !walletCreated || !accountName || !accountNumber
+                            ? "italic"
+                            : "normal"
+                        }
                       >
-                        Wema Bank
+                        {walletCreated && accountName && accountNumber
+                          ? accountName
+                          : "Processing, please wait..."}
                       </Text>
                       <Text
                         ml="10px"
                         textAlign="left"
                         fontSize={{ base: "10px", md: "16px" }}
+                        fontStyle={
+                          !walletCreated || !accountName || !accountNumber
+                            ? "italic"
+                            : "normal"
+                        }
                       >
-                        {accountNumber}
+                        {walletCreated && accountName && accountNumber
+                          ? accountNumber
+                          : ""}
                       </Text>
-                      <IconButton
-                        icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
-                        onClick={onCopy}
-                        mt="-5px"
-                        size="sm"
-                        aria-label="Copy account number"
-                        color="white"
-                        bg={hasCopied ? "#A210C6" : "#A210C6"}
-                        _hover={{ bg: "transparent" }}
-                      />
+                      {walletCreated && accountName && accountNumber && (
+                        <IconButton
+                          icon={hasCopied ? <CheckIcon /> : <CopyIcon />}
+                          onClick={onCopy}
+                          mt="-5px"
+                          size="sm"
+                          aria-label="Copy account number"
+                          color="white"
+                          bg={hasCopied ? "#A210C6" : "transparent"}
+                          _hover={{ bg: "transparent" }}
+                        />
+                      )}
                     </Flex>
                   </Box>
+
                   <Flex marginLeft={{ base: "50px", md: "400px" }}>
                     <Box color="white">
                       <Text textAlign="left" fontSize="10px">

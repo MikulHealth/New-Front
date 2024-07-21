@@ -634,7 +634,8 @@ export default function PendingApp() {
 
               <Box>
                 <Button
-                  bg="#A210C6"
+                  // bg="#A210C6"
+                  bg="linear-gradient(80deg, #A210C6, #E552FF)"
                   color="white"
                   _hover={{ color: "" }}
                   leftIcon={<EditIcon />}
@@ -680,7 +681,7 @@ export default function PendingApp() {
             </ModalBody>
             <ModalFooter>
               <Button
-                bg="#A210C6"
+                // bg="#A210C6"
                 color="white"
                 onClick={handleCancelModalClose}
               >

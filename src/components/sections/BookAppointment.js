@@ -75,7 +75,8 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
           <VStack spacing={4}>
             <Box
               onClick={() => handleOpenSelfAppointmentModal(2)}
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               color="white"
               fontWeight="bold"
               borderRadius="8px"
@@ -90,7 +91,8 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
             </Box>
             <Box
               onClick={() => setBookAppointmentModalOpen(true)}
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               color="white"
               fontWeight="bold"
               borderRadius="8px"
@@ -105,7 +107,8 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
             </Box>
             <Box
               onClick={() => handleOpenBeneficiaryAppointmentModal(3)}
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               color="white"
               fontWeight="bold"
               borderRadius="8px"

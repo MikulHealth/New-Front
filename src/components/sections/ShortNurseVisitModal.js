@@ -59,7 +59,8 @@ const ShortNurseVisitModal = ({ isOpen, onClose }) => {
               mt={{base: "5px", md: "-15px" }}
               borderRadius="10px"
               ml={{md: "100px" }}
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               w={{ base: "100vw", md: "35vw" }}
               h={{ base: "60vh", md: "67vh" }}
               _hover={{

@@ -315,7 +315,8 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
             <Button
               onClick={handleOpenAddBeneficiaryForm}
               color="white"
-              bg="#A210C6"
+              // bg="#A210C6"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               leftIcon={<AddIcon />}
               fontFamily="body"
             >
@@ -352,7 +353,8 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
             </DrawerBody>
             <DrawerFooter alignContent="space-between">
               <Button
-                bg="#A210C6"
+                // bg="#A210C6"
+                bg="linear-gradient(80deg, #A210C6, #E552FF)"
                 color="white"
                 fontFamily="body"
                 onClick={handleConfirmRemoveBeneficiary}

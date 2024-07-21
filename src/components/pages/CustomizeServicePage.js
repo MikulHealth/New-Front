@@ -404,7 +404,8 @@ const CustomizeServicePage = () => {
                             cursor: "pointer",
                           }}
                           _hover={{ color: "#A210C6" }}
-                          bg="#A210C6"
+                          // bg="#A210C6"
+                          bg="linear-gradient(80deg, #A210C6, #E552FF)"
                         >
                           Book plan
                         </Button>
@@ -486,7 +487,8 @@ const CustomizeServicePage = () => {
                 No
               </Button>
               <Button
-                 bg="#A210C6"
+                //  bg="#A210C6"
+                bg="linear-gradient(80deg, #A210C6, #E552FF)"
                  color="white"
                 marginLeft="5px"
                 onClick={handleConfirmation}

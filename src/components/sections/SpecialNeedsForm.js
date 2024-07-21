@@ -159,7 +159,8 @@ const SpecialNeedsForm = ({
           // isLoading={loading}
           // loadingText="Processing..."
           onClick={handleSubmit}
-          bg="#A210C6"
+          // bg="#A210C6"
+          bg="linear-gradient(80deg, #A210C6, #E552FF)"
           color="white"
         >
           {/* {loading ? "Processing..." : "Submit"} */}

@@ -52,20 +52,20 @@ const MedicAppPage = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useSelector((state) => state.userReducer);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
-//   const [showSearchAppointmentsModal, setShowSearchAppointmentsModal] =
-//     useState(false);
+  //   const [showSearchAppointmentsModal, setShowSearchAppointmentsModal] =
+  //     useState(false);
 
   const handleOpenAppointmentModal = () => {
     setShowAppointmentModal(true);
   };
 
-//   const handleOpenSearchAppointmentsModal = () => {
-//     setShowSearchAppointmentsModal(true);
-//   };
+  //   const handleOpenSearchAppointmentsModal = () => {
+  //     setShowSearchAppointmentsModal(true);
+  //   };
 
-//   const handleCloseSearchAppointmentsModal = () => {
-//     setShowSearchAppointmentsModal(false);
-//   };
+  //   const handleCloseSearchAppointmentsModal = () => {
+  //     setShowSearchAppointmentsModal(false);
+  //   };
 
   const handleCloseAppointmentModal = () => {
     setShowAppointmentModal(false);
@@ -136,13 +136,14 @@ const MedicAppPage = () => {
                     cursor: "pointer",
                   }}
                   _hover={{ color: "#A210C6" }}
-                //   onClick={handleOpenSearchAppointmentsModal}
+                  //   onClick={handleOpenSearchAppointmentsModal}
                 >
                   Search Appointment by date
                 </Text>
               </Flex>
             </Box>
             <Flex
+              ml={{ base: "-5px" }}
               bg="linear-gradient(80deg, #A210C6, #E552FF)"
               w={{ base: "90vw", md: "910px" }}
               h={{ base: "17vh", md: "200px" }}
@@ -179,13 +180,14 @@ const MedicAppPage = () => {
                     bg="white"
                     color="#A210C6"
                     fontFamily="body"
-                    mt={{ base: "10px", md: "30px" }}
+                    mt={{ base: "20px", md: "30px" }}
                     _hover={{ color: "" }}
                     padding={{ base: "5px", md: "0" }}
                     w={{ base: "140px", md: "190px" }}
                     h={{ base: "25px", md: "40px" }}
                     fontSize={{ base: "12px", md: "16px" }}
                     borderRadius="15px"
+                    ml={{ base: "-50px", md: "-90px" }}
                     //   leftIcon={<CheckIcon />}
                   >
                     Request appointment
@@ -212,7 +214,6 @@ const MedicAppPage = () => {
               justifyContent="center"
               className="appointment-tabs"
               overflow={{ base: "hidden", md: "hidden" }}
-              
             >
               <VStack ml={{ md: "-100px" }} w="full" {...swipeHandlers}>
                 <Tabs

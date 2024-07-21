@@ -58,12 +58,7 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
 
   return (
     <>
-      <Drawer
-        theme={customTheme}
-        isOpen={isOpen}
-        onClose={onClose}
-        size="lg"
-      >
+      <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size="lg">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader fontFamily="heading" color="#A210C6" textAlign="center">
@@ -81,14 +76,17 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
                 <Text fontFamily="body" textAlign="left" mb="4">
                   This detailed care plan is designed to assist you in providing
                   the best possible care for our patient. It is divided into two
-                  parts:<br/>
+                  parts:
+                  <br />
                   <Text as="span" fontWeight="bold">
                     - Universal Precautions and Standard Medical Interventions,
                   </Text>{" "}
-                  and<br/>
+                  and
+                  <br />
                   <Text as="span" fontWeight="bold">
                     - Specific care plans tailored to the patient's needs.
-                  </Text><br/>
+                  </Text>
+                  <br />
                   Please read through each section carefully and follow the plan
                   diligently. You can always revisit this care plan for
                   reference and reminders.
@@ -161,9 +159,7 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
                       </ListItem>
                     </UnorderedList>
                   </Box>
-                  <Text fontWeight="bold">
-                      Specific Interventions:
-                    </Text>
+                  <Text fontWeight="bold">Specific Interventions:</Text>
                   {carePlan.map((item, index) => (
                     <Text key={index}>
                       <Text as="span" fontWeight="bold">
@@ -304,7 +300,8 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
             {!isViewingCarePlan && (
               <Button
                 color="white"
-                bg="#A210C6"
+                // bg="#A210C6"
+                bgGradient="linear(to-r, #A210C6, #E552FF)"
                 borderRadius="50px"
                 onClick={handleViewCarePlan}
                 fontFamily="body"
@@ -316,7 +313,8 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
             {isViewingCarePlan && (
               <Button
                 color="white"
-                bg="#A210C6"
+                // bg="#A210C6"
+                bgGradient="linear(to-r, #A210C6, #E552FF)"
                 borderRadius="50px"
                 onClick={handleBackToDetails}
                 fontFamily="body"

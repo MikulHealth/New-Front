@@ -139,7 +139,8 @@ const PaymentConfirmationPage = () => {
     <Box
       theme={customTheme}
       height="100vh"
-      bg="#510863"
+      // bg="#510863"
+      bg="linear-gradient(80deg, #510863, #E552FF)"
       textAlign="center"
       color="white"
       p={4}

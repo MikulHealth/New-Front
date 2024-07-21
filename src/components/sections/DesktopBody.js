@@ -56,6 +56,7 @@ const DesktopCards = () => {
               cursor: "pointer",
             }}
             bg="#CFF4D7"
+            //  bgGradient="linear(to-r, #CFF4D7, #A210C6)"
             h={{ base: "125px", md: "186px" }}
             mt={{ base: "4", md: "0" }}
             w={{ base: "180px", md: "300px" }}
