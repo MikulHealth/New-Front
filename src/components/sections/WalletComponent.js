@@ -85,7 +85,7 @@ const WalletComponent = ({
     setIsSubscriptionsModalOpen(false);
   };
 
-const zoomAnimation = keyframes`
+  const zoomAnimation = keyframes`
   0%, 100% {
     transform: scale(1);
   }
@@ -290,10 +290,9 @@ const zoomAnimation = keyframes`
       <Box
         w={{ base: "370px", md: "690px" }}
         h={{ base: "50px", md: "65px" }}
-        mb={{ md: "40px" }}
+        mb={{ md: "20px" }}
         // style={{ boxShadow: "0px 4px 8px rgba(169, 169, 169, 1)" }}
-         style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
-         
+        style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
         borderRadius="4px"
         display="flex"
         justifyContent="space-between"
@@ -308,18 +307,26 @@ const zoomAnimation = keyframes`
           color="#A210C6"
           fontWeight="bold"
         >
-          Subscriptions
+          Subscribed appointments
         </Text>
-        <Text fontSize={{ base: "16px", md: "20px" }} color="#A210C6">
-          {subscriptionsCount}
-        </Text>
-        <Icon
-          as={FaHeart}
-          color="#A210C6"
-          w={10}
-          h={8}
-          animation={`${zoomAnimation} 3s infinite`}
-        />
+        <Flex>
+          <Text
+            fontWeight="bold"
+            fontSize={{ base: "18px", md: "22px" }}
+            color="#A210C6"
+          >
+            {/* {subscriptionsCount} */}0
+          </Text>
+          <Icon
+            ml="5px"
+            as={FaHeart}
+            color="#A210C6"
+            mt={{base: "px", md: "5px"}}
+            w={5}
+            h={5}
+            animation={`${zoomAnimation} 3s infinite`}
+          />
+        </Flex>
       </Box>
 
       {/* Subscriptions Modal */}
@@ -330,7 +337,9 @@ const zoomAnimation = keyframes`
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader fontFamily="heading" color="#A210C6">Subscribed Appointments</ModalHeader>
+          <ModalHeader fontFamily="heading" color="#A210C6">
+            Subscribed Appointments
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody fontFamily="body">
             {subscribedAppointments?.length > 0 ? (
@@ -348,7 +357,7 @@ const zoomAnimation = keyframes`
           </ModalBody>
           <ModalFooter>
             <Button
-                 bg="linear-gradient(80deg, #A210C6, #E552FF)"
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
               mr={3}
               color="white"
               onClick={handleCloseSubscriptionsModal}
