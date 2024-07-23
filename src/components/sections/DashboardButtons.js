@@ -21,7 +21,7 @@ const DashboardButtons = ({
       <Box marginTop="-10px">
         <Flex>
           <Box
-            style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
+            // style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
             bg="#DCFFEB"
             // bg="linear-gradient(80deg, #DCFFEB, #27AE60)"
             h={{ base: "125px", md: "150px" }}
@@ -83,7 +83,7 @@ const DashboardButtons = ({
           </Box>
 
           <Box
-            style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
+            // style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
             bg="#CFF1F4"
             // bg="linear-gradient(80deg, #CFF1F4, #0A656D)"
             h={{ base: "125px", md: "150px" }}
@@ -147,7 +147,7 @@ const DashboardButtons = ({
         </Flex>
         <Flex mt={{ base: "", md: "20px" }}>
           <Box
-            style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
+            // style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
             bg="#A7C5F2"
             //  bg="linear-gradient(80deg, #CCF0FE, #2295F2)"
             h={{ base: "125px", md: "150px" }}
@@ -205,7 +205,7 @@ const DashboardButtons = ({
             </NavLink>
           </Box>
           <Box
-            style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
+            // style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
             bg="#F1ECFE"
             //  bg="linear-gradient(80deg, #F1ECFE, #753FF6)"
             h={{ base: "125px", md: "150px" }}
@@ -265,7 +265,7 @@ const DashboardButtons = ({
           </Box>
         </Flex>
         <Box
-          style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
+          // style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
           bg="#E7F6FF"
           //  bg="linear-gradient(80deg, #E7F6FF, #2295F2)"
           h={{ base: "125px", md: "150px" }}

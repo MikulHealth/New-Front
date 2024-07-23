@@ -64,6 +64,8 @@ const ClientDash = () => {
   const activeAppointments = user?.numberOfActiveAppointments;
   const completedAppointments = user?.numberOfCompletedAppointments;
   const walletAccountNumber = user?.walletAccountNumber;
+  const subscriptionsCount = user?.subscriptionsCount;
+  const subscribedAppointments = user?.subscribedAppointments;
   const { hasCopied, onCopy } = useClipboard(walletAccountNumber);
   const walletBankName = user?.walletBankName;
 
@@ -212,6 +214,8 @@ const ClientDash = () => {
                 hasCopied={hasCopied}
                 onCopy={onCopy}
                 walletBankName={walletBankName}
+                subscribedAppointments={subscribedAppointments}
+                subscriptionsCount={subscriptionsCount}
               />
               <DashboardButtons
                 handleOpenAppointmentModal={handleOpenAppointmentModal}
