@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-// import { Link } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import PaymentModal from "./PaymentMethod";
 import BookingInstructions from "./BookingInstructions";
 import { baseUrl } from "../../apiCalls/config";
@@ -15,18 +12,15 @@ import {
   DrawerHeader,
   DrawerBody,
   FormControl,
-  FormLabel,
-  Input,
-  Button,
-  Flex,
   Box,
-  Select,
+  Button,
   extendTheme,
-  Textarea,
 } from "@chakra-ui/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SpecialNeedsForm from "./SpecialNeedsForm";
+import { FormFields } from "./formFields";
+import { formatDateToUTC, calculateEndDate, calculateUrgency, calculateServiceCost } from "./helpers";
 
 const customTheme = extendTheme({
   components: {
@@ -93,11 +87,11 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [priority, setPriority] = useState("");
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
-  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] =
-    useState(false);
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
 
   const [formFields, setFormFields] = useState({
     startDate: null,
+    endDate: null,
     shift: "",
     servicePlan: "",
     currentLocation: "",
@@ -116,19 +110,19 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const formatDateToUTC = (selectedDate) => {
-    if (!selectedDate) return "";
-
-    const adjustedDate = new Date(selectedDate);
-    adjustedDate.setDate(adjustedDate.getDate() + 1);
-
-    return adjustedDate.toISOString().split("T")[0];
-  };
-
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
-    setFormFields({ ...formFields, startDate: date });
-    calculateUrgency(date);
+    setFormFields((prevFields) => ({ ...prevFields, startDate: date }));
+    calculateUrgency(date, setPriority);
+
+    if (formFields.servicePlan) {
+      const selectedPlan = customizedPlans.find((plan) => plan.name === formFields.servicePlan);
+      if (selectedPlan) {
+        calculateEndDate(formFields.servicePlan, date, selectedPlan.duration, customizedPlans, setFormFields);
+      } else {
+        calculateEndDate(formFields.servicePlan, date, null, customizedPlans, setFormFields);
+      }
+    }
   };
 
   const handleInputChange = (e) => {
@@ -141,43 +135,42 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         if (selectedPlan.costOfService) {
           const cleanedCost = selectedPlan.costOfService;
 
-          setFormFields({
-            ...formFields,
+          setFormFields((prevFields) => ({
+            ...prevFields,
             [name]: value,
             shift: selectedPlan.shift,
             costOfService: cleanedCost,
             medicSpecialization: selectedPlan.preferredCaregiver,
-          });
+          }));
         } else {
           console.log("Cost of Service is undefined or null");
         }
         setIsShiftDisabled(true);
       } else {
-        setFormFields({
-          ...formFields,
+        setFormFields((prevFields) => ({
+          ...prevFields,
           [name]: value,
           shift: "",
           costOfService: "",
-        });
+        }));
         setIsShiftDisabled(false);
       }
-    } else {
-      setFormFields({ ...formFields, [name]: value });
-    }
-  };
 
-  const calculateUrgency = (date) => {
-    const now = new Date();
-    const diffInHours = (date - now) / (1000 * 60 * 60);
+      if (selectedPlan) {
+        calculateEndDate(value, selectedStartDate, selectedPlan.duration, customizedPlans, setFormFields);
+      } else {
+        calculateEndDate(value, selectedStartDate, null, customizedPlans, setFormFields);
+      }
 
-    if (diffInHours <= 24) {
-      setPriority("High");
-    } else if (diffInHours <= 48) {
-      setPriority("Medium");
-    } else if (diffInHours <= 72) {
-      setPriority("Normal");
+      if (value === "Short home visit") {
+        setFormFields((prevFields) => ({
+          ...prevFields,
+          shift: "Day Shift (8hrs)",
+        }));
+        setIsShiftDisabled(true);
+      }
     } else {
-      setPriority("Flexible");
+      setFormFields((prevFields) => ({ ...prevFields, [name]: value }));
     }
   };
 
@@ -210,22 +203,26 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    calculateServiceCost(formFields.servicePlan, formFields.shift, customizedPlans, setFormFields);
+  }, [formFields.servicePlan, formFields.shift, customizedPlans]);
+
   const handleFormSubmit = async () => {
     setLoading(true);
-  
+
     try {
       const token = localStorage.getItem("token");
-  
+
       const apiUrl = `${baseUrl}/appointment/save`;
-  
+
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-  
+
       const formatDateWithDayAdjustment = (selectedDate) =>
         formatDateToUTC(new Date(selectedDate));
-  
+
       const userFieldsForBookForSelf = {
         recipientFirstname: user?.firstName,
         recipientLastname: user?.lastName,
@@ -234,25 +231,27 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         recipientDOB: user?.dob,
         recipientImage: user?.image,
       };
-  
+
       const formDataWithDates = {
         ...formFields,
         startDate: formatDateWithDayAdjustment(selectedStartDate),
+        endDate: formatDateWithDayAdjustment(formFields.endDate),
         recipientDOB: formatDateWithDayAdjustment(selectedDob),
         customerPhoneNumber: user?.phoneNumber,
         customerId: user?.id,
         priority,
-        specialNeeds, // Include specialNeeds in the request
+        specialNeeds,
         ...userFieldsForBookForSelf,
       };
-  
+
       const requestBody = JSON.stringify(formDataWithDates);
       const response = await axios.post(apiUrl, requestBody, { headers });
-  
+
       if (response.data.success) {
         setLoading(false);
         setFormFields({
           startDate: null,
+          endDate: null,
           shift: "",
           servicePlan: "",
           currentLocation: "",
@@ -266,9 +265,11 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         setPaymentData({
           costOfService: response.data.data.costOfService,
           appointmentId: response.data.data.id,
-          beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`, // corrected line
+          startDate: response.data.data.startDate,
+          endDate: response.data.data.endDate,
+          beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
-  
+
         setTimeout(() => {
           setIsPaymentModalOpen(true);
         }, 4000);
@@ -283,46 +284,6 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       toast.error("Error booking appointment");
     }
   };
-  
-  const calculateServiceCost = () => {
-    const { servicePlan, shift } = formFields;
-
-    let costOfService = 0;
-
-    switch (servicePlan) {
-      case "Elderly care by a Licensed Nurse":
-        costOfService = shift === "Day Shift (8hrs)" ? 180000 : 220000;
-        break;
-      case "Elderly care by a Nurse Assistant":
-        costOfService = shift === "Day Shift (8hrs)" ? 120000 : 150000;
-        break;
-      case "Postpartum care":
-      case "Recovery care":
-        costOfService = shift === "Day Shift (8hrs)" ? 200000 : 250000;
-        break;
-      case "Nanny care":
-        costOfService = shift === "Day Shift (8hrs)" ? 70000 : 90000;
-        break;
-      case "Short home visit":
-        costOfService = 15000;
-        break;
-      default:
-        const customPlan = customizedPlans.find(
-          (plan) => plan.name === servicePlan
-        );
-        if (customPlan) {
-          costOfService = customPlan.costOfService;
-        } else {
-          costOfService = 0;
-        }
-        break;
-    }
-    setFormFields((prevFields) => ({ ...prevFields, costOfService }));
-  };
-
-  useEffect(() => {
-    calculateServiceCost();
-  });
 
   return (
     <>
@@ -354,6 +315,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
           {showSpecialNeedsForm ? (
             <SpecialNeedsForm
               specialNeeds={specialNeeds}
+              loading={loading}
               setSpecialNeeds={setSpecialNeeds}
               handleSubmit={handleFormSubmit}
               handleBack={() => setShowSpecialNeedsForm(false)}
@@ -362,240 +324,21 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
             <>
               <DrawerBody>
                 <FormControl>
-                  <Flex
-                    ml={{ base: "20px", md: "40px" }}
-                    flexWrap="wrap"
-                    marginTop="20px"
-                  >
-                    <Box  color="#00000080" w={{ base: "300px", md: "270px" }}>
-                      <FormLabel
-                        color="#00000080"
-                        fontFamily="body"
-                        fontWeight="bold"
-                      >
-                        Service Plan{" "}
-                      </FormLabel>
-                      <Select
-                        isRequired
-                        name="servicePlan"
-                        placeholder="preferred service plan"
-                        w={{ base: "300px", md: "270px" }}
-                        fontSize={{ base: "14px", md: "16px" }}
-                        // style={{ border: "1px solid #B49C9C" }}
-                        value={formFields.servicePlan}
-                        onChange={handleInputChange}
-                      >
-                        <optgroup label="Standard Plans">
-                          <option value="Elderly care by a Licensed Nurse">
-                            Elderly care by a Licensed Nurse
-                          </option>
-                          <option value="Elderly care by a Nurse Assistant">
-                            Elderly care by a Nurse Assistant
-                          </option>
-                          <option value="Postpartum care">
-                            Postpartum care by a Licensed Nurse/Midwife
-                          </option>
-                          <option value="Nanny care">
-                            Nanny service by a Professional Nanny
-                          </option>
-                          <option value="Recovery care">
-                            Recovery care by a Licensed Nurse
-                          </option>
-                          <option value="Short home visit">
-                            Short home visit by a Licensed Nurse
-                          </option>
-                        </optgroup>
-                        <optgroup label="Custom Plans">
-                          {customizedPlans.map((plan) => (
-                            <option key={plan.id} value={plan.name}>
-                              {plan.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      </Select>
-                    </Box>
-                    <Box color="#00000080" fontFamily="body" ml={{ md: "5px" }}>
-                      <FormLabel fontWeight="bold">Shift </FormLabel>
-                      <Select
-                        isRequired
-                        name="shift"
-                        placeholder="select preferred shift"
-                        w={{ base: "300px", md: "270px" }}
-                        value={formFields.shift}
-                        onChange={handleInputChange}
-                        disabled={isShiftDisabled}
-                      >
-                        <option value="Day Shift (8hrs)">
-                          Day Shift (8hrs)
-                        </option>
-                        <option value="Live-in (24hrs)">Live-in (24hrs)</option>
-                      </Select>
-                    </Box>
-                  </Flex>
-
-                  <Flex  color="#00000080" flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
-                    <Box w={{ base: "300px", md: "270px" }}>
-                      <FormLabel
-                        fontFamily="body"
-                        fontWeight="bold"
-                        marginTop="20px"
-                        color="#00000080"
-                      >
-                        Start Date
-                      </FormLabel>
-                      <Flex
-                       color="#00000080"
-                        h="6.5vh"
-                        paddingTop="5px"
-                        paddingLeft="15px"
-                        style={{
-                          border: "1px solid #ccc",
-                          borderRadius: "5px",
-                        }}
-                      >
-                        <DatePicker
-                          isRequired
-                          selected={selectedStartDate}
-                          onChange={handleStartDateChange}
-                          peekNextMonth
-                          showMonthDropdown
-                          showYearDropdown
-                          dropdownMode="select"
-                          dateFormat="dd-MM-yyyy"
-                          placeholderText="preferred date to start"
-                          className="form-control"
-                          minDate={new Date()}
-                          style={{
-                            color: "#00000080",
-                          }}
-                        />
-                      </Flex>
-                    </Box>
-                    <Box  color="#00000080" ml={{ md: "5px" }} marginTop="20px">
-                      <FormLabel
-                        color="#00000080"
-                        fontWeight="bold"
-                        fontFamily="body"
-                      >
-                        Preferred Medic Gender{" "}
-                      </FormLabel>
-                      <Select
-                        isRequired
-                        name="preferredMedicGender"
-                        placeholder="select gender"
-                        w={{ base: "300px", md: "270px" }}
-                        fontSize={{ base: "14px", md: "16px" }}
-                        value={formFields.preferredMedicGender}
-                        onChange={handleInputChange}
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </Select>
-                    </Box>
-                  </Flex>
-
-                  <Flex  color="#00000080" flexWrap="wrap" ml={{ base: "20px", md: "40px" }}>
-                    <Box w={{ base: "300px", md: "270px" }} marginTop="20px">
-                      <FormLabel
-                        color="#00000080"
-                        fontFamily="body"
-                        fontWeight="bold"
-                      >
-                        City/Town{" "}
-                      </FormLabel>
-                      <Select
-                        isRequired
-                        name="recipientTown"
-                        placeholder="select town"
-                        w={{ base: "300px", md: "270px" }}
-                        fontSize={{ base: "14px", md: "16px" }}
-                        value={formFields.recipientTown}
-                        onChange={handleInputChange}
-                      >
-                        {townsInLagos.map((town) => (
-                          <option key={town} value={town}>
-                            {town}
-                          </option>
-                        ))}
-                      </Select>
-                    </Box>
-                    <Box ml={{ md: "5px" }} marginTop="20px">
-                      <FormLabel
-                        color="#00000080"
-                        fontWeight="bold"
-                        fontFamily="body"
-                      >
-                        Location{" "}
-                      </FormLabel>
-                      <Flex>
-                        <Input
-                          isRequired
-                          name="currentLocation"
-                          type="text"
-                          placeholder="current Location"
-                          value={formFields.currentLocation}
-                          onChange={handleInputChange}
-                          w={{ base: "300px", md: "270px" }}
-                        />
-                      </Flex>
-                    </Box>
-                  </Flex>
-
-                  <Box  color="#00000080" ml={{ base: "20px", md: "40px" }} marginTop="20px">
-                    <FormLabel
-                      color="#00000080"
-                      fontWeight="bold"
-                      fontFamily="body"
-                    >
-                      Preferred Language{" "}
-                    </FormLabel>
-                    <Select
-                      isRequired
-                      name="preferredLanguage"
-                      placeholder="select language"
-                      w={{ base: "300px", md: "550px" }}
-                      fontSize={{ base: "14px", md: "16px" }}
-                      value={formFields.preferredLanguage}
-                      onChange={handleInputChange}
-                    >
-                      {majorLanguages.map((language) => (
-                        <option key={language} value={language}>
-                          {language}
-                        </option>
-                      ))}
-                    </Select>
-                  </Box>
-
-                  <Box  color="#00000080" ml={{ base: "20px", md: "40px" }} marginTop="20px">
-                    <FormLabel
-                      color="#00000080"
-                      fontWeight="bold"
-                      fontFamily="body"
-                    >
-                      Health History
-                    </FormLabel>
-                    <FormLabel
-                      color="#00000080"
-                      fontSize="14px"
-                      fontFamily="body"
-                    >
-                      (Is there anything you'd like us to know?)
-                    </FormLabel>
-                    <Textarea
-                      name="recipientHealthHistory"
-                      type="text"
-                      placeholder="share health history"
-                      value={formFields.recipientHealthHistory}
-                      onChange={handleInputChange}
-                      w={{ base: "300px", md: "550px" }}
-                    />
-                  </Box>
+                  <FormFields
+                    formFields={formFields}
+                    townsInLagos={townsInLagos}
+                    majorLanguages={majorLanguages}
+                    handleInputChange={handleInputChange}
+                    handleStartDateChange={handleStartDateChange}
+                    selectedStartDate={selectedStartDate}
+                    customizedPlans={customizedPlans}
+                    isShiftDisabled={isShiftDisabled}
+                  />
                   <Box mb="20px" ml={{ base: "20px", md: "40px" }} mt="20px">
                     <Button
                       isLoading={loading}
                       loadingText="Loading..."
                       w="150px"
-                      // bg="#A210C6"
                       bg="linear-gradient(80deg, #A210C6, #E552FF)"
                       color="white"
                       onClick={() => setShowSpecialNeedsForm(true)}

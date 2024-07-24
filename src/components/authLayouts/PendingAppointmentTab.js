@@ -56,6 +56,8 @@ export default function PendingApp() {
     setPaymentData({
       costOfService: selectedAppointment.customerAppointment.costOfService,
       appointmentId: selectedAppointment.customerAppointment.id,
+      endDate: selectedAppointment.customerAppointment.endDate,
+      startDate: selectedAppointment.customerAppointment.startDate,
       beneficiary: `${selectedAppointment.customerAppointment.recipientFirstname} ${selectedAppointment.customerAppointment.recipientLastname}`,
     });
     setTimeout(() => {

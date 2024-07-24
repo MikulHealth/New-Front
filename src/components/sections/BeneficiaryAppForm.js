@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PaymentModal from "./PaymentMethod";
 import { baseUrl } from "../../apiCalls/config";
@@ -10,23 +10,23 @@ import {
   DrawerBody,
   DrawerCloseButton,
   Button,
-  Input,
-  Select,
-  Textarea,
   FormControl,
-  FormLabel,
   Box,
-  Flex,
   extendTheme,
 } from "@chakra-ui/react";
-import DatePicker from "react-datepicker";
+import { FormFields } from "./formFields";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import BookingInstructions from "./BookingInstructions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { Link } from "react-router-dom";
 import SpecialNeedsForm from "./SpecialNeedsForm";
+import {
+  formatDateToUTC,
+  calculateEndDate,
+  calculateUrgency,
+  calculateServiceCost,
+} from "./helpers";
 
 const customTheme = extendTheme({
   components: {
@@ -96,7 +96,8 @@ const BookBeneficiaryAppointmentModal = ({
   const [priority, setPriority] = useState("");
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
-  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] =
+    useState(false);
 
   const [formPages, setFormPages] = useState({
     recipientFirstname: selectedBeneficiary.recipientFirstName,
@@ -125,70 +126,93 @@ const BookBeneficiaryAppointmentModal = ({
     return () => clearTimeout(timer);
   }, []);
 
-  const formatDateToUTC = (selectedDate) => {
-    if (!selectedDate) return "";
+  const handleStartDateChange = (date) => {
+    setSelectedStartDate(date);
+    setFormPages((prevFields) => ({ ...prevFields, startDate: date }));
+    calculateUrgency(date, setPriority);
 
-    if (isNaN(new Date(selectedDate))) {
-      console.error("Invalid date:", selectedDate);
-      return "";
+    if (formPages.servicePlan) {
+      const selectedPlan = customizedPlans.find(
+        (plan) => plan.name === formPages.servicePlan
+      );
+      if (selectedPlan) {
+        calculateEndDate(
+          formPages.servicePlan,
+          date,
+          selectedPlan.duration,
+          customizedPlans,
+          setFormPages
+        );
+      } else {
+        calculateEndDate(
+          formPages.servicePlan,
+          date,
+          null,
+          customizedPlans,
+          setFormPages
+        );
+      }
     }
-
-    const adjustedDate = new Date(selectedDate);
-    adjustedDate.setDate(adjustedDate.getDate() + 1);
-
-    return adjustedDate.toISOString().split("T")[0];
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "servicePlan") {
-      const selectedPlan = customizedPlans.find(plan => plan.name === value);
+      const selectedPlan = customizedPlans.find((plan) => plan.name === value);
 
       if (selectedPlan) {
-        setFormPages(prev => ({
-          ...prev,
-          [name]: value,
-          shift: selectedPlan.shift,
-          costOfService: parseFloat(selectedPlan.costOfService.replace(/[,]/g, "")),
-          medicSpecialization: selectedPlan.preferredCaregiver,
-        }));
+        if (selectedPlan.costOfService) {
+          const cleanedCost = selectedPlan.costOfService;
+
+          setFormPages((prevFields) => ({
+            ...prevFields,
+            [name]: value,
+            shift: selectedPlan.shift,
+            costOfService: cleanedCost,
+            medicSpecialization: selectedPlan.preferredCaregiver,
+          }));
+        } else {
+          console.log("Cost of Service is undefined or null");
+        }
         setIsShiftDisabled(true);
       } else {
-        setFormPages(prev => ({
-          ...prev,
+        setFormPages((prevFields) => ({
+          ...prevFields,
           [name]: value,
-          shift: '',
-          costOfService: 0,
+          shift: "",
+          costOfService: "",
         }));
         setIsShiftDisabled(false);
       }
+
+      if (selectedPlan) {
+        calculateEndDate(
+          value,
+          selectedStartDate,
+          selectedPlan.duration,
+          customizedPlans,
+          setFormPages
+        );
+      } else {
+        calculateEndDate(
+          value,
+          selectedStartDate,
+          null,
+          customizedPlans,
+          setFormPages
+        );
+      }
+
+      if (value === "Short home visit") {
+        setFormPages((prevFields) => ({
+          ...prevFields,
+          shift: "Day Shift (8hrs)",
+        }));
+        setIsShiftDisabled(true);
+      }
     } else {
-      setFormPages(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
-
-  const handleStartDateChange = (date) => {
-    setSelectedStartDate(date);
-    setFormPages({ ...formPages, startDate: date });
-    calculateUrgency(date);
-  };
-
-  const calculateUrgency = (date) => {
-    const now = new Date();
-    const diffInHours = (date - now) / (1000 * 60 * 60);
-
-    if (diffInHours <= 24) {
-      setPriority("High");
-    } else if (diffInHours <= 48) {
-      setPriority("Medium");
-    } else if (diffInHours <= 72) {
-      setPriority("Normal");
-    } else {
-      setPriority("Flexible");
+      setFormPages((prevFields) => ({ ...prevFields, [name]: value }));
     }
   };
 
@@ -219,8 +243,7 @@ const BookBeneficiaryAppointmentModal = ({
 
     try {
       const token = localStorage.getItem("token");
-      const apiUrl = 
-     `${baseUrl}/appointment/save`;
+      const apiUrl = `${baseUrl}/appointment/save`;
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -252,9 +275,11 @@ const BookBeneficiaryAppointmentModal = ({
           costOfService: "",
         });
         toast.success("Appointment saved");
-        
+
         setPaymentData({
           costOfService: response.data.data.costOfService,
+          endDate: response.data.data.endDate,
+          startDate: response.data.data.startDate,
           appointmentId: response.data.data.id,
           beneficiary: `${response.data.data.recipientFirstname} ${response.data.data.recipientLastname}`,
         });
@@ -283,7 +308,7 @@ const BookBeneficiaryAppointmentModal = ({
         };
 
         const response = await axios.get(
-       `${baseUrl}/appointment/all-customized-services`,
+          `${baseUrl}/appointment/all-customized-services`,
           config
         );
 
@@ -323,50 +348,23 @@ const BookBeneficiaryAppointmentModal = ({
     }
   }, [selectedBeneficiary]);
 
-  const calculateServiceCost = useCallback(() => {
-    const { servicePlan, shift } = formPages;
-
-    let costOfService = 0;
-
-    switch (servicePlan) {
-      case "Elderly care by a Licensed Nurse":
-        costOfService = shift === "Day Shift (8hrs)" ? 180000 : 220000;
-        break;
-      case "Elderly care by a Nurse Assistant":
-        costOfService = shift === "Day Shift (8hrs)" ? 120000 : 150000;
-        break;
-      case "Postpartum care":
-      case "Recovery care":
-        costOfService = shift === "Day Shift (8hrs)" ? 200000 : 250000;
-        break;
-      case "Nanny care":
-        costOfService = shift === "Day Shift (8hrs)" ? 70000 : 90000;
-        break;
-      case "Short home visit":
-        costOfService = 15000;
-        break;
-      default:
-        const customPlan = customizedPlans.find(
-          (plan) => plan.name === servicePlan
-        );
-        if (customPlan) {
-          costOfService = customPlan.costOfService;
-        } else {
-          costOfService = 0;
-        }
-        break;
-    }
-
-    setFormPages((prevPages) => ({ ...prevPages, costOfService }));
-  }, [formPages, customizedPlans]);
-
   useEffect(() => {
-    calculateServiceCost();
-  }, [calculateServiceCost]);
+    calculateServiceCost(
+      formPages.servicePlan,
+      formPages.shift,
+      customizedPlans,
+      setFormPages
+    );
+  }, [formPages.servicePlan, formPages.shift, customizedPlans]);
 
   return (
     <>
-      <Drawer theme={customTheme} isOpen={isOpen} onClose={onClose} size={{ base: "md", md: "lg" }}>
+      <Drawer
+        theme={customTheme}
+        isOpen={isOpen}
+        onClose={onClose}
+        size={{ base: "md", md: "lg" }}
+      >
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -382,13 +380,16 @@ const BookBeneficiaryAppointmentModal = ({
         <DrawerContent>
           <DrawerHeader fontFamily="heading" textAlign="center" color="#A210C6">
             Book Appointment for{" "}
-            {`${selectedBeneficiary.recipientFirstName || ""} ${selectedBeneficiary.recipientLastName || ""}`}
+            {`${selectedBeneficiary.recipientFirstName || ""} ${
+              selectedBeneficiary.recipientLastName || ""
+            }`}
           </DrawerHeader>
-        
+
           <DrawerCloseButton />
           {showSpecialNeedsForm ? (
             <SpecialNeedsForm
               specialNeeds={specialNeeds}
+              loading={loading}
               setSpecialNeeds={setSpecialNeeds}
               handleSubmit={handleFormSubmit}
               handleBack={() => setShowSpecialNeedsForm(false)}
@@ -396,221 +397,33 @@ const BookBeneficiaryAppointmentModal = ({
           ) : (
             <DrawerBody ml={{ base: "25px", md: "0" }}>
               <FormControl isRequired>
-                <Box>
-                  <Flex flexWrap="wrap">
-                    <Box ml={{ md: "40px" }}>
-                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
-                        Service Plan{" "}
-                      </FormLabel>
-                      <Select
-                        isRequired
-                        name="servicePlan"
-                        placeholder="preferred service plan"
-                        w={{ base: "300px", md: "270px" }}
-                        value={formPages.servicePlan}
-                        onChange={handleInputChange}
-                        fontSize={{ base: "14px", md: "16px" }}
-                      >
-                        <optgroup label="Standard Plans">
-                          <option value="Elderly care by a Licensed Nurse">
-                            Elderly care by a Licensed Nurse
-                          </option>
-                          <option value="Elderly care by a Nurse Assistant">
-                            Elderly care by a Nurse Assistant
-                          </option>
-                          <option value="Postpartum care">
-                            Postpartum care by a Licensed Nurse/Midwife
-                          </option>
-                          <option value="Nanny care">
-                            Nanny service by a Professional Nanny
-                          </option>
-                          <option value="Recovery care">
-                            Recovery care by a Licensed Nurse
-                          </option>
-                          <option value="Short home visit">
-                            Short home visit by a Licensed Nurse
-                          </option>
-                        </optgroup>
-                        <optgroup label="Custom Plans">
-                          {customizedPlans.map((plan) => (
-                            <option key={plan.id} value={plan.name}>
-                              {plan.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      </Select>
-                    </Box>
-
-                    <Box marginLeft="5px">
-                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
-                        Shift{" "}
-                      </FormLabel>
-                      <Select
-                        name="shift"
-                        placeholder="select preferred shift"
-                        w={{ base: "300px", md: "270px" }}
-                        value={formPages.shift}
-                        onChange={handleInputChange}
-                        disabled={isShiftDisabled}
-                      >
-                        <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
-                        <option value="Live-in (24hrs)">Live-in (24hrs)</option>
-                      </Select>
-                    </Box>
-                  </Flex>
-                  <Flex flexWrap="wrap" ml={{ md: "40px" }}>
-                    <Box w={{ base: "300px", md: "270px" }}>
-                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
-                        Start Date
-                      </FormLabel>
-                      <Flex
-                        h="6vh"
-                        padding="5px"
-                        paddingLeft="15px"
-                        style={{ border: "1px solid #ccc", borderRadius: "5px" }}
-                      >
-                        <DatePicker
-                          selected={selectedStartDate}
-                          onChange={handleStartDateChange}
-                          peekNextMonth
-                          showMonthDropdown
-                          showYearDropdown
-                          dropdownMode="select"
-                          dateFormat="dd-MM-yyyy"
-                          placeholderText="preferred date to start"
-                          className="form-control"
-                          minDate={new Date()}
-                        />
-                      </Flex>
-                    </Box>
-                    <Box ml={{ md: "5px" }}>
-                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold" marginTop="20px">
-                        Current Location{" "}
-                      </FormLabel>
-                      <Flex>
-                        <Input
-                          name="currentLocation"
-                          type="text"
-                          placeholder="current Location"
-                          value={formPages.currentLocation}
-                          onChange={handleInputChange}
-                          w={{ base: "300px", md: "270px" }}
-                        />
-                      </Flex>
-                    </Box>
-                  </Flex>
-
-                  <Flex flexWrap="wrap" ml={{ md: "40px" }}>
-                    <Box w={{ base: "300px", md: "270px" }} marginTop="20px">
-                      <FormLabel color="#00000080" fontFamily="body" fontWeight="bold">
-                        City/Town{" "}
-                      </FormLabel>
-                      <Select
-                        isRequired
-                        name="recipientTown"
-                        placeholder="select town"
-                        w={{ base: "300px", md: "270px" }}
-                        fontSize={{ base: "14px", md: "16px" }}
-                        value={formPages.recipientTown}
-                        onChange={handleInputChange}
-                      >
-                        {townsInLagos.map((town) => (
-                          <option key={town} value={town}>
-                            {town}
-                          </option>
-                        ))}
-                      </Select>
-                    </Box>
-                    <Box ml={{ md: "5px" }} marginTop="20px">
-                      <FormLabel color="#00000080" fontWeight="bold" fontFamily="body">
-                        Preferred Medic Gender{" "}
-                      </FormLabel>
-                      <Select
-                        isRequired
-                        name="preferredMedicGender"
-                        placeholder="select gender"
-                        w={{ base: "300px", md: "270px" }}
-                        fontSize={{ base: "14px", md: "16px" }}
-                        value={formPages.preferredMedicGender}
-                        onChange={handleInputChange}
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </Select>
-                    </Box>
-                  </Flex>
-
-                  <Box ml={{ base: "0px", md: "40px" }} marginTop="20px">
-                    <FormLabel color="#00000080" fontWeight="bold" fontFamily="body">
-                      Preferred Language{" "}
-                    </FormLabel>
-                    <Select
-                      isRequired
-                      name="preferredLanguage"
-                      placeholder="select language"
-                      w={{ base: "300px", md: "550px" }}
-                      fontSize={{ base: "14px", md: "16px" }}
-                      value={formPages.preferredLanguage}
-                      onChange={handleInputChange}
-                    >
-                      {majorLanguages.map((language) => (
-                        <option key={language} value={language}>
-                          {language}
-                        </option>
-                      ))}
-                    </Select>
-                  </Box>
-
-                  <Box ml={{ base: "0px", md: "40px" }} marginTop="20px">
-                    <FormLabel color="#00000080" fontWeight="bold" fontFamily="body">
-                      Health History
-                    </FormLabel>
-                    <FormLabel color="#00000080" fontSize="14px" fontFamily="body">
-                      (Is there anything you'd like us to know?)
-                    </FormLabel>
-                    <Textarea
-                      name="recipientHealthHistory"
-                      type="text"
-                      placeholder="share health history"
-                      value={formPages.recipientHealthHistory}
-                      onChange={handleInputChange}
-                      w={{ base: "300px", md: "550px" }}
-                    />
-                  </Box>
-                  <Box mb="20px" ml={{ base: "20px", md: "40px" }} >
-                    <Button
-                      isLoading={loading}
-                      loadingText="Loading..."
-                      w="150px"
-                      // bg="#A210C6"
-                      bg="linear-gradient(80deg, #A210C6, #E552FF)"
-                      color="white"
-                      mt="20px"
-                      onClick={() => setShowSpecialNeedsForm(true)}
-                    >
-                      {loading ? "Loading..." : "Next"}
-                    </Button>
-                  </Box>
+                <FormFields
+                  formFields={formPages}
+                  townsInLagos={townsInLagos}
+                  majorLanguages={majorLanguages}
+                  handleInputChange={handleInputChange}
+                  handleStartDateChange={handleStartDateChange}
+                  selectedStartDate={selectedStartDate}
+                  customizedPlans={customizedPlans}
+                  isShiftDisabled={isShiftDisabled}
+                />
+                <Box mb="20px" ml={{ base: "20px", md: "40px" }}>
+                  <Button
+                    isLoading={loading}
+                    loadingText="Loading..."
+                    w="150px"
+                    // bg="#A210C6"
+                    bg="linear-gradient(80deg, #A210C6, #E552FF)"
+                    color="white"
+                    mt="20px"
+                    onClick={() => setShowSpecialNeedsForm(true)}
+                  >
+                    {loading ? "Loading..." : "Next"}
+                  </Button>
                 </Box>
               </FormControl>
             </DrawerBody>
           )}
-          {/* {!showSpecialNeedsForm && (
-            <DrawerFooter>
-              <Button
-                w="150px"
-                isLoading={loading}
-                loadingText="Processing..."
-                bg="#A210C6"
-                color="white"
-                onClick={handleFormSubmit}
-                borderRadius="100px"
-                _hover={{ color: "" }}
-              >
-                {loading ? "Processing..." : "Submit"}
-              </Button>
-            </DrawerFooter>
-          )} */}
         </DrawerContent>
       </Drawer>
       <PaymentModal
@@ -618,7 +431,7 @@ const BookBeneficiaryAppointmentModal = ({
         onClose={() => setIsPaymentModalOpen(false)}
         paymentData={paymentData}
       />
-       <BookingInstructions
+      <BookingInstructions
         isOpen={isBookingInstructionsOpen}
         onClose={() => setIsBookingInstructionsOpen(false)}
       />

@@ -127,6 +127,8 @@ export default function AppointmentTab() {
     setPaymentData({
       costOfService: selectedAppointment.costOfService,
       appointmentId: selectedAppointment.id,
+      endDate: selectedAppointment.endDate,
+      startDate: selectedAppointment.startDate,
       beneficiary: `${selectedAppointment.recipientFirstname} ${selectedAppointment.recipientLastname}`,
     });
     setTimeout(() => {

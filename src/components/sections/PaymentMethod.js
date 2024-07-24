@@ -6,8 +6,6 @@ import {
   ModalContent,
   ModalFooter,
   Button,
-  Input,
-  useToast,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
@@ -50,12 +48,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   const balance = user?.walletBalance;
   const [amountNeeded, setAmountNeeded] = useState(0);
   const [showInsufficientModal, setShowInsufficientModal] = useState(false);
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [passwordInput, setPassword] = useState("");
-  const toast = useToast();
-  const emailInput = user?.email;
-  const openPasswordModal = () => setIsPasswordModalOpen(true);
-  const closePasswordModal = () => setIsPasswordModalOpen(false);
+  const [isRecurringModalOpen, setIsRecurringModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,10 +57,9 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
           const response = await GetCurrentUser();
           if (response.success) {
             dispatch(SetUser(response.data));
-          } else {
           }
         } catch (error) {
-        } finally {
+          console.error(error);
         }
       } else {
         navigate("/login");
@@ -78,60 +70,28 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
   }, [navigate, dispatch]);
 
   const handleWalletPayment = () => {
-    const { costOfService } = paymentData;
+    const { costOfService, endDate, startDate } = paymentData;
     const numericBalance = Number(balance);
-
     const numericCostOfService = Number(paymentData.costOfService);
+    const end = new Date(endDate);
+    const start = new Date(startDate);
+
+    const isOneMonthSubscription =
+      end.getFullYear() === start.getFullYear() &&
+      end.getMonth() === start.getMonth() + 1 &&
+      end.getDate() === start.getDate();
 
     if (numericBalance > numericCostOfService) {
-      setTimeout(() => {
-        navigate("/wallet-confirmation", {
-          state: { ...paymentData },
-        });
-      }, 1000);
-      onClose();
+      if (isOneMonthSubscription) {
+        setIsRecurringModalOpen(true);
+      } else {
+        navigate("/wallet-confirmation", { state: { ...paymentData } });
+      }
     } else {
       setAmountNeeded(costOfService);
       setShowInsufficientModal(true);
     }
-  };
-
-  const handlePasswordSubmit = async () => {
-    const apiUrl = "https://backend-c1pz.onrender.com/login";
-    try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: emailInput,
-          password: passwordInput,
-        }),
-      });
-
-      if (response.ok) {
-        closePasswordModal();
-        handleWalletPayment();
-      } else {
-        toast({
-          title: "Verification Failed",
-          description: "Invalid password. Please try again.",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-          position: "top-left",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Verification Error",
-        description: "Invalid password. Please try again.",
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-        position: "top-left",
-      });
-    } finally {
-    }
+    onClose();
   };
 
   const handleCardPayment = () => {
@@ -155,7 +115,6 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
         <ModalContent
           width={modalWidth}
           borderRadius="25px 25px 25px 0px"
-          // bg="#A210C6"
           bg="linear-gradient(80deg, #A210C6, #E552FF)"
         >
           <ModalCloseButton color="white" />
@@ -167,7 +126,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
             textAlign="center"
           >
             The cost for the service is ₦
-            {formatAmount(paymentData.costOfService)} <br></br>
+            {formatAmount(paymentData.costOfService)} <br />
             How do you want to pay?
           </ModalHeader>
 
@@ -176,9 +135,9 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
               bg="white"
               marginLeft="8px"
               borderRadius="15px"
-              onClick={openPasswordModal}
+              onClick={handleWalletPayment}
               style={{
-                cursor: "",
+                cursor: "pointer",
               }}
               _hover={{ color: "#A210C6" }}
             >
@@ -204,16 +163,6 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                     Pay with your Mikul Health wallet
                   </Text>
                 </Box>
-                {/* <Image
-               display={{base: "none", md: "block"}}
-                marginLeft="15px"
-                marginTop="25px"
-                w="30px"
-                h="30px"
-                boxSize={["20px", "30px"]}
-                src={RightArrow}
-                alt="Settings"
-              /> */}
               </Flex>
             </Box>
             <Box
@@ -224,7 +173,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
               borderRadius="15px"
               onClick={handleCardPayment}
               style={{
-                cursor: "",
+                cursor: "pointer",
               }}
               _hover={{ color: "#A210C6" }}
             >
@@ -250,16 +199,6 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
                     Pay with your card
                   </Text>
                 </Box>
-                {/* <Image
-              display={{base: "none", md: "block"}}
-                marginLeft="15px"
-                marginTop="25px"
-                w="30px"
-                h="30px"
-                boxSize={["20px", "30px"]}
-                src={RightArrow}
-                alt="Settings"
-              /> */}
               </Flex>
             </Box>
           </ModalBody>
@@ -268,50 +207,54 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
 
       <Modal
         size={{ base: "sm", md: "md" }}
-        isOpen={isPasswordModalOpen}
-        onClose={closePasswordModal}
+        isOpen={isRecurringModalOpen}
+        onClose={() => setIsRecurringModalOpen(false)}
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontFamily="heading" color="#A210C6">
-            Enter Password
+            Subscribe to Appointment
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text fontWeight="body" mb={4}>
-              Mikul health wants to make sure it's really you trying to use the
-              your wallet to make payment.
+              Do you want to subscribe to the appointment? By setting up
+              recurring charges automatically on your wallet when the
+              appointment reaches its end date. <br /> <br />
+              With this, you would not have to repeat the payment process every
+              month/week/day. <br /> <br /> You can always cancel your
+              subscribed appointment(s) later from your dashboard if you change
+              your mind.
             </Text>
-
-            <Input
-              placeholder="Password"
-              type="password"
-              value={passwordInput}
-              onChange={(e) => setPassword(e.target.value)}
-              mb={3}
-            />
           </ModalBody>
           <ModalFooter>
             <Button
               bg="#A210C6"
               color="white"
               mr={3}
-              onClick={handlePasswordSubmit}
+              onClick={() =>
+                navigate("/wallet-sub-confirmation", {
+                  state: { ...paymentData },
+                })
+              }
               fontFamily="body"
             >
-              Submit
+              Yes
             </Button>
             <Button
               fontFamily="body"
               bg="gray.500"
               color="white"
-              onClick={closePasswordModal}
+              onClick={() =>
+                navigate("/wallet-confirmation", { state: { ...paymentData } })
+              }
             >
-              Cancel
+              No
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       {showInsufficientModal && (
         <InsufficientFundsModal
           isOpen={showInsufficientModal}

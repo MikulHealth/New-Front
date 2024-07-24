@@ -30,6 +30,7 @@ const customTheme = extendTheme({
 const SpecialNeedsForm = ({
   specialNeeds,
   setSpecialNeeds,
+  loading,
   handleSubmit,
   handleBack,
 }) => {
@@ -156,15 +157,14 @@ const SpecialNeedsForm = ({
           Back
         </Button>
         <Button
-          // isLoading={loading}
-          // loadingText="Processing..."
+          isLoading={loading}
+          loadingText="Processing..."
           onClick={handleSubmit}
           // bg="#A210C6"
           bg="linear-gradient(80deg, #A210C6, #E552FF)"
           color="white"
         >
-          {/* {loading ? "Processing..." : "Submit"} */}
-          Submit
+          {loading ? "Processing..." : "Submit"}
         </Button>
       </Flex>
     </Box>

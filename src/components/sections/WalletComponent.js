@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -5,22 +6,15 @@ import {
   VStack,
   Button,
   IconButton,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
   extendTheme,
   Icon,
   keyframes,
-  ModalFooter,
 } from "@chakra-ui/react";
 import { CopyIcon, CheckIcon } from "@chakra-ui/icons";
-import { useState } from "react";
-import WalletModal from "../sections/CreateWalletModal";
 import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
+import WalletModal from "../sections/CreateWalletModal";
+import SubscribedAppointmentsDrawer from "./SubscribedAppointmentsDrawer";
 
 const customTheme = extendTheme({
   components: {
@@ -45,12 +39,10 @@ const WalletComponent = ({
   onCopy,
   walletBankName,
   subscriptionsCount,
-  subscribedAppointments,
 }) => {
   const { walletCreated, walletBalance } = user;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubscriptionsModalOpen, setIsSubscriptionsModalOpen] =
-    useState(false);
+  const [isSubscriptionsDrawerOpen, setIsSubscriptionsDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
   const formatAmount = (amount) => {
@@ -78,21 +70,21 @@ const WalletComponent = ({
   };
 
   const handleSubscriptionsClick = () => {
-    setIsSubscriptionsModalOpen(true);
+    setIsSubscriptionsDrawerOpen(true);
   };
 
-  const handleCloseSubscriptionsModal = () => {
-    setIsSubscriptionsModalOpen(false);
+  const handleCloseSubscriptionsDrawer = () => {
+    setIsSubscriptionsDrawerOpen(false);
   };
 
   const zoomAnimation = keyframes`
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-`;
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+  `;
 
   return (
     <Box theme={customTheme}>
@@ -291,7 +283,6 @@ const WalletComponent = ({
         w={{ base: "370px", md: "690px" }}
         h={{ base: "50px", md: "65px" }}
         mb={{ md: "20px" }}
-        // style={{ boxShadow: "0px 4px 8px rgba(169, 169, 169, 1)" }}
         style={{ boxShadow: "0px 4px 8px rgba(162, 16, 198, 0.4)" }}
         borderRadius="4px"
         display="flex"
@@ -315,58 +306,25 @@ const WalletComponent = ({
             fontSize={{ base: "18px", md: "22px" }}
             color="#A210C6"
           >
-            {/* {subscriptionsCount} */}0
+            {subscriptionsCount}
           </Text>
           <Icon
             ml="5px"
             as={FaHeart}
             color="#A210C6"
-            mt={{base: "px", md: "5px"}}
+            mt={{ base: "px", md: "5px" }}
             w={5}
             h={5}
-            animation={`${zoomAnimation} 3s infinite`}
+            animation={`${zoomAnimation} 2s infinite`}
           />
         </Flex>
       </Box>
 
-      {/* Subscriptions Modal */}
-      <Modal
-        isOpen={isSubscriptionsModalOpen}
-        onClose={handleCloseSubscriptionsModal}
-        theme={customTheme}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader fontFamily="heading" color="#A210C6">
-            Subscribed Appointments
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody fontFamily="body">
-            {subscribedAppointments?.length > 0 ? (
-              subscribedAppointments?.map((appointment) => (
-                <Box key={appointment?.id} mb="10px">
-                  <Text>Appointment ID: {appointment?.id}</Text>
-                  <Text>Start Date: {appointment?.startDate}</Text>
-                </Box>
-              ))
-            ) : (
-              <Text fontFamily="body">
-                You have no subscribed plan yet. Book an appointment to begin.
-              </Text>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              bg="linear-gradient(80deg, #A210C6, #E552FF)"
-              mr={3}
-              color="white"
-              onClick={handleCloseSubscriptionsModal}
-            >
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <SubscribedAppointmentsDrawer
+        isOpen={isSubscriptionsDrawerOpen}
+        onClose={handleCloseSubscriptionsDrawer}
+        user={user}
+      />
     </Box>
   );
 };

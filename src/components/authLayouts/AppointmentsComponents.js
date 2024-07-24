@@ -463,7 +463,7 @@ export const AppointmentDetails = ({
               _hover={{ color: "" }}
               onClick={onClose}
             >
-              Cancel
+              Close
             </Button>
           )}
           {appointment.appointmentPending && (
@@ -477,15 +477,17 @@ export const AppointmentDetails = ({
               >
                 Edit
               </Button>
-              <Button
-                ml="10px"
-                bg="#E1ACAE"
-                color="red.500"
-                _hover={{ color: "" }}
-                onClick={() => handleCancelAppointment(appointment.id)}
-              >
-                Delete
-              </Button>
+              {!appointment.paid && (
+                <Button
+                  ml="10px"
+                  bg="#E1ACAE"
+                  color="red.500"
+                  _hover={{ color: "" }}
+                  onClick={() => handleCancelAppointment(appointment.id)}
+                >
+                  Delete
+                </Button>
+              )}
             </Box>
           )}
         </DrawerFooter>

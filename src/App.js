@@ -43,12 +43,13 @@ import MedicChangePasswordPage from "./components/pages/MedicChangePassword";
 import MedicEdithProfilePage from "./components/pages/MedicEdithProfile";
 import MedicNotificationSettingsPage from "./components/pages/MedicNotiSettings";
 import MedicSettingsPage from "./components/pages/MedicSettingsPage";
+import WalletSubscriptionPage from "./components/sections/WalletSubscription";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <InactivityLogout />
+        {/* <InactivityLogout /> */}
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<AboutPage />}></Route>
@@ -80,6 +81,7 @@ function App() {
           <Route path="/verifyPhone" element={<VerifyOtpDash />}></Route>
           <Route path="/make-payment" element={<PaymentConfirmationPage />} />
           <Route path="/wallet-confirmation" element={<WalletPaymentPage />} />
+          <Route path="/wallet-sub-confirmation" element={<WalletSubscriptionPage />} />
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/settings" element={<SettingsPage />} />
