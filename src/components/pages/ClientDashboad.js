@@ -64,7 +64,7 @@ const ClientDash = () => {
   const activeAppointments = user?.numberOfActiveAppointments;
   const completedAppointments = user?.numberOfCompletedAppointments;
   const walletAccountNumber = user?.walletAccountNumber;
-  const subscriptionsCount = user?.subscriptionsCount;
+  const subscriptionsCount = user?.numberOfSubscriptions;
   const subscribedAppointments = user?.subscribedAppointments;
   const { hasCopied, onCopy } = useClipboard(walletAccountNumber);
   const walletBankName = user?.walletBankName;

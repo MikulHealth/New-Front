@@ -9,6 +9,7 @@ import {
   DrawerCloseButton,
   DrawerBody,
   DrawerFooter,
+  useToast,
   Text,
   Spinner,
   extendTheme,
@@ -23,7 +24,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { baseUrl } from "../../apiCalls/config";
-import { AppointmentDetails, MedicDetailsDrawer } from "../authLayouts/AppointmentsComponents";
+import {
+  AppointmentDetails,
+  MedicDetailsDrawer,
+} from "../authLayouts/AppointmentsComponents";
 import EditPendingAppointmentModal from "./EditPendingAppointmentModal";
 
 const customTheme = extendTheme({
@@ -42,22 +46,15 @@ const customTheme = extendTheme({
   },
 });
 
-const SubscribedAppointmentsDrawer = ({
-  isOpen,
-  onClose,
-  user,
-}) => {
+const SubscribedAppointmentsDrawer = ({ isOpen, onClose, user }) => {
   const [appointments, setAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [selectedSubAppointment, setSelectedSubAppointment] = useState(null);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [medicDetailsOpen, setMedicDetailsOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [cancellingAppointmentId, setCancellingAppointmentId] = useState(null);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  
-  
+  const toast = useToast();
 
   useEffect(() => {
     if (isOpen) {
@@ -89,36 +86,62 @@ const SubscribedAppointmentsDrawer = ({
   }, [isOpen, user.userId]);
 
   const handleConfirmAction = async () => {
-    if (!selectedAppointment) return;
-    const { pvbSubId, active } = selectedAppointment;
+    if (!selectedSubAppointment) return;
+    const { id, active } = selectedSubAppointment;
     const url = active
-      ? `${baseUrl}/wallets/schedule-payment/cancel`
-      : `${baseUrl}/wallets/schedule-payment/reactivate`;
-    const payload = {
-      is_active: !active,
-      next_charge_attempt: selectedAppointment.endDate,
-    };
-
+      ? `${baseUrl}/api/wallets/cancel-sub/${id}`
+      : `${baseUrl}/api/wallets/reactivate-sub/${id}`;
     try {
-      const response = await axios.patch(url, payload, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
-      if (response.data.status) {
+      if (response.data.success) {
         setAppointments((prevAppointments) =>
           prevAppointments.map((appointment) =>
-            appointment.pvbSubId === pvbSubId
+            appointment.id === id
               ? { ...appointment, active: !active }
               : appointment
           )
         );
+        toast({
+          title: "Success",
+          description: `Subscription has been ${
+            active ? "cancelled" : "reactivated"
+          } successfully.`,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "top-right",
+        });
       } else {
         console.error("Failed to update subscription status");
+        toast({
+          title: "Error",
+          description: "Failed to update subscription status.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top-right",
+        });
       }
     } catch (error) {
       console.error("Error updating subscription status:", error);
+      toast({
+        title: "Error",
+        description:
+          "An error occurred while updating the subscription status.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
     } finally {
       setIsConfirmModalOpen(false);
       setSelectedAppointment(null);
@@ -126,7 +149,7 @@ const SubscribedAppointmentsDrawer = ({
   };
 
   const handleActionClick = (appointment) => {
-    setSelectedAppointment(appointment);
+    setSelectedSubAppointment(appointment);
     setIsConfirmModalOpen(true);
   };
 
@@ -144,20 +167,11 @@ const SubscribedAppointmentsDrawer = ({
 
   const handleEditAppointment = (id) => {
     setEditModalOpen(true);
-    setDetailsModalOpen(false);
   };
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
   };
-
-  const handleCancelAppointment = (appointmentId) => {
-    setCancellingAppointmentId(appointmentId);
-    setConfirmationModalOpen(true);
-  };
-
-  
-
 
   return (
     <>
@@ -171,7 +185,9 @@ const SubscribedAppointmentsDrawer = ({
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader fontFamily="heading" color="#A210C6">
-            {selectedAppointment ? "Appointment Details" : "Subscribed Appointments"}
+            {selectedAppointment
+              ? "Appointment Details"
+              : "Subscribed Appointments"}
           </DrawerHeader>
           <DrawerCloseButton />
           <DrawerBody fontFamily="body">
@@ -184,8 +200,7 @@ const SubscribedAppointmentsDrawer = ({
                 appointment={selectedAppointment.customerAppointment}
                 handleViewMedicDetails={handleViewMedicDetails}
                 handleEditAppointment={handleEditAppointment}
-                handleCancelAppointment={handleCancelAppointment}
-            
+                // handleCancelAppointment={handleCancelAppointment}
               />
             ) : appointments?.length > 0 ? (
               appointments?.map((appointment) => {
@@ -238,7 +253,7 @@ const SubscribedAppointmentsDrawer = ({
                         Details
                       </Button>
                       <Button
-                        bg={active ? "red.500" : "green.500"}
+                        bg={active ? "red.400" : "green.300"}
                         color="white"
                         onClick={() => handleActionClick(appointment)}
                       >
@@ -257,12 +272,7 @@ const SubscribedAppointmentsDrawer = ({
             )}
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              mr={3}
-              bg="gray.500"
-              color="white"
-              onClick={onClose}
-            >
+            <Button mr={3} bg="gray.500" color="white" onClick={onClose}>
               Close
             </Button>
           </DrawerFooter>
@@ -272,6 +282,8 @@ const SubscribedAppointmentsDrawer = ({
       <Modal
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
+        motionPreset="slideInBottom"
+        position="top-right"
       >
         <ModalOverlay />
         <ModalContent>
@@ -312,10 +324,9 @@ const SubscribedAppointmentsDrawer = ({
           isOpen={medicDetailsOpen}
           onClose={closeMedicDetailsDrawer}
           medic={selectedAppointment.matchedMedic}
-          
         />
       )}
-       <EditPendingAppointmentModal
+      <EditPendingAppointmentModal
         isOpen={editModalOpen}
         onClose={handleCloseEditModal}
         appointmentDetails={selectedAppointment}

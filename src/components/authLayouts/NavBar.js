@@ -285,29 +285,29 @@ export default function NavBar() {
             onClick={onOpen}
           />
           {isDashboard ? (
-            <Flex
-              justifyContent="flex-start"
-              flexDirection={{ base: "column", md: "row" }}
-            >
-              <Heading
-                fontSize={{ base: "18", md: "28px" }}
-                color="#A210C6"
-                fontWeight="bold"
-                fontFamily="heading"
-              >
-                Hello {user?.firstName}
-              </Heading>
-              <Text
-                fontStyle="italic"
-                fontFamily="body"
-                marginLeft={{ base: "10px", md: "5px" }}
-               
-                fontSize={{ base: "10px", md: "16px" }}
-                marginTop={{ base: "5px", md: "5px" }}
-              >
-                How are you doing today?
-              </Text>
-            </Flex>
+          <Flex
+          justifyContent="flex-start"
+          flexDirection={{ base: "column", md: "row" }}
+          alignItems={{ base: "flex-start", md: "center" }}
+        >
+          <Heading
+            fontSize={{ base: "18px", md: "28px" }}
+            color="#A210C6"
+            fontWeight="bold"
+            fontFamily="heading"
+          >
+            Hello {user?.firstName}
+          </Heading>
+          <Text
+            fontStyle="italic"
+            fontFamily="body"
+            marginLeft={{ base: "0px", md: "10px" }}
+            marginTop={{ base: "5px", md: "0" }}
+            fontSize={{ base: "10px", md: "16px" }}
+          >
+            How are you doing today?
+          </Text>
+        </Flex>         
           ) : (
             <Heading
             

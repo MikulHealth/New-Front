@@ -1,0 +1,38 @@
+.responsive-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .responsive-heading {
+    font-size: 18px;
+    color: #A210C6;
+    font-weight: bold;
+    font-family: 'heading';
+  }
+  
+  .responsive-text {
+    font-style: italic;
+    font-family: 'body';
+    margin-left: 0;
+    margin-top: 5px;
+    font-size: 10px;
+  }
+  
+  /* Media query for screens with a width of 989px */
+  @media (min-width: 989px) {
+    .responsive-container {
+      flex-direction: row;
+    }
+  
+    .responsive-heading {
+      font-size: 28px;
+    }
+  
+    .responsive-text {
+      margin-left: 10px;
+      margin-top: 0;
+      font-size: 16px;
+    }
+  }
+  
