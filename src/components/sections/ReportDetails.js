@@ -37,9 +37,6 @@ const ReportDetails = ({
     <>
       <VStack mb="50px" spacing={4} align="start" w="100%">
         <Flex justifyContent="space-between" w="100%">
-          <Button colorScheme="blue" onClick={() => setSelectedReport(null)}>
-            Back
-          </Button>
           <Button
             mb="10px"
             bg="green.500"

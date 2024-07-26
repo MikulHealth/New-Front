@@ -22,9 +22,8 @@ export const GetCurrentUser = async () => {
     return response.data;
   } catch (error) {
     console.log(error);
-    if (error.response && error.response.status === 401) {
-      // Token expired, redirect to login page
-      window.location.href = "/login"; // Modify the path as per your application
+    if (error.response && error.response.status === 403) {
+      window.location.href = "/login"; 
     }
     return error.response.data;
   }
@@ -51,9 +50,8 @@ export const GetCurrentMedic = async () => {
     return response.data;
   } catch (error) {
     console.log(error);
-    if (error.response && error.response.status === 401) {
-      // Token expired, redirect to login page
-      window.location.href = "/login"; // Modify the path as per your application
+    if (error.response && error.response.status === 403) {
+      window.location.href = "/login"; 
     }
     return error.response.data;
   }

@@ -11,6 +11,8 @@ import {
   useBreakpointValue,
   Flex,
   Spinner,
+  DrawerFooter,
+  Button,
   Text,
   useToast,
   extendTheme,
@@ -285,6 +287,11 @@ function MedicalReportsDrawer({ isOpen, onClose }) {
             />
           )}
         </DrawerBody>
+        <DrawerFooter>
+            <Button mr={3} bg="gray.500" color="white" onClick={onClose}>
+              Close
+            </Button>
+          </DrawerFooter>
       </DrawerContent>
 
       <RecommendedInterventionModal

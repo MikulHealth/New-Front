@@ -175,7 +175,6 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
               </Flex>
             ) : (
               <Flex
-              
                 direction="column"
                 align="center"
                 justify="center"
@@ -306,32 +305,34 @@ const PatientDetailsDrawer = ({ patient, isOpen, onClose }) => {
               </Flex>
             )}
           </DrawerBody>
-          <DrawerFooter>
-            {!isViewingCarePlan && (
-              <Button
-                color="white"
-                // bg="#A210C6"
-                bgGradient="linear(to-r, #A210C6, #E552FF)"
-                borderRadius="50px"
-                onClick={handleViewCarePlan}
-                fontFamily="body"
-                w="full"
-              >
-                Recommended Care Plan
-              </Button>
-            )}
-            {isViewingCarePlan && (
-              <Button
-                color="white"
-                // bg="#A210C6"
-                bgGradient="linear(to-r, #A210C6, #E552FF)"
-                borderRadius="50px"
-                onClick={handleBackToDetails}
-                fontFamily="body"
-              >
-                Back to Patient Details
-              </Button>
-            )}
+          <DrawerFooter justifyContent="space-between">
+            <Box display="flex" justifyContent="space-between" width="100%">
+              {!isViewingCarePlan && (
+                <>
+                  <Button
+                    color="white"
+                    bgGradient="linear(to-r, #A210C6, #E552FF)"
+                    onClick={handleViewCarePlan}
+                    fontFamily="body"
+                  >
+                    Recommended Care Plan
+                  </Button>
+                  <Button mr={3} bg="gray.500" color="white" onClick={onClose}>
+                    Close
+                  </Button>
+                </>
+              )}
+              {isViewingCarePlan && (
+                <Button
+                  color="white"
+                  bgGradient="linear(to-r, #A210C6, #E552FF)"
+                  onClick={handleBackToDetails}
+                  fontFamily="body"
+                >
+                  Back to Patient Details
+                </Button>
+              )}
+            </Box>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

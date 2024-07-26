@@ -26,7 +26,6 @@ import { AddIcon } from "@chakra-ui/icons";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const customTheme = extendTheme({
   components: {
     Link: {
@@ -185,7 +184,12 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         />
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader fontFamily="heading" fontSize="lg" fontWeight="bold" color="#A210C6">
+          <DrawerHeader
+            fontFamily="heading"
+            fontSize="lg"
+            fontWeight="bold"
+            color="#A210C6"
+          >
             Beneficiaries
           </DrawerHeader>
           <DrawerCloseButton />
@@ -198,13 +202,19 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
             ) : (
               <VStack align="start" spacing={4}>
                 {beneficiaries.length === 0 ? (
-                  <Text fontWeight="bold" fontFamily="body">You have no beneficiaries yet.</Text>
+                  <Text fontWeight="bold" fontFamily="body">
+                    You have no beneficiaries yet.
+                  </Text>
                 ) : (
                   beneficiaries.map((beneficiary) => (
                     <Box key={beneficiary.id}>
                       <Box>
                         <Flex>
-                          <Text fontFamily="body" fontWeight="bold" color="black">
+                          <Text
+                            fontFamily="body"
+                            fontWeight="bold"
+                            color="black"
+                          >
                             Beneficiary Name:{" "}
                           </Text>
                           <Text color="black" marginLeft="15px">
@@ -216,7 +226,11 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                           </Text>
                         </Flex>
                         <Flex>
-                          <Text fontFamily="body" fontWeight="bold" color="black">
+                          <Text
+                            fontFamily="body"
+                            fontWeight="bold"
+                            color="black"
+                          >
                             Phone Number:{" "}
                           </Text>
                           <Text color="black" marginLeft="15px">
@@ -225,7 +239,11 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                           </Text>
                         </Flex>
                         <Flex>
-                          <Text fontFamily="body" fontWeight="bold" color="black">
+                          <Text
+                            fontFamily="body"
+                            fontWeight="bold"
+                            color="black"
+                          >
                             Gender:{" "}
                           </Text>
                           <Text marginLeft="15px" color="black">
@@ -233,7 +251,11 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                           </Text>
                         </Flex>
                         <Flex>
-                          <Text fontFamily="body"  fontWeight="bold" color="black">
+                          <Text
+                            fontFamily="body"
+                            fontWeight="bold"
+                            color="black"
+                          >
                             Date of Birth:{" "}
                           </Text>
                           <Text marginLeft="15px" color="black">
@@ -311,11 +333,13 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
               </VStack>
             )}
           </DrawerBody>
-          <DrawerFooter>
+          <DrawerFooter justifyContent="space-between">
+            <Button bg="gray.500" color="white" onClick={onClose}>
+              Close
+            </Button>
             <Button
               onClick={handleOpenAddBeneficiaryForm}
               color="white"
-              // bg="#A210C6"
               bg="linear-gradient(80deg, #A210C6, #E552FF)"
               leftIcon={<AddIcon />}
               fontFamily="body"
@@ -347,9 +371,13 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
         >
           <DrawerOverlay />
           <DrawerContent maxH="30vh" overflowY="auto">
-            <DrawerHeader fontFamily="heading" color="#A210C6">Confirmation</DrawerHeader>
+            <DrawerHeader fontFamily="heading" color="#A210C6">
+              Confirmation
+            </DrawerHeader>
             <DrawerBody>
-              <Text fontFamily="body">Are you sure you want to remove this beneficiary?</Text>
+              <Text fontFamily="body">
+                Are you sure you want to remove this beneficiary?
+              </Text>
             </DrawerBody>
             <DrawerFooter alignContent="space-between">
               <Button
@@ -362,7 +390,7 @@ const BeneficiariesModal = ({ isOpen, onClose }) => {
                 Confirm
               </Button>
               <Button
-              fontFamily="body"
+                fontFamily="body"
                 marginLeft="5px"
                 bg="#E1ACAE"
                 color="red.500"

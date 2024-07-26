@@ -456,7 +456,7 @@ export const AppointmentDetails = ({
           </Box>
         </DrawerBody>
         <DrawerFooter justifyContent="space-between">
-          {appointment.appointmentPending && (
+          {appointment && (
             <Button
               bg="gray.500"
               color="white"
@@ -555,6 +555,16 @@ export const MedicDetailsDrawer = ({ isOpen, onClose, medic }) => {
           <Button variant="ghost" onClick={onClose} leftIcon={<CloseIcon />} />
         </DrawerHeader>
         <DrawerBody overflowY="auto">
+          <Button
+            mt="10px"
+            w="full"
+            colorScheme="green"
+            as="a"
+            href={`tel:${medic.bioData.phoneNumber}`}
+            leftIcon={<PhoneIcon />}
+          >
+            Call Caregiver
+          </Button>
           <Flex flexDirection="column" alignItems="start" marginLeft="20px">
             <Flex marginTop="5px">
               <Text fontWeight="bold" color="black">
@@ -618,17 +628,12 @@ export const MedicDetailsDrawer = ({ isOpen, onClose, medic }) => {
                 {medic.medicHomeAddress}
               </Text>
             </Flex>
-            <Button
-              mt="10px"
-              w="full"
-              colorScheme="green"
-              as="a"
-              href={`tel:${medic.bioData.phoneNumber}`}
-              leftIcon={<PhoneIcon />}
-            >
-              Call Caregiver
-            </Button>
           </Flex>
+          <DrawerFooter>
+            <Button mr={3} bg="gray.500" color="white" onClick={onClose}>
+              Close
+            </Button>
+          </DrawerFooter>
         </DrawerBody>
       </DrawerContent>
     </Drawer>

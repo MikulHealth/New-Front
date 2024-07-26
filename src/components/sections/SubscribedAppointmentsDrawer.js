@@ -167,6 +167,7 @@ const SubscribedAppointmentsDrawer = ({ isOpen, onClose, user }) => {
 
   const handleEditAppointment = (id) => {
     setEditModalOpen(true);
+    // setDetailsModalOpen(false);
   };
 
   const handleCloseEditModal = () => {
@@ -319,11 +320,11 @@ const SubscribedAppointmentsDrawer = ({ isOpen, onClose, user }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {selectedAppointment && selectedAppointment.matchedMedic && (
+      {selectedAppointment && selectedAppointment.customerAppointment.matchedMedic && (
         <MedicDetailsDrawer
           isOpen={medicDetailsOpen}
           onClose={closeMedicDetailsDrawer}
-          medic={selectedAppointment.matchedMedic}
+          medic={selectedAppointment.customerAppointment.matchedMedic}
         />
       )}
       <EditPendingAppointmentModal

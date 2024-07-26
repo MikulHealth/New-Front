@@ -218,7 +218,7 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
           <ModalCloseButton />
           <ModalBody>
             <Text fontWeight="body" mb={4}>
-              Do you want to subscribe to the appointment? By setting up
+              Do you want to subscribe to this appointment? By setting up
               recurring charges automatically on your wallet when the
               appointment reaches its end date. <br /> <br />
               With this, you would not have to repeat the payment process every
