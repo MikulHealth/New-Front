@@ -44,11 +44,13 @@ import MedicEdithProfilePage from "./components/pages/MedicEdithProfile";
 import MedicNotificationSettingsPage from "./components/pages/MedicNotiSettings";
 import MedicSettingsPage from "./components/pages/MedicSettingsPage";
 import WalletSubscriptionPage from "./components/sections/WalletSubscription";
+import GoogleMapsConfig from './GoogleMapsConfig';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+      <GoogleMapsConfig/>
         <InactivityLogout />
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
@@ -60,8 +62,8 @@ function App() {
           <Route path="/verify-number" element={<VerifyNumber />}></Route>
           <Route path="/complete" element={<CompletionPage />}></Route>
           <Route path="/patients" element={<PatientsPage />}></Route>
-          <Route path="/medic-appointment" element={<MedicAppPage />}></Route>         
-          <Route path="/medic-wallet" element={<MedicWalletPage />}></Route>         
+          <Route path="/medic-appointment" element={<MedicAppPage />}></Route>
+          <Route path="/medic-wallet" element={<MedicWalletPage />}></Route>
           <Route
             path="/verify-medic-number"
             element={<VerifyMedicNumber />}
@@ -81,20 +83,29 @@ function App() {
           <Route path="/verifyPhone" element={<VerifyOtpDash />}></Route>
           <Route path="/make-payment" element={<PaymentConfirmationPage />} />
           <Route path="/wallet-confirmation" element={<WalletPaymentPage />} />
-          <Route path="/wallet-sub-confirmation" element={<WalletSubscriptionPage />} />
+          <Route
+            path="/wallet-sub-confirmation"
+            element={<WalletSubscriptionPage />}
+          />
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/medic-settings" element={<MedicSettingsPage />} />
           <Route path="/edit-profile" element={<EdithProfilePage />} />
-          <Route path="/medic-edit-profile" element={<MedicEdithProfilePage />} />
+          <Route
+            path="/medic-edit-profile"
+            element={<MedicEdithProfilePage />}
+          />
           <Route path="/change-password" element={<ChangePasswordPage />} />
-          <Route path="/medic-change-password" element={<MedicChangePasswordPage />} />
+          <Route
+            path="/medic-change-password"
+            element={<MedicChangePasswordPage />}
+          />
           <Route
             path="/notification-settings"
             element={<NotificationSettingsPage />}
           />
-            <Route
+          <Route
             path="/medic-notification-settings"
             element={<MedicNotificationSettingsPage />}
           />

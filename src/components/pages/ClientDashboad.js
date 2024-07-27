@@ -179,6 +179,7 @@ const ClientDash = () => {
 
   return (
     <ChakraProvider theme={customTheme} overflow="hidden">
+    
       <LeftSideBar />
       <VStack
         style={settingsContainerStyle}

@@ -1,17 +1,16 @@
 // AddressInput.js
 import React, { useState, useRef } from 'react';
-import { Input } from "@chakra-ui/react";
+import { Input, Box, List, ListItem } from "@chakra-ui/react";
 
 const AddressInput = ({ value, onChange }) => {
   const [predictions, setPredictions] = useState([]);
   const [inputValue, setInputValue] = useState(value);
   const autocompleteService = useRef(null);
-  const inputRef = useRef(null);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
-    setPredictions([]);
+    onChange(value);
 
     if (value) {
       if (!autocompleteService.current) {
@@ -33,40 +32,48 @@ const AddressInput = ({ value, onChange }) => {
           }
         }
       );
+    } else {
+      setPredictions([]);
     }
   };
 
   const handlePredictionClick = (prediction) => {
     setInputValue(prediction.description);
-    onChange(prediction.description);
     setPredictions([]);
+    onChange(prediction.description);
   };
 
   return (
-    <div>
+    <Box w={{ base: "full", md: "550px" }}>
       <Input
-        ref={inputRef}
         type="text"
         placeholder="Location"
-        className="w-80 p-3 border border-gray-300 rounded-lg text-sm"
-        onChange={handleInputChange}
         value={inputValue}
-        w={{ base: "250.5px", md: "270px" }}
+        onChange={handleInputChange}
+        w={{ base: "full", md: "550px" }}
       />
       {predictions.length > 0 && (
-        <ul className="border border-gray-300 rounded-lg">
+        <List
+          border="1px solid #ccc"
+          borderRadius="5px"
+          mt="2"
+          maxH="200px"
+          overflowY="auto"
+        >
           {predictions.map((prediction) => (
-            <li
+            <ListItem
               key={prediction.place_id}
-              className="p-2 cursor-pointer hover:bg-gray-200"
+              p="2"
+              cursor="pointer"
+              _hover={{ backgroundColor: "gray.100" }}
               onClick={() => handlePredictionClick(prediction)}
             >
               {prediction.description}
-            </li>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       )}
-    </div>
+    </Box>
   );
 };
 

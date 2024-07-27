@@ -357,84 +357,98 @@ const BookBeneficiaryAppointmentModal = ({
     );
   }, [formPages.servicePlan, formPages.shift, customizedPlans]);
 
+  const handleLocationChange = (location) => {
+    setFormPages((prevFields) => ({
+      ...prevFields,
+      currentLocation: location,
+    }));
+  };
+
   return (
     <>
-      <Drawer
-        theme={customTheme}
-        isOpen={isOpen}
-        onClose={onClose}
-        size={{ base: "md", md: "lg" }}
-      >
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader fontFamily="heading" textAlign="center" color="#A210C6">
-            Book Appointment for{" "}
-            {`${selectedBeneficiary.recipientFirstName || ""} ${
-              selectedBeneficiary.recipientLastName || ""
-            }`}
-          </DrawerHeader>
+     
+        <Drawer
+          theme={customTheme}
+          isOpen={isOpen}
+          onClose={onClose}
+          size={{ base: "md", md: "lg" }}
+        >
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerHeader
+              fontFamily="heading"
+              textAlign="center"
+              color="#A210C6"
+            >
+              Book Appointment for{" "}
+              {`${selectedBeneficiary.recipientFirstName || ""} ${
+                selectedBeneficiary.recipientLastName || ""
+              }`}
+            </DrawerHeader>
 
-          <DrawerCloseButton />
-          {showSpecialNeedsForm ? (
-            <SpecialNeedsForm
-              specialNeeds={specialNeeds}
-              loading={loading}
-              setSpecialNeeds={setSpecialNeeds}
-              handleSubmit={handleFormSubmit}
-              handleBack={() => setShowSpecialNeedsForm(false)}
-            />
-          ) : (
-            <DrawerBody ml={{ base: "25px", md: "0" }}>
-              <FormControl isRequired>
-                <FormFields
-                  formFields={formPages}
-                  townsInLagos={townsInLagos}
-                  majorLanguages={majorLanguages}
-                  handleInputChange={handleInputChange}
-                  handleStartDateChange={handleStartDateChange}
-                  selectedStartDate={selectedStartDate}
-                  customizedPlans={customizedPlans}
-                  isShiftDisabled={isShiftDisabled}
-                />
-                <Box mb="20px" ml={{ base: "20px", md: "40px" }}>
-                  <Button
-                    isLoading={loading}
-                    loadingText="Loading..."
-                    w="150px"
-                    // bg="#A210C6"
-                    bg="linear-gradient(80deg, #A210C6, #E552FF)"
-                    color="white"
-                    mt="20px"
-                    onClick={() => setShowSpecialNeedsForm(true)}
-                  >
-                    {loading ? "Loading..." : "Next"}
-                  </Button>
-                </Box>
-              </FormControl>
-            </DrawerBody>
-          )}
-        </DrawerContent>
-      </Drawer>
-      <PaymentModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        paymentData={paymentData}
-      />
-      <BookingInstructions
-        isOpen={isBookingInstructionsOpen}
-        onClose={() => setIsBookingInstructionsOpen(false)}
-      />
+            <DrawerCloseButton />
+            {showSpecialNeedsForm ? (
+              <SpecialNeedsForm
+                specialNeeds={specialNeeds}
+                loading={loading}
+                setSpecialNeeds={setSpecialNeeds}
+                handleSubmit={handleFormSubmit}
+                handleBack={() => setShowSpecialNeedsForm(false)}
+              />
+            ) : (
+              <DrawerBody ml={{ base: "25px", md: "0" }}>
+                <FormControl isRequired>
+                  <FormFields
+                    formFields={formPages}
+                    townsInLagos={townsInLagos}
+                    majorLanguages={majorLanguages}
+                    handleInputChange={handleInputChange}
+                    handleStartDateChange={handleStartDateChange}
+                    selectedStartDate={selectedStartDate}
+                    customizedPlans={customizedPlans}
+                    isShiftDisabled={isShiftDisabled}
+                    handleLocationChange={handleLocationChange}
+                  />
+                  <Box mb="20px" ml={{ base: "20px", md: "40px" }}>
+                    <Button
+                      isLoading={loading}
+                      loadingText="Loading..."
+                      w="150px"
+                      // bg="#A210C6"
+                      bg="linear-gradient(80deg, #A210C6, #E552FF)"
+                      color="white"
+                      mt="20px"
+                      onClick={() => setShowSpecialNeedsForm(true)}
+                    >
+                      {loading ? "Loading..." : "Next"}
+                    </Button>
+                  </Box>
+                </FormControl>
+              </DrawerBody>
+            )}
+          </DrawerContent>
+        </Drawer>
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={() => setIsPaymentModalOpen(false)}
+          paymentData={paymentData}
+        />
+        <BookingInstructions
+          isOpen={isBookingInstructionsOpen}
+          onClose={() => setIsBookingInstructionsOpen(false)}
+        />
+     
     </>
   );
 };

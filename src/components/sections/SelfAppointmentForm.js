@@ -20,7 +20,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SpecialNeedsForm from "./SpecialNeedsForm";
 import { FormFields } from "./formFields";
-import { formatDateToUTC, calculateEndDate, calculateUrgency, calculateServiceCost } from "./helpers";
+import {
+  formatDateToUTC,
+  calculateEndDate,
+  calculateUrgency,
+  calculateServiceCost,
+} from "./helpers";
 
 const customTheme = extendTheme({
   components: {
@@ -87,7 +92,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   const [priority, setPriority] = useState("");
   const [specialNeeds, setSpecialNeeds] = useState([]);
   const [showSpecialNeedsForm, setShowSpecialNeedsForm] = useState(false);
-  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] = useState(false);
+  const [isBookingInstructionsOpen, setIsBookingInstructionsOpen] =
+    useState(false);
 
   const [formFields, setFormFields] = useState({
     startDate: null,
@@ -116,11 +122,25 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     calculateUrgency(date, setPriority);
 
     if (formFields.servicePlan) {
-      const selectedPlan = customizedPlans.find((plan) => plan.name === formFields.servicePlan);
+      const selectedPlan = customizedPlans.find(
+        (plan) => plan.name === formFields.servicePlan
+      );
       if (selectedPlan) {
-        calculateEndDate(formFields.servicePlan, date, selectedPlan.duration, customizedPlans, setFormFields);
+        calculateEndDate(
+          formFields.servicePlan,
+          date,
+          selectedPlan.duration,
+          customizedPlans,
+          setFormFields
+        );
       } else {
-        calculateEndDate(formFields.servicePlan, date, null, customizedPlans, setFormFields);
+        calculateEndDate(
+          formFields.servicePlan,
+          date,
+          null,
+          customizedPlans,
+          setFormFields
+        );
       }
     }
   };
@@ -157,9 +177,21 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
       }
 
       if (selectedPlan) {
-        calculateEndDate(value, selectedStartDate, selectedPlan.duration, customizedPlans, setFormFields);
+        calculateEndDate(
+          value,
+          selectedStartDate,
+          selectedPlan.duration,
+          customizedPlans,
+          setFormFields
+        );
       } else {
-        calculateEndDate(value, selectedStartDate, null, customizedPlans, setFormFields);
+        calculateEndDate(
+          value,
+          selectedStartDate,
+          null,
+          customizedPlans,
+          setFormFields
+        );
       }
 
       if (value === "Short home visit") {
@@ -172,6 +204,13 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     } else {
       setFormFields((prevFields) => ({ ...prevFields, [name]: value }));
     }
+  };
+
+  const handleLocationChange = (location) => {
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      currentLocation: location,
+    }));
   };
 
   useEffect(() => {
@@ -204,7 +243,12 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   }, []);
 
   useEffect(() => {
-    calculateServiceCost(formFields.servicePlan, formFields.shift, customizedPlans, setFormFields);
+    calculateServiceCost(
+      formFields.servicePlan,
+      formFields.shift,
+      customizedPlans,
+      setFormFields
+    );
   }, [formFields.servicePlan, formFields.shift, customizedPlans]);
 
   const handleFormSubmit = async () => {
@@ -333,6 +377,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                     selectedStartDate={selectedStartDate}
                     customizedPlans={customizedPlans}
                     isShiftDisabled={isShiftDisabled}
+                    handleLocationChange={handleLocationChange}
                   />
                   <Box mb="20px" ml={{ base: "20px", md: "40px" }} mt="20px">
                     <Button
