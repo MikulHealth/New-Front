@@ -316,6 +316,7 @@ const MedicChangePasswordPage = () => {
                 fontSize={{ base: "18px" }}
                 marginTop="3px"
                 fontFamily="heading"
+                fontWeight="bold"
               >
                 Change Password
               </Text>
@@ -337,14 +338,13 @@ const MedicChangePasswordPage = () => {
           </Flex>
           
           <Box className="change-password" p={3}>
-          <WarningIcon ml="10px" mb="5px" w={10} h={10} color="yellow.400" />
               <Text  fontFamily="body" ml="12px" mb="5px" textAlign="left">
                 Please note, you will have to log in again after reseting your
                 password.
               </Text>
             {" "}
-            <VStack ml="15px" w="100%">
-              <FormControl w="280px">
+            <VStack ml="15px" w="full">
+              <FormControl w="full">
 
                 <FormLabel  fontFamily="body">Old Password</FormLabel>
                 <InputGroup>
@@ -376,7 +376,7 @@ const MedicChangePasswordPage = () => {
                 </InputGroup>
               </FormControl>
 
-              <FormControl w="280px">
+              <FormControl w="full">
                 <FormLabel  fontFamily="body">New Password</FormLabel>
                 <InputGroup>
                   <Input
@@ -397,7 +397,7 @@ const MedicChangePasswordPage = () => {
                 </InputGroup>
               </FormControl>
 
-              <FormControl w="280px">
+              <FormControl w="full">
                 <FormLabel  fontFamily="body">Confirm New Password</FormLabel>
                 <InputGroup>
                   <Input

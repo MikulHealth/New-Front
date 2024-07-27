@@ -309,6 +309,7 @@ const ChangePasswordPage = () => {
              
               <Text
                 textAlign="left"
+                fontWeight="bold"
                 fontSize={{ base: "18px" }}
                 marginTop="3px"
                 fontFamily="heading"
@@ -333,15 +334,13 @@ const ChangePasswordPage = () => {
           </Flex>
           
           <Box className="change-password" p={3}>
-          <WarningIcon ml="10px" mb="5px" w={10} h={10} color="yellow.400" />
-              <Text  fontFamily="body" ml="12px" mb="5px" textAlign="left">
+                <Text  fontFamily="body" ml="12px" mb="5px" textAlign="left">
                 Please note, you will have to log in again after reseting your
                 password.
               </Text>
             {" "}
-            <VStack ml="15px" w="100%">
-              <FormControl w="280px">
-
+            <VStack ml="15px" w="full">
+              <FormControl w="full">
                 <FormLabel  fontFamily="body">Old Password</FormLabel>
                 <InputGroup>
                   <Input
@@ -372,10 +371,11 @@ const ChangePasswordPage = () => {
                 </InputGroup>
               </FormControl>
 
-              <FormControl w="280px">
+              <FormControl w="full">
                 <FormLabel  fontFamily="body">New Password</FormLabel>
                 <InputGroup>
                   <Input
+                  w="full"
                     type={showNewPassword ? "text" : "password"}
                     value={newPassword}
                     onChange={handleNewPasswordChange}
@@ -393,10 +393,11 @@ const ChangePasswordPage = () => {
                 </InputGroup>
               </FormControl>
 
-              <FormControl w="280px">
+              <FormControl w="full">
                 <FormLabel  fontFamily="body">Confirm New Password</FormLabel>
                 <InputGroup>
                   <Input
+                  w="full"
                     type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}

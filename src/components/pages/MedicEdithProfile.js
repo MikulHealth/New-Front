@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { FaCamera } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import DateIcon from "../../assets/DateIcon.svg";
@@ -12,6 +12,7 @@ import {
   ChakraProvider,
   VStack,
   Input,
+  Icon,
   Button,
   Modal,
   ModalOverlay,
@@ -30,11 +31,11 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import LoadingSpinner from "../../utils/Spiner";
-import UpdatePhoneNumber from "../sections/UpdatePhoneNumber";
 import MedicMobileFooter from "../authLayouts/MedicFooter";
 import MedicSettingsSideBar from "../authLayouts/MedicSettingsSidebar";
 import MedicNavBar from "../authLayouts/MedicNavBar";
 import MedicSideBar from "../authLayouts/MedicSideBar";
+import MedicPhone from "../sections/UpdateMedicPhone";
 
 const customTheme = extendTheme({
   components: {
@@ -493,69 +494,88 @@ const MedicEdithProfilePage = () => {
           mb={{ base: "60px" }}
           w="360px"
         >
-          <Flex justifyContent="space-between" margin="20px">
-            <Box>
-              <Text
-                textAlign="left"
-                fontSize={{ base: "18px" }}
-                marginTop="3px"
-                marginBottom="20px"
-                fontFamily="heading"
-              >
-                Edit Profile
-              </Text>
-              <Text fontFamily="body" textAlign="left">
-                Click on the image to select a new picture before the change
-                picture button
-              </Text>
-            </Box>
+           <Box mt="15px" justifyContent="right">
             <Button
+            ml="80%"
               onClick={handleback}
               borderColor="#A210C6"
               borderWidth="1px"
               fontFamily="body"
               color="#A210C6"
-             
               _hover={{ color: "" }}
               fontSize={{ base: "12px" }}
-              h="3vh"
+              h="4vh"
               borderRadius="100px"
             >
               Back
             </Button>
-          </Flex>
-
-          <VStack spacing={-10}>
-            <Box
-              borderRadius="10px"
-              p={3}
-              h="150px"
-              w="180px"
-              bg="white"
-              boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
-            >
-              <Avatar
-                cursor="pointer"
-                h="120px"
-                w="100px"
-                src={formData?.image}
-                name={formData?.firstName}
-                bg="#A210C6"
-                onClick={handleClick}
-              />
-              <Input
-                ref={inputRef}
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  handleImageChange(e.target.files[0], formData, setFormData)
-                }
-                hidden
-                id="fileInput"
-                name="image"
-              />
             </Box>
-            <Flex marginTop="10px">
+      
+
+        
+          <Flex
+  p={3}
+  h="80px"
+  w="250px"
+  bg="white"
+  position="relative" 
+>
+  <Box position="relative" w="80px" h="80px">
+    <Image
+      cursor="pointer"
+      border="2px solid #A210C6"
+      h="80px"
+      w="80px"
+      src={formData?.image}
+      name={formData?.firstName}
+      bg="#A210C6"
+      onClick={handleClick}
+      borderRadius="full"
+    />
+    <Icon
+      as={FaCamera}
+      boxSize={5}
+      color="white"
+      bg="#A210C6"
+      borderRadius="full"
+      position="absolute"
+      bottom={1}
+      right={1} 
+      transform="translate(25%, 25%)" 
+    />
+    <Input
+      ref={inputRef}
+      type="file"
+      accept="image/*"
+      onChange={(e) =>
+        handleImageChange(e.target.files[0], formData, setFormData)
+      }
+      hidden
+      id="fileInput"
+      name="image"
+    />
+  </Box>
+  {imageLoading && <LoadingSpinner size={20} />}
+  <Flex  ml={4}>
+    <Text fontWeight="bold" fontSize="18px">
+      {formData?.firstName} 
+    </Text>
+    <Text ml="5px" fontWeight="bold" fontSize="18px">
+      {formData?.lastName}
+    </Text>
+  </Flex>
+</Flex>
+<Text
+                textAlign="left"
+                fontSize={{ base: "18px" }}
+                marginTop="30px"
+                marginBottom="10px"
+                fontWeight="bold"
+                fontFamily="heading"
+              >
+                Edit Profile
+              </Text>
+            {/* <Flex marginTop="10px">
               {imageLoading && <LoadingSpinner size={20} />}
               <Button
                 fontSize="15px"
@@ -570,7 +590,7 @@ const MedicEdithProfilePage = () => {
                 onClick={handleOpenConfirmationModal}
               >
                 Change picture
-              </Button>
+              </Button> */}
 
               {/* <Divider orientation="vertical" borderColor="black" my={1} />
               <Button
@@ -581,22 +601,9 @@ const MedicEdithProfilePage = () => {
               >
                 Delete picture
               </Button> */}
-            </Flex>
-            <Button
-              borderColor="#A210C6"
-              borderWidth="2px"
-              bg="white"
-              fontFamily="body"
-              mt="10px"
-              style={{}}
-              _hover={{
-                bg: "gray.100",
-                borderColor: "purple.800",
-              }}
-              onClick={handlePhoneModalOpen}
-            >
-              Change phone number
-            </Button>
+            {/* </Flex> */}
+            <VStack spacing={-10}>
+     
             <Box marginTop="15px" w="100%">
               <FormControl w="350px">
                 <FormLabel fontFamily="body" fontSize="16px">First Name</FormLabel>
@@ -695,6 +702,22 @@ const MedicEdithProfilePage = () => {
                   borderColor="black"
                   _hover={{ color: "" }}
                 /> */}
+                 <Button
+              borderColor="#A210C6"
+              borderWidth="2px"
+              bg="white"
+              fontFamily="body"
+              mt="10px"
+              w="full"
+              // style={{}}
+              _hover={{
+                bg: "gray.100",
+                borderColor: "purple.800",
+              }}
+              onClick={handlePhoneModalOpen}
+            >
+              Change phone number
+            </Button>
               </FormControl>
               {/* <FormControl marginTop="15px">
                   <FormLabel>Gender </FormLabel>
@@ -708,6 +731,7 @@ const MedicEdithProfilePage = () => {
                     <option value="Female">Female</option>
                   </Select>
                 </FormControl> */}
+                      
               <Button
                 marginTop="10px"
                 marginBottom="150px"
@@ -757,7 +781,7 @@ const MedicEdithProfilePage = () => {
           </Box>
         </ModalContent>
       </Modal>
-      <UpdatePhoneNumber
+      <MedicPhone
         isOpen={isPhoneModalOpen}
         onClose={handlePhoneModalClose}
       />

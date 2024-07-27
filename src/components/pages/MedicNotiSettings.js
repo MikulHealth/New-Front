@@ -74,7 +74,7 @@ const MedicNotificationSettingsPage = () => {
   };
 
   const handleback = () => {
-    navigate("/settings");
+    navigate("/medic-settings");
   };
 
   return (

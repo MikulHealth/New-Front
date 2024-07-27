@@ -13,7 +13,6 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Input,
   Select,
   InputGroup,
   InputRightElement,
@@ -28,6 +27,7 @@ import { useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import WalletModal from "./CreateWalletModal";
+import AddressInput from "./AddressInput";
 
 const customTheme = extendTheme({
   components: {
@@ -135,6 +135,13 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleLocationChange = (location) => {
+    setLocation((prevFields) => ({
+      ...prevFields,
+      currentLocation: location,
+    }));
+  };
+
   return (
     <>
       <ToastContainer
@@ -227,7 +234,12 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
                 </FormControl>
                 <FormControl isRequired mt="4">
                   <FormLabel fontFamily="body">Location</FormLabel>
-                  <InputGroup>
+                  <AddressInput
+                    value={currentLocation}
+                    onChange={handleLocationChange}
+                    // onChange={(e) => setLocation(e.target.value)}
+                  />
+                  {/* <InputGroup>
                     <Input
                       placeholder="Select preferred location"
                       value={currentLocation}
@@ -236,7 +248,7 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
                     <InputRightElement pointerEvents="none">
                       <Icon as={MdLocationOn} color="gray.300" />
                     </InputRightElement>
-                  </InputGroup>
+                  </InputGroup> */}
                 </FormControl>
               </>
             ) : (
@@ -263,7 +275,7 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
                 isLoading={loading}
                 loadingText="Loading..."
                 // bg="#A210C6"
-                 bgGradient="linear(to-r, #A210C6, #E552FF)"
+                bgGradient="linear(to-r, #A210C6, #E552FF)"
                 fontFamily="body"
                 color="white"
                 w={{ base: "auto", md: "200px" }}

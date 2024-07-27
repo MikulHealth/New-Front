@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { FaCamera } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import DateIcon from "../../assets/DateIcon.svg";
@@ -14,6 +14,7 @@ import {
   ChakraProvider,
   VStack,
   Input,
+  Icon,
   Button,
   Modal,
   ModalOverlay,
@@ -307,7 +308,9 @@ const EdithProfilePage = () => {
               Edit profile
             </Text>
             <FormControl>
-              <FormLabel fontFamily="body" fontSize="16px">First Name</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">
+                First Name
+              </FormLabel>
               <Input
                 type="text"
                 name="firstName"
@@ -318,7 +321,9 @@ const EdithProfilePage = () => {
               />
             </FormControl>
             <FormControl marginTop="15px">
-              <FormLabel fontFamily="body" fontSize="16px">Last Name</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">
+                Last Name
+              </FormLabel>
               <Input
                 type="text"
                 name="lastName"
@@ -329,7 +334,9 @@ const EdithProfilePage = () => {
               />
             </FormControl>
             <FormControl marginTop="15px">
-              <FormLabel fontFamily="body" fontSize="16px">Date of Birth</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">
+                Date of Birth
+              </FormLabel>
               <Flex
                 border="1px solid black"
                 borderRadius="6px"
@@ -366,7 +373,9 @@ const EdithProfilePage = () => {
               </Flex>
             </FormControl>
             <FormControl marginTop="15px">
-              <FormLabel fontFamily="body" fontSize="16px">Email Address</FormLabel>
+              <FormLabel fontFamily="body" fontSize="16px">
+                Email Address
+              </FormLabel>
               <Input
                 type="email"
                 name="email"
@@ -494,68 +503,75 @@ const EdithProfilePage = () => {
           w="360px"
         >
           <Flex justifyContent="space-between" margin="20px">
-            <Box>
-              <Text
-                textAlign="left"
-                fontSize={{ base: "18px" }}
-                marginTop="3px"
-                marginBottom="20px"
-                fontFamily="heading"
-              >
-                Edit Profile
-              </Text>
-              <Text fontFamily="body" textAlign="left">
-                Click on the image to select a new picture before the change
-                picture button
-              </Text>
-            </Box>
+            <Box></Box>
             <Button
               onClick={handleback}
               borderColor="#A210C6"
               borderWidth="1px"
               fontFamily="body"
               color="#A210C6"
-             
               _hover={{ color: "" }}
               fontSize={{ base: "12px" }}
-              h="3vh"
+              h="4vh"
               borderRadius="100px"
             >
               Back
             </Button>
           </Flex>
-
-          <VStack spacing={-10}>
-            <Box
-              borderRadius="10px"
-              p={3}
-              h="150px"
-              w="180px"
-              bg="white"
-              boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
-            >
-              <Avatar
-                cursor="pointer"
-                h="120px"
-                w="100px"
-                src={formData?.image}
-                name={formData?.firstName}
-                bg="#A210C6"
-                onClick={handleClick}
-              />
-              <Input
-                ref={inputRef}
-                type="file"
-                accept="image/*"
-                onChange={(e) =>
-                  handleImageChange(e.target.files[0], formData, setFormData)
-                }
-                hidden
-                id="fileInput"
-                name="image"
-              />
-            </Box>
-            <Flex marginTop="10px">
+          <Flex
+  alignItems="center"
+  p={3}
+  h="80px"
+  w="250px"
+  bg="white"
+  position="relative" 
+>
+  <Box position="relative" w="80px" h="80px">
+    <Image
+      cursor="pointer"
+      border="2px solid #A210C6"
+      h="80px"
+      w="80px"
+      src={formData?.image}
+      name={formData?.firstName}
+      bg="#A210C6"
+      onClick={handleClick}
+      borderRadius="full"
+    />
+    <Icon
+      as={FaCamera}
+      boxSize={5}
+      color="white"
+      bg="#A210C6"
+      borderRadius="full"
+      position="absolute"
+      bottom={1}
+      right={1} 
+      transform="translate(25%, 25%)" 
+    />
+    <Input
+      ref={inputRef}
+      type="file"
+      accept="image/*"
+      onChange={(e) =>
+        handleImageChange(e.target.files[0], formData, setFormData)
+      }
+      hidden
+      id="fileInput"
+      name="image"
+    />
+  </Box>
+  {imageLoading && <LoadingSpinner size={20} />}
+  <Flex flexDirection="row" ml={4}>
+    <Text fontWeight="bold" fontSize="18px">
+      {formData?.firstName} 
+    </Text>
+    <Text ml="5px" fontWeight="bold" fontSize="18px">
+      {formData?.lastName}
+    </Text>
+  </Flex>
+</Flex>
+          {/* <Flex marginTop="10px">
               {imageLoading && <LoadingSpinner size={20} />}
               <Button
                 fontSize="15px"
@@ -570,9 +586,9 @@ const EdithProfilePage = () => {
                 onClick={handleOpenConfirmationModal}
               >
                 Change picture
-              </Button>
+              </Button> */}
 
-              {/* <Divider orientation="vertical" borderColor="black" my={1} />
+          {/* <Divider orientation="vertical" borderColor="black" my={1} />
               <Button
                 _hover={{ color: "" }}
                 bg="none"
@@ -581,25 +597,27 @@ const EdithProfilePage = () => {
               >
                 Delete picture
               </Button> */}
-            </Flex>
-            <Button
-              borderColor="#A210C6"
-              borderWidth="2px"
-              bg="white"
-              fontFamily="body"
-              mt="10px"
-              style={{}}
-              _hover={{
-                bg: "gray.100",
-                borderColor: "purple.800",
-              }}
-              onClick={handlePhoneModalOpen}
-            >
-              Change phone number
-            </Button>
-            <Box marginTop="15px" w="100%">
-              <FormControl w="350px">
-                <FormLabel fontFamily="body" fontSize="16px">First Name</FormLabel>
+          {/* </Flex> */}
+          <Text
+            textAlign="left"
+            fontSize={{ base: "18px" }}
+            marginTop="-40px"
+            marginBottom="20px"
+            fontWeight="bold"
+            fontFamily="heading"
+          >
+            Edit Profile
+          </Text>
+          {/* <Text fontFamily="body" textAlign="left">
+                Click on the image to select a new picture before the change
+                picture button
+              </Text> */}
+          <VStack spacing={-10}>
+            <Box  w="full">
+              <FormControl w="full">
+                <FormLabel fontFamily="body" fontSize="16px">
+                  First Name
+                </FormLabel>
                 <Input
                   type="text"
                   name="firstName"
@@ -629,7 +647,7 @@ const EdithProfilePage = () => {
                   borderRadius="6px"
                   paddingTop="10px"
                   h="5vh"
-                  w="350px"
+                  w="full"
                 >
                   <Box marginRight="10px"></Box>
                   <DatePicker
@@ -651,19 +669,20 @@ const EdithProfilePage = () => {
                     }}
                   />
 
-                  <Image
+                  {/* <Image
                     marginLeft="160px"
                     h="24px"
                     w="24px"
-                    // src={DateIcon}
+                    src={DateIcon}
                     alt="Date icon"
-                  />
+                  /> */}
                 </Flex>
 
                 <FormLabel fontFamily="body" marginTop="15px" fontSize="16px">
                   Email Address
                 </FormLabel>
                 <Input
+                  w="full"
                   type="email"
                   name="email"
                   value={formData?.email}
@@ -709,6 +728,22 @@ const EdithProfilePage = () => {
                   </Select>
                 </FormControl> */}
               <Button
+                borderColor="#A210C6"
+                borderWidth="2px"
+                marginTop="15px"
+                bg="white"
+                fontFamily="body"
+                w="full"
+                style={{}}
+                _hover={{
+                  bg: "gray.100",
+                  borderColor: "purple.800",
+                }}
+                onClick={handlePhoneModalOpen}
+              >
+                Change phone number
+              </Button>
+              <Button
                 marginTop="10px"
                 marginBottom="150px"
                 color="white"
@@ -734,7 +769,9 @@ const EdithProfilePage = () => {
         <ModalContent>
           <ModalHeader fontFamily="heading">Confirm Changes</ModalHeader>
           <ModalCloseButton />
-          <ModalBody fontFamily="body">Are you sure you want to save the changes?</ModalBody>
+          <ModalBody fontFamily="body">
+            Are you sure you want to save the changes?
+          </ModalBody>
           <Box display="flex" justifyContent="flex-end" p="2">
             <Button
               mr={3}
