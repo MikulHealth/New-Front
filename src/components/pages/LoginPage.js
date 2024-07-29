@@ -77,14 +77,20 @@ const LandingPage = () => {
       });
   
       if (response.ok) {
-        toast.success("Login successful");
         const responseData = await response.json();
-        localStorage.setItem("token", responseData.access_token);
-  
-        // Extract roles from the response data
         const userRoles = responseData.roles || [];
   
-        // Navigate based on user roles
+        if (userRoles.includes("SUSPENDED")) {
+          toast.warning(
+            "Account Suspended: Your account is on suspension. Kindly contact support."
+          );
+          setLoading(false);
+          return;
+        }
+  
+        toast.success("Login successful");
+        localStorage.setItem("token", responseData.access_token);
+  
         if (userRoles.includes("NEW_USER") || userRoles.includes("VERIFIED_CUSTOMER")) {
           navigate("/client-dashboard");
         } else if (userRoles.includes("NEW_MEDIC") || userRoles.includes("VERIFIED_MEDIC")) {
@@ -104,6 +110,7 @@ const LandingPage = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     AOS.init();
