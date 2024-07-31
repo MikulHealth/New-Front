@@ -107,6 +107,8 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     preferredMedicGender: "",
     preferredLanguage: "",
     costOfService: "",
+    duration: "",
+    customerId: user?.userId,
   });
 
   useEffect(() => {
@@ -282,7 +284,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
         endDate: formatDateWithDayAdjustment(formFields.endDate),
         recipientDOB: formatDateWithDayAdjustment(selectedDob),
         customerPhoneNumber: user?.phoneNumber,
-        customerId: user?.id,
+        customerId: user?.userId,
         priority,
         specialNeeds,
         ...userFieldsForBookForSelf,

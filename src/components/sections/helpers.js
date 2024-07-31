@@ -12,10 +12,33 @@ export const formatDateToUTC = (selectedDate) => {
     return customizedPlans.some(plan => plan.name === servicePlan);
   };
   
+  // export const calculateEndDate = (servicePlan, startDate, duration, customizedPlans, setFormFields) => {
+  //   if (!startDate) return;
+  
+  //   let endDate;
+  
+  //   if (servicePlan === "Short home visit") {
+  //     endDate = new Date(startDate);
+  //     endDate.setDate(endDate.getDate() + 1);
+  //   } else if (isCustomPlan(servicePlan, customizedPlans) && duration) {
+  //     endDate = new Date(startDate);
+  //     const parsedDuration = parseInt(duration, 10);
+  //     if (!isNaN(parsedDuration)) {
+  //       endDate.setDate(endDate.getDate() + parsedDuration);
+  //     }
+  //   } else {
+  //     endDate = new Date(startDate);
+  //     endDate.setMonth(endDate.getMonth() + 1);
+  //   }
+  
+  //   setFormFields((prevFields) => ({ ...prevFields, endDate }));
+  // };
+
   export const calculateEndDate = (servicePlan, startDate, duration, customizedPlans, setFormFields) => {
     if (!startDate) return;
   
     let endDate;
+    const start = new Date(startDate);
   
     if (servicePlan === "Short home visit") {
       endDate = new Date(startDate);
@@ -31,8 +54,16 @@ export const formatDateToUTC = (selectedDate) => {
       endDate.setMonth(endDate.getMonth() + 1);
     }
   
-    setFormFields((prevFields) => ({ ...prevFields, endDate }));
+    // Calculate the duration in days
+    const calculatedDuration = Math.ceil((endDate - start) / (1000 * 60 * 60 * 24));
+  
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      endDate,
+      duration: calculatedDuration
+    }));
   };
+  
   
   export const calculateUrgency = (date, setPriority) => {
     const now = new Date();

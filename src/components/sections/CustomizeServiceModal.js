@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetCurrentUser } from "../../apiCalls/UserApis";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { SetUser } from "../../redux/userSlice";
 import axios from "axios";
 import { baseUrl } from "../../apiCalls/config";
@@ -12,7 +12,6 @@ import {
   VStack,
   Input,
   Button,
-  // useToast,
   Checkbox,
   FormControl,
   FormLabel,
@@ -54,12 +53,12 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const [shift, setShift] = useState("");
   const [medicSpecialization, setMedicSpecialization] = useState("");
   const [name, setName] = useState("");
-  const [costOfService, setCostOfService] = useState(0);
+  const [costOfService, setCostOfService] = useState("N/A");
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.userReducer);
+  // const { user } = useSelector((state) => state.userReducer);
 
   const availableServices = [
     "Vital signs check",
@@ -133,13 +132,13 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   }, [calculateCost]);
 
   const formattedCost = (cost) => {
-    const formattedCost = "₦ " + cost.toLocaleString("en-NG");
-    return formattedCost;
+    if (cost === "N/A") return cost;
+    return "₦ " + cost.toLocaleString("en-NG");
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      // setLoading(true);
 
       if (localStorage.getItem("token")) {
         try {
@@ -153,6 +152,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         } catch (error) {
           console.error("Error in GetCurrentUser API:", error);
         } finally {
+          // setLoading(false);
         }
       } else {
         navigate("/login");
@@ -160,7 +160,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
     };
 
     fetchData();
-  });
+  }, [dispatch, navigate]);
 
   const handleServiceToggle = (service) => {
     if (selectedServices.includes(service)) {
@@ -177,7 +177,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
   const handleConfirmationModalClose = () => {
     setIsConfirmationModalOpen(false);
   };
-  console.log("Response from Custom-plan", user?.phoneNumber);
+
   const handleSubmit = () => {
     const token = localStorage.getItem("token");
     const requestBody = {
@@ -209,7 +209,8 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
         }
       })
       .catch((error) => {
-        toast.error("Customized Plan Saved");
+        toast.error("Customized plan failed to save");
+        console.error("Error:", error);
       });
   };
 
@@ -257,9 +258,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
                   onChange={(e) => setShift(e.target.value)}
                 >
                   <option value="Day Shift (8hrs)">Day Shift (8hrs)</option>
-                  <option value="Night shift (12hrs)">
-                    Night Shift (12hrs)
-                  </option>
+                  <option value="Night shift (12hrs)">Night Shift (12hrs)</option>
                   <option value="Live-in (24hrs)">Live-in (24hrs)</option>
                 </Select>
               </FormControl>
@@ -292,7 +291,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
                 <Input
                   name="name"
                   type="text"
-                  placeholder="give the your customized plan a name"
+                  placeholder="Give your customized plan a name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -363,9 +362,7 @@ const CustomizePlanModal = ({ isOpen, onClose }) => {
             </Flex>
             <Flex>
               <Text fontWeight="bold">Cost of Service:</Text>
-              <Text marginLeft="5px">
-                {formattedCost(costOfService)}.00
-              </Text>{" "}
+              <Text marginLeft="5px">{formattedCost(costOfService)}</Text>{" "}
             </Flex>
             <Flex>
               <Text fontWeight="bold">Name of service:</Text>

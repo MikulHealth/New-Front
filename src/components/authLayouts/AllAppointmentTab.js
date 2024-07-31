@@ -64,18 +64,18 @@ export default function AppointmentTab() {
     fetchData();
   }, []);
 
-  const handleConfirmation = async () => {
+  const handleConfirmation = async (reason) => {
     try {
       const token = localStorage.getItem("token");
       const apiUrl = `${baseUrl}/appointment/cancelAppointment/${cancellingAppointmentId}`;
-
+  
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-
-      const response = await axios.post(apiUrl, {}, { headers });
-
+  
+      const response = await axios.post(apiUrl, { reason }, { headers });
+  
       if (response.data.success) {
         toast({
           description: response.data.message,
@@ -86,7 +86,12 @@ export default function AppointmentTab() {
         fetchData();
         setDetailsModalOpen(false);
       } else {
-        toast.error("Error canceling appointment");
+        toast({
+          description: "Error canceling appointment",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
         console.error("Error canceling appointment");
       }
     } catch (error) {
@@ -95,6 +100,7 @@ export default function AppointmentTab() {
       setConfirmationModalOpen(false);
     }
   };
+  
 
   const handleViewMore = (appointment) => {
     setSelectedAppointment(appointment);

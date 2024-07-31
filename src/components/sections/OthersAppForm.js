@@ -128,6 +128,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
     recipientTown: "",
     preferredMedicGender: "",
     preferredLanguage: "",
+    duration: "",
   });
 
   useEffect(() => {

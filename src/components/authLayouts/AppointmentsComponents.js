@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import {
   Drawer,
   DrawerOverlay,
@@ -14,6 +14,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  Textarea,
   Box,
   Text,
   Flex,
@@ -495,7 +496,6 @@ export const AppointmentDetails = ({
     </Drawer>
   );
 };
-
 export const CancelAppointmentModal = ({
   isOpen,
   onClose,
@@ -503,19 +503,43 @@ export const CancelAppointmentModal = ({
 }) => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
+  const [reason, setReason] = useState('');
+  const [isReasonRequired, setIsReasonRequired] = useState(false);
+
+  const handleYesClick = () => {
+    if (!reason.trim()) {
+      setIsReasonRequired(true);
+    } else {
+      handleConfirmation(reason);
+      onClose();
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setReason(e.target.value);
+    if (e.target.value.trim()) {
+      setIsReasonRequired(false);
+    }
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="md">
       <ModalOverlay />
       <ModalContent width={modalWidth} borderRadius="25px 25px 25px 0px">
         <ModalHeader>
-          {" "}
           <WarningIcon w={10} h={10} color="yellow.400" />
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          Are you sure you want to cancel this appointment? <br></br>
-          This action is irreversible.
+        This action is irreversible. <br></br>Are you sure you want to cancel this appointment? <br />
+         
+          <Textarea
+            mt={4}
+            placeholder="please provide a reason for cancellation"
+            value={reason}
+            onChange={handleInputChange}
+            isInvalid={isReasonRequired}
+          />
         </ModalBody>
         <ModalFooter>
           <Button bg="#A210C6" color="white" onClick={onClose}>
@@ -525,7 +549,7 @@ export const CancelAppointmentModal = ({
             bg="#E1ACAE"
             color="red.500"
             marginLeft="5px"
-            onClick={handleConfirmation}
+            onClick={handleYesClick}
           >
             Yes
           </Button>

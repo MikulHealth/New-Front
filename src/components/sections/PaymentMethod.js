@@ -81,6 +81,12 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       end.getMonth() === start.getMonth() + 1 &&
       end.getDate() === start.getDate();
 
+      // if (isOneMonthSubscription) {
+      //   setIsRecurringModalOpen(true);
+      // } else {
+      //   navigate("/wallet-confirmation", { state: { ...paymentData } });
+      // }
+
     if (numericBalance > numericCostOfService) {
       if (isOneMonthSubscription) {
         setIsRecurringModalOpen(true);
@@ -91,6 +97,8 @@ function PaymentModal({ isOpen, onClose, paymentData }) {
       setAmountNeeded(costOfService);
       setShowInsufficientModal(true);
     }
+
+
     onClose();
   };
 

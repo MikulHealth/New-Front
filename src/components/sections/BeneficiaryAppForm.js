@@ -117,6 +117,7 @@ const BookBeneficiaryAppointmentModal = ({
     preferredMedicGender: "",
     preferredLanguage: "",
     recipientHealthHistory: "",
+    duration: "",
   });
 
   useEffect(() => {

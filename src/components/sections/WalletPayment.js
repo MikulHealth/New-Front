@@ -47,8 +47,7 @@ const WalletPaymentPage = () => {
     const narration = `Payment for appointment ${appointmentId}`;
     const currency = "NGN";
     const source = user?.walletId;
-    const destination = "destination-wallet-id";
-    const reference = "unique-transaction-reference";
+    const reference = appointmentId;
 
     const payload = {
       customerId,
@@ -58,7 +57,6 @@ const WalletPaymentPage = () => {
       narration,
       currency,
       source,
-      destination,
       reference,
     };
 

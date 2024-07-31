@@ -100,7 +100,7 @@ const RequestAppointmentModal = ({ isOpen, onClose }) => {
     const requestData = {
       appointmentType,
       shift,
-      currentLocation,
+      currentLocation: currentLocation.currentLocation,
       specialization,
       medicId,
       preferredTown: "",

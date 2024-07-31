@@ -299,8 +299,8 @@ const LandingPage = () => {
                     onChange={handleInputChange}
                   >
                     <option value="Registered Nurse">Registered Nurse</option>
-                    <option value="Physiotherapist">Physiotherapist</option>
-                    <option value="Assistant Nurse">
+                    {/* <option value="Physiotherapist">Physiotherapist</option> */}
+                    <option value="Certified Nurse Assistant">
                       Certified Nurse Assistant
                     </option>
                     <option value="Professional Nanny">
