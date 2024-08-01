@@ -114,7 +114,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsBookingInstructionsOpen(true);
-    }, 3000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -370,17 +370,20 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
             <>
               <DrawerBody>
                 <FormControl>
-                  <FormFields
-                    formFields={formFields}
-                    townsInLagos={townsInLagos}
-                    majorLanguages={majorLanguages}
-                    handleInputChange={handleInputChange}
-                    handleStartDateChange={handleStartDateChange}
-                    selectedStartDate={selectedStartDate}
-                    customizedPlans={customizedPlans}
-                    isShiftDisabled={isShiftDisabled}
-                    handleLocationChange={handleLocationChange}
-                  />
+                  <Box ml={{md: "-25px"}}>
+                    <FormFields
+                      formFields={formFields}
+                      townsInLagos={townsInLagos}
+                      majorLanguages={majorLanguages}
+                      handleInputChange={handleInputChange}
+                      handleStartDateChange={handleStartDateChange}
+                      selectedStartDate={selectedStartDate}
+                      customizedPlans={customizedPlans}
+                      isShiftDisabled={isShiftDisabled}
+                      handleLocationChange={handleLocationChange}
+                    />
+                  </Box>
+
                   <Box mb="20px" ml={{ base: "20px", md: "40px" }} mt="20px">
                     <Button
                       isLoading={loading}

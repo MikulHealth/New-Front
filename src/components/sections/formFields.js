@@ -54,7 +54,7 @@ export const FormFields = ({
         ml={{ md: "5px" }}
         color="#00000080"
         w={{ base: "full", md: "270px" }}
-        mt={{base: "20px"}}
+      
       >
         <FormLabel color="#00000080" fontFamily="body" fontWeight="bold">
           Service Plan
@@ -125,7 +125,7 @@ export const FormFields = ({
           <option value="Live-in (24hrs)">Live-in (24hrs)</option>
         </Select>
       </Box>
-      <Box  mt={{base: "20px"}} ml={{ md: "5px" }} w={{ base: "full", md: "270px" }}>
+      <Box  ml={{ md: "5px" }} w={{ base: "full", md: "270px" }}>
         <FormLabel fontFamily="body" fontWeight="bold" color="#00000080">
           End Date
         </FormLabel>

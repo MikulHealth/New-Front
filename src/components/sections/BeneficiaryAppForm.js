@@ -123,7 +123,7 @@ const BookBeneficiaryAppointmentModal = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsBookingInstructionsOpen(true);
-    }, 3000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -410,6 +410,7 @@ const BookBeneficiaryAppointmentModal = ({
             ) : (
               <DrawerBody ml={{ base: "25px", md: "0" }}>
                 <FormControl isRequired>
+                  <Box ml={{base: "-20px", md: "0"}}>
                   <FormFields
                     formFields={formPages}
                     townsInLagos={townsInLagos}
@@ -421,6 +422,8 @@ const BookBeneficiaryAppointmentModal = ({
                     isShiftDisabled={isShiftDisabled}
                     handleLocationChange={handleLocationChange}
                   />
+                  </Box> 
+                 
                   <Box mb="20px" ml={{ base: "20px", md: "40px" }}>
                     <Button
                       isLoading={loading}

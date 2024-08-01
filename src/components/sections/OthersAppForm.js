@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import BookingInstructions from "./BookingInstructions";
 import { baseUrl } from "../../apiCalls/config";
 import { FormFields } from "./formFields";
-import { FaPhoneAlt } from "react-icons/fa";
+// import { FaPhoneAlt } from "react-icons/fa";
 import PaymentModal from "./PaymentMethod";
 import SpecialNeedsForm from "./SpecialNeedsForm";
 import {
@@ -134,7 +134,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsBookingInstructionsOpen(true);
-    }, 3000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -488,7 +488,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                   </InputGroup>
                   <InputGroup
                     mt={{ base: "20px", md: "0" }}
-                    ml={{ md: "40px" }}
+                    ml={{ md: "25px" }}
                   >
                     <Input
                       style={{ border: "1px solid #B49C9C", borderRadius: "5px" }}
@@ -590,11 +590,11 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                         w={{ base: "full", md: "475px" }}
                       />
                       <InputRightElement pointerEvents="none">
-                        <FaPhoneAlt color="#00000080" />
+                        {/* <FaPhoneAlt color="#00000080" /> */}
                       </InputRightElement>
                     </InputGroup>
                   </Box>
-                  <Box  w={{ base: "full" }} ml={{ md: "5px" }}>
+                  <Box  w={{ base: "full" }} >
                     <FormLabel
                       fontFamily="body"
                       fontWeight="bold"
@@ -634,6 +634,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                     </Select>
                   </Box>
                 </Flex>
+                <Box ml={{md: "-15px"}}>
                 <FormFields
                   formFields={formFields}
                   townsInLagos={townsInLagos}
@@ -645,6 +646,7 @@ const OthersAppointmentModal = ({ isOpen, onClose }) => {
                   isShiftDisabled={shiftDisabled}
                   handleLocationChange={handleLocationChange}
                 />
+                </Box>
                 <Box mb="20px" ml={{ base: "0", md: "40px" }}>
                   <Button
                     isLoading={loading}

@@ -3,10 +3,13 @@ import {
   List,
   ListItem,
   InputGroup,
-  InputRightElement,
+  InputLeftElement,
   IconButton,
   Input,
   Text,
+  Flex,
+  Box,
+  Button,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
@@ -26,7 +29,7 @@ const ReportList = ({
 
   return (
     <>
-      <InputGroup borderRadius="10px" mb="10px" border="4px solid gray">
+      <InputGroup borderRadius="100px" mb="10px" border="1px solid gray">
         <DatePicker
           selected={searchDate}
           onChange={(date) => setSearchDate(date)}
@@ -34,13 +37,15 @@ const ReportList = ({
           placeholderText="Search report by date"
           customInput={
             <Input
+              ml="20px"
+              fontSize={{ base: "12px", md: "16px" }}
               placeholder="Search report by date"
               value={searchDate ? searchDate.toISOString().split("T")[0] : ""}
               border="none"
             />
           }
         />
-        <InputRightElement>
+        <InputLeftElement>
           {searchDate ? (
             <IconButton
               icon={<CloseIcon />}
@@ -50,9 +55,14 @@ const ReportList = ({
               }}
             />
           ) : (
-            <IconButton icon={<SearchIcon />} onClick={() => searchReports(searchDate)} />
+            <IconButton
+              bg="none"
+              borderRadius="100px"
+              icon={<SearchIcon />}
+              onClick={() => searchReports(searchDate)}
+            />
           )}
-        </InputRightElement>
+        </InputLeftElement>
       </InputGroup>
       <List mb="10px" spacing={3} color="#A210C6">
         {reports.map((report) => (
@@ -64,12 +74,29 @@ const ReportList = ({
             cursor="pointer"
             onClick={() => setSelectedReport(report)}
           >
-            <Text fontFamily="body" fontWeight="bold">
-              Report for: {report.recipientFullName} on {formatDateTime(report.createdAt)}
-            </Text>
-            <Text fontWeight="body" fontStyle="italic">
-              Submitted by: {report.medicFullName}
-            </Text>
+            <Flex justifyContent="space-between">
+              <Box>
+                <Text fontFamily="heading" fontWeight="bold">
+                  Report for {report.recipientFullName}
+                </Text>
+                <Text
+                  fontSize={{ base: "12px", md: "16px" }}
+                  fontWeight="body"
+                  fontStyle="italic"
+                >
+                  Submitted by {report.medicFullName} on{" "}
+                  {formatDateTime(report.createdAt)}
+                </Text>
+              </Box>
+              <Button
+                fontSize={{ base: "12px", md: "16px" }}
+                borderRadius="100px"
+                color="white"
+                bg="#A210C6"
+              >
+                Open
+              </Button>
+            </Flex>
           </ListItem>
         ))}
       </List>
