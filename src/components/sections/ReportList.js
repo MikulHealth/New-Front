@@ -89,6 +89,7 @@ const ReportList = ({
                 </Text>
               </Box>
               <Button
+              display={{base: "none", md: "block"}}
                 fontSize={{ base: "12px", md: "16px" }}
                 borderRadius="100px"
                 color="white"

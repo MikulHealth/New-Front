@@ -73,14 +73,32 @@ const BookingInstructions = ({ isOpen, onClose }) => {
             </Link>{" "}
           </Text>
           <Image
-            borderRadius="20px"
+           borderRadius="20px"
             src={BookingImage}
             alt="Booking an Appointment"
-            my="20px"
+            height={{ base: "600px", md: "auto" }}
+            width="100%"
+            objectFit="cover"
           />
         </DrawerBody>
         <DrawerFooter as={Flex} justifyContent="space-between">
-          <Text color="#00000080" fontWeight="bold" fontStyle="italic">By continuing, you agree to our terms of service...</Text>
+          <Text
+            display={{ base: "none", md: "block" }}
+            color="#00000080"
+            fontWeight="bold"
+            fontStyle="italic"
+          >
+            By continuing, you agree to our terms of service...
+          </Text>
+          <Text
+            display={{ base: "block", md: "none" }}
+            color="#00000080"
+            fontWeight="bold"
+            fontStyle="italic"
+          >
+            By continuing, you agree to our<br></br>terms of service...
+          </Text>
+
           <Button
             bg="linear-gradient(80deg, #A210C6, #E552FF)"
             color="white"
