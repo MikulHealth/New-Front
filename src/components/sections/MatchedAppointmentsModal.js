@@ -16,6 +16,7 @@ import {
   extendTheme,
   useToast,
   useBreakpointValue,
+  Stack,
 } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
 import { baseUrl } from "../../apiCalls/config";
@@ -98,7 +99,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign="center">Matched Appointment(s)</ModalHeader>
+          <ModalHeader textAlign="center">Your Appointment(s) have been matched</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {matchedAppointments &&
@@ -160,7 +161,7 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                   </Flex>
                   <Divider my={4} borderColor="gray.500" />
                   <Text fontWeight="bold" color="black" marginTop="5px">
-                    Matched Caregiver(s):
+                    Availabe Caregiver(s):
                   </Text>
                   {appointmentWrapper.matchedMedics.map((medic) => (
                     <Box
@@ -218,12 +219,45 @@ const MatchedAppointmentsModal = ({ isOpen, onClose, matchedAppointments }) => {
                             </Flex>
                           </Flex>
                         </Box>
-                        <Box textAlign="center">
+
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          display={{ base: "flex", md: "none" }}
+                          spacing={10}
+                        >
                           <Image
                             src={medic.image}
                             alt={medic.fullName}
                             boxSize={{ base: "100px", md: "150px" }}
-                            borderRadius="10px"
+                            borderRadius="100px"
+                            mt={{ base: "10px", md: "0" }}
+                          />
+                          <Button
+                            isLoading={loading}
+                            loadingText="Loading..."
+                            colorScheme="green"
+                            onClick={() =>
+                              handleAcceptAppointment(
+                                appointmentWrapper.appointment.id,
+                                medic.medicId
+                              )
+                            }
+                            mt="40px"
+                          >
+                            {loading ? "Loading..." : "Accept"}
+                          </Button>
+                        </Stack>
+
+                        <Box
+                          display={{ base: "none", md: "block" }}
+                          textAlign="center"
+                        >
+                          <Image
+                            src={medic.image}
+                            alt={medic.fullName}
+                            boxSize={{ base: "100px", md: "150px" }}
+                            borderRadius="100px"
                             mt={{ base: "10px", md: "0" }}
                           />
                           <Button

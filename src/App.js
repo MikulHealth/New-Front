@@ -44,13 +44,14 @@ import MedicEdithProfilePage from "./components/pages/MedicEdithProfile";
 import MedicNotificationSettingsPage from "./components/pages/MedicNotiSettings";
 import MedicSettingsPage from "./components/pages/MedicSettingsPage";
 import WalletSubscriptionPage from "./components/sections/WalletSubscription";
-import GoogleMapsConfig from './GoogleMapsConfig';
+// import GoogleMapsConfig from './GoogleMapsConfig';
+import AppSubscriptionPage from "./components/pages/AppointmentSub";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-      <GoogleMapsConfig/>
+      {/* <GoogleMapsConfig/> */}
         <InactivityLogout />
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
@@ -86,6 +87,10 @@ function App() {
           <Route
             path="/wallet-sub-confirmation"
             element={<WalletSubscriptionPage />}
+          />
+          <Route
+            path="/app-sub-confirmation"
+            element={<AppSubscriptionPage />}
           />
           <Route path="/wallet" element={<WalletPage />} />
           <Route path="/appointment" element={<AppointmentPage />} />

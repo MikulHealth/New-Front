@@ -2,7 +2,6 @@ import React from "react";
 import {
   Text,
   extendTheme,
-  Link,
   Button,
   Drawer,
   Flex,
@@ -15,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 import BookingImage from "../../assets/booking.webp";
+import { NavLink } from "react-router-dom";
 
 const customTheme = extendTheme({
   components: {
@@ -60,7 +60,7 @@ const BookingInstructions = ({ isOpen, onClose }) => {
             one month, except for <strong>Short Home Visit</strong> and{" "}
             <strong>Custom Plans.</strong> If you would like to create a custom
             plan, click{" "}
-            <Link
+            <NavLink
               to="/customize-service"
               style={{
                 color: "#A210C6",
@@ -70,7 +70,7 @@ const BookingInstructions = ({ isOpen, onClose }) => {
               fontFamily="body"
             >
               here
-            </Link>{" "}
+            </NavLink>{" "}
           </Text>
           <Image
            borderRadius="20px"

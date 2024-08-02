@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Drawer,
   DrawerOverlay,
@@ -24,6 +24,8 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon, CheckIcon, CloseIcon, WarningIcon } from "@chakra-ui/icons";
 import { PhoneIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const AppointmentList = ({ appointments, handleViewMore }) => {
   return (
@@ -153,7 +155,6 @@ export const AppointmentList = ({ appointments, handleViewMore }) => {
     </Box>
   );
 };
-
 export const AppointmentDetails = ({
   isOpen,
   onClose,
@@ -163,6 +164,8 @@ export const AppointmentDetails = ({
   handleCancelAppointment,
   handleViewMedicDetails,
 }) => {
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.userReducer);
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     const date = new Date(dateString);
@@ -182,9 +185,37 @@ export const AppointmentDetails = ({
     return new Date(dateTimeString).toLocaleDateString(undefined, options);
   };
 
+  const handleSubscribeClick = (appointment) => {
+    const paymentDetails = {
+      costOfService: appointment.costOfService,
+      appointmentId: appointment.id,
+      startDate: appointment.startDate,
+      endDate: appointment.endDate,
+      beneficiary: `${appointment.recipientFirstname} ${appointment.recipientLastname}`,
+      actualStartDate: appointment.actualStartDate,
+      actualEndDate: appointment.actualEndDate,
+    };
+
+    setTimeout(() => {
+      console.log("Appointment is on transit: ", paymentDetails);
+      navigate("/app-sub-confirmation", {
+        state: { ...paymentDetails },
+      });
+    }, 2000);
+  };
+
   const formattedCost = (amount) => {
     const num = Number(amount);
     return "₦ " + num.toLocaleString();
+  };
+
+  const isWithin30Or31Days = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const diffTime = Math.abs(endDate - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    console.log("diffDays: ", diffDays);
+    return diffDays === 30 || diffDays === 31;
   };
 
   return (
@@ -467,6 +498,22 @@ export const AppointmentDetails = ({
               Close
             </Button>
           )}
+          {appointment.appointmentActive &&
+            user?.walletCreated &&
+            !appointment.subscription &&
+            isWithin30Or31Days(
+              appointment.actualStartDate,
+              appointment.actualEndDate
+            ) && (
+              <Button
+                bg="#A210C6"
+                color="white"
+                _hover={{ color: "" }}
+                onClick={() => handleSubscribeClick(appointment)}
+              >
+                Subscribe
+              </Button>
+            )}
           {appointment.appointmentPending && (
             <Box>
               <Button
@@ -496,6 +543,7 @@ export const AppointmentDetails = ({
     </Drawer>
   );
 };
+
 export const CancelAppointmentModal = ({
   isOpen,
   onClose,
@@ -503,7 +551,7 @@ export const CancelAppointmentModal = ({
 }) => {
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
   const modalWidth = isLargerThan768 ? "400px" : "90vw";
-  const [reason, setReason] = useState('');
+  const [reason, setReason] = useState("");
   const [isReasonRequired, setIsReasonRequired] = useState(false);
 
   const handleYesClick = () => {
@@ -531,8 +579,8 @@ export const CancelAppointmentModal = ({
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-        This action is irreversible. <br></br>Are you sure you want to cancel this appointment? <br />
-         
+          This action is irreversible. <br></br>Are you sure you want to cancel
+          this appointment? <br />
           <Textarea
             mt={4}
             placeholder="please provide a reason for cancellation"
