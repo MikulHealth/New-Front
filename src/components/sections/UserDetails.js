@@ -109,6 +109,7 @@ const UserDetailsDrawer = ({ isOpen, onClose }) => {
             >
               <Avatar
                 src={user?.image}
+                color="white"
                 alt="User Image"
                 borderRadius="8px"
                 ml={{ base: "85px", md: "10px" }}

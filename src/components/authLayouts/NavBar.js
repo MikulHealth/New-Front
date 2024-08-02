@@ -331,6 +331,7 @@ export default function NavBar() {
           >
             <Avatar
               borderRadius="full"
+              color="white"
               boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
               size={{ base: "sm", md: "md" }}
               marginTop={{ base: "5px", md: "0" }}
