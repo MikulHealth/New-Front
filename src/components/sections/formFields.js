@@ -3,12 +3,13 @@ import {
   Box,
   Flex,
   FormLabel,
+  Input,
   Select,
   Textarea,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import AddressInput from "./AddressInput";
+// import AddressInput from "./AddressInput";
 
 export const FormFields = ({
   formFields,
@@ -19,7 +20,7 @@ export const FormFields = ({
   selectedStartDate,
   customizedPlans,
   isShiftDisabled,
-  handleLocationChange,
+  // handleLocationChange,
 }) => (
   <>
     <Flex ml={{ base: "0", md: "45px" }} flexWrap="wrap" marginTop="20px">
@@ -181,12 +182,22 @@ export const FormFields = ({
       <FormLabel color="#00000080" fontWeight="bold" fontFamily="body">
         Location
       </FormLabel>
-      <Flex   w={{ base: "full", md: "550px" }} style={{ border: "1px solid #B49C9C", borderRadius: "5px" }}>
+      <Input
+        style={{ border: "1px solid #B49C9C", borderRadius: "5px" }}
+        name="currentLocation"
+        type="text"
+        placeholder="enter home address"
+        value={formFields.currentLocation}
+        onChange={handleInputChange}
+        w={{ base: "full", md: "550px" }}
+      />
+      {/* <Flex   w={{ base: "full", md: "550px" }} style={{ border: "1px solid #B49C9C", borderRadius: "5px" }}>
+        
         <AddressInput
           value={formFields.currentLocation}
           onChange={handleLocationChange}
         />
-      </Flex>
+      </Flex> */}
     </Box>
 
     <Flex color="#00000080" flexWrap="wrap" ml={{ base: "0", md: "40px" }}>

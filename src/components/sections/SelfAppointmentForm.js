@@ -208,12 +208,14 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleLocationChange = (location) => {
-    setFormFields((prevFields) => ({
-      ...prevFields,
-      currentLocation: location,
-    }));
-  };
+
+  // const handleLocationChange = (currentLocation) => {
+  //   console.log("Location: ", currentLocation)
+  //   setFormFields((prevFields) => ({
+  //     ...prevFields,
+  //     currentLocation,
+  //   }));
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -380,7 +382,7 @@ const SelfAppointmentModal = ({ isOpen, onClose }) => {
                       selectedStartDate={selectedStartDate}
                       customizedPlans={customizedPlans}
                       isShiftDisabled={isShiftDisabled}
-                      handleLocationChange={handleLocationChange}
+                      // handleLocationChange={handleLocationChange}
                     />
                   </Box>
 

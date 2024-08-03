@@ -195,7 +195,7 @@ const BankTransferModal = ({ isOpen, onClose, bankDetails }) => {
   const { hasCopied, onCopy } = useClipboard(bankDetails.accountNumber);
 
   return (
-    <Modal theme={customTheme} isOpen={isOpen} onClose={onClose}>
+    <Modal size={{ base: "sm", sm: "md", md: "lg" }} theme={customTheme} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontFamily="heading">Bank Transfer</ModalHeader>
@@ -318,7 +318,7 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
       <ToastContainer
         position="top-right"
         autoClose={5000}

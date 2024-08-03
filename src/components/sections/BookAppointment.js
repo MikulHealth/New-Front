@@ -64,7 +64,7 @@ const BookAppointmentModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal theme={customTheme} isOpen={isOpen} onClose={onClose} size="xs">
+    <Modal theme={customTheme} isOpen={isOpen} onClose={onClose} size={{ base: "sm", sm: "md", md: "lg" }}>
       <ModalOverlay />
       <ModalContent  borderRadius="25px 25px 25px 0px">
         <ModalHeader fontFamily="heading" textAlign="center" color="#A210C6" fontWeight="bold">

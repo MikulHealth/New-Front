@@ -281,53 +281,55 @@ const SubscribedAppointmentsDrawer = ({ isOpen, onClose, user }) => {
       </Drawer>
 
       <Modal
-  isOpen={isConfirmModalOpen}
-  onClose={() => setIsConfirmModalOpen(false)}
-  motionPreset="slideInBottom"
-  position="top-right"
->
-  <ModalOverlay />
-  <ModalContent>
-    <ModalHeader fontFamily="heading" color="#A210C6">
-      {selectedAppointment?.active
-        ? "Cancel Subscription"
-        : "Reactivate Subscription"}
-    </ModalHeader>
-    <ModalCloseButton />
-    <ModalBody>
-      <Text>
-        Are you sure you want to{" "}
-        {selectedAppointment?.active ? "cancel" : "reactivate"} this
-        subscription?
-      </Text>
-    </ModalBody>
-    <ModalFooter>
-      <Button
-        mr={3}
-        bg="gray.500"
-        color="white"
-        onClick={handleConfirmAction}
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        motionPreset="slideInBottom"
+        position="top-right"
+        size={{ base: "sm", sm: "md", md: "lg" }}
       >
-        Yes
-      </Button>
-      <Button
-        bg="linear-gradient(80deg, #A210C6, #E552FF)"
-        color="white"
-        onClick={() => setIsConfirmModalOpen(false)}
-      >
-        No
-      </Button>
-    </ModalFooter>
-  </ModalContent>
-</Modal>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontFamily="heading" color="#A210C6">
+            {selectedAppointment?.active
+              ? "Cancel Subscription"
+              : "Reactivate Subscription"}
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Are you sure you want to{" "}
+              {selectedAppointment?.active ? "cancel" : "reactivate"} this
+              subscription?
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              mr={3}
+              bg="gray.500"
+              color="white"
+              onClick={handleConfirmAction}
+            >
+              Yes
+            </Button>
+            <Button
+              bg="linear-gradient(80deg, #A210C6, #E552FF)"
+              color="white"
+              onClick={() => setIsConfirmModalOpen(false)}
+            >
+              No
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
-      {selectedAppointment && selectedAppointment.customerAppointment.matchedMedic && (
-        <MedicDetailsDrawer
-          isOpen={medicDetailsOpen}
-          onClose={closeMedicDetailsDrawer}
-          medic={selectedAppointment.customerAppointment.matchedMedic}
-        />
-      )}
+      {selectedAppointment &&
+        selectedAppointment.customerAppointment.matchedMedic && (
+          <MedicDetailsDrawer
+            isOpen={medicDetailsOpen}
+            onClose={closeMedicDetailsDrawer}
+            medic={selectedAppointment.customerAppointment.matchedMedic}
+          />
+        )}
       <EditPendingAppointmentModal
         isOpen={editModalOpen}
         onClose={handleCloseEditModal}

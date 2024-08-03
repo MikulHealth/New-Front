@@ -67,18 +67,25 @@ export const formatDateToUTC = (selectedDate) => {
   
   export const calculateUrgency = (date, setPriority) => {
     const now = new Date();
-    const diffInHours = (date - now) / (1000 * 60 * 60);
   
+    const selectedDate = new Date(date);
+  
+    const diffInHours = (selectedDate - now) / (1000 * 60 * 60);
+  
+    let priority;
     if (diffInHours <= 24) {
-      setPriority("High");
+      priority = "High";
     } else if (diffInHours <= 48) {
-      setPriority("Medium");
+      priority = "Medium";
     } else if (diffInHours <= 72) {
-      setPriority("Normal");
+      priority = "Normal";
     } else {
-      setPriority("Flexible");
+      priority = "Flexible";
     }
+  
+    setPriority(priority);
   };
+  
   
   export const calculateServiceCost = (servicePlan, shift, customizedPlans, setFormFields) => {
     let costOfService = 0;

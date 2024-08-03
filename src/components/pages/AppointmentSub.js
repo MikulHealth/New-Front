@@ -264,7 +264,7 @@ console.log(`New End Date: ${newEndDate}`);
                 {beneficiary}'s
               </Text>{" "}
               care, ensure your wallet has the required amount mentioned above
-              for the cost of service.
+              for the cost of service when the appointment reaches it's end date.
               <br></br>
               <br></br>
               With this setup, the current appointment would be re-booked with

@@ -26,6 +26,7 @@ import { EditIcon, CheckIcon, CloseIcon, WarningIcon } from "@chakra-ui/icons";
 import { PhoneIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import RebookAppointmentModal from '../sections/RebookAppointmentModal';
 
 export const AppointmentList = ({ appointments, handleViewMore }) => {
   return (
@@ -162,10 +163,12 @@ export const AppointmentDetails = ({
   handlePayment,
   handleEditAppointment,
   handleCancelAppointment,
+  handleRebookAppointment,
   handleViewMedicDetails,
 }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
+  const [isRebookModalOpen, setRebookModalOpen] = React.useState(false);
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     const date = new Date(dateString);
@@ -183,6 +186,10 @@ export const AppointmentDetails = ({
       second: "numeric",
     };
     return new Date(dateTimeString).toLocaleDateString(undefined, options);
+  };
+
+  const handleRebook = ({ startDate, endDate, }) => {
+    handleRebookAppointment({ ...appointment, startDate, endDate });
   };
 
   const handleSubscribeClick = (appointment) => {
@@ -219,6 +226,7 @@ export const AppointmentDetails = ({
   };
 
   return (
+    <>
     <Drawer isOpen={isOpen} onClose={onClose} placement="right" size="md">
       <DrawerOverlay />
       <DrawerContent>
@@ -538,9 +546,27 @@ export const AppointmentDetails = ({
               )}
             </Box>
           )}
+          {appointment.appointmentCompleted && (
+              <Button
+                ml="10px"
+                bg="#A210C6"
+                color="white"
+                _hover={{ color: "" }}
+                onClick={() => setRebookModalOpen(true)}
+              >
+                Rebook appointment
+              </Button>
+            )}
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+    <RebookAppointmentModal
+        isOpen={isRebookModalOpen}
+        onClose={() => setRebookModalOpen(false)}
+        onRebook={handleRebook}
+        appointment={appointment} 
+      />
+    </>
   );
 };
 

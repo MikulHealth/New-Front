@@ -89,7 +89,7 @@ const HeadsUpModal = ({ isOpen, onClose, onBankTransfer }) => {
       theme={customTheme}
       isOpen={isOpen}
       onClose={onClose}
-      size={{ base: "sm", md: "xl" }}
+      size={{ base: "sm", sm: "md", md: "lg" }}
       borderRadius="15px"
     >
       <ModalOverlay />
@@ -202,7 +202,7 @@ const ChooseBankModal = ({
   };
 
   return (
-    <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
+    <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
@@ -375,7 +375,7 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   };
 
   return (
-    <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
+    <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
@@ -549,7 +549,7 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -638,7 +638,7 @@ const ConfirmationModal = ({
   };
 
   return (
-    <Modal size={{ base: "sm", md: "md" }} isOpen={isOpen} onClose={onClose}>
+    <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
