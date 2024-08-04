@@ -5,10 +5,7 @@ import { useLocation } from "react-router-dom";
 import { baseUrl } from "../../apiCalls/config";
 import {
   Box,
-  // useToast,
-  // extendTheme,
   Text,
-  // Link as ChakraLink,
   useMediaQuery,
   FormControl,
   FormLabel,
@@ -18,7 +15,6 @@ import {
   Button,
   Image,
 } from "@chakra-ui/react";
-import { PaystackButton } from "react-paystack";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/Whitelogo.svg";
 
@@ -43,8 +39,7 @@ const customTheme = extendTheme({
 
 const PaymentConfirmationPage = () => {
   const navigate = useNavigate();
-  const [loading] = useState(false);
-  // const toast = useToast();
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.userReducer);
   const location = useLocation();
   const { costOfService, appointmentId, beneficiary } = location.state;
@@ -56,7 +51,6 @@ const PaymentConfirmationPage = () => {
     reference: appointmentId,
     name: `${user?.firstName || ""} ${user?.lastName || ""}`,
     phone: user?.phoneNumber || "",
-    publicKey: "pk_test_be79821835be2e8689484980b54a9785c8fa0778",
   });
 
   console.log("cost ", costOfService);
@@ -75,61 +69,94 @@ const PaymentConfirmationPage = () => {
     return num.toLocaleString("en-US");
   };
 
-  const handlePaymentSuccess = (response) => {
-    verifyPayment();
-    // navigate("/client-dashboard");
-  };
+  // const handlePaymentSuccess = (response) => {
+  //   verifyPayment();
+  // };
 
   const handlePaymentFailure = (error) => {
     toast.error("Payment failed, please try again later");
   };
 
-  const verifyPayment = async () => {
-    toast.info("Please wait, while we verify your payment");
+  // const verifyPayment = async () => {
+  //   toast.info("Please wait, while we verify your payment");
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     console.log("ID is " + appointmentId);
+  //     const apiUrl = `${baseUrl}/payment/verify/${appointmentId}`;
+
+  //     const headers = {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     };
+
+  //     const response = await axios.get(apiUrl, { headers });
+  //     console.log(response.data);
+
+  //     if (response.data.status === true) {
+  //       setPaymentData({
+  //         email: "",
+  //         amount: " ",
+  //         reference: " ",
+  //         name: " ",
+  //         phone: " ",
+  //       });
+  //       toast.success("Payment verified");
+  //       setTimeout(() => {
+  //         navigate("/client-dashboard");
+  //       }, 5000);
+  //     } else {
+  //       toast.error("Payment verification failed, please cancel and try again");
+  //       console.error("Payment verification failed");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Payment verification failed, please cancel and try again");
+  //     console.error("An error occurred during payment verification:", error);
+  //   }
+  // };
+
+  const handlePayment = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      console.log("ID is " + appointmentId);
-      const apiUrl = `${baseUrl}/payment/verify/${appointmentId}`;
-
+      const apiUrl = `${baseUrl}/payment/payment`;
+  
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
+  
+      const response = await axios.post(apiUrl, {
+        amount: amountInKobo,
+        appointmentId: paymentData.reference,
+        userId: user?.userId,
+      }, { headers });
+  
+      if (response.status === 200) {
+        const authorizationUrl = response.data.data.authorizationUrl;
+        const newWindow = window.open(authorizationUrl, '_blank', 'width=500,height=600');
 
-      const response = await axios.get(apiUrl, { headers });
-      console.log(response.data);
-
-      if (response.data.status === true) {
-        setPaymentData({
-          email: "",
-          amount: " ",
-          reference: " ",
-          name: " ",
-          phone: " ",
-          publicKey: " ",
-        });
-        toast.success("Payment verified");
-        setTimeout(() => {
-          navigate("/client-dashboard");
-        }, 5000);
-        // window.location.reload();
+        if (newWindow) {
+          newWindow.focus();
+          setTimeout(() => {
+            navigate("/client-dashboard");
+          }, 5000);
+        } else {
+          toast.error("Pop-up blocked. Please allow pop-ups for this site.");
+        }
       } else {
-        toast.error("Payment verification failed, please cancel and try again");
-        console.error("Payment verification failed");
+        toast.error("Payment initialization failed, please try again later");
       }
     } catch (error) {
-      toast.error("Payment verification failed, please cancel and try again");
-      console.error("An error occurred during payment verification:", error);
+      console.error("An error occurred during payment processing:", error);
+      handlePaymentFailure(error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handlePayment = (e) => {
-    e.preventDefault();
-  };
-
+  
   const handleCancel = () => {
     navigate("/client-dashboard");
-    // window.location.reload();
   };
 
   const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
@@ -139,7 +166,6 @@ const PaymentConfirmationPage = () => {
     <Box
       theme={customTheme}
       height="100vh"
-      // bg="#510863"
       bg="linear-gradient(80deg, #510863, #E552FF)"
       textAlign="center"
       color="white"
@@ -236,21 +262,10 @@ const PaymentConfirmationPage = () => {
                   _hover={{ color: "" }}
                   bg="green.400"
                   color="white"
-                  onClick={handlePayment}
+                  type="submit"
                   isLoading={loading}
                 >
-                  <Box color="white">
-                    {/* Use the retrieved paymentData */}
-                    <PaystackButton
-                      {...paymentData}
-                      text="Process Payment"
-                      fontFamily="body"
-                      fontWight="bold"
-                      className="submits"
-                      onSuccess={handlePaymentSuccess}
-                      onClose={handlePaymentFailure}
-                    />
-                  </Box>
+                  Process Payment
                 </Button>
                 <Button
                   marginLeft="5px"
@@ -258,7 +273,6 @@ const PaymentConfirmationPage = () => {
                   bg="#E1ACAE"
                   color="red.500"
                   onClick={handleCancel}
-                  // _hover={{ bg: "" }}
                 >
                   Cancel Payment
                 </Button>
