@@ -69,14 +69,6 @@ const PaymentConfirmationPage = () => {
     return num.toLocaleString("en-US");
   };
 
-  // const handlePaymentSuccess = (response) => {
-  //   verifyPayment();
-  // };
-
-  const handlePaymentFailure = (error) => {
-    toast.error("Payment failed, please try again later");
-  };
-
   // const verifyPayment = async () => {
   //   toast.info("Please wait, while we verify your payment");
   //   try {
@@ -120,44 +112,32 @@ const PaymentConfirmationPage = () => {
     try {
       const token = localStorage.getItem("token");
       const apiUrl = `${baseUrl}/payment/payment`;
-  
+
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       };
-  
+
       const response = await axios.post(apiUrl, {
         amount: amountInKobo,
         appointmentId: paymentData.reference,
         userId: user?.userId,
       }, { headers });
-  
+
       if (response.status === 200) {
         const authorizationUrl = response.data.data.authorizationUrl;
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        const windowFeatures = isMobile ? '' : 'width=500,height=600';
-  
-        const newWindow = window.open(authorizationUrl, '_blank', windowFeatures);
-  
-        if (newWindow) {
-          newWindow.focus();
-          setTimeout(() => {
-            navigate("/appointment");
-          }, 5000);
-        } else {
-          toast.error("Pop-up blocked. Please allow pop-ups for this site.");
-        }
+        window.location.href = authorizationUrl;
       } else {
         toast.error("Payment initialization failed, please try again later");
       }
     } catch (error) {
+      toast.error("Payment processing failed, please try again later");
       console.error("An error occurred during payment processing:", error);
-      handlePaymentFailure(error);
-    } finally {
+        } finally {
       setLoading(false);
     }
   };
-  
+
   const handleCancel = () => {
     navigate("/client-dashboard");
   };
