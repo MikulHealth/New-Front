@@ -134,12 +134,15 @@ const PaymentConfirmationPage = () => {
   
       if (response.status === 200) {
         const authorizationUrl = response.data.data.authorizationUrl;
-        const newWindow = window.open(authorizationUrl, '_blank', 'width=500,height=600');
-
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const windowFeatures = isMobile ? '' : 'width=500,height=600';
+  
+        const newWindow = window.open(authorizationUrl, '_blank', windowFeatures);
+  
         if (newWindow) {
           newWindow.focus();
           setTimeout(() => {
-            navigate("/client-dashboard");
+            navigate("/appointment");
           }, 5000);
         } else {
           toast.error("Pop-up blocked. Please allow pop-ups for this site.");
