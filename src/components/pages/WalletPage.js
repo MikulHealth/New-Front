@@ -296,7 +296,7 @@ const OnlinePaymentModal = ({ isOpen, onClose }) => {
 
       if (response.data.success) {
         setLoading(false);
-        toast.success("Wallet Funding in Progress: You would be notified when it's complete.");
+        toast.success("Wallet Funding in Progress: Your balance will be updated when it's complete.");
         setAmount("");
         setTimeout(() => {
           navigate("/client-dashboard");

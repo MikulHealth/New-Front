@@ -69,43 +69,6 @@ const PaymentConfirmationPage = () => {
     return num.toLocaleString("en-US");
   };
 
-  // const verifyPayment = async () => {
-  //   toast.info("Please wait, while we verify your payment");
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     console.log("ID is " + appointmentId);
-  //     const apiUrl = `${baseUrl}/payment/verify/${appointmentId}`;
-
-  //     const headers = {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     };
-
-  //     const response = await axios.get(apiUrl, { headers });
-  //     console.log(response.data);
-
-  //     if (response.data.status === true) {
-  //       setPaymentData({
-  //         email: "",
-  //         amount: " ",
-  //         reference: " ",
-  //         name: " ",
-  //         phone: " ",
-  //       });
-  //       toast.success("Payment verified");
-  //       setTimeout(() => {
-  //         navigate("/client-dashboard");
-  //       }, 5000);
-  //     } else {
-  //       toast.error("Payment verification failed, please cancel and try again");
-  //       console.error("Payment verification failed");
-  //     }
-  //   } catch (error) {
-  //     toast.error("Payment verification failed, please cancel and try again");
-  //     console.error("An error occurred during payment verification:", error);
-  //   }
-  // };
-
   const handlePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -122,10 +85,14 @@ const PaymentConfirmationPage = () => {
         amount: amountInKobo,
         appointmentId: paymentData.reference,
         userId: user?.userId,
+        name: paymentData.name,
+        email: paymentData.email,
+        phone: paymentData.phone,
       }, { headers });
 
       if (response.status === 200) {
         const authorizationUrl = response.data.data.authorizationUrl;
+        toast.success("Payment initialized");
         window.location.href = authorizationUrl;
       } else {
         toast.error("Payment initialization failed, please try again later");
@@ -133,7 +100,7 @@ const PaymentConfirmationPage = () => {
     } catch (error) {
       toast.error("Payment processing failed, please try again later");
       console.error("An error occurred during payment processing:", error);
-        } finally {
+    } finally {
       setLoading(false);
     }
   };
