@@ -202,7 +202,23 @@ const ChooseBankModal = ({
   };
 
   return (
-    <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      size={{ base: "sm", sm: "md", md: "lg" }}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
@@ -272,12 +288,11 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   useEffect(() => {
     const fetchBanks = async () => {
       try {
-        const secretKey = "process.env.PAYSTACK_SECRET_KEY";
-        const link = "https://api.paystack.co/bank";
-
+        const token = localStorage.getItem("token");
+        const link = `${baseUrl}/api/wallets/bank-list`;
         const response = await axios.get(link, {
           headers: {
-            Authorization: `Bearer ${secretKey}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -287,10 +302,7 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
           throw new Error("Failed to fetch bank list");
         }
       } catch (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          status: "error",
+        toast.error("Error: " + error.message, {
           duration: 5000,
           isClosable: true,
         });
@@ -308,21 +320,22 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
       if (accountNumber.length === 10 && selectedBank) {
         setIsFetching(true);
         try {
-          const response = await axios.post(
-            `${baseUrl}/payment/bankName`,
+          const response = await axios.get(
+            `${baseUrl}/api/wallets/name-enquiry`,
             {
-              accountNumber,
-              bankCode: selectedBank,
-            },
-            {
+              params: {
+                bankCode: selectedBank,
+                accountNumber: accountNumber,
+              },
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
               },
             }
           );
-          if (response.data.account_name) {
-            setAccountName(response.data.account_name);
+
+          if (response.status || response.data.data.account_name) {
+            setAccountName(response.data.data.account_name);
             setHasError(false);
           } else {
             setAccountName(
@@ -330,22 +343,20 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
             );
             setHasError(true);
           }
-          setIsFetching(false);
         } catch (error) {
-          toast({
-            title: "Error",
-            description: error.message,
-            status: "error",
+          toast.error("Error: " + error.message, {
             duration: 5000,
             isClosable: true,
           });
+          setHasError(true);
+        } finally {
           setIsFetching(false);
         }
       }
     };
 
     fetchAccountName();
-  }, [accountNumber, selectedBank, toast, user.token]);
+  }, [accountNumber, selectedBank, toast, user?.token]);
 
   const handleAccountNumberChange = (e) => {
     const value = e.target.value;
@@ -375,7 +386,11 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
   };
 
   return (
-    <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      size={{ base: "sm", sm: "md", md: "lg" }}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
@@ -425,17 +440,15 @@ const AddBankModal = ({ isOpen, onClose, onReviewBank }) => {
           )}
         </ModalBody>
         <ModalFooter>
-          {!hasError && accountName && (
-            <Button
-              bg="#A210C6"
-              color="white"
-              onClick={handleAddBank}
-              ml={3}
-              disabled={isFetching}
-            >
-              Save
-            </Button>
-          )}
+          <Button
+            bg="#A210C6"
+            color="white"
+            onClick={handleAddBank}
+            ml={3}
+            disabled={isFetching}
+          >
+            Save
+          </Button>
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>
@@ -549,7 +562,11 @@ const WithdrawModal = ({ isOpen, onClose, onOpenConfirmation, setAmount }) => {
 
   return (
     <>
-      <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        size={{ base: "sm", sm: "md", md: "lg" }}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -638,7 +655,11 @@ const ConfirmationModal = ({
   };
 
   return (
-    <Modal size={{ base: "sm", sm: "md", md: "lg" }} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      size={{ base: "sm", sm: "md", md: "lg" }}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader color="#A210C6" fontFamily="heading">
