@@ -26,11 +26,11 @@ const TransactionPinModal = ({ isOpen, onClose, handleSubmit }) => {
     setIsLoading(true);
     const success = await handleSubmit(pin);
     setIsLoading(false);
-    setIsSuccess(success); // Set success state based on the response
+    setIsSuccess(success); 
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size={{ base: "sm", sm: "md", md: "lg" }}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontFamily="heading" color="#A210C6">

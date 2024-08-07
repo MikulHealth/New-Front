@@ -82,6 +82,7 @@ export default function AppointmentTab() {
           status: "success",
           duration: 5000,
           isClosable: true,
+          position: "top-right",
         });
         fetchData();
         setDetailsModalOpen(false);
