@@ -802,7 +802,6 @@ const MedicWalletPage = () => {
       bankCode: selectedBankDetails?.bankCode,
       accountNumber: selectedBankDetails?.accountNumber,
       source: user?.walletId,
-      reference: "generated_reference",
     };
 
     const apiUrl = `${baseUrl}/api/wallets/withdraw`;
@@ -818,7 +817,7 @@ const MedicWalletPage = () => {
 
       if (response.data.success) {
         setLoading(false);
-        toast.success("Transfer successful");
+        toast.success("Transfer initiated");
         setTimeout(() => {
           navigate("/medic-dashboard");
         }, 3000);

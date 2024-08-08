@@ -44,6 +44,7 @@ import MedicEdithProfilePage from "./components/pages/MedicEdithProfile";
 import MedicNotificationSettingsPage from "./components/pages/MedicNotiSettings";
 import MedicSettingsPage from "./components/pages/MedicSettingsPage";
 import WalletSubscriptionPage from "./components/sections/WalletSubscription";
+import AdminDashboard from "./components/pages/AdminDash";
 // import GoogleMapsConfig from './GoogleMapsConfig';
 import AppSubscriptionPage from "./components/pages/AppointmentSub";
 
@@ -52,7 +53,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
       {/* <GoogleMapsConfig/> */}
-        <InactivityLogout />
+        {/* <InactivityLogout /> */}
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route path="/about" element={<AboutPage />}></Route>
@@ -93,6 +94,7 @@ function App() {
             element={<AppSubscriptionPage />}
           />
           <Route path="/wallet" element={<WalletPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/appointment" element={<AppointmentPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/medic-settings" element={<MedicSettingsPage />} />

@@ -22,7 +22,7 @@ export const GetCurrentUser = async () => {
     return response.data;
   } catch (error) {
     console.log(error);
-    if (error.response && error.response.status === 403) {
+    if (error.response || error.response.status === 403 || error.response.status === 500 ) {
       window.location.href = "/login"; 
     }
     return error.response.data;
