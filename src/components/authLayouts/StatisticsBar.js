@@ -49,7 +49,7 @@ const StatisticsBar = () => {
       title: "Total Medics",
       count: 0,
       percentage: "0%",
-      bgColor: "linear-gradient(80deg, #FF6F61, #E552FF)",
+      bgColor: "linear-gradient(80deg, #6FBACA, #E552FF)",
       lastMonth: "Last Month",
       icon: AiOutlineMedicineBox,
     },

@@ -130,15 +130,10 @@ const MedicDashboard = () => {
     fetchMatchedAppointments();
   }, [toast]);
 
-  const settingsContainerStyle = {
-    animation: "slideInUp 0.9s ease-in-out",
-  };
-
   return (
     <ChakraProvider theme={customTheme} overflow="hidden">
       <LeftSideBar />
       <VStack
-        style={settingsContainerStyle}
         ml={{ md: "230px" }}
         w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}

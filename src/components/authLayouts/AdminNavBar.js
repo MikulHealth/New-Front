@@ -18,18 +18,21 @@ import {
   Image,
   Spacer,
   Input,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import MedicDetailsDrawer from "../sections/MedicDetails";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import LogoutIcon from "../../assets/Logout.svg";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons"; 
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import HomeIcon from "../../assets/HomeBlack.svg";
 import Wallet from "../../assets/Wallet.svg";
 import serviceIcon from "../../assets/PatientsIcon.svg";
 import SettingsIcon from "../../assets/SettingsIcon.svg";
+import { AiOutlineBell } from "react-icons/ai"; // Importing the bell icon
 
 const customTheme = extendTheme({
   components: {
@@ -285,35 +288,43 @@ export default function AdminNavBar() {
               <Spacer />
               <Spacer />
               <Spacer />
-              <Input
-                placeholder="Search anything"
-                backgroundColor="white"
-                borderRadius="15px"
-                width="300px"
-              />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Box
-                style={{ cursor: "pointer" }}
-                onClick={handleOpenUserDetailsModal}
-                display={{ base: "block", md: "flex" }}
-                justifyContent="flex-end"
-              >
-                <Avatar
-                  borderRadius="full"
+              <InputGroup>
+                <Input
+                  placeholder="Search anything"
+                  backgroundColor="#4B4B4B"
                   color="white"
-                  boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
-                  size="md"
-                  src={user?.image}
-                  name={user?.firstName}
-                  bg="#A210C6"
+                  borderRadius="10px"
+                  width="300px"
                 />
-              </Box>
+                <InputLeftElement
+                  children={<SearchIcon color="white" />}
+                  pointerEvents="none"
+                />
+              </InputGroup>
+              <Spacer />
+              <Spacer />
+              <Spacer />
+              <Spacer />
+              <Spacer />
+              <Spacer />
+              <Spacer />
+              <Flex alignItems="center">
+                <AiOutlineBell size={24} color="white" />
+                <Box
+                  style={{ cursor: "pointer", marginLeft: "15px" }}
+                  onClick={handleOpenUserDetailsModal}
+                >
+                  <Avatar
+                    borderRadius="full"
+                    color="white"
+                    boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
+                    size="md"
+                    src={user?.image}
+                    name={user?.firstName}
+                    bg="#A210C6"
+                  />
+                </Box>
+              </Flex>
             </HStack>
           </Flex>
         </HStack>

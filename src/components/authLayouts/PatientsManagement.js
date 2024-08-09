@@ -9,6 +9,8 @@ import {
   Thead,
   Tbody,
   Tr,
+  InputGroup,
+  InputLeftElement,
   Th,
   Td,
   Checkbox,
@@ -16,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
+import { SearchIcon } from "@chakra-ui/icons";
 
 const PatientsManagement = () => {
   const [beneficiaries, setBeneficiaries] = useState([]);
@@ -59,22 +62,27 @@ const PatientsManagement = () => {
         <Text fontSize="lg" fontWeight="bold">
           Patients Management
         </Text>
-        <Text fontSize="lg" fontWeight="bold">
-          See all
+        <Text textAlign="left" fontSize="sm" color="#00C6F7" cursor="pointer">
+          See All
         </Text>
       </Flex>
       <Flex mb={4}>
-        <Input
-          placeholder="search patients name, id"
-          backgroundColor="white"
-          color="black"
-          borderRadius="15px"
-          width="300px"
-          mr={4}
-        />
-        <Button bg="#4B4B4B" color="white" borderRadius="15px">
+        <InputGroup>
+          <Input
+            placeholder="search patients name, policy number"
+            backgroundColor="#4B4B4B"
+            color="white"
+            borderRadius="10px"
+            width="500px"
+          />
+          <InputLeftElement
+            children={<SearchIcon color="white" />}
+            pointerEvents="none"
+          />
+        </InputGroup>
+        {/* <Button bg="#4B4B4B" color="white" borderRadius="15px">
           Advance Filter
-        </Button>
+        </Button> */}
       </Flex>
       {loading ? (
         <Flex justifyContent="center" alignItems="center" h="200px">
@@ -83,7 +91,14 @@ const PatientsManagement = () => {
       ) : (
         <Box maxH="400px" overflowY="auto">
           <Table variant="simple" colorScheme="whiteAlpha">
-            <Thead>
+            <Thead
+              css={{
+                position: "sticky",
+                top: 0,
+                background: "#4B4B4B",
+                zIndex: 1,
+              }}
+            >
               <Tr>
                 <Th color="#A210C6">
                   <Checkbox colorScheme="blue" />

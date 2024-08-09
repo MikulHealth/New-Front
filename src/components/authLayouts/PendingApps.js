@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Text,
-  VStack,
   Spinner,
   Table,
   Thead,
@@ -39,8 +38,20 @@ const PendingCustomerAppointments = () => {
     <Box maxH="400px" overflowY="auto">
       <Box bg="#4B4B4B" borderRadius="10px" p={4} color="white" w="100%">
         <Flex justifyContent="space-between" alignItems="center" mb={4}>
-          <Text fontSize="lg" fontWeight="bold">
+          <Text
+            css={{
+              position: "sticky",
+              top: 0,
+              background: "#4B4B4B",
+              zIndex: 1,
+            }}
+            fontSize="lg"
+            fontWeight="bold"
+          >
             Pending Customer Appointments
+          </Text>
+          <Text textAlign="left" fontSize="sm" color="#00C6F7" cursor="pointer">
+            See All
           </Text>
         </Flex>
         {loading ? (
@@ -49,7 +60,14 @@ const PendingCustomerAppointments = () => {
           </Flex>
         ) : appointments.length > 0 ? (
           <Table variant="simple" colorScheme="whiteAlpha">
-            <Thead>
+            <Thead
+              css={{
+                position: "sticky",
+                top: 0,
+                background: "#4B4B4B",
+                zIndex: 1,
+              }}
+            >
               <Tr>
                 <Th color="#A210C6">Recipient Name</Th>
                 <Th color="#A210C6">Service Plan</Th>
@@ -68,7 +86,11 @@ const PendingCustomerAppointments = () => {
                   <Td>{appointment.customerAppointment.servicePlan}</Td>
                   <Td>{appointment.customerAppointment.startDate}</Td>
                   <Td>{appointment.customerAppointment.currentLocation}</Td>
-                  <Td>
+                  <Td
+                    color={
+                      appointment.customerAppointment.paid ? "green.500" : "red.500"
+                    }
+                  >
                     {appointment.customerAppointment.paid ? "Paid" : "Not Paid"}
                   </Td>
                 </Tr>

@@ -56,7 +56,7 @@ const ClientDash = () => {
   const [pendingAppointment, setPendingAppointment] = useState(null);
   const [matchedAppointments, setMatchedAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.userReducer);
@@ -173,16 +173,10 @@ const ClientDash = () => {
   const handleBeneficiariesButtonClick = () => setBeneficiariesModalOpen(true);
   const handleOpenWalletModal = () => navigate("/wallet");
 
-  const settingsContainerStyle = {
-    animation: "slideInUp 0.9s ease-in-out",
-  };
-
   return (
     <ChakraProvider theme={customTheme} overflow="hidden">
-    
       <LeftSideBar />
       <VStack
-        style={settingsContainerStyle}
         ml={{ md: "230px" }}
         w={{ base: "100%", md: "80%" }}
         h={{ base: "100%", md: "100%" }}

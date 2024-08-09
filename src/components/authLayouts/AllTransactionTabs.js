@@ -5,6 +5,10 @@ import { VStack, useToast, Box, Text, Flex, Image } from "@chakra-ui/react";
 import CreditIcon from "../../assets/CreditIcon.svg";
 import DebitIcon from "../../assets/DebitIcon.svg";
 import { baseUrl } from "../../apiCalls/config";
+import {
+  formatDistanceToNow,
+} from "date-fns";
+
 
 export default function TransactionTab() {
   const toast = useToast();
@@ -187,7 +191,9 @@ export default function TransactionTab() {
                       maxW={{ base: "80px", md: "100px" }}
                       wordWrap="break-word"
                     >
-                      {formatTimeDifference(transaction.transactionDate)}
+                      {formatDistanceToNow(new Date(transaction.transactionDate), {
+                      addSuffix: true,
+                    })}
                     </Text>
                     <Box
                       mr={{ base: "-30px", md: "-25px" }}

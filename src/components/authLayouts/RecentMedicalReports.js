@@ -14,13 +14,17 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 
+import {
+  formatDistanceToNow,
+} from "date-fns";
+
 const RecentMedicalReports = () => {
   const [medicalReportsData, setMedicalReportsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/v1/api/admin/reports")
+      .get("http://localhost:8080/v1/api/admin/medical-reports")
       .then((response) => {
         if (response.data.success) {
           const sortedData = response.data.data.sort(
@@ -35,9 +39,9 @@ const RecentMedicalReports = () => {
         setLoading(false);
       });
   }, []);
-
+  
   return (
-    <Box bg="#4B4B4B" borderRadius="10px" p={4} color="white"  w="100%">
+    <Box bg="#4B4B4B" borderRadius="10px" p={4} color="white" w="100%">
       <Flex justifyContent="space-between" alignItems="center" mb={4}>
         <Text fontSize="lg" fontWeight="bold">
           Recent Medical Reports
@@ -53,12 +57,19 @@ const RecentMedicalReports = () => {
       ) : (
         <Box maxH="400px" overflowY="auto">
           <Table variant="simple" colorScheme="whiteAlpha">
-            <Thead>
+            <Thead
+              css={{
+                position: "sticky",
+                top: 0,
+                background: "#4B4B4B",
+                zIndex: 1,
+              }}
+            >
               <Tr>
                 <Th color="#A210C6">Medic Full Name</Th>
                 <Th color="#A210C6">Recipient Full Name</Th>
                 <Th color="#A210C6">Service Plan</Th>
-                <Th color="#A210C6">Submited On</Th>
+                <Th color="#A210C6">Timestamp</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -67,7 +78,9 @@ const RecentMedicalReports = () => {
                   <Td>{report.medicFullName}</Td>
                   <Td>{report.recipientFullName}</Td>
                   <Td>{report.servicePlan}</Td>
-                  <Td>{new Date(report.createdAt).toLocaleString()}</Td>
+                  <Td> {formatDistanceToNow(new Date(report.createdAt), {
+                      addSuffix: true,
+                    })}</Td>
                 </Tr>
               ))}
             </Tbody>

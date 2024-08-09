@@ -13,6 +13,10 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import axios from "axios";
+import {
+  formatDistanceToNow,
+} from "date-fns";
+
 
 const ActiveMedics = () => {
   const [medicsData, setMedicsData] = useState([]);
@@ -24,7 +28,7 @@ const ActiveMedics = () => {
         const response = await axios.get(
           "http://localhost:8080/v1/api/admin/pending-medic-appointments"
         );
-        setMedicsData(response.data.data);
+        setMedicsData(response.data.data.content);
       } catch (error) {
         console.error("Error fetching medics:", error);
       } finally {
@@ -39,7 +43,7 @@ const ActiveMedics = () => {
     <Box bg="#4B4B4B" borderRadius="10px" p={4} color="white" w="100%">
       <Flex justifyContent="space-between" alignItems="center" mb={4}>
         <Text fontSize="lg" fontWeight="bold">
-          Available Medics
+          Pending Medic Requests
         </Text>
         <Text fontSize="sm" color="#00C6F7" cursor="pointer">
           See All
@@ -51,13 +55,20 @@ const ActiveMedics = () => {
         </Flex>
       ) : medicsData.length > 0 ? (
         <Table variant="simple" colorScheme="whiteAlpha">
-          <Thead>
+          <Thead
+            css={{
+              position: "sticky",
+              top: 0,
+              background: "#4B4B4B",
+              zIndex: 1,
+            }}
+          >
             <Tr>
               <Th color="#A210C6">Avatar</Th>
               <Th color="#A210C6">Medic Full Name</Th>
               <Th color="#A210C6">Service Plan</Th>
               <Th color="#A210C6">Current Location</Th>
-              <Th color="#A210C6">Status</Th>
+              <Th color="#A210C6">Timestamp</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -65,14 +76,19 @@ const ActiveMedics = () => {
               <Tr key={medic.id}>
                 <Td>
                   <Avatar
-                    src={medic.image || "https://bit.ly/dan-abramov"}
+                    src={
+                      medic.medicAppointment.image ||
+                      "https://bit.ly/dan-abramov"
+                    }
                     size="md"
                   />
                 </Td>
-                <Td>{medic.medicFullName}</Td>
-                <Td>{medic.servicePlan}</Td>
-                <Td>{medic.currentLocation}</Td>
-                <Td color="green">Pending</Td>
+                <Td>{medic.medicAppointment.fullName}</Td>
+                <Td>{medic.medicAppointment.specialization}</Td>
+                <Td>{medic.medicAppointment.currentLocation || "N/A"}</Td>
+                <Td> {formatDistanceToNow(new Date(medic.medicAppointment.createdAt), {
+                      addSuffix: true,
+                    })}</Td>
               </Tr>
             ))}
           </Tbody>

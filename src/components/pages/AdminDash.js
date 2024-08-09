@@ -83,17 +83,12 @@ const AdminDashboard = () => {
     fetchData();
   }, [navigate, dispatch]);
 
-  const settingsContainerStyle = {
-    animation: "slideInUp 0.9s ease-in-out",
-  };
-
   return (
     <ChakraProvider theme={customTheme} overflow="hidden">
       <Box bg="#2C2C2C" minH="100vh">
         {/* <Box bg="white" minH="100vh"> */}
         <LeftSideBar />
         <VStack
-          style={settingsContainerStyle}
           ml={{ md: "260px" }}
           w={{ base: "100%", md: "80%" }}
           h={{ base: "100%", md: "100%" }}
