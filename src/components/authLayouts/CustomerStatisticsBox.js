@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex, Text, VStack, HStack } from "@chakra-ui/react";
+import { Box, Flex, Text, HStack } from "@chakra-ui/react";
 import {
   AiOutlineUser,
   AiOutlineCalendar,
-  AiOutlineDollarCircle,
   AiOutlineHeart,
-  AiOutlineMedicineBox,
 } from "react-icons/ai";
 import axios from "axios";
 import { useSpring, animated } from "@react-spring/web";
@@ -15,7 +13,7 @@ const formatNumber = (num) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const StatisticsBar = () => {
+const CustomerStatisticsBox = () => {
   const [statistics, setStatistics] = useState([
     {
       id: 1,
@@ -28,13 +26,14 @@ const StatisticsBar = () => {
     },
     {
       id: 2,
-      title: "Total Bookings",
+      title: "Total Customers",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #FDD835, #E552FF)",
       lastMonth: "Last Month",
       icon: AiOutlineCalendar,
     },
+
     {
       id: 3,
       title: "Total Patients",
@@ -45,22 +44,13 @@ const StatisticsBar = () => {
       icon: AiOutlineHeart,
     },
     {
-      id: 4,
-      title: "Total Medics",
+      id: 3,
+      title: "Total Coporates",
       count: 0,
       percentage: "0%",
-      bgColor: "linear-gradient(80deg, #6FBACA, #E552FF)",
+      bgColor: "linear-gradient(80deg, #057B1F, #E552FF)",
       lastMonth: "Last Month",
-      icon: AiOutlineMedicineBox,
-    },
-    {
-      id: 5,
-      title: "Total Revenue",
-      count: 0,
-      percentage: "0%",
-      bgColor: "linear-gradient(80deg, #A210C6, #E552FF)",
-      lastMonth: "Last Month",
-      icon: AiOutlineDollarCircle,
+      icon: AiOutlineHeart,
     },
   ]);
 
@@ -69,15 +59,16 @@ const StatisticsBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/v1/api/statistics");
+        const response = await axios.get(
+          "http://localhost:8080/v1/api/statistics"
+        );
         const data = response.data[0];
 
         setFetchedData({
           totalUsers: data.totalUsers,
-          totalAppointments: data.totalAppointments,
+          totalCustomers: data.totalCustomers,
           totalCareBeneficiaries: data.totalCareBeneficiaries,
-          totalMedics: data.totalMedics,
-          totalAmountMade: data.totalAmountMade / 100,
+          totalCoporates: data?.totalCoporates,
         });
       } catch (error) {
         console.error("Error fetching statistics:", error);
@@ -87,14 +78,24 @@ const StatisticsBar = () => {
     fetchData();
   }, []);
 
-  const userSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalUsers : 0 });
-  const appointmentSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAppointments : 0 });
-  const beneficiarySpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalCareBeneficiaries : 0 });
-  const medicSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalMedics : 0 });
-  const revenueSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAmountMade : 0 });
-
+  const userSpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalUsers : 0,
+  });
+  const appointmentSpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalCustomers : 0,
+  });
+  const beneficiarySpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalCareBeneficiaries : 0,
+  });
+  const medicSpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData?.totalCoporates : 0,
+  });
   return (
-    <Flex justifyContent="space-between" w="100%" p={4}>
+    <Flex justifyContent="space-between" w="100%" p={4} gap={4}>
       {statistics.map((stat, index) => {
         const springValue =
           index === 0
@@ -103,17 +104,15 @@ const StatisticsBar = () => {
             ? appointmentSpring.value
             : index === 2
             ? beneficiarySpring.value
-            : index === 3
-            ? medicSpring.value
-            : revenueSpring.value;
-        
+            : medicSpring.value
+
         return (
           <Box
             key={stat.id}
             bg={stat.bgColor}
             borderRadius="20px"
             p={4}
-            w="19%"
+            flex="1"
             color="white"
           >
             <Flex justifyContent="space-between" alignItems="center">
@@ -144,4 +143,4 @@ const StatisticsBar = () => {
   );
 };
 
-export default StatisticsBar;
+export default CustomerStatisticsBox;

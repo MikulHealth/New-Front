@@ -15,11 +15,11 @@ const formatNumber = (num) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const StatisticsBar = () => {
+const MedicStatBox = () => {
   const [statistics, setStatistics] = useState([
     {
       id: 1,
-      title: "Total Users",
+      title: "Unverified",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #00C6F7, #E552FF)",
@@ -28,7 +28,7 @@ const StatisticsBar = () => {
     },
     {
       id: 2,
-      title: "Total Bookings",
+      title: "Total RNs",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #FDD835, #E552FF)",
@@ -37,7 +37,7 @@ const StatisticsBar = () => {
     },
     {
       id: 3,
-      title: "Total Patients",
+      title: "Total CNAs",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #057B1F, #E552FF)",
@@ -46,7 +46,7 @@ const StatisticsBar = () => {
     },
     {
       id: 4,
-      title: "Total Medics",
+      title: "Total DRs",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #6FBACA, #E552FF)",
@@ -55,7 +55,7 @@ const StatisticsBar = () => {
     },
     {
       id: 5,
-      title: "Total Revenue",
+      title: "Total PTs",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #A210C6, #E552FF)",
@@ -69,15 +69,17 @@ const StatisticsBar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/v1/api/statistics");
+        const response = await axios.get(
+          "http://localhost:8080/v1/api/statistics"
+        );
         const data = response.data[0];
 
         setFetchedData({
-          totalUsers: data.totalUsers,
-          totalAppointments: data.totalAppointments,
-          totalCareBeneficiaries: data.totalCareBeneficiaries,
-          totalMedics: data.totalMedics,
-          totalAmountMade: data.totalAmountMade / 100,
+          totalUnVerifiedMedics: data.totalUnVerifiedMedics,
+          totalRNs: data.totalRNs,
+          totalCNAs: data.totalCNAs,
+          totalDoctors: data.totalDoctors,
+          totalPhysiotherapists: data.totalPhysiotherapists,
         });
       } catch (error) {
         console.error("Error fetching statistics:", error);
@@ -87,11 +89,26 @@ const StatisticsBar = () => {
     fetchData();
   }, []);
 
-  const userSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalUsers : 0 });
-  const appointmentSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAppointments : 0 });
-  const beneficiarySpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalCareBeneficiaries : 0 });
-  const medicSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalMedics : 0 });
-  const revenueSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAmountMade : 0 });
+  const userSpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalUnVerifiedMedics : 0,
+  });
+  const appointmentSpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalRNs : 0,
+  });
+  const beneficiarySpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalCNAs : 0,
+  });
+  const medicSpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalDoctors : 0,
+  });
+  const revenueSpring = useSpring({
+    from: { value: 0 },
+    value: fetchedData ? fetchedData.totalPhysiotherapists : 0,
+  });
 
   return (
     <Flex justifyContent="space-between" w="100%" p={4}>
@@ -106,7 +123,7 @@ const StatisticsBar = () => {
             : index === 3
             ? medicSpring.value
             : revenueSpring.value;
-        
+
         return (
           <Box
             key={stat.id}
@@ -126,7 +143,7 @@ const StatisticsBar = () => {
               <animated.span>
                 {springValue.to((val) =>
                   index === 4
-                    ? `₦${formatNumber(val.toFixed(2))}`
+                    ? `${formatNumber(val.toFixed(2))}`
                     : formatNumber(Math.floor(val))
                 )}
               </animated.span>
@@ -144,4 +161,4 @@ const StatisticsBar = () => {
   );
 };
 
-export default StatisticsBar;
+export default MedicStatBox;

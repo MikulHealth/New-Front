@@ -101,8 +101,8 @@ const UserActivities = () => {
             pointerEvents="none"
           />
         </InputGroup>
-        <Text fontSize="md" fontWeight="bold">
-          {format(currentTime, "MMMM yyyy, hh:mm:ss a")}
+        <Text fontSize="14px" fontWeight="bold">
+          {format(currentTime, "dd MMMM yyyy, hh:mm:ss a")}
         </Text>
       </Flex>
       {/* <HStack spacing={4} mb={4}>
@@ -141,7 +141,7 @@ const UserActivities = () => {
       <Box
         className="activities"
         maxH="300px"
-        w="100%"
+        w="90%"
         overflowY="auto"
         css={{
           "&::-webkit-scrollbar": { display: "none" },

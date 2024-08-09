@@ -47,6 +47,9 @@ import WalletSubscriptionPage from "./components/sections/WalletSubscription";
 import AdminDashboard from "./components/pages/AdminDash";
 // import GoogleMapsConfig from './GoogleMapsConfig';
 import AppSubscriptionPage from "./components/pages/AppointmentSub";
+import Customers from "./components/pages/admin/Customers";
+import Medics from "./components/pages/admin/Medics";
+import Admin from "./components/pages/admin/Admin";
 
 function App() {
   return (
@@ -125,6 +128,9 @@ function App() {
           <Route path="/book" element={<BookButton />} />
           <Route path="/servicesSection" element={<ServicesSection />} />
           <Route path="/faqs" element={<Faqs />} />
+          <Route path="/users/customers" element={<Customers />} />
+          <Route path="/users/medics" element={<Medics />} />
+          <Route path="/users/admins" element={<Admin />} />
         </Routes>
       </BrowserRouter>
     </div>

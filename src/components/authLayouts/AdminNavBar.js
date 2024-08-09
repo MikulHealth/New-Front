@@ -21,18 +21,17 @@ import {
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import MedicDetailsDrawer from "../sections/MedicDetails";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import LogoutIcon from "../../assets/Logout.svg";
-import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons"; 
+import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import AppointmentsIcon from "../../assets/AppointmentIcon.svg";
 import HomeIcon from "../../assets/HomeBlack.svg";
 import Wallet from "../../assets/Wallet.svg";
 import serviceIcon from "../../assets/PatientsIcon.svg";
 import SettingsIcon from "../../assets/SettingsIcon.svg";
-import { AiOutlineBell } from "react-icons/ai"; // Importing the bell icon
+import { AiOutlineBell } from "react-icons/ai";
 
 const customTheme = extendTheme({
   components: {
@@ -56,6 +55,20 @@ export default function AdminNavBar() {
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showUserDetailsModal, setShowUserDetailsModal] = useState(false);
+  const [greeting, setGreeting] = useState("");
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 4) {
+      setGreeting("you should be sleeping");
+    } else if (hour < 12) {
+      setGreeting("good morning");
+    } else if (hour < 18) {
+      setGreeting("good afternoon");
+    } else {
+      setGreeting("good evening");
+    }
+  }, []);
 
   const handleOpenUserDetailsModal = () => {
     setShowUserDetailsModal(true);
@@ -90,23 +103,27 @@ export default function AdminNavBar() {
   };
 
   const pageTitles = {
-    admin: "Dashboard",
-    "/mh-appointment": "Appointments",
-    "/mh-patients": "Patients",
-    "/admin-settings": "Settings",
-    "/logout": "Logout",
-    "/admin-edit-profile": "Settings",
-    "/admin-change-password": "Settings",
-    "/admin-notification-settings": "Settings",
-    "/admin-help": "Help",
+    "/admin": "Hello, Welcome",
+    "/users/customers": "Mikul Health Customers",
+    "/users/medics": "Mikul Health Medics",
+    "/users/admins": "Mikul Health Admins",
+    "/appointments": "All Appointments",
+    "/admin/medical-reports": "Medical Reports",
+    "/finance": "Financials",
   };
 
-  const pageTitle = pageTitles[location.pathname] || "Unknown Page";
-  const isDashboard = location.pathname === "/medic-dashboard";
+  const pageTitle = pageTitles[location.pathname] || "MH Admin Dashboard";
 
   return (
     <ChakraProvider theme={customTheme}>
-      <header style={{ top: 0, zIndex: 1000 }}>
+      <header
+        style={{
+          top: 0,
+          zIndex: 1000,
+          padding: "10px 20px",
+          width: "100%",
+        }}
+      >
         <Drawer size="xs" isOpen={isOpen} onClose={onClose} placement="left">
           <DrawerOverlay />
           <DrawerContent>
@@ -129,38 +146,80 @@ export default function AdminNavBar() {
                   </Flex>
                 </NavLink>
 
-                <NavLink to="/mh-patients" style={listItemStyle}>
+                <NavLink to="/users/customers" style={listItemStyle}>
                   <Flex
                     fontFamily="heading"
                     fontSize={{ base: "18", md: "28px" }}
                     color={
-                      location.pathname === "/mh-patients" ? "#A210C6" : ""
+                      location.pathname === "/users/customers" ? "#A210C6" : ""
                     }
                     fontWeight={
-                      location.pathname === "/mh-patients" ? "bold" : ""
+                      location.pathname === "/users/customers" ? "bold" : ""
                     }
                     textDecoration={
-                      location.pathname === "/mh-patients" ? "underline" : ""
+                      location.pathname === "/users/customers"
+                        ? "underline"
+                        : ""
                     }
                     alignItems="center"
                   >
                     <Image src={serviceIcon} alt="Patients" style={iconStyle} />
-                    <Text style={listTextStyle}>Patients</Text>
+                    <Text style={listTextStyle}>Customers</Text>
                   </Flex>
                 </NavLink>
 
-                <NavLink to="/mh-appointment" style={listItemStyle}>
+                <NavLink to="/users/medics" style={listItemStyle}>
                   <Flex
                     fontFamily="heading"
                     fontSize={{ base: "18", md: "28px" }}
                     color={
-                      location.pathname === "/mh-appointment" ? "#A210C6" : ""
+                      location.pathname === "/users/medics" ? "#A210C6" : ""
                     }
                     fontWeight={
-                      location.pathname === "/mh-appointment" ? "bold" : ""
+                      location.pathname === "/users/medics" ? "bold" : ""
                     }
                     textDecoration={
-                      location.pathname === "/mh-appointment" ? "underline" : ""
+                      location.pathname === "/users/medics" ? "underline" : ""
+                    }
+                    alignItems="center"
+                  >
+                    <Image src={serviceIcon} alt="Medics" style={iconStyle} />
+                    <Text style={listTextStyle}>Medics</Text>
+                  </Flex>
+                </NavLink>
+
+                <NavLink to="/users/admins" style={listItemStyle}>
+                  <Flex
+                    fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
+                    color={
+                      location.pathname === "/users/admins" ? "#A210C6" : ""
+                    }
+                    fontWeight={
+                      location.pathname === "/users/admins" ? "bold" : ""
+                    }
+                    textDecoration={
+                      location.pathname === "/users/admins" ? "underline" : ""
+                    }
+                    alignItems="center"
+                  >
+                    <Image src={serviceIcon} alt="Admins" style={iconStyle} />
+                    <Text style={listTextStyle}>Admins</Text>
+                  </Flex>
+                </NavLink>
+
+                <NavLink to="/appointments" style={listItemStyle}>
+                  <Flex
+                    fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
+                    color={
+                      location.pathname === "/appointments" ? "#A210C6" : ""
+                    }
+                    fontWeight={
+                      location.pathname === "/appointments" ? "bold" : ""
+                    }
+                    textDecoration={
+                      location.pathname === "/appointments" ? "underline" : ""
                     }
                     alignItems="center"
                   >
@@ -173,49 +232,52 @@ export default function AdminNavBar() {
                   </Flex>
                 </NavLink>
 
-                <NavLink to="/settings" style={listItemStyle}>
+                <NavLink to="/admin/medical-reports" style={listItemStyle}>
                   <Flex
-                    fontSize={{ base: "18", md: "28px" }}
                     fontFamily="heading"
-                    style={listTextStyle}
-                    marginLeft="5px"
-                    textDecoration={
-                      location.pathname === "/admin-settings" ||
-                      location.pathname === "/admin-edit-profile" ||
-                      location.pathname === "/admin-change-password" ||
-                      location.pathname === "/admin-notification-settings" ||
-                      location.pathname === "/admin-help"
-                        ? "underline"
-                        : ""
-                    }
-                    fontWeight={
-                      location.pathname === "/admin-settings" ||
-                      location.pathname === "/admin-edit-profile" ||
-                      location.pathname === "/admin-change-password" ||
-                      location.pathname === "/admin-notification-settings" ||
-                      location.pathname === "/admin-help"
-                        ? "bold"
-                        : ""
-                    }
+                    fontSize={{ base: "18", md: "28px" }}
                     color={
-                      location.pathname === "/admin-settings" ||
-                      location.pathname === "/admin-edit-profile" ||
-                      location.pathname === "/admin-change-password" ||
-                      location.pathname === "/admin-notification-settings" ||
-                      location.pathname === "/admin-help"
+                      location.pathname === "/admin/medical-reports"
                         ? "#A210C6"
                         : ""
                     }
+                    fontWeight={
+                      location.pathname === "/admin/medical-reports"
+                        ? "bold"
+                        : ""
+                    }
+                    textDecoration={
+                      location.pathname === "/admin/medical-reports"
+                        ? "underline"
+                        : ""
+                    }
+                    alignItems="center"
                   >
                     <Image
-                      marginLeft="-5px"
-                      src={SettingsIcon}
-                      alt="settings"
+                      src={Wallet}
+                      alt="Medical Reports"
                       style={iconStyle}
                     />
-                    <Text style={listTextStyle}>Settings</Text>
+                    <Text style={listTextStyle}>Medical Reports</Text>
                   </Flex>
                 </NavLink>
+
+                <NavLink to="/finance" style={listItemStyle}>
+                  <Flex
+                    fontFamily="heading"
+                    fontSize={{ base: "18", md: "28px" }}
+                    color={location.pathname === "/finance" ? "#A210C6" : ""}
+                    fontWeight={location.pathname === "/finance" ? "bold" : ""}
+                    textDecoration={
+                      location.pathname === "/finance" ? "underline" : ""
+                    }
+                    alignItems="center"
+                  >
+                    <Image src={Wallet} alt="Financials" style={iconStyle} />
+                    <Text style={listTextStyle}>Financials</Text>
+                  </Flex>
+                </NavLink>
+
                 <NavLink onClick={handleConfirmLogout} style={listItemStyle}>
                   <Flex
                     fontSize={{ base: "18", md: "28px" }}
@@ -241,12 +303,12 @@ export default function AdminNavBar() {
             </DrawerBody>
           </DrawerContent>
         </Drawer>
+
         <HStack
           flexGrow="1"
           marginTop="20px"
           direction={{ base: "row", md: "row" }}
           width="100%"
-          px={{ base: "20px", md: "20px" }}
           spacing={10}
           justifyContent="space-between"
         >
@@ -262,52 +324,28 @@ export default function AdminNavBar() {
             width="100%"
             padding="10px"
           >
-            <VStack alignItems="flex-start" spacing={0}>
+            <Box textAlign="left" flex="1">
               <Heading color="white" fontSize="20px" fontWeight="bold">
-                Hello, {user?.firstName}{" "}
-                <span role="img" aria-label="wave">
-                  👋
-                </span>
+                {pageTitle === "Hello, Welcome"
+                  ? `Hello ${user?.firstName}, ${greeting}`
+                  : pageTitle}
               </Heading>
-              <Text color="white" fontStyle="italic">
-                Welcome to the MH Admin Dashboard.
-              </Text>
-            </VStack>
+            </Box>
             <Spacer />
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <Spacer />
-            <HStack spacing={5}>
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <InputGroup>
+            <HStack w="100%" spacing={5} flex="1" justifyContent="flex-end">
+              <InputGroup width="300px">
                 <Input
                   placeholder="Search anything"
                   backgroundColor="#4B4B4B"
                   color="white"
                   borderRadius="10px"
-                  width="300px"
                 />
                 <InputLeftElement
                   children={<SearchIcon color="white" />}
                   pointerEvents="none"
                 />
               </InputGroup>
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
-              <Spacer />
+
               <Flex alignItems="center">
                 <AiOutlineBell size={24} color="white" />
                 <Box
@@ -329,10 +367,6 @@ export default function AdminNavBar() {
           </Flex>
         </HStack>
       </header>
-      <MedicDetailsDrawer
-        isOpen={showUserDetailsModal}
-        onClose={handleCloseUserDetailsModal}
-      />
     </ChakraProvider>
   );
 }

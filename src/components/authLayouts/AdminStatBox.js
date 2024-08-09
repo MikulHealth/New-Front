@@ -15,11 +15,11 @@ const formatNumber = (num) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const StatisticsBar = () => {
+const AdminStatBox = () => {
   const [statistics, setStatistics] = useState([
     {
       id: 1,
-      title: "Total Users",
+      title: "Total Admin",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #00C6F7, #E552FF)",
@@ -28,7 +28,7 @@ const StatisticsBar = () => {
     },
     {
       id: 2,
-      title: "Total Bookings",
+      title: "Total Super-admin",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #FDD835, #E552FF)",
@@ -37,7 +37,7 @@ const StatisticsBar = () => {
     },
     {
       id: 3,
-      title: "Total Patients",
+      title: "Total Admin",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #057B1F, #E552FF)",
@@ -46,22 +46,14 @@ const StatisticsBar = () => {
     },
     {
       id: 4,
-      title: "Total Medics",
+      title: "Total Admin-support",
       count: 0,
       percentage: "0%",
       bgColor: "linear-gradient(80deg, #6FBACA, #E552FF)",
       lastMonth: "Last Month",
       icon: AiOutlineMedicineBox,
     },
-    {
-      id: 5,
-      title: "Total Revenue",
-      count: 0,
-      percentage: "0%",
-      bgColor: "linear-gradient(80deg, #A210C6, #E552FF)",
-      lastMonth: "Last Month",
-      icon: AiOutlineDollarCircle,
-    },
+   
   ]);
 
   const [fetchedData, setFetchedData] = useState(null);
@@ -73,11 +65,10 @@ const StatisticsBar = () => {
         const data = response.data[0];
 
         setFetchedData({
-          totalUsers: data.totalUsers,
-          totalAppointments: data.totalAppointments,
-          totalCareBeneficiaries: data.totalCareBeneficiaries,
-          totalMedics: data.totalMedics,
-          totalAmountMade: data.totalAmountMade / 100,
+          totalAdministrator: data.totalAdministrator,
+          totalSuperAdmins: data.totalSuperAdmins,
+          totalAdmins: data.totalAdmins,
+          totalAdminSupports: data.totalAdminSupports,
         });
       } catch (error) {
         console.error("Error fetching statistics:", error);
@@ -87,11 +78,10 @@ const StatisticsBar = () => {
     fetchData();
   }, []);
 
-  const userSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalUsers : 0 });
-  const appointmentSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAppointments : 0 });
-  const beneficiarySpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalCareBeneficiaries : 0 });
-  const medicSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalMedics : 0 });
-  const revenueSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAmountMade : 0 });
+  const userSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAdministrator : 0 });
+  const appointmentSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalSuperAdmins : 0 });
+  const beneficiarySpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAdmins : 0 });
+  const medicSpring = useSpring({ from: { value: 0 }, value: fetchedData ? fetchedData.totalAdminSupports : 0 });
 
   return (
     <Flex justifyContent="space-between" w="100%" p={4}>
@@ -103,9 +93,7 @@ const StatisticsBar = () => {
             ? appointmentSpring.value
             : index === 2
             ? beneficiarySpring.value
-            : index === 3
-            ? medicSpring.value
-            : revenueSpring.value;
+            : medicSpring.value
         
         return (
           <Box
@@ -113,7 +101,7 @@ const StatisticsBar = () => {
             bg={stat.bgColor}
             borderRadius="20px"
             p={4}
-            w="19%"
+            w="23%"
             color="white"
           >
             <Flex justifyContent="space-between" alignItems="center">
@@ -144,4 +132,4 @@ const StatisticsBar = () => {
   );
 };
 
-export default StatisticsBar;
+export default AdminStatBox;

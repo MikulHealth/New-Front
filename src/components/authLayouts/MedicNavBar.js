@@ -105,7 +105,14 @@ export default function MedicNavBar() {
 
   return (
     <ChakraProvider theme={customTheme}>
-      <header style={{ top: 0, zIndex: 1000 }}>
+      <header
+        style={{
+          top: 0,
+          zIndex: 1000,
+          padding: "10px 20px",
+          width: "100%",
+        }}
+      >
         <Drawer size="xs" isOpen={isOpen} onClose={onClose} placement="left">
           <DrawerOverlay />
           <DrawerContent>
